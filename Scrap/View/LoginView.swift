@@ -10,120 +10,151 @@ import SwiftUI
 struct LoginView: View {
     @State private var id: String = ""
     @State private var pw: String = ""
-//    @State private var showPW = false
+    @State private var showPW = false //비밀번호 visible, invisible
     @State private var keepLogin = false
     @State private var showingSignUpSheet = false //회원가입 sheet state property
     @State private var rootView = false
     
+    let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
+    let bold_sub_gray = Color(red: 151/255, green: 151/255, blue: 151/255)
+    let light_blue = Color(red: 70/255, green: 193/255, blue: 241/255)
+    let error_red = Color(red: 255/255, green: 84/255, blue: 84/255)
+    
     var body: some View {
         NavigationView{
             VStack{
-//            Text("Scrap")
                 Text("스크랩")
-                    .font(.system(size: 48, weight: .bold))
+                    .font(.system(size: 64, weight: .bold))
                     .multilineTextAlignment(.center)
-                    .padding(.bottom, 48)
+                    .padding(.bottom, 64)
                 VStack(spacing: 32){
                     TextField("아이디", text: $id)
                         .disableAutocorrection(true) //자동 수정 비활성화
                         .padding(.horizontal)
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.gray)
+                                .stroke(light_gray)
                                 .frame(height: 40, alignment: .center)
                         )
                     HStack{
-    //                    if showPW {
-    //                        TextField("비밀번호", text: $pw)
-    //                            .disableAutocorrection(true) //자동 수정 비활성화
-    //                            .padding(.horizontal)
-    //                            .overlay(
-    //                                RoundedRectangle(cornerRadius: 10)
-    //                                    .stroke(Color.gray)
-    //                                    .frame(height: 40, alignment: .center)
-    //                            )
-    //                    }
-    //                    else {
-                            SecureField("비밀번호", text: $pw)
-                                .disableAutocorrection(true) //자동 수정 비활성화
-                                .padding(.horizontal)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.gray)
-                                        .frame(height: 40, alignment: .center)
-                                )
-    //                    }
-    //                    Button(aciton: {
-    //                        self.showPW.toggle()
-    //                    }) {
-    //                        Image(systemName: "eye")
-    //                            .foregroundColor(.gray)
-    //                    }
+                        if showPW {
+                            HStack{
+                                TextField("비밀번호", text: $pw)
+                                    .disableAutocorrection(true) //자동 수정 비활성화
+                                    .padding(.horizontal)
+                                    
+                                Button(action: {
+                                    self.showPW.toggle()
+                                }) {
+                                    Image(systemName: "eye")
+                                        .resizable()
+                                        .frame(width: 20, height: 13)
+                                        .foregroundColor(light_gray)
+                                }
+                                .padding(.trailing, 12)
+                            }
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(light_gray)
+                                    .frame(height: 42, alignment: .center)
+                            )
+                        }
+                        else {
+                            HStack{
+                                SecureField("비밀번호", text: $pw)
+                                    .disableAutocorrection(true) //자동 수정 비활성화
+                                    .padding(.horizontal)
+                                    
+                                Button(action: {
+                                    self.showPW.toggle()
+                                }) {
+                                    Image(systemName: "eye.slash")
+                                        .resizable()
+                                        .frame(width: 20, height: 15)
+                                        .foregroundColor(light_gray)
+                                }
+                                .padding(.trailing, 12)
+                            }
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(light_gray)
+                                    .frame(height: 42, alignment: .center)
+                            )
+                        }
+                        
                     }
                 }
-                .padding(EdgeInsets(top: 0, leading: 12, bottom: 10, trailing: 12))
-                
-//                Text("아이디/비밀번호가 맞지 않습니다.") //관련 에러 메세지 따로 출력되도록
-//                    .font(.caption)
-//                    .foregroundColor(Color.red)
-//                    .lineLimit(0)
-//                    .frame(width: UIScreen.main.bounds.width - 32, alignment: .topLeading)
-////                    .visibility(.gone)
-//
+                .padding(.horizontal, 50)
                 HStack(){ //로그인 유지 체크 박스
+                    Text("아이디/비밀번호가 맞지 않습니다.") //관련 에러 메세지 따로 출력되도록
+                        .font(.caption)
+                        .foregroundColor(error_red)
+                        .lineLimit(0)
+                        .padding(.leading, 4)
+//                        .hidden()
                     Spacer()
                     HStack{
                         Button(action: {
                             //stayLogin
-                            
                             self.keepLogin.toggle()
                         }) {
                             if keepLogin {
                                 Image(systemName: "checkmark.square")
-                                    .foregroundColor(Color.gray)
+                                    .resizable()
+                                    .frame(width: 12, height: 12)
+                                    .foregroundColor(light_gray)
                             }else{
                                 Image(systemName: "square")
-                                    .foregroundColor(Color.gray)
-                                //activeLogin==true, "checkmark.square"
-                                //activeLogin==false, "square"
+                                    .resizable()
+                                    .frame(width: 12, height: 12)
+                                    .foregroundColor(light_gray)
                             }
                         }
+                        .frame(width: 8, height: 8)
                         Text("로그인 유지")
+                            .font(.system(size: 14, weight: .light))
                     }
-                    .padding(.horizontal, 14)
                 }
-                .padding(EdgeInsets(top: 6, leading: 0, bottom: 12, trailing: 0))
+                .frame(width: UIScreen.main.bounds.width - 100, height: 40)
                 
                 VStack(spacing: 12){
                     Button(action: { //login button
                     
                     }) {
                         Text("로그인")
-                            .frame(width: UIScreen.main.bounds.width - 48, height: 32, alignment: .center)
+                            .frame(width: UIScreen.main.bounds.width-120, height: 28, alignment: .center)
                             .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(Color.white)
+                            .foregroundColor(.white)
                             .multilineTextAlignment(.center)
                             .padding(10)
-                            .background(Color.blue)
+                            .background(light_blue)
                             .cornerRadius(12)
                     }
+                    HStack{
+                        Rectangle()
+                            .frame(width: UIScreen.main.bounds.width/3.1, height: 1)
+                            .foregroundColor(light_gray)
+                        Text("or")
+                            .foregroundColor(light_gray)
+
+                        Rectangle()
+                            .frame(width: UIScreen.main.bounds.width/3.1, height: 1)
+                            .foregroundColor(light_gray)
+                    }
+                    .padding(.vertical)
                     Button(action: { //login button
                         //카카오로 연결
                     }) {
-                        Text("카카오 로그인")
-                            .frame(width: UIScreen.main.bounds.width - 48, height: 32, alignment: .center)
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(Color.black)
-                            .multilineTextAlignment(.center)
-                            .padding(10)
-                            .background(Color.yellow)
-                            .cornerRadius(12)
+                        Image("kakao_login_large_narrow")
+                            .resizable()
+                            .frame(width: UIScreen.main.bounds.width / 1.8, height: 52, alignment: .center)
                     }
                 }
+                
                 NavigationLink(destination: SignUpView(rootView: $rootView), isActive: $rootView){
                     Text("회원가입")
                         .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(Color.gray)
+                        .foregroundColor(bold_sub_gray)
                         .underline()
                 }
 //                Button(action: {
@@ -140,51 +171,14 @@ struct LoginView: View {
 //                }
                 .padding(.top, 12)
             }
-            .padding(.bottom, 32)
+            .padding(.bottom, 80)
+//            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         }
-    }
-    
-    func postInfor(id: String){
-        let config = URLSessionConfiguration.default
-        let session = URLSession(configuration: config)
-        let url = URL(string: "https://hana-umc.shop/user/duplicate?id=test0303")!
-        var request = URLRequest(url: url)
-       
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        Group{
-            LoginView()
-            SignUpView(rootView: .constant(true))
-            HomeView(rootView: .constant(true))
-            MyPageView(rootView: .constant(true))
-            SideMenuView(isAddingCategory: .constant(false))
-            SaveDataView()
-        }
+        LoginView()
     }
-}
-
-//=========================visibility modifier=======================
-//visible, invisible, gone 세 가지 종류
-//invisible: 보이진 않지만 사라지진 않음
-//gone: UI 개체가 아예 사라진 경우
-
-enum ViewVisibility: CaseIterable {
-  case visible, // view is fully visible
-       invisible, // view is hidden but takes up space
-       gone // view is fully removed from the view hierarchy
-}
-
-extension View {
-  @ViewBuilder func visibility(_ visibility: ViewVisibility) -> some View {
-    if visibility != .gone {
-      if visibility == .visible {
-        self
-      } else {
-        hidden()
-      }
-    }
-  }
 }

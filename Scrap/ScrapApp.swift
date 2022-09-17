@@ -11,13 +11,9 @@ import SwiftUI
 struct ScrapApp: App {
     var body: some Scene {
         WindowGroup {
-            
             //if 로그아웃 혹은 첫 런칭이라면 LoginView()
             //else HomeView()
-            
-//            LoginView()
-            TestIDDuplication()
-//            HomeView()
+            LoginView()
         }
     }
 }
