@@ -10,8 +10,11 @@ import SwiftUI
 struct MyPageView: View {
     @State private var isEditingUserName = false
     @State private var username = ""
+    @State private var iconArr = ["camping", "circus", "classical", "compass", "palette", "rocket", "ufo"]
     @Binding var rootView : Bool
     @Environment(\.presentationMode) var presentationMode //pop sheet
+    
+    let icon = Int.random(in: 0...7)
     
     var body: some View {
         VStack(spacing: 60){
@@ -30,8 +33,7 @@ struct MyPageView: View {
             .frame(width: UIScreen.main.bounds.width-20, alignment: .leading)
             VStack{
                 HStack(spacing: 8){
-//                    Image("profile")
-                    Image("Palette") //랜덤 출력
+                    Image("\(iconArr[icon])") //랜덤 출력
                         .resizable()
                         .frame(width: 64, height: 64)
                     VStack{
@@ -81,19 +83,20 @@ struct MyPageView: View {
                 .frame(width: UIScreen.main.bounds.width - 40)
                 Divider()
                     .padding(.top, 16)
+                Spacer()
                 Button(action:{
                     //login 화면으로 pop -> rootview
                     rootView = false
                     //로그아웃 기능
                 }){
-                    Text("로그아웃")
-                        .frame(width: UIScreen.main.bounds.width/2, height: 32, alignment: .center)
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundColor(Color.white)
-                        .multilineTextAlignment(.center)
-                        .padding(10)
-                        .background(Color.blue)
-                        .cornerRadius(12)
+//                    HStack{
+//                        Image(systemName: "rectangle.portrait.and.arrow.right.fill")
+//                            .foregroundColor(.gray)
+                        Text("로그아웃")
+                            .underline()
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundColor(Color.gray)
+//                    }
                 }
                 .padding()
             }//VStack2
