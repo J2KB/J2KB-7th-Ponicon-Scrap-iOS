@@ -1,52 +1,84 @@
 //
-//  MainHomeView.swift
+//  HomeView.swift
 //  Scrap
 //
-//  Created by 김영선 on 2022/09/08.
+//  Created by 김영선 on 2022/09/05.
 //
+
+
+//로그인이 된 상태라면, 앱의 처음 시작은 HomeView
+//사용자가 저장한 자료를 보거나 수정, 삭제할 수 있는 공간
 
 import SwiftUI
 
 struct MainHomeView: View {
+    @State private var isShowingCategory = false
+    @State private var isShowingMyPage = false
+    @Binding var rootView : Bool
+    
     var body: some View {
-        VStack{
-            //나열, 정렬 순서 버튼
-            //자료 리스트 - dynamically list (ForEach)
-            ScrollView(.vertical, showsIndicators: false){
-                HStack{
-                    Button(action: {
-                        
-                    }){
-                        Image(systemName: "square.grid.2x2.fill")
-                            .resizable()
-                            .frame(width: 16, height: 16)
-                            .foregroundColor(.gray)
-                    }
-                    Text("최신순") //정렬 순서에 따라 달라짐 (최신순/오래된순)
-                        .font(.system(size: 14))
-                        .foregroundColor(.gray)
-                    Button(action: {
-                        
-                    }){
-                        Image(systemName: "arrow.up.arrow.down")
-                            .resizable()
-                            .frame(width: 16, height: 16)
-                            .foregroundColor(.black)
+        HStack(spacing: 0){
+            //Drawer
+            SideMenuView()
+            //Main Home
+            NavigationView{
+                SubHomeView()
+                    .padding(.horizontal)
+                .navigationBarTitle("", displayMode: .inline)
+                .toolbar{
+                    ToolbarItem(placement: .navigationBarLeading){
+                        HStack(spacing: 2){
+                            Button(action: {
+                                withAnimation(.easeInOut){
+                                    self.isShowingCategory = true
+                                }
+                            }) {
+                                Image(systemName: "line.3.horizontal")
+                                    .resizable()
+                                    .frame(width: 20, height: 14)
+                                    .foregroundColor(.black)
+                            }
+                            Text("카테고리 이름")
+                                .fontWeight(.bold)
+                        }
                     }
                 }
-                .frame(width: UIScreen.main.bounds.width - 32, height: 40, alignment: .trailing)
-                ForEach(0...9, id: \.self) { page in
-                    PageView()
-                        .padding(4)
+                .toolbar{
+                    ToolbarItem(placement: .navigationBarTrailing){
+                        VStack{
+                            NavigationLink(destination: MyPageView(rootView: $rootView), isActive: $isShowingMyPage) {
+                                Button(action: {
+                                    self.isShowingMyPage.toggle()
+                                }) {
+                                    Image(systemName: "person.circle")
+                                        .foregroundColor(.black)
+                                }
+                            }
+                        }
+                    }
                 }
             }
+            .frame(width: UIScreen.main.bounds.width)
         }
-
+        .frame(width: UIScreen.main.bounds.width)
+        .offset(x: isShowingCategory ? UIScreen.main.bounds.width / 2.7 : -UIScreen.main.bounds.width / 2.6) //moving view
+        .gesture(DragGesture().onEnded({
+            if $0.translation.width < -100 {
+                withAnimation(.easeInOut) {
+                    self.isShowingCategory = false
+                }
+            }else if $0.translation.width > 100 {
+                withAnimation(.easeInOut) {
+                    self.isShowingCategory = true
+                }
+            }
+        }))
     }
 }
 
 struct MainHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        MainHomeView()
+        MainHomeView(rootView: .constant(true))
+//        LoginView()
     }
 }

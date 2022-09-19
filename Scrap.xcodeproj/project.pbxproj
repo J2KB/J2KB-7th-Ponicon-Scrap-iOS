@@ -11,14 +11,14 @@
 		F8740C2228C988E1009D6F8C /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2128C988E1009D6F8C /* PageView.swift */; };
 		F8740C2428C99954009D6F8C /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2328C99954009D6F8C /* SideMenuView.swift */; };
 		F8740C2628C99A54009D6F8C /* CategoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2528C99A54009D6F8C /* CategoryRowView.swift */; };
-		F8740C2828C99EB0009D6F8C /* MainHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2728C99EB0009D6F8C /* MainHomeView.swift */; };
+		F8740C2828C99EB0009D6F8C /* SubHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2728C99EB0009D6F8C /* SubHomeView.swift */; };
 		F8740C2A28C9BD63009D6F8C /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2928C9BD63009D6F8C /* MyPageView.swift */; };
 		F88E7E3228C5CDDB00C3CCA8 /* ScrapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88E7E3128C5CDDB00C3CCA8 /* ScrapApp.swift */; };
 		F88E7E3428C5CDDB00C3CCA8 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88E7E3328C5CDDB00C3CCA8 /* LoginView.swift */; };
 		F88E7E3628C5CDDC00C3CCA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F88E7E3528C5CDDC00C3CCA8 /* Assets.xcassets */; };
 		F88E7E3928C5CDDC00C3CCA8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F88E7E3828C5CDDC00C3CCA8 /* Preview Assets.xcassets */; };
 		F89BED8828C5F1EE0053D406 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F89BED8728C5F1EE0053D406 /* SignUpView.swift */; };
-		F89BED8D28C5FC680053D406 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F89BED8C28C5FC680053D406 /* HomeView.swift */; };
+		F89BED8D28C5FC680053D406 /* MainHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F89BED8C28C5FC680053D406 /* MainHomeView.swift */; };
 		F8A8972728D2F531006CEC60 /* SaveDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A8972628D2F531006CEC60 /* SaveDataView.swift */; };
 		F8A8972B28D2F5DA006CEC60 /* CategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A8972A28D2F5DA006CEC60 /* CategoryListView.swift */; };
 		F8F0F20228D338C00085097F /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F0F20128D338C00085097F /* APIService.swift */; };
@@ -29,7 +29,7 @@
 		F8740C2128C988E1009D6F8C /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
 		F8740C2328C99954009D6F8C /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
 		F8740C2528C99A54009D6F8C /* CategoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryRowView.swift; sourceTree = "<group>"; };
-		F8740C2728C99EB0009D6F8C /* MainHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHomeView.swift; sourceTree = "<group>"; };
+		F8740C2728C99EB0009D6F8C /* SubHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubHomeView.swift; sourceTree = "<group>"; };
 		F8740C2928C9BD63009D6F8C /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		F88E7E2E28C5CDDB00C3CCA8 /* Scrap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scrap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F88E7E3128C5CDDB00C3CCA8 /* ScrapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapApp.swift; sourceTree = "<group>"; };
@@ -37,7 +37,7 @@
 		F88E7E3528C5CDDC00C3CCA8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F88E7E3828C5CDDC00C3CCA8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F89BED8728C5F1EE0053D406 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
-		F89BED8C28C5FC680053D406 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		F89BED8C28C5FC680053D406 /* MainHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHomeView.swift; sourceTree = "<group>"; };
 		F8A8972628D2F531006CEC60 /* SaveDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveDataView.swift; sourceTree = "<group>"; };
 		F8A8972A28D2F5DA006CEC60 /* CategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListView.swift; sourceTree = "<group>"; };
 		F8F0F20128D338C00085097F /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
@@ -108,9 +108,9 @@
 				F8740C2028C988D1009D6F8C /* SubView */,
 				F88E7E3328C5CDDB00C3CCA8 /* LoginView.swift */,
 				F89BED8728C5F1EE0053D406 /* SignUpView.swift */,
-				F89BED8C28C5FC680053D406 /* HomeView.swift */,
+				F89BED8C28C5FC680053D406 /* MainHomeView.swift */,
 				F8740C2328C99954009D6F8C /* SideMenuView.swift */,
-				F8740C2728C99EB0009D6F8C /* MainHomeView.swift */,
+				F8740C2728C99EB0009D6F8C /* SubHomeView.swift */,
 				F8740C2928C9BD63009D6F8C /* MyPageView.swift */,
 				F8A8972628D2F531006CEC60 /* SaveDataView.swift */,
 				F801187E28D41B3F0011D935 /* TestIDDuplication.swift */,
@@ -217,10 +217,10 @@
 				F8A8972728D2F531006CEC60 /* SaveDataView.swift in Sources */,
 				F88E7E3428C5CDDB00C3CCA8 /* LoginView.swift in Sources */,
 				F801187F28D41B3F0011D935 /* TestIDDuplication.swift in Sources */,
-				F89BED8D28C5FC680053D406 /* HomeView.swift in Sources */,
+				F89BED8D28C5FC680053D406 /* MainHomeView.swift in Sources */,
 				F8740C2A28C9BD63009D6F8C /* MyPageView.swift in Sources */,
 				F89BED8828C5F1EE0053D406 /* SignUpView.swift in Sources */,
-				F8740C2828C99EB0009D6F8C /* MainHomeView.swift in Sources */,
+				F8740C2828C99EB0009D6F8C /* SubHomeView.swift in Sources */,
 				F8F0F20228D338C00085097F /* APIService.swift in Sources */,
 				F88E7E3228C5CDDB00C3CCA8 /* ScrapApp.swift in Sources */,
 			);

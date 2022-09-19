@@ -148,7 +148,7 @@ struct SignUpView: View {
             //모두 올바른 입력값인 경우 회원가입 성공 -> HomeView 이동
             //실패하면 버튼 클릭 x -> 비활성화하면 어떨지
             //우선 상관없이 바로 HomeView 이동 가능하도록
-            NavigationLink(destination: MainHomeView().navigationBarBackButtonHidden(true).navigationBarHidden(true)){
+            NavigationLink(destination: MainHomeView(rootView: $rootView).navigationBarBackButtonHidden(true).navigationBarHidden(true)){
                 Text("회원가입")
                     .font(.system(size: 16, weight: .semibold))
                     .frame(width: UIScreen.main.bounds.width / 2.2, height: 44, alignment: .center)
