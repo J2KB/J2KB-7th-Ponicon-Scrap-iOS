@@ -9,35 +9,41 @@ import SwiftUI
 
 struct SaveDataView: View {
     //임시 데이터 -> 나중엔 데이터 받아올 것
-    @State private var arr = ["category 1", "category 2", "category 3", "category 4"]
+    let arr = ["모든 자료", "분류되지 않은 자료", "category 1", "category 2", "category 3", "category 4"]
+    @State private var title = ""
     @State private var allDoc = "모든 자료"
     @State private var notDi = "분류되지 않은 자료"
+    @State private var selection = 0
     
     var body: some View {
-        VStack{
-            Button(action:{
-                //저장 기능
-                //앱 종료
-            }){
-                Text("저장")
-                    .frame(width: UIScreen.main.bounds.width/2, height: 32, alignment: .center)
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundColor(Color.white)
-                    .multilineTextAlignment(.center)
-                    .padding(10)
-                    .background(Color.blue)
-                    .cornerRadius(12)
+        NavigationView{
+            Form{
+                Section{
+                    TextField("자료 제목", text: $title)
+                }
+                Section{
+                    Picker("저장할 카테고리", selection: $selection) {
+                        ForEach(0..<arr.count){
+                            Text("\(self.arr[$0])")
+                        }
+                    }
+                }
             }
-            .padding(.bottom, 32)
-            CategoryRowView(text: $allDoc) //모든 자료
-                .padding(.vertical, 2)
-            CategoryRowView(text: $notDi)  //분류되지 않은 자료
-                .padding(.vertical, 2)
-            ForEach($arr, id: \.self) { i in
-                CategoryRowView(text: i) //button으로 변경하기
-                    .padding(.vertical, 2)
+            .toolbar{
+                ToolbarItem(placement: .navigationBarLeading){
+                    Button("취소", action: {
+                        
+                    })
+                }
             }
-        }.padding(.top, -UIScreen.main.bounds.height/5)
+            .toolbar{
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button("저장", action: {
+                        
+                    })
+                }
+            }
+        }
     }
 }
 
