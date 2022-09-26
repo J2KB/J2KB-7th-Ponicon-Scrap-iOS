@@ -22,7 +22,7 @@ struct MainHomeView: View {
             SideMenuView()
             //Main Home
             NavigationView{
-                SubHomeView()
+                SubHomeView() //⭐️여기로 category 데이터 넘겨줘야 됨
                     .padding(.horizontal)
                 .navigationBarTitle("", displayMode: .inline)
                 .toolbar{
