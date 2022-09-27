@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct PageView: View {
-    @Binding var data : DataModel
+    @Binding var data : DataResponse.Datas
     @Binding var isOneCol : Bool
     @State private var height = 200
-    @State var selection: Int = -1
     @State private var menu = ["삭제", "카테고리 이동", "이름 변경"]
     let light_blue = Color(red: 70/255, green: 193/255, blue: 241/255)
 
@@ -20,7 +19,7 @@ struct PageView: View {
             //imageUrl == nil
             //light_color
             //imageUrl != nil
-            if data.imageURL == ""{ //image 없으면 default light_blue color
+            if data.imgUrl == ""{ //image 없으면 default light_blue color
                 Rectangle()
                     .foregroundColor(light_blue)
                     .frame(width: isOneCol ? UIScreen.main.bounds.width - 24 : UIScreen.main.bounds.width / 2.2, height: isOneCol ? 130 : 98)
@@ -28,7 +27,8 @@ struct PageView: View {
                     .cornerRadius(10, corners: .topRight)
                     .shadow(radius: 2)
             }else{
-                Image(data.imageURL!)
+                Image(systemName: "person.fill")
+                    .imageData(url: URL(string: data.imgUrl)!)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
 //                    .aspectRatio(contentMode: .fit)
@@ -70,7 +70,7 @@ struct PageView: View {
                         .foregroundColor(.black)
                     }
                     .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.4, height: 36, alignment: .center)
-                    Text(data.domain) //출처
+                    Text("domain") //출처 -> link에서 자르기
                         .font(.caption)
                         .foregroundColor(.gray)
                         .lineLimit(0)
@@ -83,7 +83,7 @@ struct PageView: View {
 
 struct PageView_Previews: PreviewProvider {
     static var previews: some View {
-        PageView(data: .constant(DataModel(title: "apple", link: "https://www.apple.com", imageURL: "iOS", domain: "apple.com")), isOneCol: .constant(false))
+        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", imgUrl: "")), isOneCol: .constant(true))
     }
 }
 
@@ -101,5 +101,14 @@ struct RoundedCorner: Shape {
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape( RoundedCorner(radius: radius, corners: corners) )
+    }
+}
+
+extension Image {
+    func imageData(url: URL) -> Self {
+        if let data = try? Data(contentsOf: url){
+            return Image(uiImage: UIImage(data: data)!)
+        }
+        return self
     }
 }

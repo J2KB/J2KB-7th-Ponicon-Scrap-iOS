@@ -9,20 +9,21 @@ import SwiftUI
 import Combine
 
 struct SideMenuView: View {
-    @State private var arr = ["모든 자료", "분류되지 않은 자료", "category 1", "category 2", "category 3", "category 4"]
-//    @State private var allDoc = ""
-//    @State private var notDi = "분류되지 않은 자료"
+    @Binding var categoryList : CategoryResponse.Result
     @State private var newCat = "" //초기화해줘야 함
-//    @Binding var isAddingCategory : Bool
+    @State private var isAddingCategory = false
     @State private var maxCatName = 20
-    
+    @ObservedObject var vm : ViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
+    var categoryTitle : String
+    @Binding var selected : Int
+
     var body: some View {
 //        HStack{
             VStack{
                 HStack{
-//                    Text("카테고리 이름")
-//                        .font(.system(size: 24))
-//                        .fontWeight(.bold)
+                    Text(categoryTitle) //리스트 선택 기능을 구현하고 이 기능을 추가하는 것으로!
+                        .font(.system(size: 20))
+                        .fontWeight(.semibold)
                     Spacer()
                     Button(action: {}){
                         Image(systemName: "pencil")
@@ -30,61 +31,59 @@ struct SideMenuView: View {
                             .frame(width: 16, height: 16)
                             .foregroundColor(.black)
                     }
-//                    Button(action: {}){
-//                        Image(systemName: "plus")
-//                            .resizable()
-//                            .frame(width: 16, height: 16)
-//                            .foregroundColor(.black)
-//                    }
+                    Button(action: {
+                        self.isAddingCategory.toggle()
+                    }){
+                        Image(systemName: isAddingCategory ? "xmark" : "plus")
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                            .foregroundColor(.black)
+                    }
                 }
-                .padding(.leading, 6)
-                .frame(width: UIScreen.main.bounds.width / 1.4, height: 48)
-                HStack{
+                .padding(.leading, 14)
+                .frame(width: UIScreen.main.bounds.width / 1.45, height: 48)
+                VStack{
                     List{
-//                        HStack{
-//                            Text(allDoc)
-//                                .font(.system(size: 16))
-//                            Spacer()
-//                            Text("\(12)")
-//                                .font(.system(size: 16))
-//                        }
-//                        .frame(width: UIScreen.main.bounds.width / 1.5)
-//                        .padding(4)
-//                        HStack{
-//                            Text(notDi)
-//                                .font(.system(size: 16))
-//                            Spacer()
-//                            Text("\(100)")
-//                                .font(.system(size: 16))
-//                        }
-//                        .frame(width: UIScreen.main.bounds.width / 1.5)
-//                        .padding(4)
-                        ForEach(arr, id: \.self) { ar in
+                        ForEach(categoryList.categories) { category in
                             HStack{
-                                Text(ar)
+                                Text(category.name)
                                     .font(.system(size: 16))
                                 Spacer()
-                                Text("\(14)")
+                                Text("\(category.numOfLink)")
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.gray)
                             }
-                            .frame(width: UIScreen.main.bounds.width / 1.5)
+                            .frame(width: UIScreen.main.bounds.width / 1.55)
                             .padding(4)
-                        }
-                        HStack{
-                            TextField("새로운 카테고리", text: $newCat)
-                            Spacer()
-                            Button(action: {}){
-                                Image(systemName: "plus")
-                                    .foregroundColor(.blue)
+                            .onTapGesture { //클릭하면 현재 categoryID
+                                self.selected = category.categoryId
+//                                self.categoryTitle = categoryList.categories.firstIndex(where: $0.categoryID == selected)
+                                vm.getData(catID: selected)
                             }
                         }
-                        .frame(width: UIScreen.main.bounds.width / 1.5)
-//                        .background(.gray)
-                        .cornerRadius(12)
-                        .padding(4)
-//                        }
                     }
-                    .listStyle(InsetListStyle())
+                    if isAddingCategory {
+                        HStack{
+                            Image(systemName: "square.and.pencil")
+                            TextField("새로운 카테고리", text: $newCat,
+                              onCommit: {
+                                //마지막 categoryId, order을 알아내야함
+                                let newCategory = CategoryResponse.Result.init(categories: [CategoryResponse.Category(categoryId: 0, name: newCat, numOfLink: 0, order: 0)])
+//                                categoryList.categories.append(newCategory) //append 함수 구현하기
+                                newCat = ""
+                                isAddingCategory = false
+                              }
+//                            엔터를 치면 post api로 카테고리 서버 저장 && list에 추가
+                            )
+                            .disableAutocorrection(true) //자동 수정 비활성화
+                        }
+                        .frame(width: UIScreen.main.bounds.width / 1.55)
+                        .padding(10)
+                        .background(Color(hue: 1.0, saturation: 0.0, brightness: 0.921))
+                        .cornerRadius(10)
+                    }
                 }
+                .listStyle(InsetListStyle())
             }
             .frame(width: UIScreen.main.bounds.width / 1.3)
     }
@@ -92,9 +91,6 @@ struct SideMenuView: View {
 
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
-//            HomeView()
-            SideMenuView()
-        }
+        MainHomeView(rootView: .constant(true))
     }
 }

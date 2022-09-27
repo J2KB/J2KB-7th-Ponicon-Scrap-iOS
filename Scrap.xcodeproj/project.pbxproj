@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F801187F28D41B3F0011D935 /* TestIDDuplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = F801187E28D41B3F0011D935 /* TestIDDuplication.swift */; };
+		F87109F428E33275009AFA8F /* CategoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87109F328E33275009AFA8F /* CategoryResponse.swift */; };
+		F87109F628E3327F009AFA8F /* DataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87109F528E3327F009AFA8F /* DataResponse.swift */; };
 		F8740C2228C988E1009D6F8C /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2128C988E1009D6F8C /* PageView.swift */; };
 		F8740C2428C99954009D6F8C /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2328C99954009D6F8C /* SideMenuView.swift */; };
 		F8740C2628C99A54009D6F8C /* CategoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2528C99A54009D6F8C /* CategoryRowView.swift */; };
@@ -52,7 +53,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		F801187E28D41B3F0011D935 /* TestIDDuplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestIDDuplication.swift; sourceTree = "<group>"; };
+		F87109F328E33275009AFA8F /* CategoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryResponse.swift; sourceTree = "<group>"; };
+		F87109F528E3327F009AFA8F /* DataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataResponse.swift; sourceTree = "<group>"; };
 		F8740C2128C988E1009D6F8C /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
 		F8740C2328C99954009D6F8C /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
 		F8740C2528C99A54009D6F8C /* CategoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryRowView.swift; sourceTree = "<group>"; };
@@ -153,7 +155,6 @@
 				F8740C2728C99EB0009D6F8C /* SubHomeView.swift */,
 				F8740C2928C9BD63009D6F8C /* MyPageView.swift */,
 				F8A8972628D2F531006CEC60 /* SaveDataView.swift */,
-				F801187E28D41B3F0011D935 /* TestIDDuplication.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -161,6 +162,8 @@
 		F88E7E4028C5CFD700C3CCA8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				F87109F328E33275009AFA8F /* CategoryResponse.swift */,
+				F87109F528E3327F009AFA8F /* DataResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -293,16 +296,17 @@
 			files = (
 				F8740C2628C99A54009D6F8C /* CategoryRowView.swift in Sources */,
 				F8740C2428C99954009D6F8C /* SideMenuView.swift in Sources */,
+				F87109F428E33275009AFA8F /* CategoryResponse.swift in Sources */,
 				F8A8972B28D2F5DA006CEC60 /* CategoryListView.swift in Sources */,
 				F8740C2228C988E1009D6F8C /* PageView.swift in Sources */,
 				F8A8972728D2F531006CEC60 /* SaveDataView.swift in Sources */,
 				F88E7E3428C5CDDB00C3CCA8 /* LoginView.swift in Sources */,
-				F801187F28D41B3F0011D935 /* TestIDDuplication.swift in Sources */,
 				F89BED8D28C5FC680053D406 /* MainHomeView.swift in Sources */,
 				F8740C2A28C9BD63009D6F8C /* MyPageView.swift in Sources */,
 				F89BED8828C5F1EE0053D406 /* SignUpView.swift in Sources */,
 				F8740C2828C99EB0009D6F8C /* SubHomeView.swift in Sources */,
 				F8F0F20228D338C00085097F /* APIService.swift in Sources */,
+				F87109F628E3327F009AFA8F /* DataResponse.swift in Sources */,
 				F88E7E3228C5CDDB00C3CCA8 /* ScrapApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
