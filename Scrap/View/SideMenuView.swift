@@ -16,6 +16,7 @@ struct SideMenuView: View {
     @ObservedObject var vm : ViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     var categoryTitle : String
     @Binding var selected : Int
+    let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
 
     var body: some View {
 //        HStack{
@@ -53,15 +54,16 @@ struct SideMenuView: View {
                                 Image(systemName: "chevron.right")
                                     .foregroundColor(.gray)
                             }
+                            .listRowBackground(self.selected == category.categoryId ? light_gray : Color(.white))
                             .frame(width: UIScreen.main.bounds.width / 1.55)
                             .padding(4)
                             .onTapGesture { //클릭하면 현재 categoryID
                                 self.selected = category.categoryId
-//                                self.categoryTitle = categoryList.categories.firstIndex(where: $0.categoryID == selected)
                                 vm.getData(catID: selected)
                             }
                         }
                     }
+                    .listStyle(InsetListStyle())
                     if isAddingCategory {
                         HStack{
                             Image(systemName: "square.and.pencil")
@@ -83,7 +85,6 @@ struct SideMenuView: View {
                         .cornerRadius(10)
                     }
                 }
-                .listStyle(InsetListStyle())
             }
             .frame(width: UIScreen.main.bounds.width / 1.3)
     }

@@ -155,7 +155,7 @@ struct MainHomeView: View {
             .frame(width: UIScreen.main.bounds.width)
         }
         .frame(width: UIScreen.main.bounds.width)
-        .offset(x: isShowingCategory ? UIScreen.main.bounds.width / 2.7 : -UIScreen.main.bounds.width / 2.6) //moving view
+        .offset(x: isShowingCategory ? UIScreen.main.bounds.width / 2.95 : -UIScreen.main.bounds.width / 2.6) //moving view
         .onAppear(perform: { //이 화면 등장하면 api 통신
             vm.getCategoryData()
         })
