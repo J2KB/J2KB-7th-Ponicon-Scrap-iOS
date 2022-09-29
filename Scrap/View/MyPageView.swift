@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MyPageView: View {
+    @Binding var userData : UserResponse.Result
     @State private var isEditingUserName = false
     @State private var username = ""
     @State private var iconArr = ["camping", "circus", "classical", "compass", "palette", "rocket", "ufo"]
@@ -60,7 +61,7 @@ struct MyPageView: View {
                         }
                         else{ //username 나타내는(text)
                             HStack(spacing: 8){
-                                Text("username 님") //user data 가져오기
+                                Text("\(userData.name) 님") //user data 가져오기
                                     .font(.system(size: 24, weight: .bold))
                                 Button(action: {
                                     self.isEditingUserName.toggle()
@@ -73,7 +74,7 @@ struct MyPageView: View {
                             }
                             .frame(width: UIScreen.main.bounds.width - 120, height: 28, alignment: .leading)
                         }
-                        Text("userID1234")
+                        Text("\(userData.username)")
                             .font(.system(size: 12, weight: .medium))
                             .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.681))
                             .frame(width: UIScreen.main.bounds.width - 120, alignment: .leading)
@@ -109,6 +110,6 @@ struct MyPageView: View {
 
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
-        MyPageView(rootView: .constant(true))
+        MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")), rootView: .constant(true))
     }
 }
