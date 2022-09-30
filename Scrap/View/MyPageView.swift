@@ -13,6 +13,7 @@ struct MyPageView: View {
     @State private var username = ""
     @State private var iconArr = ["camping", "circus", "classical", "compass", "palette", "rocket", "ufo"]
     @Binding var rootView : Bool
+    @ObservedObject var vm : ScrapViewModel //여기서 로그아웃
     @Environment(\.presentationMode) var presentationMode //pop sheet
     
     let icon = Int.random(in: 0...6)
@@ -87,17 +88,14 @@ struct MyPageView: View {
                 Spacer()
                 Button(action:{
                     //login 화면으로 pop -> rootview
+                    vm.logOut() //log out 서버에 보내기
                     rootView = false
                     //로그아웃 기능
                 }){
-//                    HStack{
-//                        Image(systemName: "rectangle.portrait.and.arrow.right.fill")
-//                            .foregroundColor(.gray)
-                        Text("로그아웃")
-                            .underline()
-                            .font(.system(size: 15, weight: .semibold))
-                            .foregroundColor(Color.gray)
-//                    }
+                Text("로그아웃")
+                    .underline()
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(Color.gray)
                 }
                 .padding()
             }//VStack2
@@ -110,6 +108,6 @@ struct MyPageView: View {
 
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
-        MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")), rootView: .constant(true))
+        MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")), rootView: .constant(true), vm: ScrapViewModel())
     }
 }

@@ -72,13 +72,18 @@ struct SignUpModel: Decodable{
     }
 }
 
+struct LogOutModel: Decodable{
+    let code: Int
+    let message: String
+    init(code: Int, message: String){
+        self.code = code
+        self.message = message
+    }
+}
+
 class ScrapViewModel: ObservableObject{
     //Get Objects
-    @Published var categoryList = CategoryResponse(code: 0, message: "", result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)])) { //초기화
-        willSet{
-            objectWillChange.send()
-        }
-    }
+    @Published var categoryList = CategoryResponse(code: 0, message: "", result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)]))  //초기화
     //categoryList에는 Category 값만 넣을 것..!
     @Published var dataList = DataResponse(code: 0, message: "", result: DataResponse.Result(links: [DataResponse.Datas(linkId: 0, link: "", title: "", imgUrl: "")]))
     @Published var user = UserResponse(code: 0, message: "", result: UserResponse.Result(name: "", username: ""))
@@ -161,29 +166,26 @@ class ScrapViewModel: ObservableObject{
     }
     
     //로그아웃
-//    func get(userID: Int){
-//        guard let url = URL(string: "https://scrap.hana-umc.shop/user/mypage?id=\(userID)") else {
-//            print("invalid url")
-//            return
-//        }
-//        URLSession.shared.dataTask(with: url) { (data, response, error) in
-//            do{
-//                if let data = data {
-//                    let decoder = JSONDecoder()
-//                    let result = try decoder.decode(UserResponse.self, from: data)
-//                    DispatchQueue.main.async {
-//                        self.user = result
-//                    }
-//                } else {
-//                    print("no data")
-//                }
-//            }catch (let error){
-//                print("error")
-//                print(String(describing: error))
-//            }
-//        }.resume()
-//    }
-    
+    func logOut(){
+        guard let url = URL(string: "https://scrap.hana-umc.shop/user/logout") else {
+            print("invalid url")
+            return
+        }
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(LogOutModel.self, from: data)
+                    print(result)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print("error")
+                print(String(describing: error))
+            }
+        }.resume()
+    }
     
     //POST
     //카테고리 추가

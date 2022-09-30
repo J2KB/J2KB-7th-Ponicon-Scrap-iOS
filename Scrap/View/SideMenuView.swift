@@ -62,6 +62,10 @@ struct SideMenuView: View {
                             }
                         }
                     }
+//                    .refreshable{
+//                        await vm.getCategoryData()
+//                        print("refresh")
+//                    }
                     .listStyle(InsetListStyle())
                     if isAddingCategory {
                         HStack{
@@ -73,8 +77,7 @@ struct SideMenuView: View {
                                 
                                 //post로 추가된 카테고리 이름 서버에 전송
                                 vm.addNewCategory(newCat: newCat)
-                                //get로 카테고리 데이터 다시 받아오기
-                                vm.getCategoryData()
+                                //reload list - how to do this?
                                 newCat = ""
                                 isAddingCategory = false
                               }
