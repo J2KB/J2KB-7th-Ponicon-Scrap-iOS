@@ -13,7 +13,9 @@ struct ScrapApp: App {
         WindowGroup {
             //if 로그아웃 혹은 첫 런칭이라면 LoginView()
             //else HomeView()
-            MainHomeView(rootView: .constant(true))
+//            RootView()
+//            MainHomeView(rootView: .constant(true))
+            LoginView()
         }
     }
 }

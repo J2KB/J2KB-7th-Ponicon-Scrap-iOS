@@ -13,8 +13,7 @@ struct SideMenuView: View {
     @State private var newCat = "" //초기화해줘야 함
     @State private var isAddingCategory = false
     @State private var maxCatName = 20
-    @ObservedObject var vm : ViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
-    var categoryTitle : String
+    @ObservedObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @Binding var selected : Int
     let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
 
@@ -22,7 +21,7 @@ struct SideMenuView: View {
 //        HStack{
             VStack{
                 HStack{
-                    Text(categoryTitle) //리스트 선택 기능을 구현하고 이 기능을 추가하는 것으로!
+                    Text("카테고리") //리스트 선택 기능을 구현하고 이 기능을 추가하는 것으로!
                         .font(.system(size: 20))
                         .fontWeight(.semibold)
                     Spacer()
@@ -69,9 +68,13 @@ struct SideMenuView: View {
                             Image(systemName: "square.and.pencil")
                             TextField("새로운 카테고리", text: $newCat,
                               onCommit: {
-                                //마지막 categoryId, order을 알아내야함
-                                let newCategory = CategoryResponse.Result.init(categories: [CategoryResponse.Category(categoryId: 0, name: newCat, numOfLink: 0, order: 0)])
+//                                let newCategory = CategoryResponse.Result.init(categories: [CategoryResponse.Category(categoryId: 0, name: newCat, numOfLink: 0, order: 0)])
 //                                categoryList.categories.append(newCategory) //append 함수 구현하기
+                                
+                                //post로 추가된 카테고리 이름 서버에 전송
+                                vm.addNewCategory(newCat: newCat)
+                                //get로 카테고리 데이터 다시 받아오기
+                                vm.getCategoryData()
                                 newCat = ""
                                 isAddingCategory = false
                               }

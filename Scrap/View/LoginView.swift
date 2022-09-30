@@ -8,12 +8,17 @@
 import SwiftUI
 
 struct LoginView: View {
+    @ObservedObject var vm = ScrapViewModel()
     @State private var id: String = ""
     @State private var pw: String = ""
     @State private var showPW = false //비밀번호 visible, invisible
     @State private var keepLogin = false
     @State private var showingSignUpSheet = false //회원가입 sheet state property
     @State private var rootView = false
+    @State private var successLogin = false
+    var toastMessage : String {
+        return "\(vm.login.message)"
+    }
     
     let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
     let bold_sub_gray = Color(red: 151/255, green: 151/255, blue: 151/255)
@@ -42,7 +47,6 @@ struct LoginView: View {
                                 TextField("비밀번호", text: $pw)
                                     .disableAutocorrection(true) //자동 수정 비활성화
                                     .padding(.horizontal)
-                                    
                                 Button(action: {
                                     self.showPW.toggle()
                                 }) {
@@ -86,12 +90,13 @@ struct LoginView: View {
                 }
                 .padding(.horizontal, 50)
                 HStack(){ //로그인 유지 체크 박스
-                    Text("아이디/비밀번호가 맞지 않습니다.") //관련 에러 메세지 따로 출력되도록
-                        .font(.caption)
-                        .foregroundColor(error_red)
-                        .lineLimit(0)
-                        .padding(.leading, 4)
-//                        .hidden()
+                    if vm.login.code != 20000 {
+                        Text(toastMessage) //관련 에러 메세지 따로 출력되도록
+                            .font(.caption)
+                            .foregroundColor(error_red)
+                            .lineLimit(0)
+                            .padding(.leading, 4)
+                    }
                     Spacer()
                     HStack{
                         Button(action: {
@@ -111,25 +116,52 @@ struct LoginView: View {
                             }
                         }
                         .frame(width: 8, height: 8)
-                        Text("로그인 유지")
+                        Text("자동 로그인")
                             .font(.system(size: 14, weight: .light))
                     }
                 }
                 .frame(width: UIScreen.main.bounds.width - 100, height: 40)
                 
                 VStack(spacing: 12){
-                    Button(action: { //login button
-                    
-                    }) {
-                        Text("로그인")
-                            .frame(width: UIScreen.main.bounds.width-120, height: 28, alignment: .center)
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.center)
-                            .padding(10)
-                            .background(light_blue)
-                            .cornerRadius(12)
+                    NavigationLink(destination: MainHomeView(rootView: $rootView).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $successLogin){
+//                        Button(action:{
+//                            vm.postLogin(userid: id, password: pw, autoLogin: keepLogin)
+//                            if vm.login.code == 20000 {
+//                                self.successLogin = true
+//                            }
+//                        }){
+                            Text("로그인")
+                                .frame(width: UIScreen.main.bounds.width-120, height: 28, alignment: .center)
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundColor(.white)
+                                .multilineTextAlignment(.center)
+                                .padding(10)
+                                .background(light_blue)
+                                .cornerRadius(12)
                     }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        vm.postLogin(userid: id, password: pw, autoLogin: keepLogin)
+                        self.successLogin = vm.successLogin
+                        print(successLogin)
+                    })
+
+//                    }
+//                    Button(action: { //login button
+//                        vm.postLogin(userid: id, password: pw, autoLogin: keepLogin)
+//                        if vm.login.code == 20000 {
+//                            self.successLogin = true
+//                        }
+//                    }) {
+//                        Text("로그인")
+//                            .frame(width: UIScreen.main.bounds.width-120, height: 28, alignment: .center)
+//                            .font(.system(size: 20, weight: .semibold))
+//                            .foregroundColor(.white)
+//                            .multilineTextAlignment(.center)
+//                            .padding(10)
+//                            .background(light_blue)
+//                            .cornerRadius(12)
+//                    }
+                                         
                     HStack{
                         Rectangle()
                             .frame(width: UIScreen.main.bounds.width/3.1, height: 1)
@@ -144,6 +176,7 @@ struct LoginView: View {
                     .padding(.vertical)
                     Button(action: { //login button
                         //카카오로 연결
+                        vm.addNewData()
                     }) {
                         Image("kakao_login_large_narrow")
                             .resizable()
@@ -174,6 +207,7 @@ struct LoginView: View {
             .padding(.bottom, 80)
 //            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         }
+        
     }
 }
 

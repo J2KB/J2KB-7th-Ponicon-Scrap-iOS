@@ -27,6 +27,7 @@ struct SaveDataView: View {
                             Text("\(self.arr[$0])")
                         }
                     }
+                    .pickerStyle(.wheel)
                 }
             }
             .toolbar{

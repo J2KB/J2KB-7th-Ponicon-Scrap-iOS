@@ -15,7 +15,7 @@ struct MyPageView: View {
     @Binding var rootView : Bool
     @Environment(\.presentationMode) var presentationMode //pop sheet
     
-    let icon = Int.random(in: 0...7)
+    let icon = Int.random(in: 0...6)
     
     var body: some View {
         VStack(spacing: 60){
