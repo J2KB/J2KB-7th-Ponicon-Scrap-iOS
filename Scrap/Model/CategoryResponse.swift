@@ -9,7 +9,7 @@ import Foundation
 
 struct CategoryResponse: Decodable{
     struct Result: Decodable {
-        let categories: [Category]
+        var categories: [Category]
         
         init(categories: [Category]){
             self.categories = categories
@@ -17,10 +17,10 @@ struct CategoryResponse: Decodable{
     }
     struct Category: Decodable, Identifiable{
         let id = UUID()
-        let categoryId: Int
-        let name: String
-        let numOfLink: Int
-        let order: Int
+        var categoryId: Int
+        var name: String
+        var numOfLink: Int
+        var order: Int
         
         init(categoryId: Int, name: String, numOfLink: Int, order: Int){
             self.categoryId = categoryId
@@ -29,8 +29,8 @@ struct CategoryResponse: Decodable{
             self.order = order
         }
     }
-    let code: Int
-    let message: String
+    var code: Int
+    var message: String
     var result: Result
     
     init(code: Int, message: String, result: Result){

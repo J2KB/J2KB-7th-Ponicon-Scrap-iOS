@@ -9,13 +9,21 @@ import SwiftUI
 
 @main
 struct ScrapApp: App {
+    @StateObject var scrapVM = ScrapViewModel()
+    @StateObject var userVM = UserViewModel()
+    @State private var rootView = false
+
     var body: some Scene {
         WindowGroup {
             //if 로그아웃 혹은 첫 런칭이라면 LoginView()
             //else HomeView()
 //            RootView()
 //            MainHomeView(rootView: .constant(true))
-            LoginView()
+//                .environmentObject(scrapVM)
+//                .environmentObject(userVM)
+            LoginView(rootView: $rootView)
+                .environmentObject(scrapVM)
+                .environmentObject(userVM)
         }
     }
 }

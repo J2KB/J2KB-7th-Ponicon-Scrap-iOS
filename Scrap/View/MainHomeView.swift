@@ -12,22 +12,22 @@
 import SwiftUI
 
 struct MainHomeView: View {
-    @StateObject var vm = ScrapViewModel()
+    @EnvironmentObject var scrapVM : ScrapViewModel //ScrapApp에서 연결받은 EnvironmentObject
     @State private var isShowingCategory = false
     @State private var isShowingMyPage = false
     @Binding var rootView : Bool
     @State private var selected : Int = 2
     var categoryTitle : String {
-        return "\(vm.categoryList.result.categories[vm.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"
+        return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"
     }
 
     var body: some View {
         HStack(spacing: 0){
             //Drawer
-            SideMenuView(categoryList: $vm.categoryList.result, vm: vm, selected: $selected)
+            SideMenuView(categoryList: $scrapVM.categoryList.result, selected: $selected)
             //Main Home
             NavigationView{
-                SubHomeView(datas: $vm.dataList.result) //⭐️여기로 category 데이터 넘겨줘야 됨
+                SubHomeView(datas: $scrapVM.dataList.result) //⭐️여기로 category 데이터 넘겨줘야 됨
                 .navigationBarTitle("", displayMode: .inline)
                 .toolbar{
                     ToolbarItem(placement: .navigationBarLeading){
@@ -50,10 +50,10 @@ struct MainHomeView: View {
                 .toolbar{
                     ToolbarItem(placement: .navigationBarTrailing){
                         VStack{
-                            NavigationLink(destination: MyPageView(userData: $vm.user.result, rootView: $rootView, vm: vm), isActive: $isShowingMyPage) {
+                            NavigationLink(destination: MyPageView(userData: $scrapVM.user.result, rootView: $rootView), isActive: $isShowingMyPage) {
                                 Button(action: {
                                     self.isShowingMyPage.toggle()
-                                    vm.getMyData(userID: 9)
+                                    scrapVM.getMyData(userID: 9)
                                 }) {
                                     Image(systemName: "person.circle")
                                         .foregroundColor(.black)
@@ -68,7 +68,7 @@ struct MainHomeView: View {
         .frame(width: UIScreen.main.bounds.width)
         .offset(x: isShowingCategory ? UIScreen.main.bounds.width / 2.7 : -UIScreen.main.bounds.width / 2.6) //moving view
         .onAppear{ //이 화면 등장하면 api 통신
-            vm.getCategoryData()
+            scrapVM.getCategoryData()
         }
 //        .refreshable {
 //            vm.getCategoryData()
@@ -91,6 +91,7 @@ struct MainHomeView: View {
 struct MainHomeView_Previews: PreviewProvider {
     static var previews: some View {
         MainHomeView(rootView: .constant(true))
+            .environmentObject(ScrapViewModel())
 //        LoginView()
     }
 }

@@ -14,7 +14,7 @@ let bold_blue = Color(red: 20/255, green: 142/255, blue: 174/255)
 let light_blue = Color(red: 70/255, green: 193/255, blue: 241/255)
 
 struct SignUpView: View {
-    @ObservedObject var vm = ScrapViewModel()
+    @EnvironmentObject var vm : ScrapViewModel
     @State private var username = ""
     @State private var id = ""
     @State private var pw = ""
@@ -158,7 +158,7 @@ struct SignUpView: View {
                     .cornerRadius(10)
             }
             .simultaneousGesture(TapGesture().onEnded {
-                vm.postSignUp(userid: id, password: pw, name: username)
+//                vm.postSignUp(userid: id, password: pw, name: username)
             })
             .padding(.top, 28)
         }
@@ -172,5 +172,6 @@ struct SignUpView: View {
 struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
         SignUpView(rootView: .constant(true))
+            .environmentObject(ScrapViewModel())
     }
 }

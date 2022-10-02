@@ -7,17 +7,17 @@
 
 import Foundation
 
-struct NewCategoryModel: Decodable{
+struct NewCategoryModel: Decodable{ //카테고리 추가 -> response 데이터로 받을 user id
     struct Result: Decodable {
-        var id: Int
+        var categoryId: Int
         
-        init(id: Int){
-            self.id = id
+        init(categoryId: Int){
+            self.categoryId = categoryId
         }
     }
     var code: Int
     var message: String
-    var result: Result
+    var result: Result?
     init(code: Int, message: String, result: Result){
         self.code = code
         self.message = message
@@ -25,7 +25,7 @@ struct NewCategoryModel: Decodable{
     }
 }
 
-struct NewDataModel: Decodable{
+struct NewDataModel: Decodable{ //자료 저장 -> response 데이터로 받을 link id
     struct Result: Decodable {
         var linkId: Int
         
@@ -43,54 +43,19 @@ struct NewDataModel: Decodable{
     }
 }
 
-struct LoginModel: Decodable{
-    struct Result: Decodable {
-        var id: Int
-        
-        init(id: Int){
-            self.id = id
-        }
-    }
-    let code: Int
-    let message: String
-    var result: Result
-    
-    init(code: Int, message: String, result: Result){
-        self.code = code
-        self.message = message
-        self.result = result
-    }
-}
-
-struct SignUpModel: Decodable{
-    var code: Int
-    var message: String
-    
-    init(code: Int, message: String){
-        self.code = code
-        self.message = message
-    }
-}
-
-struct LogOutModel: Decodable{
-    let code: Int
-    let message: String
-    init(code: Int, message: String){
-        self.code = code
-        self.message = message
-    }
-}
-
-class ScrapViewModel: ObservableObject{
-    //Get Objects
+class ScrapViewModel: ObservableObject{ //감시할 data model
     @Published var categoryList = CategoryResponse(code: 0, message: "", result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)]))  //초기화
     //categoryList에는 Category 값만 넣을 것..!
     @Published var dataList = DataResponse(code: 0, message: "", result: DataResponse.Result(links: [DataResponse.Datas(linkId: 0, link: "", title: "", imgUrl: "")]))
     @Published var user = UserResponse(code: 0, message: "", result: UserResponse.Result(name: "", username: ""))
-    //Post Objects
-    @Published var login = LoginModel(code: 0, message: "", result: LoginModel.Result(id: 0))
     
-    var successLogin = false
+    var failLogin = false
+    var failedLoginToastMessage = ""
+    var categoryID = 0
+    
+    func appendCategory(newCategory: CategoryResponse.Category){
+        categoryList.result.categories.append(newCategory)
+    }
     
     //GET
     //카테고리 전체 조회
@@ -116,7 +81,6 @@ class ScrapViewModel: ObservableObject{
             }
         }.resume()
     }
-    
     //자료 조회 -> query: category id
     func getData(catID: Int){
         guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=2&category=\(catID)&seq=desc") else {
@@ -140,7 +104,6 @@ class ScrapViewModel: ObservableObject{
             }
         }.resume()
     }
-    
     //마이 페이지 -> query: user id
     func getMyData(userID: Int){
         guard let url = URL(string: "https://scrap.hana-umc.shop/user/mypage?id=\(userID)") else {
@@ -155,28 +118,6 @@ class ScrapViewModel: ObservableObject{
                     DispatchQueue.main.async {
                         self.user = result
                     }
-                } else {
-                    print("no data")
-                }
-            }catch (let error){
-                print("error")
-                print(String(describing: error))
-            }
-        }.resume()
-    }
-    
-    //로그아웃
-    func logOut(){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/user/logout") else {
-            print("invalid url")
-            return
-        }
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            do{
-                if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(LogOutModel.self, from: data)
-                    print(result)
                 } else {
                     print("no data")
                 }
@@ -209,6 +150,7 @@ class ScrapViewModel: ObservableObject{
                 if let data = data {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(NewCategoryModel.self, from: data)
+                    self.categoryID = result.result?.categoryId ?? 0
                     print(result)
                 } else {
                     print("no data")
@@ -218,77 +160,6 @@ class ScrapViewModel: ObservableObject{
             }
         }.resume()
     }
-    
-    //로그인
-    func postLogin(userid: String, password: String, autoLogin: Bool){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/user/login") else {
-            print("invalid url")
-            return
-        }
-        
-        let id = userid
-        let pw = password
-        let autoLogin = autoLogin
-        let body: [String: Any] = ["username": id, "password": pw, "autoLogin": autoLogin]
-        let finalData = try! JSONSerialization.data(withJSONObject: body)
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = finalData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            do{
-                if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(LoginModel.self, from: data)
-                    self.successLogin = true
-                    print("success posting login data")
-                    print(result)
-                } else {
-                    print("no data")
-                }
-            }catch (let error){
-                print("erorr")
-                self.successLogin = false
-                print(String(describing: error))
-            }
-        }.resume()
-    }
-    
-    //회원가입
-    func postSignUp(userid: String, password: String, name: String){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/user/join") else {
-            print("invalid url")
-            return
-        }
-
-        let username = userid
-        let pw = password
-        let name = name
-        let body: [String: Any] = ["username": username, "password": pw, "name": name]
-        let finalData = try! JSONSerialization.data(withJSONObject: body)
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = finalData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            do{
-                if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(SignUpModel.self, from: data)
-                    print(result)
-                } else {
-                    print("no data")
-                }
-            }catch (let error){
-                print(String(describing: error))
-            }
-        }.resume()
-    }
-    
     //자료 저장
     func addNewData(){
         guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=2&category=3") else {

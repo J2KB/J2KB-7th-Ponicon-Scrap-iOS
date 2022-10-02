@@ -8,18 +8,17 @@
 import SwiftUI
 
 struct LoginView: View {
-    @ObservedObject var vm = ScrapViewModel()
-    @State private var id: String = ""
-    @State private var pw: String = ""
+    @EnvironmentObject var userVM : UserViewModel
+    @State private var id: String = " "
+    @State private var pw: String = " "
     @State private var showPW = false //비밀번호 visible, invisible
     @State private var keepLogin = false
     @State private var showingSignUpSheet = false //회원가입 sheet state property
-    @State private var rootView = false
+    @Binding var rootView : Bool
     @State private var successLogin = false
-    var toastMessage : String {
-        return "\(vm.login.message)"
-    }
-    
+//    var toastMessage : String {
+//        return "\(vm.login.message)"
+//    }
     let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
     let bold_sub_gray = Color(red: 151/255, green: 151/255, blue: 151/255)
     let light_blue = Color(red: 70/255, green: 193/255, blue: 241/255)
@@ -68,7 +67,7 @@ struct LoginView: View {
                                 SecureField("비밀번호", text: $pw)
                                     .disableAutocorrection(true) //자동 수정 비활성화
                                     .padding(.horizontal)
-                                    
+
                                 Button(action: {
                                     self.showPW.toggle()
                                 }) {
@@ -85,18 +84,18 @@ struct LoginView: View {
                                     .frame(height: 42, alignment: .center)
                             )
                         }
-                        
+
                     }
                 }
                 .padding(.horizontal, 50)
                 HStack(){ //로그인 유지 체크 박스
-                    if vm.login.code != 20000 {
-                        Text(toastMessage) //관련 에러 메세지 따로 출력되도록
-                            .font(.caption)
-                            .foregroundColor(error_red)
-                            .lineLimit(0)
-                            .padding(.leading, 4)
-                    }
+//                    if vm.login.code != 20000 {
+//                        Text(toastMessage) //관련 에러 메세지 따로 출력되도록
+//                            .font(.caption)
+//                            .foregroundColor(error_red)
+//                            .lineLimit(0)
+//                            .padding(.leading, 4)
+//                    }
                     Spacer()
                     HStack{
                         Button(action: {
@@ -121,7 +120,7 @@ struct LoginView: View {
                     }
                 }
                 .frame(width: UIScreen.main.bounds.width - 100, height: 40)
-                
+
                 VStack(spacing: 12){
                     NavigationLink(destination: MainHomeView(rootView: $rootView).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $successLogin){
 //                        Button(action:{
@@ -140,9 +139,9 @@ struct LoginView: View {
                                 .cornerRadius(12)
                     }
                     .simultaneousGesture(TapGesture().onEnded {
-                        vm.postLogin(userid: id, password: pw, autoLogin: keepLogin)
-                        self.successLogin = vm.successLogin
-                        print(successLogin)
+//                        vm.postLogin(userid: id, password: pw, autoLogin: keepLogin)
+//                        self.successLogin = vm.failLogin
+//                        print(successLogin)
                     })
 
 //                    }
@@ -161,7 +160,7 @@ struct LoginView: View {
 //                            .background(light_blue)
 //                            .cornerRadius(12)
 //                    }
-                                         
+
                     HStack{
                         Rectangle()
                             .frame(width: UIScreen.main.bounds.width/3.1, height: 1)
@@ -176,14 +175,14 @@ struct LoginView: View {
                     .padding(.vertical)
                     Button(action: { //login button
                         //카카오로 연결
-                        vm.addNewData()
+//                        vm.addNewData()
                     }) {
                         Image("kakao_login_large_narrow")
                             .resizable()
                             .frame(width: UIScreen.main.bounds.width / 1.8, height: 52, alignment: .center)
                     }
                 }
-                
+
                 NavigationLink(destination: SignUpView(rootView: $rootView), isActive: $rootView){
                     Text("회원가입")
                         .font(.system(size: 16, weight: .medium))
@@ -207,12 +206,13 @@ struct LoginView: View {
             .padding(.bottom, 80)
 //            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         }
-        
+
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(rootView: .constant(false))
+            .environmentObject(ScrapViewModel())
     }
 }

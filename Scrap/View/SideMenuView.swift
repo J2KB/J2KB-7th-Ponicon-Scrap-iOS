@@ -13,7 +13,7 @@ struct SideMenuView: View {
     @State private var newCat = "" //초기화해줘야 함
     @State private var isAddingCategory = false
     @State private var maxCatName = 20
-    @ObservedObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
+    @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @Binding var selected : Int
     let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
 
@@ -44,7 +44,7 @@ struct SideMenuView: View {
                 .frame(width: UIScreen.main.bounds.width / 1.45, height: 48)
                 VStack{
                     List{
-                        ForEach(categoryList.categories) { category in
+                        ForEach($categoryList.categories) { $category in
                             HStack{
                                 Text(category.name)
                                     .font(.system(size: 16))
@@ -72,12 +72,11 @@ struct SideMenuView: View {
                             Image(systemName: "square.and.pencil")
                             TextField("새로운 카테고리", text: $newCat,
                               onCommit: {
-//                                let newCategory = CategoryResponse.Result.init(categories: [CategoryResponse.Category(categoryId: 0, name: newCat, numOfLink: 0, order: 0)])
-//                                categoryList.categories.append(newCategory) //append 함수 구현하기
-                                
-                                //post로 추가된 카테고리 이름 서버에 전송
                                 vm.addNewCategory(newCat: newCat)
-                                //reload list - how to do this?
+                                let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: 0)
+                                vm.appendCategory(newCategory: newCategory) //append 함수 구현하기
+                                //post로 추가된 카테고리 이름 서버에 전송
+                                //reload list - how can i do this?
                                 newCat = ""
                                 isAddingCategory = false
                               }
@@ -99,5 +98,6 @@ struct SideMenuView: View {
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
         MainHomeView(rootView: .constant(true))
+            .environmentObject(ScrapViewModel())
     }
 }
