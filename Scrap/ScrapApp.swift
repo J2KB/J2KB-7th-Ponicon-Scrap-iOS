@@ -11,7 +11,6 @@ import SwiftUI
 struct ScrapApp: App {
     @StateObject var scrapVM = ScrapViewModel()
     @StateObject var userVM = UserViewModel()
-    @State private var rootView = false
 
     var body: some Scene {
         WindowGroup {
@@ -21,7 +20,7 @@ struct ScrapApp: App {
 //            MainHomeView(rootView: .constant(true))
 //                .environmentObject(scrapVM)
 //                .environmentObject(userVM)
-            LoginView(rootView: $rootView)
+            LoginView()
                 .environmentObject(scrapVM)
                 .environmentObject(userVM)
         }

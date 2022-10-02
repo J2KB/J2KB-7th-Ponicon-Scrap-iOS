@@ -9,16 +9,16 @@ import SwiftUI
 
 struct LoginView: View {
     @EnvironmentObject var userVM : UserViewModel
-    @State private var id: String = " "
-    @State private var pw: String = " "
+    @State private var id: String = ""
+    @State private var pw: String = ""
     @State private var showPW = false //비밀번호 visible, invisible
     @State private var keepLogin = false
     @State private var showingSignUpSheet = false //회원가입 sheet state property
-    @Binding var rootView : Bool
-    @State private var successLogin = false
+    @State private var rootView = false
 //    var toastMessage : String {
-//        return "\(vm.login.message)"
+//        return userVM.login.message
 //    }
+    
     let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
     let bold_sub_gray = Color(red: 151/255, green: 151/255, blue: 151/255)
     let light_blue = Color(red: 70/255, green: 193/255, blue: 241/255)
@@ -46,6 +46,9 @@ struct LoginView: View {
                                 TextField("비밀번호", text: $pw)
                                     .disableAutocorrection(true) //자동 수정 비활성화
                                     .padding(.horizontal)
+                                    .onSubmit {
+                                        hideKeyboard()
+                                    }
                                 Button(action: {
                                     self.showPW.toggle()
                                 }) {
@@ -67,13 +70,15 @@ struct LoginView: View {
                                 SecureField("비밀번호", text: $pw)
                                     .disableAutocorrection(true) //자동 수정 비활성화
                                     .padding(.horizontal)
-
+                                    .onSubmit {
+                                        hideKeyboard()
+                                    }
                                 Button(action: {
                                     self.showPW.toggle()
                                 }) {
                                     Image(systemName: "eye.slash")
                                         .resizable()
-                                        .frame(width: 20, height: 15)
+                                        .frame(width: 20, height: 13)
                                         .foregroundColor(light_gray)
                                 }
                                 .padding(.trailing, 12)
@@ -88,15 +93,16 @@ struct LoginView: View {
                     }
                 }
                 .padding(.horizontal, 50)
-                HStack(){ //로그인 유지 체크 박스
-//                    if vm.login.code != 20000 {
-//                        Text(toastMessage) //관련 에러 메세지 따로 출력되도록
-//                            .font(.caption)
-//                            .foregroundColor(error_red)
-//                            .lineLimit(0)
-//                            .padding(.leading, 4)
-//                    }
-                    Spacer()
+                .padding(.bottom, 15)
+                VStack(){ //로그인 유지 체크 박스
+                    if !userVM.loginState {
+                        Text(userVM.toastMessage) //관련 에러 메세지 따로 출력되도록
+                            .font(.caption)
+                            .foregroundColor(error_red)
+                            .lineLimit(0)
+                            .padding(.leading, 4)
+                            .frame(width: UIScreen.main.bounds.width - 100, alignment: .leading)
+                    }
                     HStack{
                         Button(action: {
                             //stayLogin
@@ -118,56 +124,30 @@ struct LoginView: View {
                         Text("자동 로그인")
                             .font(.system(size: 14, weight: .light))
                     }
+                    .frame(width: UIScreen.main.bounds.width - 100, alignment: .trailing)
+                    .padding(.top, -10)
                 }
-                .frame(width: UIScreen.main.bounds.width - 100, height: 40)
 
                 VStack(spacing: 12){
-                    NavigationLink(destination: MainHomeView(rootView: $rootView).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $successLogin){
-//                        Button(action:{
-//                            vm.postLogin(userid: id, password: pw, autoLogin: keepLogin)
-//                            if vm.login.code == 20000 {
-//                                self.successLogin = true
-//                            }
-//                        }){
-                            Text("로그인")
-                                .frame(width: UIScreen.main.bounds.width-120, height: 28, alignment: .center)
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(.white)
-                                .multilineTextAlignment(.center)
-                                .padding(10)
-                                .background(light_blue)
-                                .cornerRadius(12)
+                    Button(action:{
+                        userVM.postLogin(userid: id, password: pw, autoLogin: keepLogin)
+                    }){
+                        Text("로그인")
+                            .frame(width: UIScreen.main.bounds.width-120, height: 28, alignment: .center)
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.center)
+                            .padding(10)
+                            .background(light_blue)
+                            .cornerRadius(12)
                     }
-                    .simultaneousGesture(TapGesture().onEnded {
-//                        vm.postLogin(userid: id, password: pw, autoLogin: keepLogin)
-//                        self.successLogin = vm.failLogin
-//                        print(successLogin)
-                    })
-
-//                    }
-//                    Button(action: { //login button
-//                        vm.postLogin(userid: id, password: pw, autoLogin: keepLogin)
-//                        if vm.login.code == 20000 {
-//                            self.successLogin = true
-//                        }
-//                    }) {
-//                        Text("로그인")
-//                            .frame(width: UIScreen.main.bounds.width-120, height: 28, alignment: .center)
-//                            .font(.system(size: 20, weight: .semibold))
-//                            .foregroundColor(.white)
-//                            .multilineTextAlignment(.center)
-//                            .padding(10)
-//                            .background(light_blue)
-//                            .cornerRadius(12)
-//                    }
-
+                    NavigationLink("", destination: MainHomeView(rootView: $rootView).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $userVM.loginState)
                     HStack{
                         Rectangle()
                             .frame(width: UIScreen.main.bounds.width/3.1, height: 1)
                             .foregroundColor(light_gray)
                         Text("or")
                             .foregroundColor(light_gray)
-
                         Rectangle()
                             .frame(width: UIScreen.main.bounds.width/3.1, height: 1)
                             .foregroundColor(light_gray)
@@ -212,7 +192,15 @@ struct LoginView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView(rootView: .constant(false))
+        LoginView()
             .environmentObject(ScrapViewModel())
     }
 }
+
+#if canImport(UIKit)
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
+    }
+}
+#endif
