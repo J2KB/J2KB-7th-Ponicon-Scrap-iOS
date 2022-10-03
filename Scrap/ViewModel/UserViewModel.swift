@@ -74,17 +74,12 @@ class UserViewModel: ObservableObject{
                 if let data = data {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(LoginModel.self, from: data)
-                    print("success posting login data")
                     DispatchQueue.main.async {
                         if result.code == 20000 {
-                            print("correct login")
                             self.loginState = true
-                            print(self.loginState)
                         } else {
-                            print("incorrect login")
                             self.loginState = false
                             self.toastMessage = result.message
-                            print(self.loginState)
                         }
                     }
                     print(result)

@@ -15,9 +15,6 @@ struct LoginView: View {
     @State private var keepLogin = false
     @State private var showingSignUpSheet = false //회원가입 sheet state property
     @State private var rootView = false
-//    var toastMessage : String {
-//        return userVM.login.message
-//    }
     
     let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
     let bold_sub_gray = Color(red: 151/255, green: 151/255, blue: 151/255)
@@ -169,22 +166,9 @@ struct LoginView: View {
                         .foregroundColor(bold_sub_gray)
                         .underline()
                 }
-//                Button(action: {
-//                    self.showingSignUpSheet.toggle()
-//                }){
-//                    Text("회원가입")
-//                        .font(.system(size: 16, weight: .medium))
-//                        .foregroundColor(Color.gray)
-//                        .underline()
-//                }
-//                .fullScreenCover(isPresented: $showingSignUpSheet) {
-//                    //sheet에 표시될 뷰를 할당
-//                    SignUpView()
-//                }
                 .padding(.top, 12)
             }
             .padding(.bottom, 80)
-//            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         }
 
     }
