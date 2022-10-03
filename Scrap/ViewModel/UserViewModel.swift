@@ -48,7 +48,9 @@ struct LogOutModel: Decodable{
 class UserViewModel: ObservableObject{
     @Published var login = LoginModel(code: 0, message: "", result: LoginModel.Result(id: 0))
     @Published var loginState = false
-    @Published var toastMessage = ""
+    @Published var signUpState = false
+    @Published var loginToastMessage = ""
+    @Published var signupToastMessage = ""
     
     //POST
     //로그인
@@ -79,7 +81,7 @@ class UserViewModel: ObservableObject{
                             self.loginState = true
                         } else {
                             self.loginState = false
-                            self.toastMessage = result.message
+                            self.loginToastMessage = result.message
                         }
                     }
                     print(result)
@@ -116,6 +118,14 @@ class UserViewModel: ObservableObject{
                 if let data = data {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(SignUpModel.self, from: data)
+                    DispatchQueue.main.async {
+                        if result.code == 20000 {
+                            self.signUpState = true
+                        } else {
+                            self.signUpState = false
+                            self.signupToastMessage = result.message
+                        }
+                    }
                     print(result)
                 } else {
                     print("no data")

@@ -93,7 +93,7 @@ struct LoginView: View {
                 .padding(.bottom, 15)
                 VStack(){ //로그인 유지 체크 박스
                     if !userVM.loginState {
-                        Text(userVM.toastMessage) //관련 에러 메세지 따로 출력되도록
+                        Text(userVM.loginToastMessage) //관련 에러 메세지 따로 출력되도록
                             .font(.caption)
                             .foregroundColor(error_red)
                             .lineLimit(0)
