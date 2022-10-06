@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import KakaoSDKUser
 
 struct LoginView: View {
     @EnvironmentObject var userVM : UserViewModel
@@ -170,9 +171,18 @@ struct LoginView: View {
                                 .foregroundColor(light_gray)
                         }
                         .padding(.vertical)
-                        Button(action: { //login button
-                            //카카오로 연결
-    //                        vm.addNewData()
+                        Button(action: { //kakao login button
+                            if (UserApi.isKakaoTalkLoginAvailable()) {
+                                UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+                                    print(oauthToken)
+                                    print(error)
+                                }
+                            } else {
+                                UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
+                                    print(oauthToken)
+                                    print(error)
+                                }
+                            }
                         }) {
                             Image("kakao_login_large_narrow")
                                 .resizable()
