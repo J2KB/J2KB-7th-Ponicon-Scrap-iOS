@@ -15,7 +15,8 @@ struct MainHomeView: View {
     @EnvironmentObject var scrapVM : ScrapViewModel //ScrapApp에서 연결받은 EnvironmentObject
     @State private var isShowingCategory = false
     @State private var isShowingMyPage = false
-//    @Binding var rootView : Bool
+    @Binding var popRootView : Bool
+    @Binding var autoLogin : Bool
     @State private var selected : Int = 2
     var categoryTitle : String {
         return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"
@@ -50,7 +51,7 @@ struct MainHomeView: View {
                 .toolbar{
                     ToolbarItem(placement: .navigationBarTrailing){
                         VStack{
-                            NavigationLink(destination: MyPageView(userData: $scrapVM.user.result), isActive: $isShowingMyPage) {
+                            NavigationLink(destination: MyPageView(userData: $scrapVM.user.result, popRootView: $popRootView, autoLogin: $autoLogin), isActive: $isShowingMyPage) {
                                 Button(action: {
                                     self.isShowingMyPage.toggle()
                                     scrapVM.getMyData(userID: 9)
@@ -90,7 +91,7 @@ struct MainHomeView: View {
 
 struct MainHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        MainHomeView()
+        MainHomeView(popRootView: .constant(true), autoLogin: .constant(true))
             .environmentObject(ScrapViewModel())
 //        LoginView()
     }

@@ -67,12 +67,11 @@ struct SubHomeView: View {
                 .padding(.horizontal, isOneCol ? 0 : 8)
             }
         }
-
     }
 }
 
 struct SubHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        MainHomeView()
+        MainHomeView(popRootView: .constant(true), autoLogin: .constant(true))
     }
 }

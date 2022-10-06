@@ -12,8 +12,9 @@ struct MyPageView: View {
     @State private var isEditingUserName = false
     @State private var username = ""
     @State private var iconArr = ["camping", "circus", "classical", "compass", "palette", "rocket", "ufo"]
-//    @Binding var rootView : Bool
-    @EnvironmentObject var vm : ScrapViewModel //여기서 로그아웃
+    @Binding var popRootView : Bool
+    @Binding var autoLogin : Bool
+    @EnvironmentObject var vm : UserViewModel //여기서 로그아웃
     @Environment(\.presentationMode) var presentationMode //pop sheet
     
     let icon = Int.random(in: 0...6)
@@ -87,17 +88,31 @@ struct MyPageView: View {
                     .padding(.top, 16)
                 Spacer()
                 Button(action:{
-                    //login 화면으로 pop -> rootview
-//                    vm.logOut() //log out 서버에 보내기
-//                    rootView = false
-                    //로그아웃 기능
+                    //logout 서버에 보내기
+//                    vm.logOut()
+                    //NavigationLink로 LoginView로 이동
+                    popRootView = false
+                    autoLogin = false
+                    vm.loginState = false
+                    //데이터 지우기 -> user id 데이터 지우기
+                    print("log out")
                 }){
-                Text("로그아웃")
-                    .underline()
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(Color.gray)
+                    Text("로그아웃")
+                        .underline()
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(Color.gray)
                 }
                 .padding()
+//                NavigationLink(destination: LoginView().navigationBarBackButtonHidden(true).navigationBarHidden(true)){
+//                    Text("로그아웃")
+//                        .underline()
+//                        .font(.system(size: 15, weight: .semibold))
+//                        .foregroundColor(Color.gray)
+//                }
+//                .simultaneousGesture(TapGesture().onEnded {
+////                    vm.logOut() //logout 서버에 보내기
+//                    print("logout")
+//                })
             }//VStack2
             .navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)
@@ -108,7 +123,7 @@ struct MyPageView: View {
 
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
-        MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")))
+        MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")), popRootView: .constant(true), autoLogin: .constant(true))
             .environmentObject(ScrapViewModel())
     }
 }

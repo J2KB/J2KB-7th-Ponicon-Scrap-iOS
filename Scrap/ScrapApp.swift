@@ -17,7 +17,7 @@ struct ScrapApp: App {
             //if 로그아웃 혹은 첫 런칭이라면 LoginView()
             //else HomeView()
 //            RootView()
-//            MainHomeView(rootView: .constant(true))
+//            MainHomeView()
 //                .environmentObject(scrapVM)
 //                .environmentObject(userVM)
             LoginView()
