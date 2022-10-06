@@ -73,6 +73,6 @@ struct SubHomeView: View {
 
 struct SubHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        MainHomeView(rootView: .constant(true))
+        MainHomeView()
     }
 }

@@ -14,7 +14,8 @@ struct LoginView: View {
     @State private var showPW = false //비밀번호 visible, invisible
     @State private var keepLogin = false
     @State private var showingSignUpSheet = false //회원가입 sheet state property
-    @State private var rootView = false
+    @State private var loginView = false
+    @State private var movingToSignUp = false
     
     let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
     let bold_sub_gray = Color(red: 151/255, green: 151/255, blue: 151/255)
@@ -138,7 +139,7 @@ struct LoginView: View {
                             .background(light_blue)
                             .cornerRadius(12)
                     }
-                    NavigationLink("", destination: MainHomeView(rootView: $rootView).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $userVM.loginState)
+                    NavigationLink("", destination: MainHomeView().navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $userVM.loginState)
                     HStack{
                         Rectangle()
                             .frame(width: UIScreen.main.bounds.width/3.1, height: 1)
@@ -160,7 +161,7 @@ struct LoginView: View {
                     }
                 }
 
-                NavigationLink(destination: SignUpView(rootView: $rootView), isActive: $rootView){
+                NavigationLink(destination: SignUpView(movingToSignUp: $movingToSignUp), isActive: $movingToSignUp){
                     Text("회원가입")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(bold_sub_gray)

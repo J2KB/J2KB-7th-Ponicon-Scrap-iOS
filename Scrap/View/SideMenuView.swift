@@ -97,7 +97,7 @@ struct SideMenuView: View {
 
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        MainHomeView(rootView: .constant(true))
+        MainHomeView()
             .environmentObject(ScrapViewModel())
     }
 }

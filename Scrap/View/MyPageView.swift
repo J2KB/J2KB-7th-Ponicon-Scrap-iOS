@@ -12,7 +12,7 @@ struct MyPageView: View {
     @State private var isEditingUserName = false
     @State private var username = ""
     @State private var iconArr = ["camping", "circus", "classical", "compass", "palette", "rocket", "ufo"]
-    @Binding var rootView : Bool
+//    @Binding var rootView : Bool
     @EnvironmentObject var vm : ScrapViewModel //여기서 로그아웃
     @Environment(\.presentationMode) var presentationMode //pop sheet
     
@@ -89,7 +89,7 @@ struct MyPageView: View {
                 Button(action:{
                     //login 화면으로 pop -> rootview
 //                    vm.logOut() //log out 서버에 보내기
-                    rootView = false
+//                    rootView = false
                     //로그아웃 기능
                 }){
                 Text("로그아웃")
@@ -108,7 +108,7 @@ struct MyPageView: View {
 
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
-        MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")), rootView: .constant(true))
+        MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")))
             .environmentObject(ScrapViewModel())
     }
 }
