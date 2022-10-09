@@ -56,6 +56,7 @@ class CategoryViewModel: ObservableObject{ //감시할 data model
                     DispatchQueue.main.async {
                         self.categoryList = result
                     }
+                    print(result)
                 } else {
                     print("no data")
                 }
@@ -67,27 +68,33 @@ class CategoryViewModel: ObservableObject{ //감시할 data model
     }
 }
 
+class CategoryIDDelegate: ObservableObject {
+    @Published var categoryID: Int = 0
+}
+
 
 struct ShareUIView: View {
-    let vm = CategoryViewModel()
+    @ObservedObject var delegate : CategoryIDDelegate
+    @ObservedObject var vm = CategoryViewModel()
     let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
     @State private var selected : Int = 0 //이 값을 ShareViewController로 넘겨줘야 한다.
-    let arr = ["분류되지 않은 자료", "category 1", "category 2", "category 3", "category 4"]
 
     var body: some View {
             List{
-                ForEach(arr, id: \.self){ category in
-                    Text(category)
-//                ForEach(vm.categoryList.result.categories){ category in
-//                    Text(category.name)
-//                    .listRowBackground(self.selected == category.categoryId ? light_gray : Color(.white))
-//                    .onTapGesture { //클릭하면 현재 categoryID
-//                        self.selected = category.categoryId
-//                    }
+                ForEach($vm.categoryList.result.categories){ $category in
+                    Text(category.name)
+                    .listRowBackground(self.selected == category.categoryId ? light_gray : Color(.white))
+                    .onTapGesture { //클릭하면 현재 categoryID
+                        self.selected = category.categoryId
+                        self.delegate.categoryID = category.categoryId
+                    }
                 }
             }
             .listStyle(InsetListStyle())
-            .toolbar{
+            .onAppear{
+                vm.getCategoryData()
+            }
+//            .toolbar{
 //                ToolbarItem(placement: .navigationBarLeading){
 //                    Button("취소", action: {
 //
@@ -101,13 +108,12 @@ struct ShareUIView: View {
 //                    })
 //                }
 //            }
-            }
-        
+//            }
     }
 }
 
 struct ShareUIView_Previews: PreviewProvider {
     static var previews: some View {
-        ShareUIView()
+        ShareUIView(delegate: CategoryIDDelegate())
     }
 }

@@ -8,20 +8,47 @@
 import UIKit
 import Social
 import SwiftUI
+import Combine
+
+struct NewDataModel: Decodable{ //자료 저장 -> response 데이터로 받을 link id
+    struct Result: Decodable {
+        var linkId: Int
+        
+        init(linkId: Int){
+            self.linkId = linkId
+        }
+    }
+    var code: Int
+    var message: String
+    var result: Result
+    init(code: Int, message: String, result: Result){
+        self.code = code
+        self.message = message
+        self.result = result
+    }
+}
 
 class ShareViewController: UIViewController{
-    let childView = UIHostingController(rootView: ShareUIView())
-
+    private var cancellable: AnyCancellable!
+    private var catID = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemGray6
         configureNavBar()
         
+        let delegate = CategoryIDDelegate()
+        let childView = UIHostingController(rootView: ShareUIView(delegate: delegate))
         //이 view controller가 열릴 때, categoryList를 받아와야 함
         self.addChild(childView)
         childView.view.frame = self.view.bounds
         self.view.addSubview(childView.view)
         childView.didMove(toParent: self)
+        
+        self.cancellable = delegate.$categoryID.sink { catID in
+            print(catID)
+            self.catID = catID
+        }
     }
     
     //2: set the title and the navigation items
@@ -51,13 +78,49 @@ class ShareViewController: UIViewController{
         //pull the url out
         if itemProvider.hasItemConformingToTypeIdentifier("public.url") {
             itemProvider.loadItem(forTypeIdentifier: "public.url", options: nil) { (url, error) in
-                var baseURL = url as! NSURL
+                let baseURL = url as! NSURL
                 print(baseURL)
+                self.addNewData(baseurl: baseURL.absoluteString!, catID: self.catID)
                 //request to server with this base url
             }
         }
         //default stubbed out code which can pass data back to the host app.
         extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
+    }
+    
+    func addNewData(baseurl: String, catID: Int){
+        guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=2&category=\(catID)") else {
+            print("invalid url")
+            return
+        }
+
+        let baseURL = baseurl
+        //"https://msearch.shopping.naver.com/book/catalog/32490794178?query=%EC%84%9C%EC%9A%B8%EC%8B%9C&NaPm=ct%3Dl8n3zly0%7Cci%3Da2b61e45d04a07004ebfbf8c0f18f65b73892fe8%7Ctr%3Dboksl%7Csn%3D95694%7Chk%3D6e1701f1592ca7e85c1ed5444d4302ff63462f28"
+        
+        let body: [String: Any] = ["baseURL" : baseURL]
+        let finalData = try! JSONSerialization.data(withJSONObject: body)
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = finalData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(NewDataModel.self, from: data)
+                    print(result)
+                    print("post saving data : SUCCESS")
+                    print(catID)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print("error")
+                print(String(describing: error))
+            }
+        }.resume()
     }
 }
 
