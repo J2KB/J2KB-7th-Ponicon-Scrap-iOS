@@ -252,19 +252,6 @@ struct SignUpView: View {
                     .background(light_blue)
                     .cornerRadius(10)
             }
-//            NavigationLink(destination: MainHomeView(rootView: $rootView).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $vm.signUpState){
-//                Text("회원가입")
-//                    .font(.system(size: 16, weight: .semibold))
-//                    .frame(width: UIScreen.main.bounds.width / 2.2, height: 44, alignment: .center)
-//                    .foregroundColor(Color.white)
-//                    .background(light_blue)
-//                    .cornerRadius(10)
-//            }
-//            .simultaneousGesture(TapGesture().onEnded {
-//                self.signUpButton = true
-//                movingToSignUp = vm.signUpState
-//                vm.postSignUp(userid: id, password: pw, name: username)
-//            })
             .padding(.top, 28)
         }
         .padding(.bottom, 80)

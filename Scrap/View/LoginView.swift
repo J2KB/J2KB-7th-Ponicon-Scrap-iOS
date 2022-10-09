@@ -10,6 +10,7 @@ import KakaoSDKUser
 
 struct LoginView: View {
     @EnvironmentObject var userVM : UserViewModel
+    @EnvironmentObject var scrapVM : ScrapViewModel
     @State private var id: String = ""
     @State private var pw: String = ""
     @State private var showPW = false //비밀번호 visible, invisible
@@ -172,6 +173,7 @@ struct LoginView: View {
                         }
                         .padding(.vertical)
                         Button(action: { //kakao login button
+//                            scrapVM.addNewData()
                             if (UserApi.isKakaoTalkLoginAvailable()) {
                                 UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
                                     print(oauthToken)

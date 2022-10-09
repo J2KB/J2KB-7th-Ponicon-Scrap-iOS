@@ -9,7 +9,7 @@ import Foundation
 
 struct LoginModel: Decodable{
     struct Result: Decodable {
-        var id: Int?
+        var id: Int
         
         init(id: Int){
             self.id = id
@@ -17,7 +17,7 @@ struct LoginModel: Decodable{
     }
     let code: Int
     let message: String
-    var result: Result?
+    var result: Result
     
     init(code: Int, message: String, result: Result){
         self.code = code
@@ -51,6 +51,7 @@ class UserViewModel: ObservableObject{
     @Published var signUpState = false
     @Published var loginToastMessage = ""
     @Published var signupToastMessage = ""
+    @Published var userID = -1 //나중에 지울것 -> core data로
     
     //POST
     //로그인
@@ -79,6 +80,7 @@ class UserViewModel: ObservableObject{
                     DispatchQueue.main.async {
                         if result.code == 20000 {
                             self.loginState = true
+                            self.userID = result.result.id
                         } else {
                             self.loginState = false
                             self.loginToastMessage = result.message
