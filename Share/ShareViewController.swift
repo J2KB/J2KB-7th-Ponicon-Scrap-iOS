@@ -7,12 +7,21 @@
 
 import UIKit
 import Social
+import SwiftUI
 
 class ShareViewController: UIViewController{
+    let childView = UIHostingController(rootView: ShareUIView())
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemGray6
         configureNavBar()
+        
+        //이 view controller가 열릴 때, categoryList를 받아와야 함
+        self.addChild(childView)
+        childView.view.frame = self.view.bounds
+        self.view.addSubview(childView.view)
+        childView.didMove(toParent: self)
     }
     
     //2: set the title and the navigation items

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F802200F28F2C3F40032DAD0 /* ShareUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F802200E28F2C3F40032DAD0 /* ShareUIView.swift */; };
 		F84C51CA28E5619300E5DECD /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84C51C928E5619300E5DECD /* UserResponse.swift */; };
 		F84C51CC28E58D0A00E5DECD /* ScrapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84C51CB28E58D0A00E5DECD /* ScrapViewModel.swift */; };
 		F84C51CE28E596F600E5DECD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84C51CD28E596F600E5DECD /* RootView.swift */; };
@@ -58,6 +59,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F802200E28F2C3F40032DAD0 /* ShareUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareUIView.swift; sourceTree = "<group>"; };
 		F84C51C928E5619300E5DECD /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
 		F84C51CB28E58D0A00E5DECD /* ScrapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapViewModel.swift; sourceTree = "<group>"; };
 		F84C51CD28E596F600E5DECD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 			children = (
 				F89494B028DAF9D10087304B /* ShareViewController.swift */,
 				F89494B528DAF9D10087304B /* Info.plist */,
+				F802200E28F2C3F40032DAD0 /* ShareUIView.swift */,
 			);
 			path = Share;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F802200F28F2C3F40032DAD0 /* ShareUIView.swift in Sources */,
 				F89494B128DAF9D10087304B /* ShareViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

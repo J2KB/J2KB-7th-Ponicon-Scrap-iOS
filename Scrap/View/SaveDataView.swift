@@ -9,42 +9,31 @@ import SwiftUI
 
 struct SaveDataView: View {
     //임시 데이터 -> 나중엔 데이터 받아올 것
-    let arr = ["모든 자료", "분류되지 않은 자료", "category 1", "category 2", "category 3", "category 4"]
-    @State private var title = ""
-    @State private var allDoc = "모든 자료"
-    @State private var notDi = "분류되지 않은 자료"
+    let arr = ["분류되지 않은 자료", "category 1", "category 2", "category 3", "category 4"]
     @State private var selection = 0
     
+    //선택된 row는 색칠해줘야됨
+    
     var body: some View {
-        NavigationView{
-            Form{
-                Section{
-                    TextField("자료 제목", text: $title)
-                }
-                Section{
-                    Picker("저장할 카테고리", selection: $selection) {
-                        ForEach(0..<arr.count){
-                            Text("\(self.arr[$0])")
-                        }
-                    }
-                    .pickerStyle(.wheel)
-                }
+        List{
+            ForEach(arr, id: \.self){ category in
+                Text(category)
             }
-            .toolbar{
-                ToolbarItem(placement: .navigationBarLeading){
-                    Button("취소", action: {
-                        
-                    })
-                }
-            }
-            .toolbar{
-                ToolbarItem(placement: .navigationBarTrailing){
-                    Button("저장", action: {
-                        
-                    })
-                }
-            }
-        }
+        }.listStyle(.inset)
+//            .toolbar{
+//                ToolbarItem(placement: .navigationBarLeading){
+//                    Button("취소", action: {
+//
+//                    })
+//                }
+//            }
+//            .toolbar{
+//                ToolbarItem(placement: .navigationBarTrailing){
+//                    Button("저장", action: {
+//
+//                    })
+//                }
+//            }
     }
 }
 
