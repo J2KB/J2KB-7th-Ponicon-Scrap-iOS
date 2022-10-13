@@ -32,7 +32,7 @@ struct LoginView: View {
     var body: some View {
         NavigationView{
             if autoLogin { //자동 로그인의 경우, 바로 HomeView로 이동
-                NavigationLink("", destination: MainHomeView(popRootView: $popRootView, autoLogin: $autoLogin).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $popRootView)
+                NavigationLink("", destination: MainHomeView(popRootView: $popRootView).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $popRootView)
                 .onReceive(timer) { _ in
                     if timeRemaining > 0 {
                         timeRemaining -= 0.01
@@ -42,7 +42,7 @@ struct LoginView: View {
                     }
                 }
             }
-            else {
+            else { //no autoLogin
                 VStack{
                     Text("스크랩")
                         .font(.system(size: 64, weight: .bold))
@@ -144,7 +144,6 @@ struct LoginView: View {
                         .frame(width: UIScreen.main.bounds.width - 100, alignment: .trailing)
                         .padding(.top, -10)
                     }
-
                     VStack(spacing: 12){
                         Button(action:{
                             userVM.postLogin(userid: id, password: pw, autoLogin: keepLogin)
@@ -160,7 +159,7 @@ struct LoginView: View {
                                 .background(light_blue)
                                 .cornerRadius(12)
                         }
-                        NavigationLink("", destination: MainHomeView(popRootView: $popRootView, autoLogin: $autoLogin).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $userVM.loginState)
+                        NavigationLink("", destination: MainHomeView(popRootView: $popRootView).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $userVM.loginState)
                         HStack{
                             Rectangle()
                                 .frame(width: UIScreen.main.bounds.width/3.1, height: 1)
@@ -174,15 +173,33 @@ struct LoginView: View {
                         .padding(.vertical)
                         Button(action: { //kakao login button
 //                            scrapVM.addNewData()
+                            var accessToken = ""
+                            var refreshToken = ""
                             if (UserApi.isKakaoTalkLoginAvailable()) {
                                 UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
-                                    print(oauthToken)
-                                    print(error)
+                                    if let oauthToken = oauthToken {
+                                        print(oauthToken)
+                                        accessToken = oauthToken.accessToken
+                                        refreshToken = oauthToken.refreshToken
+                                        print("accessToken: \(accessToken)")
+                                        print("refreshToken: \(refreshToken)")
+                                        userVM.postKaKaoLogin(accessToken: accessToken, refreshToken: refreshToken)
+                                    } else {
+                                        print(String(describing: error))
+                                    }
                                 }
                             } else {
                                 UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
-                                    print(oauthToken)
-                                    print(error)
+                                    if let oauthToken = oauthToken {
+                                        print(oauthToken)
+                                        accessToken = oauthToken.accessToken
+                                        refreshToken = oauthToken.refreshToken
+                                        print("accessToken: \(accessToken)")
+                                        print("refreshToken: \(refreshToken)")
+                                        userVM.postKaKaoLogin(accessToken: accessToken, refreshToken: refreshToken)
+                                    } else {
+                                        print(String(describing: error))
+                                    }
                                 }
                             }
                         }) {
@@ -191,7 +208,6 @@ struct LoginView: View {
                                 .frame(width: UIScreen.main.bounds.width / 1.8, height: 52, alignment: .center)
                         }
                     }
-
                     NavigationLink(destination: SignUpView(movingToSignUp: $movingToSignUp), isActive: $movingToSignUp){
                         Text("회원가입")
                             .font(.system(size: 16, weight: .medium))

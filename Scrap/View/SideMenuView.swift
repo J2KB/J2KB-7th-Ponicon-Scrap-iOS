@@ -12,25 +12,33 @@ struct SideMenuView: View {
     @Binding var categoryList : CategoryResponse.Result
     @State private var newCat = "" //초기화해줘야 함
     @State private var isAddingCategory = false
+    @Binding var isShowingCateogry : Bool
     @State private var maxCatName = 20
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
+    @EnvironmentObject var userVM : UserViewModel //ScrapApp에서 연결받은 EnvironmentObject
     @Binding var selected : Int
     let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
 
     var body: some View {
 //        HStack{
-            VStack{
+//        ZStack{
+//            Color(red: 248/255, green: 248/255, blue: 248/255)
+        VStack(spacing: -2){
                 HStack{
-                    Text("카테고리") //리스트 선택 기능을 구현하고 이 기능을 추가하는 것으로!
-                        .font(.system(size: 20))
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Button(action: {}){
-                        Image(systemName: "pencil")
+                    Button(action: {
+                        withAnimation(.easeInOut){
+                            isShowingCateogry = false
+                        }
+                    }){
+                        Image(systemName: "chevron.backward")
                             .resizable()
                             .frame(width: 16, height: 16)
                             .foregroundColor(.black)
                     }
+                    Text("카테고리") //리스트 선택 기능을 구현하고 이 기능을 추가하는 것으로!
+                        .font(.system(size: 20))
+                        .fontWeight(.semibold)
+                    Spacer()
                     Button(action: {
                         self.isAddingCategory.toggle()
                     }){
@@ -41,7 +49,8 @@ struct SideMenuView: View {
                     }
                 }
                 .padding(.leading, 14)
-                .frame(width: UIScreen.main.bounds.width / 1.45, height: 48)
+                .frame(width: UIScreen.main.bounds.width / 1.35, height: 48)
+                .background(.white)
                 VStack{
                     List{
                         ForEach($categoryList.categories) { $category in
@@ -58,25 +67,20 @@ struct SideMenuView: View {
                             .padding(4)
                             .onTapGesture { //클릭하면 현재 categoryID
                                 self.selected = category.categoryId
-                                vm.getData(catID: selected)
+                                vm.getData(userID: 2, catID: selected, seq: "desc")
                             }
                         }
                     }
-//                    .refreshable{
-//                        await vm.getCategoryData()
-//                        print("refresh")
-//                    }
                     .listStyle(InsetListStyle())
                     if isAddingCategory {
                         HStack{
                             Image(systemName: "square.and.pencil")
                             TextField("새로운 카테고리", text: $newCat,
                               onCommit: {
-                                vm.addNewCategory(newCat: newCat)
+                                vm.addNewCategory(newCat: newCat, userID: 2)
                                 let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: 0)
                                 vm.appendCategory(newCategory: newCategory) //append 함수 구현하기
                                 //post로 추가된 카테고리 이름 서버에 전송
-                                //reload list - how can i do this?
                                 newCat = ""
                                 isAddingCategory = false
                               }
@@ -91,13 +95,15 @@ struct SideMenuView: View {
                     }
                 }
             }
-            .frame(width: UIScreen.main.bounds.width / 1.3)
+            .frame(width: UIScreen.main.bounds.width / 1.35)
+            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 4))
+//        }
     }
 }
 
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        MainHomeView(popRootView: .constant(true), autoLogin: .constant(true))
+        MainHomeView(popRootView: .constant(true))
             .environmentObject(ScrapViewModel())
     }
 }

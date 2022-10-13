@@ -59,8 +59,8 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     
     //GET
     //카테고리 전체 조회
-    func getCategoryData(){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/category/all?id=2") else {
+    func getCategoryData(userID: Int){
+        guard let url = URL(string: "https://scrap.hana-umc.shop/category/all?id=\(userID)") else {
             print("invalid url")
             return
         }
@@ -82,8 +82,8 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     //자료 조회 -> query: category id
-    func getData(catID: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=2&category=\(catID)&seq=desc") else {
+    func getData(userID: Int, catID: Int, seq: String){
+        guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=\(userID)&category=\(catID)&seq=\(seq)") else {
             print("invalid url")
             return
         }
@@ -130,7 +130,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     
     //POST
     //카테고리 추가
-    func addNewCategory(newCat: String){
+    func addNewCategory(newCat: String, userID: Int){
         guard let url = URL(string: "https://scrap.hana-umc.shop/category?id=2") else {
             print("invalid url")
             return
@@ -160,36 +160,37 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
             }
         }.resume()
     }
-    //자료 저장
-    func addNewData(){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=2&category=3") else {
-            print("invalid url")
-            return
-        }
-
-        let baseURL = "https://msearch.shopping.naver.com/book/catalog/32490794178?query=%EC%84%9C%EC%9A%B8%EC%8B%9C&NaPm=ct%3Dl8n3zly0%7Cci%3Da2b61e45d04a07004ebfbf8c0f18f65b73892fe8%7Ctr%3Dboksl%7Csn%3D95694%7Chk%3D6e1701f1592ca7e85c1ed5444d4302ff63462f28"
-        
-        let body: [String: Any] = ["baseURL":baseURL]
-        let finalData = try! JSONSerialization.data(withJSONObject: body)
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = finalData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            do{
-                if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(NewDataModel.self, from: data)
-                    print(result)
-                } else {
-                    print("no data")
-                }
-            }catch (let error){
-                print("error")
-                print(String(describing: error))
-            }
-        }.resume()
-    }
+    
+//    //자료 저장
+//    func addNewData(userID: Int, ){
+//        guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=2&category=3") else {
+//            print("invalid url")
+//            return
+//        }
+//
+//        let baseURL = "https://msearch.shopping.naver.com/book/catalog/32490794178?query=%EC%84%9C%EC%9A%B8%EC%8B%9C&NaPm=ct%3Dl8n3zly0%7Cci%3Da2b61e45d04a07004ebfbf8c0f18f65b73892fe8%7Ctr%3Dboksl%7Csn%3D95694%7Chk%3D6e1701f1592ca7e85c1ed5444d4302ff63462f28"
+//
+//        let body: [String: Any] = ["baseURL":baseURL]
+//        let finalData = try! JSONSerialization.data(withJSONObject: body)
+//
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "POST"
+//        request.httpBody = finalData
+//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//
+//        URLSession.shared.dataTask(with: request) { (data, response, error) in
+//            do{
+//                if let data = data {
+//                    let decoder = JSONDecoder()
+//                    let result = try decoder.decode(NewDataModel.self, from: data)
+//                    print(result)
+//                } else {
+//                    print("no data")
+//                }
+//            }catch (let error){
+//                print("error")
+//                print(String(describing: error))
+//            }
+//        }.resume()
+//    }
 }

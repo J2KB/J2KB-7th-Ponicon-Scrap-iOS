@@ -72,7 +72,6 @@ class CategoryIDDelegate: ObservableObject {
     @Published var categoryID: Int = 0
 }
 
-
 struct ShareUIView: View {
     @ObservedObject var delegate : CategoryIDDelegate
     @ObservedObject var vm = CategoryViewModel()

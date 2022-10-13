@@ -45,14 +45,18 @@ struct LogOutModel: Decodable{
     }
 }
 
+//카카오 로그인
+//-> https://scrap.hana-umc.shop/login/kakao/v2
+
 class UserViewModel: ObservableObject{
     @Published var login = LoginModel(code: 0, message: "", result: LoginModel.Result(id: 0))
     @Published var loginState = false
     @Published var signUpState = false
     @Published var loginToastMessage = ""
     @Published var signupToastMessage = ""
-    @Published var userID = -1 //나중에 지울것 -> core data로
-    
+//    @Published var userID = -1 //나중에 지울것 -> core data로
+//    @Published var userID: Int = UserDefaults.standard.integer(forKey: "ID") //user id 없으면 -1
+
     //POST
     //로그인
     func postLogin(userid: String, password: String, autoLogin: Bool){
@@ -77,13 +81,61 @@ class UserViewModel: ObservableObject{
                 if let data = data {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(LoginModel.self, from: data)
+                    
                     DispatchQueue.main.async {
-                        if result.code == 20000 {
-                            self.loginState = true
-                            self.userID = result.result.id
-                        } else {
-                            self.loginState = false
-                            self.loginToastMessage = result.message
+                        if let response = response as? HTTPURLResponse {
+                            if response.statusCode != 200 {
+                                self.loginState = false
+                                self.loginToastMessage = result.message
+                            } else {
+                                self.loginState = true
+//                            self.userID = result.result.id //login해서 받은 id를 user defaults에 넣어준다
+                            }
+                        }
+                    }
+                    print(result)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print("error")
+                print(String(describing: error))
+            }
+        }.resume()
+    }
+    
+    func postKaKaoLogin(accessToken: String, refreshToken: String){
+        print("kakao login")
+        guard let url = URL(string: "https://scrap.hana-umc.shop/user/login/kakao/v2") else {
+            print("invalid url")
+            return
+        }
+        
+        let accessToken = accessToken
+        let refreshToken = refreshToken
+        let body: [String: Any] = ["accessToken": accessToken, "refreshToken": refreshToken]
+        let finalData = try! JSONSerialization.data(withJSONObject: body)
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = finalData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(LoginModel.self, from: data)
+                    
+                    DispatchQueue.main.async {
+                        if let response = response as? HTTPURLResponse {
+                            if response.statusCode != 200 {
+                                self.loginState = false
+                                self.loginToastMessage = result.message
+                            } else {
+                                self.loginState = true
+//                            self.userID = result.result.id //login해서 받은 id를 user defaults에 넣어준다
+                            }
                         }
                     }
                     print(result)
@@ -150,6 +202,7 @@ class UserViewModel: ObservableObject{
                 if let data = data {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(LogOutModel.self, from: data)
+//                    self.userID = -1
                     print(result)
                 } else {
                     print("no data")
