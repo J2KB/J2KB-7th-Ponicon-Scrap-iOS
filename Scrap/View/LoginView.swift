@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import KakaoSDKUser
+//import KakaoSDKUser
 
 struct LoginView: View {
     @EnvironmentObject var userVM : UserViewModel
@@ -15,7 +15,6 @@ struct LoginView: View {
     @State private var pw: String = ""
     @State private var showPW = false //비밀번호 visible, invisible
     @State private var keepLogin = false
-    @State private var showingSignUpSheet = false //회원가입 sheet state property
     @State private var popRootView = false
     @State private var movingToSignUp = false
     @State var timeRemaining = 0.01
@@ -31,18 +30,18 @@ struct LoginView: View {
     
     var body: some View {
         NavigationView{
-            if autoLogin { //자동 로그인의 경우, 바로 HomeView로 이동
-                NavigationLink("", destination: MainHomeView(popRootView: $popRootView).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $popRootView)
-                .onReceive(timer) { _ in
-                    if timeRemaining > 0 {
-                        timeRemaining -= 0.01
-                    }
-                    if timeRemaining == 0 { //0.1 시간 지나면 화면 이동하기
-                        self.popRootView = true
-                    }
-                }
-            }
-            else { //no autoLogin
+//            if autoLogin { //자동 로그인의 경우, 바로 HomeView로 이동
+//                NavigationLink("", destination: MainHomeView(popRootView: $popRootView).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $popRootView)
+//                .onReceive(timer) { _ in
+//                    if timeRemaining > 0 {
+//                        timeRemaining -= 0.01
+//                    }
+//                    if timeRemaining == 0 { //0.1 시간 지나면 화면 이동하기
+//                        self.popRootView = true
+//                    }
+//                }
+//            }
+//            else { //no autoLogin
                 VStack{
                     Text("스크랩")
                         .font(.system(size: 64, weight: .bold))
@@ -172,36 +171,23 @@ struct LoginView: View {
                         }
                         .padding(.vertical)
                         Button(action: { //kakao login button
-//                            scrapVM.addNewData()
-                            var accessToken = ""
-                            var refreshToken = ""
-                            if (UserApi.isKakaoTalkLoginAvailable()) {
-                                UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
-                                    if let oauthToken = oauthToken {
-                                        print(oauthToken)
-                                        accessToken = oauthToken.accessToken
-                                        refreshToken = oauthToken.refreshToken
-                                        print("accessToken: \(accessToken)")
-                                        print("refreshToken: \(refreshToken)")
-                                        userVM.postKaKaoLogin(accessToken: accessToken, refreshToken: refreshToken)
-                                    } else {
-                                        print(String(describing: error))
-                                    }
-                                }
-                            } else {
-                                UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
-                                    if let oauthToken = oauthToken {
-                                        print(oauthToken)
-                                        accessToken = oauthToken.accessToken
-                                        refreshToken = oauthToken.refreshToken
-                                        print("accessToken: \(accessToken)")
-                                        print("refreshToken: \(refreshToken)")
-                                        userVM.postKaKaoLogin(accessToken: accessToken, refreshToken: refreshToken)
-                                    } else {
-                                        print(String(describing: error))
-                                    }
-                                }
-                            }
+//                            if (UserApi.isKakaoTalkLoginAvailable()) {
+//                                UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+//                                    if let oauthToken = oauthToken {
+//                                        userVM.postKaKaoLogin(accessToken: oauthToken.accessToken, refreshToken: oauthToken.refreshToken)
+//                                    } else {
+//                                        print(String(describing: error))
+//                                    }
+//                                }
+//                            } else {
+//                                UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
+//                                    if let oauthToken = oauthToken {
+//                                        userVM.postKaKaoLogin(accessToken: oauthToken.accessToken, refreshToken: oauthToken.refreshToken)
+//                                    } else {
+//                                        print(String(describing: error))
+//                                    }
+//                                }
+//                            }
                         }) {
                             Image("kakao_login_large_narrow")
                                 .resizable()
@@ -217,7 +203,7 @@ struct LoginView: View {
                     .padding(.top, 12)
                 }
                 .padding(.bottom, 80)
-            }
+//            }
         }
     }
 }

@@ -31,6 +31,8 @@
 		F89BED8828C5F1EE0053D406 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F89BED8728C5F1EE0053D406 /* SignUpView.swift */; };
 		F89BED8D28C5FC680053D406 /* MainHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F89BED8C28C5FC680053D406 /* MainHomeView.swift */; };
 		F8A8972728D2F531006CEC60 /* SaveDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A8972628D2F531006CEC60 /* SaveDataView.swift */; };
+		F8CFE8FB28FD508C005DB6F5 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */; };
+		F8CFE8FE28FD8D9F005DB6F5 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */; };
 		F8F0F20228D338C00085097F /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F0F20128D338C00085097F /* APIService.swift */; };
 /* End PBXBuildFile section */
 
@@ -83,6 +85,8 @@
 		F89BED8728C5F1EE0053D406 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		F89BED8C28C5FC680053D406 /* MainHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHomeView.swift; sourceTree = "<group>"; };
 		F8A8972628D2F531006CEC60 /* SaveDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveDataView.swift; sourceTree = "<group>"; };
+		F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		F8F0F20128D338C00085097F /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,7 +148,9 @@
 				F88E7E3F28C5CFD300C3CCA8 /* View */,
 				F88E7E3128C5CDDB00C3CCA8 /* ScrapApp.swift */,
 				F88E7E3528C5CDDC00C3CCA8 /* Assets.xcassets */,
+				F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */,
 				F88E7E3728C5CDDC00C3CCA8 /* Preview Content */,
+				F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */,
 			);
 			path = Scrap;
 			sourceTree = "<group>";
@@ -299,6 +305,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8CFE8FB28FD508C005DB6F5 /* Colors.xcassets in Resources */,
 				F88E7E3928C5CDDC00C3CCA8 /* Preview Assets.xcassets in Resources */,
 				F88E7E3628C5CDDC00C3CCA8 /* Assets.xcassets in Resources */,
 			);
@@ -321,6 +328,7 @@
 				F8740C2628C99A54009D6F8C /* CategoryRowView.swift in Sources */,
 				F8740C2428C99954009D6F8C /* SideMenuView.swift in Sources */,
 				F87109F428E33275009AFA8F /* CategoryResponse.swift in Sources */,
+				F8CFE8FE28FD8D9F005DB6F5 /* ColorExtension.swift in Sources */,
 				F84C51CE28E596F600E5DECD /* RootView.swift in Sources */,
 				F84C51CC28E58D0A00E5DECD /* ScrapViewModel.swift in Sources */,
 				F8740C2228C988E1009D6F8C /* PageView.swift in Sources */,

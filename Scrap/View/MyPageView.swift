@@ -19,7 +19,7 @@ struct MyPageView: View {
     
     let icon = Int.random(in: 0...6)
     var body: some View {
-        VStack(spacing: 60){
+        VStack(spacing: 40){
             HStack{
                 Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
@@ -30,94 +30,48 @@ struct MyPageView: View {
                         .foregroundColor(.black)
                 }
                 Text("마이페이지")
-                    .fontWeight(.bold)
+                    .font(.system(size: 16, weight: .bold))
             }
             .frame(width: UIScreen.main.bounds.width-20, alignment: .leading)
             VStack{
                 HStack(spacing: 8){
                     Image("\(iconArr[icon])") //랜덤 출력
                         .resizable()
-                        .frame(width: 64, height: 64)
-                    VStack{
-//                        if isEditingUserName { //username 편집(textfield)
-//                            HStack{
-//                                VStack{
-//                                    TextField("username을 입력해주세요", text: $username)
-//                                        .disableAutocorrection(true) //자동 수정 비활성화
-//                                    Divider()
-//                                        .padding(.top, -6)
-//                                }
-//                                .frame(width: UIScreen.main.bounds.width/2, height: 28, alignment: .leading)
-//                                Button(action: {
-//                                    self.isEditingUserName.toggle()
-//                                }){
-//                                    Image(systemName: "checkmark") //임시 icon
-//                                        .resizable()
-//                                        .frame(width: 14, height: 14)
-//                                        .foregroundColor(.gray)
-//                                }
-//                                Spacer()
-//                            }
-//                            .frame(width: UIScreen.main.bounds.width-120)
-//                        }
-//                        else{ //username 나타내는(text)
-//                            HStack(spacing: 8){
-                                Text("\(userData.name) 님") //user data 가져오기
-                                    .font(.system(size: 24, weight: .bold))
-                                    .frame(width: UIScreen.main.bounds.width - 120, height: 28, alignment: .leading)
-//                                Button(action: {
-//                                    self.isEditingUserName.toggle()
-//                                }){
-//                                    Image(systemName: "pencil")
-//                                        .resizable()
-//                                        .frame(width: 14, height: 14)
-//                                        .foregroundColor(.gray)
-//                                }
-//                            }
-//                            .frame(width: UIScreen.main.bounds.width - 120, height: 28, alignment: .leading)
-//                        }
+                        .frame(width: 70, height: 70)
+                    VStack(spacing: 10){
+                        Text("\(userData.name) 님") //user data 가져오기
+                            .lineLimit(2)
+                            .font(.system(size: 16, weight: .bold))
+                            .frame(width: UIScreen.main.bounds.width / 1.5, height: 28, alignment: .leading)
                         Text("\(userData.username)")
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.681))
-                            .frame(width: UIScreen.main.bounds.width - 120, alignment: .leading)
+                            .font(.system(size: 12, weight: .regular))
+                            .foregroundColor(.gray_bold)
+                            .frame(width: UIScreen.main.bounds.width / 1.5, alignment: .leading)
                     }
-                    .frame(width: UIScreen.main.bounds.width - 120, height: 60, alignment: .topLeading)
+                    .frame(width: UIScreen.main.bounds.width / 1.5, height: 70, alignment: .leading)
                 }
-                .frame(width: UIScreen.main.bounds.width - 40)
+                .frame(width: UIScreen.main.bounds.width)
                 Divider()
-                    .padding(.top, 16)
+                    .frame(width: UIScreen.main.bounds.width - 40, alignment: .center)
+                    .padding(.top, 12)
                 Spacer()
                 Button(action:{
-                    //logout 서버에 보내기
-//                    vm.logOut()
-                    //NavigationLink로 LoginView로 이동
-                    popRootView = false
-//                    autoLogin = false
+                    vm.logOut() //logout 서버에 보내기
+                    popRootView = false                     //NavigationLink로 LoginView로 이동
                     vm.loginState = false
                     //데이터 지우기 -> user id 데이터 지우기
                     print("log out")
                 }){
                     Text("로그아웃")
                         .underline()
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundColor(Color.gray)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(.gray_bold)
                 }
-                .padding()
-//                NavigationLink(destination: LoginView().navigationBarBackButtonHidden(true).navigationBarHidden(true)){
-//                    Text("로그아웃")
-//                        .underline()
-//                        .font(.system(size: 15, weight: .semibold))
-//                        .foregroundColor(Color.gray)
-//                }
-//                .simultaneousGesture(TapGesture().onEnded {
-////                    vm.logOut() //logout 서버에 보내기
-//                    print("logout")
-//                })
             }//VStack2
             .navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)
         }//VStack1
-        .frame(height: UIScreen.main.bounds.height-100, alignment: .top)
+        .frame(height: UIScreen.main.bounds.height - 100, alignment: .top)
     }
 }
 

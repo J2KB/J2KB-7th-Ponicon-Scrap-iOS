@@ -8,11 +8,6 @@
 import SwiftUI
 import Combine
 
-let error_red = Color(red: 255/255, green: 84/255, blue: 84/255)
-let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
-let bold_blue = Color(red: 20/255, green: 142/255, blue: 174/255)
-let light_blue = Color(red: 70/255, green: 193/255, blue: 241/255)
-
 struct SignUpView: View {
     @EnvironmentObject var vm : UserViewModel
     @State private var username = ""
@@ -48,56 +43,59 @@ struct SignUpView: View {
 //        let pred = NSPredicate(format: "SEFL MATCHES %@", nameRegEx)
 //        return pred.evaluate(with: name)
 //    }
+    
     var body: some View {
-        VStack(spacing: 32){
-            VStack{
-                VStack{ //이름 입력창
+        VStack(spacing: 64){
+            VStack(spacing: 48){
+                VStack(spacing: 20){ //이름 입력창
                     HStack{
                         Text("이름")
                             .font(.system(size: 20, weight: .semibold))
                         Text("*")
-                            .foregroundColor(bold_blue)
+                            .foregroundColor(.blue_bold)
                             .padding(.leading, -2)
                     }
-                    .frame(width: UIScreen.main.bounds.width/1.2, alignment: .leading)
-                    TextField("이름을 입력하세요", text: $username)
-                        .frame(width: UIScreen.main.bounds.width/1.2, height: 28, alignment: .leading)
-                        .onSubmit {
-                            //특수문자 혹은 숫자가 들어간 경우 -> 에러 메세지
-                            if username.filter({$0.isLetter}).count != username.count {
-                                self.checkInfo[0] = 0
+                    .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
+                    VStack{
+                        TextField("이름을 입력하세요", text: $username)
+                            .frame(width: UIScreen.main.bounds.width/1.2, height: 28, alignment: .leading)
+                            .onSubmit {
+                                //특수문자 혹은 숫자가 들어간 경우 -> 에러 메세지
+                                if username.filter({$0.isLetter}).count != username.count {
+                                    self.checkInfo[0] = 0
+                                }
+                                //0자 입력시
+                                else if username.isEmpty {
+                                    self.checkInfo[0] = 1
+                                }
+                                else {
+                                    self.checkInfo[0] = 9
+                                }
                             }
-                            //0자 입력시
-                            else if username.isEmpty {
-                                self.checkInfo[0] = 1
-                            }
-                            else {
-                                self.checkInfo[0] = 9
-                            }
-                        }
-                        .onReceive(Just(username), perform: { _ in  //최대 30글자
-                            if maxUserName < username.count {
-                                username = String(username.prefix(maxUserName))
-                            }
-                        })
-                    Divider()
-                        .foregroundColor(light_gray)
-                        .frame(width: UIScreen.main.bounds.width/1.2)
-                    Text(toastMessages[checkInfo[0]]!) //관련 에러 메세지 따로 출력되도록
-                        .font(.caption)
-                        .foregroundColor(error_red)
-                        .frame(width: UIScreen.main.bounds.width/1.2, alignment: .leading)
+                            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
+                            .onReceive(Just(username), perform: { _ in  //최대 30글자
+                                if maxUserName < username.count {
+                                    username = String(username.prefix(maxUserName))
+                                }
+                            })
+                        Divider()
+                            .foregroundColor(.gray_bold)
+                            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2)
+                        Text(toastMessages[checkInfo[0]]!) //관련 에러 메세지 따로 출력되도록
+                            .font(.caption)
+                            .foregroundColor(.red_error)
+                            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
+                    }
                 }
-                .padding(.bottom, 16)
                 VStack{ //아이디 입력창
                     HStack{
                         Text("아이디")
                             .font(.system(size: 20, weight: .semibold))
                         Text("*")
-                            .foregroundColor(bold_blue)
+                            .foregroundColor(.blue_bold)
                             .padding(.leading, -2)
                     }
-                    .frame(width: UIScreen.main.bounds.width/1.2, alignment: .leading)
+                    .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
                     VStack{
                         HStack{
                             TextField("아이디를 입력하세요", text: $id)
@@ -123,6 +121,7 @@ struct SignUpView: View {
                                         id = String(id.prefix(maxIdPw))
                                     }
                                 })
+                                .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2 - 88, alignment: .leading)
                             Button(action: {
                                 //아이디 중복 확인 버튼
                                 //api 통신
@@ -132,32 +131,31 @@ struct SignUpView: View {
                                     .font(.system(size: 12, weight: .semibold))
                                     .frame(width: 80, height: 32, alignment: .center)
                                     .foregroundColor(Color.white)
-                                    .background(light_blue)
+                                    .background(Color("main_accent"))
                                     .cornerRadius(8)
                             }
                         }
                         Divider()
-                            .foregroundColor(light_gray)
-                            .frame(width: UIScreen.main.bounds.width/1.2)
+                            .foregroundColor(.gray_bold)
+                            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
                     }
                     Text(toastMessages[checkInfo[1]]!) //관련 에러 메세지 따로 출력되도록
                         .font(.caption)
-                        .foregroundColor(error_red)
-                        .frame(width: UIScreen.main.bounds.width/1.2, alignment: .leading)
+                        .foregroundColor(.red_error)
+                        .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
                 }
-                .padding(.bottom, 16)
                 VStack{ //비밀번호 입력창
                     HStack{
                         Text("비밀번호")
                             .font(.system(size: 20, weight: .semibold))
                         Text("*")
-                            .foregroundColor(bold_blue)
+                            .foregroundColor(.blue_bold)
                             .padding(.leading, -2)
                     }
-                    .frame(width: UIScreen.main.bounds.width/1.2, alignment: .leading)
+                    .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
                     TextField("비밀번호를 입력하세요", text: $pw)
                         .keyboardType(.asciiCapable)
-                        .frame(width: UIScreen.main.bounds.width/1.2, height: 28, alignment: .leading)
+                        .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
                         .onSubmit {
                             //fail -> 영어만 있거나 숫자만 있는 경우 || 5보다 작은 문자열 길이
                             let countLetter = pw.filter({$0.isLetter}).count //영어 개수
@@ -181,26 +179,25 @@ struct SignUpView: View {
                             }
                         })
                     Divider()
-                        .foregroundColor(light_gray)
-                        .frame(width: UIScreen.main.bounds.width/1.2)
+                        .foregroundColor(.gray_bold)
+                        .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
                     Text(toastMessages[checkInfo[2]]!) //관련 에러 메세지 따로 출력되도록
                         .font(.caption)
-                        .foregroundColor(error_red)
-                        .frame(width: UIScreen.main.bounds.width/1.2, alignment: .topLeading)
+                        .foregroundColor(.red_error)
+                        .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
                 }
-                .padding(.bottom, 16)
                 VStack{ //비밀번호 확인 입력창
                     HStack{
                         Text("비밀번호 확인")
                             .font(.system(size: 20, weight: .semibold))
                         Text("*")
-                            .foregroundColor(bold_blue)
+                            .foregroundColor(.blue_bold)
                             .padding(.leading, -2)
                     }
-                    .frame(width: UIScreen.main.bounds.width/1.2, alignment: .leading)
+                    .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
                     TextField("비밀번호 확인을 입력하세요", text: $checkPW)
                         .keyboardType(.asciiCapable)
-                        .frame(width: UIScreen.main.bounds.width/1.2, height: 28, alignment: .leading)
+                        .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
                         .onSubmit {
                             if pw != checkPW {
                                 self.checkInfo[3] = 7
@@ -213,13 +210,12 @@ struct SignUpView: View {
                             }
                         }
                     Divider()
-                        .frame(width: UIScreen.main.bounds.width/1.2)
+                        .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
                     Text(toastMessages[checkInfo[3]]!) //관련 에러 메세지 따로 출력되도록
                         .font(.caption)
-                        .foregroundColor(error_red)
-                        .frame(width: UIScreen.main.bounds.width/1.2, alignment: .topLeading)
+                        .foregroundColor(.red_error)
+                        .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
                 }
-                .padding(.bottom, 16)
             }
             
             //모두 올바른 입력값인 경우 회원가입 성공 -> HomeView 이동
@@ -249,12 +245,10 @@ struct SignUpView: View {
                     .font(.system(size: 16, weight: .semibold))
                     .frame(width: UIScreen.main.bounds.width / 2.2, height: 44, alignment: .center)
                     .foregroundColor(Color.white)
-                    .background(light_blue)
+                    .background(Color("main_accent"))
                     .cornerRadius(10)
             }
-            .padding(.top, 28)
         }
-        .padding(.bottom, 80)
         .navigationBarTitle("",displayMode: .inline)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: backButton)

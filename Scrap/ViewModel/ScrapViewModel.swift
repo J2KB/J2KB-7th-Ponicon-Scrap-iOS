@@ -46,7 +46,7 @@ struct NewDataModel: Decodable{ //자료 저장 -> response 데이터로 받을 
 class ScrapViewModel: ObservableObject{ //감시할 data model
     @Published var categoryList = CategoryResponse(code: 0, message: "", result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)]))  //초기화
     //categoryList에는 Category 값만 넣을 것..!
-    @Published var dataList = DataResponse(code: 0, message: "", result: DataResponse.Result(links: [DataResponse.Datas(linkId: 0, link: "", title: "", imgUrl: "")]))
+    @Published var dataList = DataResponse(code: 0, message: "", result: DataResponse.Result(links: [DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")]))
     @Published var user = UserResponse(code: 0, message: "", result: UserResponse.Result(name: "", username: ""))
     
     var failLogin = false

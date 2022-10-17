@@ -43,7 +43,7 @@ struct SubHomeView: View {
                                 if let Url = url {
                                     Link(destination: Url, label:{
                                         PageView(data: data, isOneCol: $isOneCol)
-                                            .padding(2)
+                                            .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                                     })
                                     .foregroundColor(.black)
                                 }

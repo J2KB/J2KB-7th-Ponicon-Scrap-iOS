@@ -71,7 +71,7 @@ struct MainHomeView: View {
             }
             //Drawer
             SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCateogry: $isShowingCategory, selected: $selected)
-                .offset(x: isShowingCategory ? -60 : -UIScreen.main.bounds.width) //moving view
+                .offset(x: isShowingCategory ? -(UIScreen.main.bounds.width / 8) : -UIScreen.main.bounds.width) //moving view
         }
         .frame(width: UIScreen.main.bounds.width)
         .onAppear{ //이 화면 등장하면 api 통신
