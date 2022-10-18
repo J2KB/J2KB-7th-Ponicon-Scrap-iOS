@@ -41,11 +41,19 @@ struct SubHomeView: View {
                             if let urlString = data.link {
                                 let url = URL(string: urlString.wrappedValue)
                                 if let Url = url {
-                                    Link(destination: Url, label:{
-                                        PageView(data: data, isOneCol: $isOneCol)
-                                            .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
-                                    })
-                                    .foregroundColor(.black)
+                                    ZStack{
+                                        Button(action: {
+                                            
+                                        }){
+                                            Image(systemName: "ellipsis")
+                                                .rotationEffect(.degrees(90))
+                                        }
+                                        Link(destination: Url, label:{
+                                            PageView(data: data, isOneCol: $isOneCol)
+                                                .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+                                        })
+                                        .foregroundColor(.black)
+                                    }
                                 }
                             }
                         }

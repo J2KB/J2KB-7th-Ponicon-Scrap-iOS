@@ -72,15 +72,12 @@ struct MainHomeView: View {
             //Drawer
             SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCateogry: $isShowingCategory, selected: $selected)
                 .offset(x: isShowingCategory ? -(UIScreen.main.bounds.width / 8) : -UIScreen.main.bounds.width) //moving view
+            //if isShowingCategory is true,
         }
         .frame(width: UIScreen.main.bounds.width)
         .onAppear{ //이 화면 등장하면 api 통신
             scrapVM.getCategoryData(userID: 2)
         }
-//        .refreshable {
-//            vm.getCategoryData()
-//            print("refresh")
-//        }
         .gesture(DragGesture().onEnded({
             if $0.translation.width < -100 {
                 withAnimation(.easeInOut) {

@@ -60,7 +60,7 @@ class UserViewModel: ObservableObject{
     //POST
     //로그인
     func postLogin(userid: String, password: String, autoLogin: Bool){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/user/login") else {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/login") else {
             print("invalid url")
             return
         }
@@ -106,7 +106,7 @@ class UserViewModel: ObservableObject{
     
 //    func postKaKaoLogin(accessToken: String, refreshToken: String){
 //        print("kakao login")
-//        guard let url = URL(string: "https://scrap.hana-umc.shop/user/login/kakao/v2") else {
+//        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/login/kakao/v2") else {
 //            print("invalid url")
 //            return
 //        }
@@ -151,7 +151,7 @@ class UserViewModel: ObservableObject{
     
     //회원가입
     func postSignUp(userid: String, password: String, name: String){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/user/join") else {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/join") else {
             print("invalid url")
             return
         }
@@ -193,7 +193,7 @@ class UserViewModel: ObservableObject{
     //GET
     //로그아웃
     func logOut(){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/user/logout") else {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/logout") else {
             print("invalid url")
             return
         }

@@ -20,7 +20,7 @@ struct SideMenuView: View {
     let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
 
     var body: some View {
-        VStack(spacing: 20){
+        VStack(spacing: -2){
             //HEADER
             HStack{
                 HStack(spacing: 12){
@@ -48,30 +48,38 @@ struct SideMenuView: View {
                         .foregroundColor(.black)
                 }
             }
-            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 4) - 16)
+            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 4) - 12.4, height: 40)
             .padding(.horizontal, 16)
             .padding(.bottom, 10)
             .background(.white)
             //Category LIST
             VStack{
                 List{
-                    ForEach($categoryList.categories) { $category in
-                        HStack{
-                            Text(category.name)
-                                .font(.system(size: 16))
-                                .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.4), alignment: .leading)
-                            Text("\(category.numOfLink)")
-                                .font(.system(size: 16))
-                                .frame(width: 30, alignment: .trailing)
-                        }
-                        .listRowBackground(self.selected == category.categoryId ? light_gray : Color(.white))
-                        .onTapGesture { //클릭하면 현재 categoryID
-                            self.selected = category.categoryId
-                            vm.getData(userID: 2, catID: selected, seq: "desc")
-                        }
+                    HStack{
+                        Text("category.name")
+                            .font(.system(size: 16))
+                            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.4), alignment: .leading)
+                        Text("10")
+                            .font(.system(size: 16))
+                            .frame(width: 30, alignment: .trailing)
                     }
+//                    ForEach($categoryList.categories) { $category in
+//                        HStack{
+//                            Text(category.name)
+//                                .font(.system(size: 16))
+//                                .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.4), alignment: .leading)
+//                            Text("\(category.numOfLink)")
+//                                .font(.system(size: 16))
+//                                .frame(width: 30, alignment: .trailing)
+//                        }
+//                        .listRowBackground(self.selected == category.categoryId ? light_gray : Color(.white))
+//                        .onTapGesture { //클릭하면 현재 categoryID
+//                            self.selected = category.categoryId
+//                            vm.getData(userID: 2, catID: selected, seq: "desc")
+//                        }
+//                    }
                 }
-                .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 4))
+                .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 5))
                 .listStyle(InsetListStyle())
 //                if isAddingCategory {
 //                    HStack{
@@ -96,7 +104,7 @@ struct SideMenuView: View {
             }
         }
 //            .frame(width: UIScreen.main.bounds.width / 1.35)
-            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 4))
+            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 5))
     }
 }
 
