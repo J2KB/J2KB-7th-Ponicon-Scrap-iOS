@@ -48,7 +48,8 @@ struct SideMenuView: View {
                         .foregroundColor(.black)
                 }
             }
-            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 4) - 12.4, height: 40)
+            //12.4
+            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.72), height: 40)
             .padding(.horizontal, 16)
             .padding(.bottom, 10)
             .background(.white)
@@ -58,8 +59,17 @@ struct SideMenuView: View {
                     HStack{
                         Text("category.name")
                             .font(.system(size: 16))
-                            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.4), alignment: .leading)
+                            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.15), alignment: .leading)
                         Text("10")
+                            .font(.system(size: 16))
+                            .frame(width: 30, alignment: .trailing)
+                    }
+                    .listRowBackground(Color(.blue))
+                    HStack{
+                        Text("category.name2")
+                            .font(.system(size: 16))
+                            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.15), alignment: .leading)
+                        Text("120")
                             .font(.system(size: 16))
                             .frame(width: 30, alignment: .trailing)
                     }
@@ -79,8 +89,8 @@ struct SideMenuView: View {
 //                        }
 //                    }
                 }
-                .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 5))
-                .listStyle(InsetListStyle())
+                .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 3.5))
+                .listStyle(PlainListStyle())
 //                if isAddingCategory {
 //                    HStack{
 //                        Image(systemName: "square.and.pencil")
@@ -104,7 +114,8 @@ struct SideMenuView: View {
             }
         }
 //            .frame(width: UIScreen.main.bounds.width / 1.35)
-            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 5))
+        .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 3.5))
+        .background(.white)
     }
 }
 

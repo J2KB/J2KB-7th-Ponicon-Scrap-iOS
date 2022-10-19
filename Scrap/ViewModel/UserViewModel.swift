@@ -45,22 +45,19 @@ struct LogOutModel: Decodable{
     }
 }
 
-//카카오 로그인
-//-> https://scrap.hana-umc.shop/login/kakao/v2
-
 class UserViewModel: ObservableObject{
-    @Published var login = LoginModel(code: 0, message: "", result: LoginModel.Result(id: 0))
+//    @Published var login = LoginModel(code: 0, message: "", result: LoginModel.Result(id: 0))
     @Published var loginState = false
-    @Published var signUpState = false
+//    @Published var signUpState = false
     @Published var loginToastMessage = ""
-    @Published var signupToastMessage = ""
+//    @Published var signupToastMessage = ""
 //    @Published var userID = -1 //나중에 지울것 -> core data로
 //    @Published var userID: Int = UserDefaults.standard.integer(forKey: "ID") //user id 없으면 -1
 
     //POST
     //로그인
     func postLogin(userid: String, password: String, autoLogin: Bool){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/login") else {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/user/login") else {
             print("invalid url")
             return
         }
@@ -98,7 +95,7 @@ class UserViewModel: ObservableObject{
                     print("no data")
                 }
             }catch (let error){
-                print("error")
+                print("🚨🚨error🚨🚨")
                 print(String(describing: error))
             }
         }.resume()
@@ -106,7 +103,7 @@ class UserViewModel: ObservableObject{
     
 //    func postKaKaoLogin(accessToken: String, refreshToken: String){
 //        print("kakao login")
-//        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/login/kakao/v2") else {
+//        guard let url = URL(string: "https://scrap.hana-umc.shop/user/login/kakao/v2") else {
 //            print("invalid url")
 //            return
 //        }
@@ -151,7 +148,7 @@ class UserViewModel: ObservableObject{
     
     //회원가입
     func postSignUp(userid: String, password: String, name: String){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/join") else {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/user/join") else {
             print("invalid url")
             return
         }
@@ -172,14 +169,14 @@ class UserViewModel: ObservableObject{
                 if let data = data {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(SignUpModel.self, from: data)
-                    DispatchQueue.main.async {
-                        if result.code == 20000 {
-                            self.signUpState = true
-                        } else {
-                            self.signUpState = false
-                            self.signupToastMessage = result.message
-                        }
-                    }
+//                    DispatchQueue.main.async {
+//                        if result.code == 20000 {
+//                            self.signUpState = true
+//                        } else {
+//                            self.signUpState = false
+////                            self.signupToastMessage = result.message
+//                        }
+//                    }
                     print(result)
                 } else {
                     print("no data")
@@ -193,7 +190,7 @@ class UserViewModel: ObservableObject{
     //GET
     //로그아웃
     func logOut(){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/logout") else {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/user/logout") else {
             print("invalid url")
             return
         }
@@ -202,7 +199,6 @@ class UserViewModel: ObservableObject{
                 if let data = data {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(LogOutModel.self, from: data)
-//                    self.userID = -1
                     print(result)
                 } else {
                     print("no data")

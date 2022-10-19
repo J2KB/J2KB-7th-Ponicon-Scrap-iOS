@@ -71,7 +71,7 @@ struct MainHomeView: View {
             }
             //Drawer
             SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCateogry: $isShowingCategory, selected: $selected)
-                .offset(x: isShowingCategory ? -(UIScreen.main.bounds.width / 8) : -UIScreen.main.bounds.width) //moving view
+                .offset(x: isShowingCategory ? -(UIScreen.main.bounds.width / 6) : -UIScreen.main.bounds.width) //moving view
             //if isShowingCategory is true,
         }
         .frame(width: UIScreen.main.bounds.width)
