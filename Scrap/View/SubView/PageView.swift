@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct PageView: View {
-    @Binding var data : DataResponse.Datas
+//    @Binding var data : DataResponse.Datas
     @Binding var isOneCol : Bool
     @State private var height = 200
+    @State private var data = DataResponse.Datas(linkId: 0, link: " ", title: "title", domain: "domain", imgUrl: "")
     
     var body: some View {
         VStack(spacing: 0){
@@ -42,9 +43,9 @@ struct PageView: View {
                     Text(data.title)
                         .lineLimit(2)
                         .font(.system(size: 13, weight: .medium))
-                        .frame(width: isOneCol ? UIScreen.main.bounds.width - 80 : UIScreen.main.bounds.width / 3, height: 40, alignment: .topLeading)
+                        .frame(width: isOneCol ? UIScreen.main.bounds.width - 90 : UIScreen.main.bounds.width / 3 - 14, height: 40, alignment: .topLeading)
                         .padding(.trailing, 40)
-                    Text("domain") //출처 -> link에서 자르기
+                    Text(data.domain) //출처 -> link에서 자르기
                         .font(.caption)
                         .foregroundColor(.gray)
                         .lineLimit(1)
@@ -58,7 +59,7 @@ struct PageView: View {
 
 struct PageView_Previews: PreviewProvider {
     static var previews: some View {
-        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), isOneCol: .constant(false))
+        PageView(/*data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), */isOneCol: .constant(true))
     }
 }
 

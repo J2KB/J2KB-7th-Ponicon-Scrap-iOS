@@ -18,7 +18,6 @@ struct SideMenuView: View {
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @EnvironmentObject var userVM : UserViewModel //ScrapApp에서 연결받은 EnvironmentObject
     @Binding var selected : Int
-    let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -70,6 +69,8 @@ struct SideMenuView: View {
                                 .padding(.leading, 16)
                                 .id(i)
                         }
+                        .onMove(perform: move)
+                        .onDelete(perform: delete)
 //                        HStack{
 //                            Text("category.name1")
 //                                .font(.system(size: 16))
@@ -130,16 +131,21 @@ struct SideMenuView: View {
             .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 3.5))
             .background(.white)
         }
+        .environment(\.editMode, .constant(.active))
+    }
+    
+    private func move(from source: IndexSet, to destination: Int) {
+        arr.move(fromOffsets: source, toOffset: destination)
+    }
+    
+    private func delete(offsets: IndexSet) {
+        arr.remove(atOffsets: offsets)
     }
 }
 
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        Group{
-//        MainHomeView(popRootView: .constant(true))
-//                .environmentObject(ScrapViewModel())
         SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 1)])), isShowingCateogry: .constant(true), selected: .constant(1))
             .environmentObject(ScrapViewModel())
-        }
     }
 }

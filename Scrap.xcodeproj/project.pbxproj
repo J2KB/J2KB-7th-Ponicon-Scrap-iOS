@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F802200F28F2C3F40032DAD0 /* ShareUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F802200E28F2C3F40032DAD0 /* ShareUIView.swift */; };
+		F82C610128FFF716000C2C92 /* HalfSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82C610028FFF716000C2C92 /* HalfSheetController.swift */; };
 		F84C51CA28E5619300E5DECD /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84C51C928E5619300E5DECD /* UserResponse.swift */; };
 		F84C51CC28E58D0A00E5DECD /* ScrapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84C51CB28E58D0A00E5DECD /* ScrapViewModel.swift */; };
 		F84C51CE28E596F600E5DECD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84C51CD28E596F600E5DECD /* RootView.swift */; };
@@ -61,6 +62,7 @@
 
 /* Begin PBXFileReference section */
 		F802200E28F2C3F40032DAD0 /* ShareUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareUIView.swift; sourceTree = "<group>"; };
+		F82C610028FFF716000C2C92 /* HalfSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfSheetController.swift; sourceTree = "<group>"; };
 		F84C51C928E5619300E5DECD /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
 		F84C51CB28E58D0A00E5DECD /* ScrapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapViewModel.swift; sourceTree = "<group>"; };
 		F84C51CD28E596F600E5DECD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 		F89BED8928C5FB050053D406 /* Modifier */ = {
 			isa = PBXGroup;
 			children = (
+				F82C610028FFF716000C2C92 /* HalfSheetController.swift */,
 			);
 			path = Modifier;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 				F8740C2828C99EB0009D6F8C /* SubHomeView.swift in Sources */,
 				F88A67BF28E95BB6003BD8A6 /* UserViewModel.swift in Sources */,
 				F87109F628E3327F009AFA8F /* DataResponse.swift in Sources */,
+				F82C610128FFF716000C2C92 /* HalfSheetController.swift in Sources */,
 				F88E7E3228C5CDDB00C3CCA8 /* ScrapApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

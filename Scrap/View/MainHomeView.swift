@@ -89,13 +89,16 @@ struct MainHomeView: View {
                 }
             }
         }))
+//        .environment(\.editMode, .constant(.active))
     }
 }
 
-struct MainHomeView_Previews: PreviewProvider {
+struct MainHomeView_Previews: PreviewProvider { 
     static var previews: some View {
         MainHomeView(popRootView: .constant(true))
             .environmentObject(ScrapViewModel())
-//        LoginView()
+            .environmentObject(UserViewModel())
+
+        //        LoginView()
     }
 }
