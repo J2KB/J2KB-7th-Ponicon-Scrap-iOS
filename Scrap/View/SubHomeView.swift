@@ -37,53 +37,55 @@ struct SubHomeView: View {
                 }
                 .frame(width: UIScreen.main.bounds.width - 32, height: 40, alignment: .trailing)
                 LazyVGrid(columns: isOneCol ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: UIScreen.main.bounds.width / 2.5))], spacing: 10){
-//                    if isRecent {
-//                        ForEach($datas.links.reversed()) { data in
-//                            if let urlString = data.link {
-//                                let url = URL(string: urlString.wrappedValue)
-//                                if let Url = url {
-//                                    ZStack{
-//                                        Button(action: {
-//
-//                                        }){
-//                                            Image(systemName: "ellipsis")
-//                                                .rotationEffect(.degrees(90))
-//                                        }
-//                                        Link(destination: Url, label:{
-//                                            PageView(data: data, isOneCol: $isOneCol)
-//                                                .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
-//                                        })
-//                                        .foregroundColor(.black)
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }else {
-                    ZStack{
-                        PageView(isOneCol: $isOneCol)
-                        Button(action: {
-                            //half-modal view 등장해야됨
-                            self.isPresentHalfModal = true
-                        }){
-                            Image(systemName: "ellipsis")
-                                .rotationEffect(.degrees(90))
-                                .foregroundColor(.black_bold)
+                    if isRecent {
+                        ForEach($datas.links.reversed()) { data in
+                            if let urlString = data.link {
+                                let url = URL(string: urlString.wrappedValue!) //if-let으로 옵셔널 바인딩
+                                if let Url = url {
+                                    ZStack{
+                                        Button(action: {
+                                            //half-modal view 등장해야됨
+                                            self.isPresentHalfModal = true
+                                        }){
+                                            Image(systemName: "ellipsis")
+                                                .rotationEffect(.degrees(90))
+                                                .foregroundColor(.black_bold)
+                                        }
+                                        .padding(EdgeInsets(top: 90, leading: 315, bottom: 0, trailing: 0))
+                                        Link(destination: Url, label:{
+                                            PageView(data: data, isOneCol: $isOneCol)
+                                                .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+                                        })
+                                        .foregroundColor(.black)
+                                    }
+                                }
+                            }
                         }
-                        .padding(EdgeInsets(top: 90, leading: 315, bottom: 0, trailing: 0))
+                    }else {
+                        ForEach($datas.links) { data in
+                            if let urlString = data.link {
+                                let url = URL(string: urlString.wrappedValue!)
+                                if let Url = url {
+                                    ZStack{
+                                        Button(action: {
+                                            //half-modal view 등장해야됨
+                                            self.isPresentHalfModal = true
+                                        }){
+                                            Image(systemName: "ellipsis")
+                                                .rotationEffect(.degrees(90))
+                                                .foregroundColor(.black_bold)
+                                        }
+                                        .padding(EdgeInsets(top: 90, leading: 315, bottom: 0, trailing: 0))
+                                        Link(destination: Url, label:{
+                                            PageView(data: data, isOneCol: $isOneCol)
+                                                .padding(2)
+                                        })
+                                        .foregroundColor(.black)
+                                    }
+                                }
+                            }
+                        }
                     }
-//                        ForEach($datas.links) { data in
-//                            if let urlString = data.link {
-//                                let url = URL(string: urlString.wrappedValue)
-//                                if let Url = url {
-//                                    Link(destination: Url, label:{
-//                                        PageView(data: data, isOneCol: $isOneCol)
-//                                            .padding(2)
-//                                    })
-//                                    .foregroundColor(.black)
-//                                }
-//                            }
-//                        }
-//                    }
                 }
                 .padding(.horizontal, isOneCol ? 0 : 8)
             }

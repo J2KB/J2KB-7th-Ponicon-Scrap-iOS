@@ -7,17 +7,42 @@
 
 import SwiftUI
 import Combine
+import UniformTypeIdentifiers
+import Share
+
+struct DragDelegate<Category: Equatable>: DropDelegate {
+    @Binding var current: Category? //현재 아이템
+    
+    func dropUpdated(info: DropInfo) -> DropProposal? {
+        DropProposal(operation: .move)
+    }
+    
+    func performDrop(info: DropInfo) -> Bool { //이동시킨 후, current = nil로 변경
+        current = nil
+        return true
+    }
+}
+
+struct Item: Identifiable, Equatable{ //category item
+    let id: Int
+    let title: String
+    let num: Int
+}
 
 struct SideMenuView: View {
-    @State private var arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+    //📌 test
+    @State private var arr = [Item(id: 1, title: "Algorithm", num: 2), Item(id: 2, title: "DataStructure", num: 5), Item(id: 3, title: "Network", num: 4), Item(id: 4, title: "SQL", num: 6)]
+    @State private var dragging: CategoryResponse.Category?
+//    @State private var dragging: Item?
     @Binding var categoryList : CategoryResponse.Result
-    @State private var newCat = "" //초기화해줘야 함
+    @State private var newCat = ""
     @State private var isAddingCategory = false
     @Binding var isShowingCateogry : Bool
     @State private var maxCatName = 20
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @EnvironmentObject var userVM : UserViewModel //ScrapApp에서 연결받은 EnvironmentObject
     @Binding var selected : Int
+    
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -44,7 +69,7 @@ struct SideMenuView: View {
                         self.isAddingCategory.toggle() //카테고리 추가 토글
                         withAnimation {
 //                            proxy.scrollTo(categoryList.categories.count) //scroll to last element(category)
-                            proxy.scrollTo(arr.count, anchor: .top)
+//                            proxy.scrollTo(arr.count, anchor: .top)
                         }
                     }){
                         Image(systemName: isAddingCategory ? "xmark" : "plus")
@@ -58,58 +83,71 @@ struct SideMenuView: View {
                 .padding(.horizontal, 16)
                 .padding(.bottom, 10)
                 .background(.white)
-
                 //Category LIST
                 VStack{
                     List{
-                        ForEach(arr, id:\.self) { i in
-                            Text("row \(i)")
-                                .font(.system(size: 16))
-                                .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.15), alignment: .leading)
-                                .padding(.leading, 16)
-                                .id(i)
+                        //📌 test
+//                        ForEach(arr) { i in
+//                            HStack{
+//                                Text(i.title)
+//                                    .font(.system(size: 16))
+//                                    .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 1.8), alignment: .leading)
+//                                    .padding(.leading, 12)
+//                                Spacer()
+//                                Text("\(i.num)")
+//                                    .font(.system(size: 16))
+//                                    .frame(width: 30, alignment: .trailing)
+//                                Button(action: {
+//
+//                                }) {
+//                                    Image(systemName: "pencil")
+//                                        .resizable()
+//                                        .frame(width: 18, height: 18)
+//                                        .foregroundColor(.gray_bold)
+//                                }
+//                            }
+//                            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.75))
+//                            .onDrag {
+//                                self.dragging = i
+//                                return NSItemProvider(object: NSString())
+//                            }
+//                            .onDrop(of: [UTType.text], delegate: DragDelegate(current: $dragging))
+//                        }
+//                        .onDelete(perform: delete)
+//                        .onMove(perform: {source, destination in //from source: IndexSet, to destination: Int
+//                        })
+                        //📌 real
+                        ForEach($categoryList.categories) { $category in
+                            HStack{
+                                Text(category.name)
+                                    .font(.system(size: 16))
+                                    .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2), alignment: .leading)
+                                Text("\(category.numOfLink)")
+                                    .font(.system(size: 16))
+                                    .frame(width: 30, alignment: .trailing)
+                            }
+                            .padding(.leading, 10)
+                            .listRowBackground(self.selected == category.categoryId ? .gray_sub : Color(.white))
+                            .onTapGesture { //클릭하면 현재 categoryID
+                                self.selected = category.categoryId
+                                vm.getData(userID: 16, catID: selected, seq: "seq")
+                            }
+                            .onDrag {
+                                self.dragging = category
+                                return NSItemProvider(object: NSString())
+                            }
+                            .onDrop(of: [UTType.text], delegate: DragDelegate(current: $dragging))
                         }
-                        .onMove(perform: move)
                         .onDelete(perform: delete)
-//                        HStack{
-//                            Text("category.name1")
-//                                .font(.system(size: 16))
-//                                .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.15), alignment: .leading)
-//                            Text("10")
-//                                .font(.system(size: 16))
-//                                .frame(width: 30, alignment: .trailing)
-//                        }
-//                        .id(1)
-//                        .listRowBackground(Color("light_blue"))
-//                        HStack{
-//                            Text("category.name2")
-//                                .font(.system(size: 16))
-//                                .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.15), alignment: .leading)
-//                            Text("120")
-//                                .font(.system(size: 16))
-//                                .frame(width: 30, alignment: .trailing)
-//                        }
-//                        .id(2)
-    //                    ForEach($categoryList.categories) { $category in
-    //                        HStack{
-    //                            Text(category.name)
-    //                                .font(.system(size: 16))
-    //                                .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.4), alignment: .leading)
-    //                            Text("\(category.numOfLink)")
-    //                                .font(.system(size: 16))
-    //                                .frame(width: 30, alignment: .trailing)
-    //                        }
-    //                        .listRowBackground(self.selected == category.categoryId ? light_gray : Color(.white))
-    //                        .onTapGesture { //클릭하면 현재 categoryID
-    //                            self.selected = category.categoryId
-    //                            vm.getData(userID: 2, catID: selected, seq: "desc")
-    //                        }
-    //                    }
+                        .onMove(perform: {source, destination in //from source: IndexSet, to destination: Int
+                            //📡 카테고리 이동 통신
+                            source.forEach { vm.moveCategory(from: $0, to: destination)} //카테고리 이동 배열 순서 변경
+                        })
                         if isAddingCategory { //카테고리 추가 버튼을 누른 경우 -> 보여짐
                             HStack{
                                 TextField("새로운 카테고리", text: $newCat,
                                   onCommit: {
-                                    vm.addNewCategory(newCat: newCat, userID: 2)
+                                    vm.addNewCategory(newCat: newCat, userID: 2) //📡 카테고리 추가 통신
                                     let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: 0)
                                     vm.appendCategory(newCategory: newCategory) //post로 추가된 카테고리 이름 서버에 전송
                                     newCat = ""
@@ -131,15 +169,17 @@ struct SideMenuView: View {
             .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 3.5))
             .background(.white)
         }
-        .environment(\.editMode, .constant(.active))
     }
     
-    private func move(from source: IndexSet, to destination: Int) {
-        arr.move(fromOffsets: source, toOffset: destination)
-    }
-    
-    private func delete(offsets: IndexSet) {
-        arr.remove(atOffsets: offsets)
+//    private func move(from source: IndexSet, to destination: Int) {
+//        arr.move(fromOffsets: source, toOffset: destination)
+//    }
+
+    private func delete(indexSet: IndexSet) {
+        for index in indexSet {
+            vm.removeCategory(index: index)
+        }
+        //📡 카테고리 삭제 통신
     }
 }
 

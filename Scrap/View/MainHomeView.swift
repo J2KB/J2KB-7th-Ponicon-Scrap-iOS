@@ -5,7 +5,6 @@
 //  Created by 김영선 on 2022/09/05.
 //
 
-
 //로그인이 된 상태라면, 앱의 처음 시작은 HomeView
 //사용자가 저장한 자료를 보거나 수정, 삭제할 수 있는 공간
 
@@ -18,7 +17,7 @@ struct MainHomeView: View {
     @State private var isShowingMyPage = false
     @Binding var popRootView : Bool
 //    @Binding var autoLogin : Bool
-    @State private var selected : Int = 2
+    @State private var selected : Int = 0
     var categoryTitle : String {
         return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"
     }
@@ -52,7 +51,7 @@ struct MainHomeView: View {
                             NavigationLink(destination: MyPageView(userData: $scrapVM.user.result, popRootView: $popRootView), isActive: $isShowingMyPage) {
                                 Button(action: {
                                     self.isShowingMyPage.toggle()
-                                    scrapVM.getMyData(userID: 2)
+                                    scrapVM.getMyData(userID: 16)
                                 }) {
                                     Image(systemName: "person.circle")
                                         .foregroundColor(.black)
@@ -72,11 +71,10 @@ struct MainHomeView: View {
             //Drawer
             SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCateogry: $isShowingCategory, selected: $selected)
                 .offset(x: isShowingCategory ? -(UIScreen.main.bounds.width / 6) : -UIScreen.main.bounds.width) //moving view
-            //if isShowingCategory is true,
         }
         .frame(width: UIScreen.main.bounds.width)
         .onAppear{ //이 화면 등장하면 api 통신
-            scrapVM.getCategoryData(userID: 2)
+            scrapVM.getCategoryData(userID: 16)
         }
         .gesture(DragGesture().onEnded({
             if $0.translation.width < -100 {
@@ -89,7 +87,6 @@ struct MainHomeView: View {
                 }
             }
         }))
-//        .environment(\.editMode, .constant(.active))
     }
 }
 
@@ -98,7 +95,5 @@ struct MainHomeView_Previews: PreviewProvider {
         MainHomeView(popRootView: .constant(true))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
-
-        //        LoginView()
     }
 }

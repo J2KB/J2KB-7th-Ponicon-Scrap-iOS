@@ -24,7 +24,7 @@ struct LoginView: View {
     @State private var autoLogin = false
     
     var body: some View {
-//        NavigationView{
+        NavigationView{
             if autoLogin { //자동 로그인의 경우, 바로 HomeView로 이동
                 NavigationLink("", destination: MainHomeView(popRootView: $popRootView).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $popRootView)
                 .onReceive(timer) { _ in
@@ -119,10 +119,9 @@ struct LoginView: View {
                             }
                             HStack(spacing: 4){ //자동 로그인 체크박스 버튼
                                 Button(action: {
-                                    //stayLogin
                                     self.keepLogin.toggle()
                                 }) {
-                                    if !keepLogin {
+                                    if keepLogin {
                                         Image(systemName: "checkmark.square.fill")
                                             .resizable()
                                             .frame(width: 12, height: 12)
@@ -202,7 +201,7 @@ struct LoginView: View {
                     .padding(.top, 20)
                 }
             }
-//        }
+        }
     }
 }
 

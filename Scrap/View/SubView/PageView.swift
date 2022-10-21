@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct PageView: View {
-//    @Binding var data : DataResponse.Datas
+    @Binding var data : DataResponse.Datas
     @Binding var isOneCol : Bool
     @State private var height = 200
-    @State private var data = DataResponse.Datas(linkId: 0, link: " ", title: "title", domain: "domain", imgUrl: "")
+//    @State private var data = DataResponse.Datas(linkId: 0, link: " ", title: "title", domain: "domain", imgUrl: "")
     
     var body: some View {
         VStack(spacing: 0){
-            if data.imgUrl == ""{ //image 없으면 default light_blue color
+            if data.imgUrl == "" || data.imgUrl == nil{ //image 없으면 default light_blue color
                 Rectangle()
                     .foregroundColor(.light_blue)
                     .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
@@ -24,7 +24,7 @@ struct PageView: View {
                     .shadow(radius: 2)
             }else{
                 Image(systemName: "person.fill")
-                    .imageData(url: URL(string: data.imgUrl)!)
+                    .imageData(url: URL(string: data.imgUrl!)!)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
@@ -40,12 +40,12 @@ struct PageView: View {
                     .cornerRadius(10, corners: .bottomRight)
                     .shadow(radius: 2)
                 VStack(spacing: 2){
-                    Text(data.title)
+                    Text(data.title ?? "")
                         .lineLimit(2)
                         .font(.system(size: 13, weight: .medium))
                         .frame(width: isOneCol ? UIScreen.main.bounds.width - 90 : UIScreen.main.bounds.width / 3 - 14, height: 40, alignment: .topLeading)
                         .padding(.trailing, 40)
-                    Text(data.domain) //출처 -> link에서 자르기
+                    Text(data.domain ?? "") //출처 -> link에서 자르기
                         .font(.caption)
                         .foregroundColor(.gray)
                         .lineLimit(1)
@@ -59,7 +59,7 @@ struct PageView: View {
 
 struct PageView_Previews: PreviewProvider {
     static var previews: some View {
-        PageView(/*data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), */isOneCol: .constant(true))
+        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), isOneCol: .constant(true))
     }
 }
 

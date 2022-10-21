@@ -150,7 +150,6 @@
 				F88E7E3528C5CDDC00C3CCA8 /* Assets.xcassets */,
 				F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */,
 				F88E7E3728C5CDDC00C3CCA8 /* Preview Content */,
-				F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */,
 			);
 			path = Scrap;
 			sourceTree = "<group>";
@@ -185,6 +184,7 @@
 				F87109F328E33275009AFA8F /* CategoryResponse.swift */,
 				F87109F528E3327F009AFA8F /* DataResponse.swift */,
 				F84C51C928E5619300E5DECD /* UserResponse.swift */,
+				F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";

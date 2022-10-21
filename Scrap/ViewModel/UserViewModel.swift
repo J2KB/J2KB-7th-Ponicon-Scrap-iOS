@@ -78,7 +78,6 @@ class UserViewModel: ObservableObject{
                 if let data = data {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(LoginModel.self, from: data)
-                    
                     DispatchQueue.main.async {
                         if let response = response as? HTTPURLResponse {
                             if response.statusCode != 200 {

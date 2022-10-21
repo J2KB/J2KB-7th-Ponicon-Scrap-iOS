@@ -61,6 +61,18 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         categoryList.result.categories.append(newCategory)
     }
     
+    //categoryList에 category 삭제 함수
+    func removeCategory(index: Int){
+        categoryList.result.categories.remove(at: index)
+    }
+    
+    func moveCategory(from oldIndex: Int, to newIndex: Int) {
+        
+        if oldIndex == newIndex { return }
+        if abs(newIndex - oldIndex) == 1 { return categoryList.result.categories.swapAt(oldIndex, newIndex) }
+        categoryList.result.categories.insert(categoryList.result.categories.remove(at: oldIndex), at: newIndex)
+    }
+    
     //GET
     //카테고리 전체 조회
     func getCategoryData(userID: Int){
@@ -76,6 +88,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                     DispatchQueue.main.async {
                         self.categoryList = result
                     }
+                    print(result)
                 } else {
                     print("no data")
                 }
@@ -100,6 +113,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                     DispatchQueue.main.async {
                         self.dataList = result
                     }
+                    print(result)
                 } else {
                     print("no data")
                 }

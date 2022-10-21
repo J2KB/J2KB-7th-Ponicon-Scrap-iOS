@@ -15,7 +15,7 @@ struct CategoryResponse: Decodable{
             self.categories = categories
         }
     }
-    struct Category: Decodable, Identifiable{
+    struct Category: Decodable, Identifiable, Equatable {
         let id = UUID()
         var categoryId: Int
         var name: String
