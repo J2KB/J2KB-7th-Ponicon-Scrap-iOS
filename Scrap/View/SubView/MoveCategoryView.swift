@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SaveDataView: View {
+struct MoveCategoryView: View {
     //임시 데이터 -> 나중엔 데이터 받아올 것
     let arr = ["분류되지 않은 자료", "category 1", "category 2", "category 3", "category 4"]
     @State private var selection = 0
@@ -20,25 +20,25 @@ struct SaveDataView: View {
                 Text(category)
             }
         }.listStyle(.inset)
-//            .toolbar{
-//                ToolbarItem(placement: .navigationBarLeading){
-//                    Button("취소", action: {
-//
-//                    })
-//                }
-//            }
-//            .toolbar{
-//                ToolbarItem(placement: .navigationBarTrailing){
-//                    Button("저장", action: {
-//
-//                    })
-//                }
-//            }
+        .toolbar{
+            ToolbarItem(placement: .navigationBarLeading){
+                Button("취소", action: {
+
+                })
+            }
+        }
+        .toolbar{
+            ToolbarItem(placement: .navigationBarTrailing){
+                Button("저장", action: {
+
+                })
+            }
+        }
     }
 }
 
-struct SaveDataView_Previews: PreviewProvider {
+struct MoveCategoryView_Previews: PreviewProvider {
     static var previews: some View {
-        SaveDataView()
+        MoveCategoryView()
     }
 }

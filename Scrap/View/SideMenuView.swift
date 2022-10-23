@@ -119,20 +119,14 @@ struct SideMenuView: View {
                         //📌 real
                         ForEach($categoryList.categories) { $category in
                             if category.order != 0 && category.order != 1 {
-                                CategoryRow(category: $category)
-                                .padding(.leading, 10)
-                                .listRowBackground(self.selected == category.categoryId ? .gray_sub : Color(.white))
-                                .onTapGesture { //클릭하면 현재 categoryID
-                                    self.selected = category.categoryId
-                                    vm.getData(userID: 16, catID: selected, seq: "seq")
-                                }
+                                CategoryRow(category: $category, selected: $selected)
                                 .onDrag {
                                     self.dragging = category
                                     return NSItemProvider(object: NSString())
                                 }
                                 .onDrop(of: [UTType.text], delegate: DragDelegate(current: $dragging))
-                            } else {  //모든 자료, 분류x자료 카테고리만
-                                HStack{
+                            } else {
+                                HStack{ //모든 자료, 분류x자료 카테고리만
                                     Text(category.name)
                                         .font(.system(size: 16))
                                         .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2), alignment: .leading)
@@ -201,7 +195,7 @@ struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
         SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 0),
            CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2),
-           CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCateogry: .constant(true), selected: .constant(1))
+           CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCateogry: .constant(true), selected: .constant(0))
             .environmentObject(ScrapViewModel())
     }
 }

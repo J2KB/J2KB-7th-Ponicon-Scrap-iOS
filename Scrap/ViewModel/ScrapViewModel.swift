@@ -65,9 +65,19 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     func removeCategory(index: Int){
         categoryList.result.categories.remove(at: index)
     }
-    
+
+    //dataList에 data 삭제 함수
+    func removeData(linkID: Int){ //더 효율적인 방법 찾아보기
+        for i in 0..<dataList.result.links.count {
+            if dataList.result.links[i].linkId == linkID {
+                dataList.result.links.remove(at: i)
+                break
+            }
+        }
+    }
+
+    //categoryList의 category 위치 이동
     func moveCategory(from oldIndex: Int, to newIndex: Int) {
-        
         if oldIndex == newIndex { return }
         if abs(newIndex - oldIndex) == 1 { return categoryList.result.categories.swapAt(oldIndex, newIndex) }
         categoryList.result.categories.insert(categoryList.result.categories.remove(at: oldIndex), at: newIndex)

@@ -6,31 +6,51 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct PageView: View {
+    @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @Binding var data : DataResponse.Datas
     @Binding var isOneCol : Bool
     @State private var height = 200
+    @State private var isPresentHalfModal = false
 //    @State private var data = DataResponse.Datas(linkId: 0, link: " ", title: "title", domain: "domain", imgUrl: "")
     
     var body: some View {
         VStack(spacing: 0){
             if data.imgUrl == "" || data.imgUrl == nil{ //image 없으면 default light_blue color
-                Rectangle()
-                    .foregroundColor(.light_blue)
-                    .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
-                    .cornerRadius(10, corners: .topLeft)
-                    .cornerRadius(10, corners: .topRight)
-                    .shadow(radius: 2)
+                if let urlString = data.link {
+                    let url = URL(string: urlString)
+                    if let Url = url {
+                        Link(destination: Url, label:{
+                            Rectangle()
+                                .foregroundColor(.light_blue)
+                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
+                                .cornerRadius(10, corners: .topLeft)
+                                .cornerRadius(10, corners: .topRight)
+                                .shadow(radius: 2)
+                        })
+                        .foregroundColor(.black)
+                    }
+                }
+                
             }else{
-                Image(systemName: "person.fill")
-                    .imageData(url: URL(string: data.imgUrl!)!)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
-                    .cornerRadius(10, corners: .topLeft)
-                    .cornerRadius(10, corners: .topRight)
-                    .shadow(radius: 2)
+                if let urlString = data.link {
+                    let url = URL(string: urlString)
+                    if let Url = url {
+                        Link(destination: Url, label:{
+                            Image(systemName: "person.fill")
+                                .imageData(url: URL(string: data.imgUrl!)!)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
+                                .cornerRadius(10, corners: .topLeft)
+                                .cornerRadius(10, corners: .topRight)
+                                .shadow(radius: 2)
+                        })
+                        .foregroundColor(.black)
+                    }
+                }
             }
             ZStack{
                 Rectangle()
@@ -52,7 +72,63 @@ struct PageView: View {
                         .padding(.horizontal, 5)
                         .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, alignment: .leading)
                 }
+                Button(action: {
+                    //half-modal view 등장해야됨
+                    self.isPresentHalfModal = true
+                }){
+                    Image(systemName: "ellipsis")
+                        .rotationEffect(.degrees(90))
+                        .foregroundColor(.black_bold)
+                }
+                .padding(EdgeInsets(top: 1, leading: 315, bottom: 20, trailing: 0))
             }
+        }
+        .sheet(isPresented: $isPresentHalfModal){
+            HalfSheet {
+                VStack{
+                    Text(data.title ?? "")
+                        .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
+                    List {
+                        Section {
+                            Button(action:{
+                                UIPasteboard.general.setValue(data.link ?? "", forPasteboardType: UTType.plainText.identifier)
+                                self.isPresentHalfModal = false
+                            }){
+                                Label("링크 복사", systemImage: "doc.on.doc")
+                                    .foregroundColor(.black)
+                            }
+                            .foregroundColor(.black)
+                        }
+                        Section {
+                            Button(action:{
+                                //카테고리 이동 view로.. 이동
+                                //categoryList에 해당 자료를 찾아서 categoryId를 변경해줘야 한다
+                                self.isPresentHalfModal = false
+                            }){
+                                Label("카테고리 이동", systemImage: "arrow.turn.down.right")
+                                    .foregroundColor(.black)
+                            }
+                            .foregroundColor(.black)
+                            Button(action:{
+                                //이 자료의 인덱스를 찾아서 삭제해야됨...
+                                vm.removeData(linkID: data.linkId!)
+                                self.isPresentHalfModal = false
+                            }){
+                                Label("삭제", systemImage: "trash")
+                                    .foregroundColor(.red)
+                            }
+                            .foregroundColor(.red)
+                        }
+                    }
+                    .background(Color("background"))
+                }
+                .padding(.top, 48)
+                .background(Color("background"))
+            }
+            .ignoresSafeArea()
+        }
+        .onAppear{
+            UITableView.appearance().backgroundColor = .clear
         }
     }
 }
@@ -60,6 +136,7 @@ struct PageView: View {
 struct PageView_Previews: PreviewProvider {
     static var previews: some View {
         PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), isOneCol: .constant(true))
+            .environmentObject(ScrapViewModel())
     }
 }
 
