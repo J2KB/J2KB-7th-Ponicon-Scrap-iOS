@@ -118,25 +118,39 @@ struct SideMenuView: View {
 //                        })
                         //📌 real
                         ForEach($categoryList.categories) { $category in
-                            HStack{
-                                Text(category.name)
-                                    .font(.system(size: 16))
-                                    .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2), alignment: .leading)
-                                Text("\(category.numOfLink)")
-                                    .font(.system(size: 16))
-                                    .frame(width: 30, alignment: .trailing)
+                            if category.order != 0 && category.order != 1 {
+                                CategoryRow(category: $category)
+                                .padding(.leading, 10)
+                                .listRowBackground(self.selected == category.categoryId ? .gray_sub : Color(.white))
+                                .onTapGesture { //클릭하면 현재 categoryID
+                                    self.selected = category.categoryId
+                                    vm.getData(userID: 16, catID: selected, seq: "seq")
+                                }
+                                .onDrag {
+                                    self.dragging = category
+                                    return NSItemProvider(object: NSString())
+                                }
+                                .onDrop(of: [UTType.text], delegate: DragDelegate(current: $dragging))
+                            } else {  //모든 자료, 분류x자료 카테고리만
+                                HStack{
+                                    Text(category.name)
+                                        .font(.system(size: 16))
+                                        .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2), alignment: .leading)
+                                    Text("\(category.numOfLink)")
+                                        .font(.system(size: 16))
+                                        .frame(width: 30, alignment: .trailing)
+                                }
+                                .padding(.leading, 10)
+                                .listRowBackground(self.selected == category.categoryId ? .gray_sub : Color(.white))
+                                .onTapGesture { //클릭하면 현재 categoryID
+                                    self.selected = category.categoryId
+                                    if category.order == 0 {
+                                        //모든 자료의 경우 -> 전체 자료 조회 api 따로 진행해야됨 📡
+                                    } else {
+                                        vm.getData(userID: 16, catID: selected, seq: "seq")
+                                    }
+                                }
                             }
-                            .padding(.leading, 10)
-                            .listRowBackground(self.selected == category.categoryId ? .gray_sub : Color(.white))
-                            .onTapGesture { //클릭하면 현재 categoryID
-                                self.selected = category.categoryId
-                                vm.getData(userID: 16, catID: selected, seq: "seq")
-                            }
-                            .onDrag {
-                                self.dragging = category
-                                return NSItemProvider(object: NSString())
-                            }
-                            .onDrop(of: [UTType.text], delegate: DragDelegate(current: $dragging))
                         }
                         .onDelete(perform: delete)
                         .onMove(perform: {source, destination in //from source: IndexSet, to destination: Int
@@ -185,7 +199,9 @@ struct SideMenuView: View {
 
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 1)])), isShowingCateogry: .constant(true), selected: .constant(1))
+        SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 0),
+           CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2),
+           CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCateogry: .constant(true), selected: .constant(1))
             .environmentObject(ScrapViewModel())
     }
 }
