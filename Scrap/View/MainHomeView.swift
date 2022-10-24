@@ -18,9 +18,12 @@ struct MainHomeView: View {
     @Binding var popRootView : Bool
 //    @Binding var autoLogin : Bool
     @State private var selected : Int = 0
+    
     var categoryTitle : String {
+        print(userVM.userIdx)
         return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"
     }
+    
     var body: some View {
         ZStack(){
             //Main Home
@@ -51,7 +54,7 @@ struct MainHomeView: View {
                             NavigationLink(destination: MyPageView(userData: $scrapVM.user.result, popRootView: $popRootView), isActive: $isShowingMyPage) {
                                 Button(action: {
                                     self.isShowingMyPage.toggle()
-                                    scrapVM.getMyData(userID: 16)
+                                    scrapVM.getMyPageData(userID: userVM.userIdx)
                                 }) {
                                     Image(systemName: "person.circle")
                                         .foregroundColor(.black)
@@ -73,8 +76,10 @@ struct MainHomeView: View {
                 .offset(x: isShowingCategory ? -(UIScreen.main.bounds.width / 6) : -UIScreen.main.bounds.width) //moving view
         }
         .frame(width: UIScreen.main.bounds.width)
-        .onAppear{ //이 화면 등장하면 api 통신
-            scrapVM.getCategoryData(userID: 16)
+        .onAppear{ //MainHomeView 등장하면 api 통신
+            userVM.userIdx = UserDefaults.standard.integer(forKey: "ID")
+            print("user idx: \(userVM.userIdx)")
+            scrapVM.getCategoryData(userID: userVM.userIdx)
         }
         .gesture(DragGesture().onEnded({
             if $0.translation.width < -100 {

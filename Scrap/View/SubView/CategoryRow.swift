@@ -13,6 +13,7 @@ struct CategoryRow: View {
     @State private var categoryName = "category"
     @Binding var selected : Int
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
+    @EnvironmentObject var userVM : UserViewModel //여기서 로그아웃
 
     var body: some View {
 //        VStack{
@@ -22,7 +23,7 @@ struct CategoryRow: View {
                     Button(action:{
                         self.selected = category.categoryId
                         print("\(selected) is selected category id")
-                        vm.getData(userID: 16, catID: selected, seq: "seq")
+                        vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
                         print("get data")
                     }){
                         Text(category.name)

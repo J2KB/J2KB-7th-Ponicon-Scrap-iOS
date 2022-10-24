@@ -19,9 +19,7 @@ struct LoginView: View {
     @State private var movingToSignUp = false
     @State var timeRemaining = 0.01
     let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
-
-    //remove this one, after testing
-    @State private var autoLogin = false
+    @Binding var autoLogin : Bool
     
     var body: some View {
         NavigationView{
@@ -207,7 +205,7 @@ struct LoginView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(autoLogin: .constant(true))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
     }

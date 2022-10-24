@@ -13,27 +13,28 @@ import KakaoSDKCommon
 struct ScrapApp: App {
     @StateObject var scrapVM = ScrapViewModel()
     @StateObject var userVM = UserViewModel()
-
+    let userIdx = UserDefaults.standard.integer(forKey: "ID")
+    
     init(){
         KakaoSDK.initSDK(appKey: "7942e72a93d27c86ee00caec504989f7") //native app key
     }
     
     var body: some Scene {
         WindowGroup {
-            //if 로그아웃 혹은 첫 런칭이라면 LoginView()
-            //else HomeView()
-//            RootView()
-//            MainHomeView()
-//                .environmentObject(scrapVM)
-//                .environmentObject(userVM)
-            LoginView()
-                .environmentObject(scrapVM)
-                .environmentObject(userVM)
-                .onOpenURL{ url in
-                    if (AuthApi.isKakaoTalkLoginUrl(url)) {
-                          _ = AuthController.handleOpenUrl(url: url)
+            if userIdx == 0 { //auto login X -> Login View
+                LoginView(autoLogin: .constant(false))
+                    .environmentObject(scrapVM)
+                    .environmentObject(userVM)
+                    .onOpenURL{ url in
+                        if (AuthApi.isKakaoTalkLoginUrl(url)) {
+                              _ = AuthController.handleOpenUrl(url: url)
+                        }
                     }
-                }
+            } else { //auto login o -> Main Home View
+                LoginView(autoLogin: .constant(true))
+                    .environmentObject(scrapVM)
+                    .environmentObject(userVM)
+            }
         }
     }
 }

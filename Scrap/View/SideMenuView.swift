@@ -141,7 +141,7 @@ struct SideMenuView: View {
                                     if category.order == 0 {
                                         //모든 자료의 경우 -> 전체 자료 조회 api 따로 진행해야됨 📡
                                     } else {
-                                        vm.getData(userID: 16, catID: selected, seq: "seq")
+                                        vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
                                     }
                                 }
                             }
@@ -155,7 +155,7 @@ struct SideMenuView: View {
                             HStack{
                                 TextField("새로운 카테고리", text: $newCat,
                                   onCommit: {
-                                    vm.addNewCategory(newCat: newCat, userID: 2) //📡 카테고리 추가 통신
+                                    vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
                                     let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: 0)
                                     vm.appendCategory(newCategory: newCategory) //post로 추가된 카테고리 이름 서버에 전송
                                     newCat = ""

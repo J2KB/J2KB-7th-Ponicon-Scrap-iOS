@@ -13,7 +13,6 @@ struct MyPageView: View {
     @State private var username = ""
     @State private var iconArr = ["camping", "circus", "classical", "compass", "palette", "rocket", "ufo"]
     @Binding var popRootView : Bool
-//    @Binding var autoLogin : Bool
     @EnvironmentObject var vm : UserViewModel //여기서 로그아웃
     @Environment(\.presentationMode) var presentationMode //pop sheet
     
@@ -61,6 +60,7 @@ struct MyPageView: View {
                     vm.loginState = false
                     //데이터 지우기 -> user id 데이터 지우기
                     print("log out")
+                    print(vm.userIdx)
                 }){
                     Text("로그아웃")
                         .underline()

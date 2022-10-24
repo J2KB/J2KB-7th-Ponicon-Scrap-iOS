@@ -135,7 +135,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     }
     
     //마이 페이지 -> query: user id
-    func getMyData(userID: Int){
+    func getMyPageData(userID: Int){
         guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/mypage?id=\(userID)") else {
             print("invalid url")
             return

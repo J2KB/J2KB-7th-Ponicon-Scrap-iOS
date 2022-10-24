@@ -51,7 +51,7 @@ class UserViewModel: ObservableObject{
 //    @Published var signUpState = false
     @Published var loginToastMessage = ""
 //    @Published var signupToastMessage = ""
-//    @Published var userID = -1 //나중에 지울것 -> core data로
+    @Published var userIdx = -1
 //    @Published var userID: Int = UserDefaults.standard.integer(forKey: "ID") //user id 없으면 -1
 
     //POST
@@ -85,7 +85,13 @@ class UserViewModel: ObservableObject{
                                 self.loginToastMessage = result.message
                             } else {
                                 self.loginState = true
-//                            self.userID = result.result.id //login해서 받은 id를 user defaults에 넣어준다
+                                self.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
+                                print("user idx: \(self.userIdx)")
+                                if autoLogin { //autoLogin일 때만 저장
+                                    UserDefaults.standard.set(result.result.id, forKey: "ID") //login해서 받은 id를 user defaults에 저장
+                                    print("save user idx to UserDefaults")
+                                }
+                                print("\(UserDefaults.standard.integer(forKey: "ID"))")
                             }
                         }
                     }
@@ -199,6 +205,8 @@ class UserViewModel: ObservableObject{
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(LogOutModel.self, from: data)
                     print(result)
+                    UserDefaults.standard.set(0, forKey: "ID") //변경
+                    print(UserDefaults.standard.integer(forKey: "ID"))
                 } else {
                     print("no data")
                 }

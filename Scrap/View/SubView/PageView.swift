@@ -49,6 +49,7 @@ struct PageView: View {
                                 .shadow(radius: 2)
                         })
                         .foregroundColor(.black)
+                        .shadow(radius: 2)
                     }
                 }
             }
@@ -73,8 +74,7 @@ struct PageView: View {
                         .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, alignment: .leading)
                 }
                 Button(action: {
-                    //half-modal view 등장해야됨
-                    self.isPresentHalfModal = true
+                    self.isPresentHalfModal = true //half-modal view 등장
                 }){
                     Image(systemName: "ellipsis")
                         .rotationEffect(.degrees(90))
