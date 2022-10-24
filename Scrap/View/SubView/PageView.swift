@@ -14,122 +14,128 @@ struct PageView: View {
     @Binding var isOneCol : Bool
     @State private var height = 200
     @State private var isPresentHalfModal = false
+    @State private var isShowMovingCategory = false
 //    @State private var data = DataResponse.Datas(linkId: 0, link: " ", title: "title", domain: "domain", imgUrl: "")
     
     var body: some View {
-        VStack(spacing: 0){
-            if data.imgUrl == "" || data.imgUrl == nil{ //image 없으면 default light_blue color
-                if let urlString = data.link {
-                    let url = URL(string: urlString)
-                    if let Url = url {
-                        Link(destination: Url, label:{
-                            Rectangle()
-                                .foregroundColor(.light_blue)
-                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
-                                .cornerRadius(10, corners: .topLeft)
-                                .cornerRadius(10, corners: .topRight)
-                                .shadow(radius: 2)
-                        })
-                        .foregroundColor(.black)
+//        NavigationView{
+            VStack(spacing: 0){
+                if data.imgUrl == "" || data.imgUrl == nil{ //image 없으면 default light_blue color
+                    if let urlString = data.link {
+                        let url = URL(string: urlString)
+                        if let Url = url {
+                            Link(destination: Url, label:{
+                                Rectangle()
+                                    .foregroundColor(.light_blue)
+                                    .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
+                                    .cornerRadius(10, corners: .topLeft)
+                                    .cornerRadius(10, corners: .topRight)
+                                    .shadow(radius: 2)
+                            })
+                            .foregroundColor(.black)
+                        }
+                    }
+                    
+                }else{
+                    if let urlString = data.link {
+                        let url = URL(string: urlString)
+                        if let Url = url {
+                            Link(destination: Url, label:{
+                                Image(systemName: "person.fill")
+                                    .imageData(url: URL(string: data.imgUrl!)!)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
+                                    .cornerRadius(10, corners: .topLeft)
+                                    .cornerRadius(10, corners: .topRight)
+                                    .shadow(radius: 2)
+                            })
+                            .foregroundColor(.black)
+                            .shadow(radius: 2)
+                        }
                     }
                 }
-                
-            }else{
-                if let urlString = data.link {
-                    let url = URL(string: urlString)
-                    if let Url = url {
-                        Link(destination: Url, label:{
-                            Image(systemName: "person.fill")
-                                .imageData(url: URL(string: data.imgUrl!)!)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
-                                .cornerRadius(10, corners: .topLeft)
-                                .cornerRadius(10, corners: .topRight)
-                                .shadow(radius: 2)
-                        })
-                        .foregroundColor(.black)
+                ZStack{
+                    Rectangle()
+                        .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 5) : (UIScreen.main.bounds.width / 2.5) / 2.3)
+                        .foregroundColor(.white)
+                        .cornerRadius(10, corners: .bottomLeft)
+                        .cornerRadius(10, corners: .bottomRight)
                         .shadow(radius: 2)
+                    VStack(spacing: 2){
+                        Text(data.title ?? "")
+                            .lineLimit(2)
+                            .font(.system(size: 13, weight: .medium))
+                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 90 : UIScreen.main.bounds.width / 3 - 14, height: 40, alignment: .topLeading)
+                            .padding(.trailing, 40)
+                        Text(data.domain ?? "") //출처 -> link에서 자르기
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                            .lineLimit(1)
+                            .padding(.horizontal, 5)
+                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, alignment: .leading)
                     }
+                    Button(action: {
+                        self.isPresentHalfModal = true //half-modal view 등장
+                    }){
+                        Image(systemName: "ellipsis")
+                            .rotationEffect(.degrees(90))
+                            .foregroundColor(.black_bold)
+                    }
+                    .padding(EdgeInsets(top: 1, leading: 315, bottom: 20, trailing: 0))
                 }
             }
-            ZStack{
-                Rectangle()
-                    .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 5) : (UIScreen.main.bounds.width / 2.5) / 2.3)
-                    .foregroundColor(.white)
-                    .cornerRadius(10, corners: .bottomLeft)
-                    .cornerRadius(10, corners: .bottomRight)
-                    .shadow(radius: 2)
-                VStack(spacing: 2){
-                    Text(data.title ?? "")
-                        .lineLimit(2)
-                        .font(.system(size: 13, weight: .medium))
-                        .frame(width: isOneCol ? UIScreen.main.bounds.width - 90 : UIScreen.main.bounds.width / 3 - 14, height: 40, alignment: .topLeading)
-                        .padding(.trailing, 40)
-                    Text(data.domain ?? "") //출처 -> link에서 자르기
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                        .lineLimit(1)
-                        .padding(.horizontal, 5)
-                        .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, alignment: .leading)
-                }
-                Button(action: {
-                    self.isPresentHalfModal = true //half-modal view 등장
-                }){
-                    Image(systemName: "ellipsis")
-                        .rotationEffect(.degrees(90))
-                        .foregroundColor(.black_bold)
-                }
-                .padding(EdgeInsets(top: 1, leading: 315, bottom: 20, trailing: 0))
-            }
-        }
-        .sheet(isPresented: $isPresentHalfModal){
-            HalfSheet {
-                VStack{
-                    Text(data.title ?? "")
-                        .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
-                    List {
-                        Section {
-                            Button(action:{
-                                UIPasteboard.general.setValue(data.link ?? "", forPasteboardType: UTType.plainText.identifier)
-                                self.isPresentHalfModal = false
-                            }){
-                                Label("링크 복사", systemImage: "doc.on.doc")
-                                    .foregroundColor(.black)
+            .sheet(isPresented: $isPresentHalfModal){
+                HalfSheet {
+                    VStack{
+                        Text(data.title ?? "")
+                            .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
+                        List {
+                            Section {
+                                Button(action:{
+                                    UIPasteboard.general.setValue(data.link ?? "", forPasteboardType: UTType.plainText.identifier)
+                                    self.isPresentHalfModal = false
+                                }){
+                                    Label("링크 복사", systemImage: "doc.on.doc")
+                                        .foregroundColor(.black)
+                                }
+                                .foregroundColor(.black)
                             }
-                            .foregroundColor(.black)
+                            Section {
+                                NavigationLink(
+                                    destination: MoveCategoryView(categoryList: $vm.categoryList.result, data: $data).navigationBarBackButtonHidden(true),
+                                    isActive: $isShowMovingCategory) {
+                                        Button(action: {
+                                            self.isPresentHalfModal = false  //이거 안됨🚨
+                                            self.isShowMovingCategory = true
+                                        }) {
+                                            Label("카테고리 이동", systemImage: "arrow.turn.down.right")
+                                                .foregroundColor(.black)
+                                        }
+                                        .foregroundColor(.black)
+                                }
+                                Button(action:{
+                                    //이 자료의 인덱스를 찾아서 삭제해야됨...
+                                    vm.removeData(linkID: data.linkId!)
+                                    self.isPresentHalfModal = false
+                                }){
+                                    Label("삭제", systemImage: "trash")
+                                        .foregroundColor(.red)
+                                }
+                                .foregroundColor(.red)
+                            }
                         }
-                        Section {
-                            Button(action:{
-                                //카테고리 이동 view로.. 이동
-                                //categoryList에 해당 자료를 찾아서 categoryId를 변경해줘야 한다
-                                self.isPresentHalfModal = false
-                            }){
-                                Label("카테고리 이동", systemImage: "arrow.turn.down.right")
-                                    .foregroundColor(.black)
-                            }
-                            .foregroundColor(.black)
-                            Button(action:{
-                                //이 자료의 인덱스를 찾아서 삭제해야됨...
-                                vm.removeData(linkID: data.linkId!)
-                                self.isPresentHalfModal = false
-                            }){
-                                Label("삭제", systemImage: "trash")
-                                    .foregroundColor(.red)
-                            }
-                            .foregroundColor(.red)
-                        }
+                        .background(Color("background"))
                     }
+                    .padding(.top, 48)
                     .background(Color("background"))
                 }
-                .padding(.top, 48)
-                .background(Color("background"))
+                .ignoresSafeArea()
             }
-            .ignoresSafeArea()
-        }
-        .onAppear{
-            UITableView.appearance().backgroundColor = .clear
-        }
+            .onAppear{
+                UITableView.appearance().backgroundColor = .clear
+            }
+//        }
     }
 }
 
