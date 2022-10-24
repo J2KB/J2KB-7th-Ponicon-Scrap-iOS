@@ -9,10 +9,12 @@ import SwiftUI
 import KakaoSDKAuth
 import KakaoSDKCommon
 
+
 @main
 struct ScrapApp: App {
     @StateObject var scrapVM = ScrapViewModel()
     @StateObject var userVM = UserViewModel()
+    @StateObject var network = Network()
     let userIdx = UserDefaults.standard.integer(forKey: "ID")
     
     init(){
@@ -21,19 +23,23 @@ struct ScrapApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if userIdx == 0 { //auto login X -> Login View
-                LoginView(autoLogin: .constant(false))
-                    .environmentObject(scrapVM)
-                    .environmentObject(userVM)
-                    .onOpenURL{ url in
-                        if (AuthApi.isKakaoTalkLoginUrl(url)) {
-                              _ = AuthController.handleOpenUrl(url: url)
+            if !network.connected {
+                if userIdx == 0 { //auto login X -> Login View
+                    LoginView(autoLogin: .constant(false))
+                        .environmentObject(scrapVM)
+                        .environmentObject(userVM)
+                        .onOpenURL{ url in
+                            if (AuthApi.isKakaoTalkLoginUrl(url)) {
+                                  _ = AuthController.handleOpenUrl(url: url)
+                            }
                         }
-                    }
-            } else { //auto login o -> Main Home View
-                LoginView(autoLogin: .constant(true))
-                    .environmentObject(scrapVM)
-                    .environmentObject(userVM)
+                } else { //auto login o -> Main Home View
+                    LoginView(autoLogin: .constant(true))
+                        .environmentObject(scrapVM)
+                        .environmentObject(userVM)
+                }
+            } else {
+                OfflineView()
             }
         }
     }
