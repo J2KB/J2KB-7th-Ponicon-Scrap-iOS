@@ -17,10 +17,10 @@ struct MainHomeView: View {
     @State private var isShowingMyPage = false
     @Binding var popRootView : Bool
 //    @Binding var autoLogin : Bool
-    @State private var selected : Int = 0
+    @State private var selected = UserDefaults.standard.integer(forKey: "lastCategory") //last category id 가져오기
     
     var categoryTitle : String {
-        print(userVM.userIdx)
+        print(self.selected)
         return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"
     }
     

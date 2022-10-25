@@ -51,7 +51,8 @@ class UserViewModel: ObservableObject{
 //    @Published var signUpState = false
     @Published var loginToastMessage = ""
 //    @Published var signupToastMessage = ""
-    @Published var userIdx = -1
+    @Published var userIdx = 0 //initial value
+    @Published var iconIdx = 0 //initial value
 //    @Published var userID: Int = UserDefaults.standard.integer(forKey: "ID") //user id 없으면 -1
 
     //POST
@@ -86,10 +87,13 @@ class UserViewModel: ObservableObject{
                             } else {
                                 self.loginState = true
                                 self.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
+                                self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
                                 print("user idx: \(self.userIdx)")
                                 if autoLogin { //autoLogin일 때만 저장
                                     UserDefaults.standard.set(result.result.id, forKey: "ID") //login해서 받은 id를 user defaults에 저장
-                                    print("save user idx to UserDefaults")
+                                    UserDefaults.standard.set(self.iconIdx, forKey: "iconIdx") //login했을 때 생성한 랜덤 icon idx를 user defaults에 저장
+                                    print("save user idx, iconIdx to UserDefaults")
+                                    print(self.iconIdx)
                                 }
                                 print("\(UserDefaults.standard.integer(forKey: "ID"))")
                             }
@@ -205,8 +209,10 @@ class UserViewModel: ObservableObject{
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(LogOutModel.self, from: data)
                     print(result)
-                    UserDefaults.standard.set(0, forKey: "ID") //변경
-                    print(UserDefaults.standard.integer(forKey: "ID"))
+                    //initialized
+                    UserDefaults.standard.set(0, forKey: "ID")
+                    UserDefaults.standard.set(0, forKey: "iconIdx")
+                    UserDefaults.standard.set(0, forKey: "lastCategory") //모든 자료 카테고리 id로 변경
                 } else {
                     print("no data")
                 }

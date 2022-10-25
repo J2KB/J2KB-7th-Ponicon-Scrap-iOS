@@ -43,7 +43,6 @@ struct SideMenuView: View {
     @EnvironmentObject var userVM : UserViewModel //ScrapApp에서 연결받은 EnvironmentObject
     @Binding var selected : Int
     
-
     var body: some View {
         ScrollViewReader { proxy in
             VStack(spacing: -2){
@@ -68,7 +67,7 @@ struct SideMenuView: View {
                     Button(action: {
                         self.isAddingCategory.toggle() //카테고리 추가 토글
                         withAnimation {
-//                            proxy.scrollTo(categoryList.categories.count) //scroll to last element(category)
+                            proxy.scrollTo(categoryList.categories.count) //scroll to last element(category)
 //                            proxy.scrollTo(arr.count, anchor: .top)
                         }
                     }){

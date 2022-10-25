@@ -16,7 +16,6 @@ struct MyPageView: View {
     @EnvironmentObject var vm : UserViewModel //여기서 로그아웃
     @Environment(\.presentationMode) var presentationMode //pop sheet
     
-    let icon = Int.random(in: 0...6)
     var body: some View {
         VStack(spacing: 40){
             HStack{
@@ -34,7 +33,7 @@ struct MyPageView: View {
             .frame(width: UIScreen.main.bounds.width-20, alignment: .leading)
             VStack{
                 HStack(spacing: 8){
-                    Image("\(iconArr[icon])") //랜덤 출력
+                    Image("\(iconArr[vm.iconIdx])") //랜덤 출력
                         .resizable()
                         .frame(width: 70, height: 70)
                     VStack(spacing: 10){

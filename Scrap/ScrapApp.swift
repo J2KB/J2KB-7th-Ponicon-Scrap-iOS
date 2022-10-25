@@ -15,10 +15,12 @@ struct ScrapApp: App {
     @StateObject var scrapVM = ScrapViewModel()
     @StateObject var userVM = UserViewModel()
     @StateObject var network = Network()
+    @State private var autoLogin = false
     let userIdx = UserDefaults.standard.integer(forKey: "ID")
     
     init(){
         KakaoSDK.initSDK(appKey: "7942e72a93d27c86ee00caec504989f7") //native app key
+//        checkAutoLogin(autoLogin: autoLogin)
     }
     
     var body: some Scene {
@@ -42,5 +44,11 @@ struct ScrapApp: App {
                 OfflineView()
             }
         }
+        
     }
+    
+//    func checkAutoLogin(autoLogin: Bool) {
+//        if userIdx == 0 { self.autoLogin = false; print(self.autoLogin) }
+//        else { self.autoLogin = true; print(self.autoLogin) }
+//    }
 }

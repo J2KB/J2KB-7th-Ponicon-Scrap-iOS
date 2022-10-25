@@ -14,7 +14,6 @@ struct CategoryRow: View {
     @Binding var selected : Int
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @EnvironmentObject var userVM : UserViewModel //여기서 로그아웃
-
     var body: some View {
 //        VStack{
         if !isEditing { //edit mode가 아닐 때
@@ -22,6 +21,7 @@ struct CategoryRow: View {
                 HStack{
                     Button(action:{
                         self.selected = category.categoryId
+                        UserDefaults.standard.set(selected, forKey: "lastCategory") //마지막 카테고리 id 저장
                         print("\(selected) is selected category id")
                         vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
                         print("get data")
