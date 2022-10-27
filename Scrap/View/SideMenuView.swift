@@ -109,6 +109,7 @@ struct SideMenuView: View {
                                     self.selected = category.categoryId
                                     if category.order == 0 {
                                         //모든 자료의 경우 -> 전체 자료 조회 api 따로 진행해야됨 📡
+                                        vm.getAllData(userID: userVM.userIdx)
                                     } else {
                                         vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
                                     }
@@ -144,7 +145,6 @@ struct SideMenuView: View {
                 }
             }
             .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 3.5))
-//            .offset(x: -(UIScreen.main.bounds.width / 6))
             .background(.white)
         }
     }

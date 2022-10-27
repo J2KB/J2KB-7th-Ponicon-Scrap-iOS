@@ -133,6 +133,31 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
+    //자료 전체 조회 -> query: category id
+    func getAllData(userID: Int){
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data/all?id=\(userID)") else {
+            print("invalid url")
+            return
+        }
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(DataResponse.self, from: data)
+                    DispatchQueue.main.async {
+                        self.dataList = result
+                    }
+                    print(result)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print("error")
+                print(String(describing: error))
+            }
+        }.resume()
+    }
+    
     //마이 페이지 -> query: user id
     func getMyPageData(userID: Int){
         guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/mypage?id=\(userID)") else {

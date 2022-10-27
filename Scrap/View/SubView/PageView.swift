@@ -20,7 +20,7 @@ struct PageView: View {
     var body: some View {
 //        NavigationView{
             VStack(spacing: 0){
-                if data.imgUrl == "" || data.imgUrl == nil{ //image 없으면 default light_blue color
+                if data.imgUrl == "" || data.imgUrl == nil { //image 없으면 default light_blue color
                     if let urlString = data.link {
                         let url = URL(string: urlString)
                         if let Url = url {
@@ -35,20 +35,25 @@ struct PageView: View {
                             .foregroundColor(.black)
                         }
                     }
-                    
-                }else{
+                } else {
                     if let urlString = data.link {
                         let url = URL(string: urlString)
                         if let Url = url {
                             Link(destination: Url, label:{
-                                Image(systemName: "person.fill")
-                                    .imageData(url: URL(string: data.imgUrl!)!)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
-                                    .cornerRadius(10, corners: .topLeft)
-                                    .cornerRadius(10, corners: .topRight)
-                                    .shadow(radius: 2)
+                                ZStack{
+                                    Rectangle()
+                                        .foregroundColor(.light_blue)
+                                        .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
+                                        .cornerRadius(10, corners: .topLeft)
+                                        .cornerRadius(10, corners: .topRight)
+                                    Image(systemName: "person.fill")
+                                        .imageData(url: URL(string: data.imgUrl!)!)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
+                                        .cornerRadius(10, corners: .topLeft)
+                                        .cornerRadius(10, corners: .topRight)
+                                }
                             })
                             .foregroundColor(.black)
                             .shadow(radius: 2)
@@ -102,18 +107,26 @@ struct PageView: View {
                                 .foregroundColor(.black)
                             }
                             Section {
-                                NavigationLink(
-                                    destination: MoveCategoryView(categoryList: $vm.categoryList.result, data: $data).navigationBarBackButtonHidden(true),
-                                    isActive: $isShowMovingCategory) {
-                                        Button(action: {
-                                            self.isPresentHalfModal = false  //이거 안됨🚨
-                                            self.isShowMovingCategory = true
-                                        }) {
-                                            Label("카테고리 이동", systemImage: "arrow.turn.down.right")
-                                                .foregroundColor(.black)
-                                        }
-                                        .foregroundColor(.black)
+                                Button(action: {
+                                    self.isPresentHalfModal = false  //이거 안됨🚨
+                                    self.isShowMovingCategory = true
+                                }) {
+                                    NavigationLink(destination: MoveCategoryView(categoryList: $vm.categoryList.result, data: $data).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){
+                                        Label("카테고리 이동", systemImage: "arrow.turn.down.right")
+                                            .foregroundColor(.black)
+                                    }
                                 }
+                                .foregroundColor(.black)
+//                                               {
+//                                        Button(action: {
+//                                            self.isPresentHalfModal = false  //이거 안됨🚨
+//                                            self.isShowMovingCategory = true
+//                                        }) {
+//                                            Label("카테고리 이동", systemImage: "arrow.turn.down.right")
+//                                                .foregroundColor(.black)
+//                                        }
+//                                        .foregroundColor(.black)
+//                                }
                                 Button(action:{
                                     //이 자료의 인덱스를 찾아서 삭제해야됨...
                                     vm.removeData(linkID: data.linkId!)
