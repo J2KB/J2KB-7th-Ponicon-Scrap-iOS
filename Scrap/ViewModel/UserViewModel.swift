@@ -90,12 +90,12 @@ class UserViewModel: ObservableObject{
                                 self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
                                 print("user idx: \(self.userIdx)")
                                 if autoLogin { //autoLogin일 때만 저장
-                                    UserDefaults.standard.set(result.result.id, forKey: "ID") //login해서 받은 id를 user defaults에 저장
-                                    UserDefaults.standard.set(self.iconIdx, forKey: "iconIdx") //login했을 때 생성한 랜덤 icon idx를 user defaults에 저장
+                                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(result.result.id, forKey: "ID") //login해서 받은 id를 user defaults에 저장
+                                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx") //login했을 때 생성한 랜덤 icon idx를 user defaults에 저장
                                     print("save user idx, iconIdx to UserDefaults")
                                     print(self.iconIdx)
                                 }
-                                print("\(UserDefaults.standard.integer(forKey: "ID"))")
+                                print("UserDefaults에 저장된 ID 값은? \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID"))")
                             }
                         }
                     }
@@ -210,9 +210,9 @@ class UserViewModel: ObservableObject{
                     let result = try decoder.decode(LogOutModel.self, from: data)
                     print(result)
                     //initialized
-                    UserDefaults.standard.set(0, forKey: "ID")
-                    UserDefaults.standard.set(0, forKey: "iconIdx")
-                    UserDefaults.standard.set(0, forKey: "lastCategory") //모든 자료 카테고리 id로 변경
+                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "ID")
+                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "iconIdx")
+                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "lastCategory") //모든 자료 카테고리 id로 변경
                 } else {
                     print("no data")
                 }

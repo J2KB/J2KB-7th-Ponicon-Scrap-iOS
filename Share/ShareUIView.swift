@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-struct CategoryResponse: Decodable{
+struct CategoryResponseInShare: Decodable{
     struct Result: Decodable {
-        var categories: [Category]
+        var categories: [CategoryInShare]
         
-        init(categories: [Category]){
+        init(categories: [CategoryInShare]){
             self.categories = categories
         }
     }
-    struct Category: Decodable, Identifiable{
+    struct CategoryInShare: Decodable, Identifiable{
         let id = UUID()
         var categoryId: Int
         var name: String
@@ -40,11 +40,13 @@ struct CategoryResponse: Decodable{
     }
 }
 
+//카테고리 조회하기 -> userdefaults에 저장된 idx로 조회해야됨
 class CategoryViewModel: ObservableObject{ //감시할 data model
-    @Published var categoryList = CategoryResponse(code: 0, message: "", result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)]))  //초기화
+    @Published var categoryList = CategoryResponseInShare(code: 0, message: "",result: CategoryResponseInShare.Result(categories: [CategoryResponseInShare.CategoryInShare(categoryId: 0, name: "", numOfLink: 0, order: 0)]))
     
-    func getCategoryData(){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/category/all?id=2") else {
+    func getCategoryDataInShare(userIdx: Int){
+        print("user index : \(userIdx)")
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category/all?id=\(userIdx)") else {
             print("invalid url")
             return
         }
@@ -52,7 +54,7 @@ class CategoryViewModel: ObservableObject{ //감시할 data model
             do{
                 if let data = data {
                     let decoder = JSONDecoder()
-                    let result = try decoder.decode(CategoryResponse.self, from: data)
+                    let result = try decoder.decode(CategoryResponseInShare.self, from: data)
                     DispatchQueue.main.async {
                         self.categoryList = result
                     }
@@ -74,40 +76,33 @@ class CategoryIDDelegate: ObservableObject {
 
 struct ShareUIView: View {
     @ObservedObject var delegate : CategoryIDDelegate
-    @ObservedObject var vm = CategoryViewModel()
+    @StateObject var vm = CategoryViewModel()
     let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
     @State private var selected : Int = 0 //이 값을 ShareViewController로 넘겨줘야 한다.
+    private let userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") //user id 가져오기
 
     var body: some View {
+        if userIdx == 0 {
+            Text("로그인 하셈")
+        } else { //사용자 로그인되어있는 상태라면
             List{
                 ForEach($vm.categoryList.result.categories){ $category in
-                    Text(category.name)
-                    .listRowBackground(self.selected == category.categoryId ? light_gray : Color(.white))
-                    .onTapGesture { //클릭하면 현재 categoryID
-                        self.selected = category.categoryId
-                        self.delegate.categoryID = category.categoryId
+                    if category.order != 0 { //모든 자료는 제외
+                        Text(category.name)
+                        .listRowBackground(self.selected == category.categoryId ? light_gray : Color(.white))
+                        .onTapGesture { //클릭하면 현재 categoryID
+                            self.selected = category.categoryId
+                            self.delegate.categoryID = category.categoryId
+                        }
                     }
                 }
             }
             .listStyle(InsetListStyle())
             .onAppear{
-                vm.getCategoryData()
+                print("user idx: \(self.userIdx!)")
+                vm.getCategoryDataInShare(userIdx: self.userIdx!)
             }
-//            .toolbar{
-//                ToolbarItem(placement: .navigationBarLeading){
-//                    Button("취소", action: {
-//
-//                    })
-//                }
-//            }
-//            .toolbar{
-//                ToolbarItem(placement: .navigationBarTrailing){
-//                    Button("저장", action: {
-//
-//                    })
-//                }
-//            }
-//            }
+        }
     }
 }
 

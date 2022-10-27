@@ -50,8 +50,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //사용자 정보를 담는 user 객체 -> 마이페이지에서 사용할 것
     @Published var dataList = DataResponse(code: 0, message: "", result: DataResponse.Result(links: [DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")]))
     @Published var user = UserResponse(code: 0, message: "", result: UserResponse.Result(name: "", username: ""))
-    @Published var categoryList = CategoryResponse(code: 0, message: "",
-                                                   result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)]))
+    @Published var categoryList = CategoryResponse(code: 0, message: "", result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)]))
 
     var failedLoginToastMessage = ""
     var categoryID = 0
@@ -161,7 +160,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //POST
     //카테고리 추가
     func addNewCategory(newCat: String, userID: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category?id=2") else {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category?id=\(userID)") else {
             print("invalid url")
             return
         }

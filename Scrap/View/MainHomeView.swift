@@ -17,8 +17,7 @@ struct MainHomeView: View {
     @State private var isShowingMyPage = false
     @Binding var popRootView : Bool
 //    @Binding var autoLogin : Bool
-    @State private var selected = UserDefaults.standard.integer(forKey: "lastCategory") //last category id 가져오기
-    
+    @State private var selected = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "lastCategory") ?? 0 //last category id 가져오기
     var categoryTitle : String {
         print(self.selected)
         return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"
@@ -77,7 +76,8 @@ struct MainHomeView: View {
         }
         .frame(width: UIScreen.main.bounds.width)
         .onAppear{ //MainHomeView 등장하면 api 통신
-            userVM.userIdx = UserDefaults.standard.integer(forKey: "ID")
+            print("현재 UserDefaults id 값은? : \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID"))")
+            userVM.userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ? userVM.userIdx : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
             print("user idx: \(userVM.userIdx)")
             scrapVM.getCategoryData(userID: userVM.userIdx)
         }

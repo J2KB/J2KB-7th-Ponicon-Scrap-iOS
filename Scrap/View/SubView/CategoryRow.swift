@@ -21,7 +21,7 @@ struct CategoryRow: View {
                 HStack{
                     Button(action:{
                         self.selected = category.categoryId
-                        UserDefaults.standard.set(selected, forKey: "lastCategory") //마지막 카테고리 id 저장
+                        UserDefaults(suiteName: "group.com.thk.Scrap")?.set(selected, forKey: "lastCategory") //마지막 카테고리 id 저장
                         print("\(selected) is selected category id")
                         vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
                         print("get data")

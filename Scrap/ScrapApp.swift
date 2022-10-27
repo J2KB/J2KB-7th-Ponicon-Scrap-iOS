@@ -16,7 +16,7 @@ struct ScrapApp: App {
     @StateObject var userVM = UserViewModel()
     @StateObject var network = Network()
     @State private var autoLogin = false
-    let userIdx = UserDefaults.standard.integer(forKey: "ID")
+    let userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID")
     
     init(){
         KakaoSDK.initSDK(appKey: "7942e72a93d27c86ee00caec504989f7") //native app key

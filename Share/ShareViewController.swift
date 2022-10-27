@@ -31,6 +31,7 @@ struct NewDataModel: Decodable{ //자료 저장 -> response 데이터로 받을 
 class ShareViewController: UIViewController{
     private var cancellable: AnyCancellable!
     private var catID = 0
+    private var userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +59,9 @@ class ShareViewController: UIViewController{
         self.navigationItem.setLeftBarButton(cancelButton, animated: false)
         let postButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(postAction))
         self.navigationItem.setRightBarButton(postButton, animated: false)
+        if userIdx == 0 {
+            self.navigationItem.rightBarButtonItem?.isEnabled = false;
+        }
     }
     
     //3. define the actions for the navigation items - cancel
@@ -80,7 +84,7 @@ class ShareViewController: UIViewController{
             itemProvider.loadItem(forTypeIdentifier: "public.url", options: nil) { (url, error) in
                 let baseURL = url as! NSURL
                 print(baseURL)
-                self.addNewData(baseurl: baseURL.absoluteString!, catID: self.catID)
+                self.addNewData(baseurl: baseURL.absoluteString!, catID: self.catID, userIdx: self.userIdx!)
                 //request to server with this base url
             }
         }
@@ -88,8 +92,8 @@ class ShareViewController: UIViewController{
         extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
     }
     
-    func addNewData(baseurl: String, catID: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data?id=2&category=\(catID)") else {
+    func addNewData(baseurl: String, catID: Int, userIdx: Int){
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data?id=\(userIdx)&category=\(catID)") else {
             print("invalid url")
             return
         }
