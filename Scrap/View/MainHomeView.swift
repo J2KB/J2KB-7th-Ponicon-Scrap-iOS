@@ -72,11 +72,11 @@ struct MainHomeView: View {
             }
             //Drawer
             SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCateogry: $isShowingCategory, selected: $selected)
-                .offset(x: isShowingCategory ? -(UIScreen.main.bounds.width / 6) : -UIScreen.main.bounds.width) //moving view
+                .offset(x: isShowingCategory ? -(UIScreen.main.bounds.width / 6) : -UIScreen.main.bounds.width)
         }
         .frame(width: UIScreen.main.bounds.width)
         .onAppear{ //MainHomeView 등장하면 api 통신
-            print("현재 UserDefaults id 값은? : \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID"))")
+//            print("현재 UserDefaults id 값은? : \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID"))")
             userVM.userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ? userVM.userIdx : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
             print("user idx: \(userVM.userIdx)")
             scrapVM.getCategoryData(userID: userVM.userIdx)

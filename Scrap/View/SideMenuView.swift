@@ -85,36 +85,6 @@ struct SideMenuView: View {
                 //Category LIST
                 VStack{
                     List{
-                        //📌 test
-//                        ForEach(arr) { i in
-//                            HStack{
-//                                Text(i.title)
-//                                    .font(.system(size: 16))
-//                                    .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 1.8), alignment: .leading)
-//                                    .padding(.leading, 12)
-//                                Spacer()
-//                                Text("\(i.num)")
-//                                    .font(.system(size: 16))
-//                                    .frame(width: 30, alignment: .trailing)
-//                                Button(action: {
-//
-//                                }) {
-//                                    Image(systemName: "pencil")
-//                                        .resizable()
-//                                        .frame(width: 18, height: 18)
-//                                        .foregroundColor(.gray_bold)
-//                                }
-//                            }
-//                            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.75))
-//                            .onDrag {
-//                                self.dragging = i
-//                                return NSItemProvider(object: NSString())
-//                            }
-//                            .onDrop(of: [UTType.text], delegate: DragDelegate(current: $dragging))
-//                        }
-//                        .onDelete(perform: delete)
-//                        .onMove(perform: {source, destination in //from source: IndexSet, to destination: Int
-//                        })
                         //📌 real
                         ForEach($categoryList.categories) { $category in
                             if category.order != 0 && category.order != 1 {
@@ -124,8 +94,8 @@ struct SideMenuView: View {
                                     return NSItemProvider(object: NSString())
                                 }
                                 .onDrop(of: [UTType.text], delegate: DragDelegate(current: $dragging))
-                            } else {
-                                HStack{ //모든 자료, 분류x자료 카테고리만
+                            } else { //모든 자료, 분류x자료 카테고리만
+                                HStack{
                                     Text(category.name)
                                         .font(.system(size: 16))
                                         .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2), alignment: .leading)
@@ -174,6 +144,7 @@ struct SideMenuView: View {
                 }
             }
             .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 3.5))
+//            .offset(x: -(UIScreen.main.bounds.width / 6))
             .background(.white)
         }
     }
