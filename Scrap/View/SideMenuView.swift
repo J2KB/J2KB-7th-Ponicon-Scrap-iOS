@@ -119,7 +119,10 @@ struct SideMenuView: View {
                         .onDelete(perform: delete)
                         .onMove(perform: {source, destination in //from source: IndexSet, to destination: Int
                             //📡 카테고리 이동 통신
-                            source.forEach { vm.moveCategory(from: $0, to: destination)} //카테고리 이동 배열 순서 변경
+                            source.forEach {
+                                vm.moveCategory(from: $0, to: destination)
+                                vm.movingCategory(userID: userVM.userIdx, startIdx: $0, endIdx: destination)
+                            } //카테고리 이동 배열 순서 변경
                         })
                         if isAddingCategory { //카테고리 추가 버튼을 누른 경우 -> 보여짐
                             HStack{
@@ -128,7 +131,7 @@ struct SideMenuView: View {
                                 .frame(width: 220)
                                 .disableAutocorrection(true) //자동 수정 비활성화
                                 Button(action: {
-//                                    vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
+                                    vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
                                     let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
                                     vm.appendCategory(newCategory: newCategory) //post로 추가된 카테고리 이름 서버에 전송
                                     newCat = ""
@@ -154,8 +157,8 @@ struct SideMenuView: View {
     private func delete(indexSet: IndexSet) {
         for index in indexSet {
             vm.removeCategory(index: index)
+            vm.deleteCategory(categoryID: index) //📡 카테고리 삭제 통신
         }
-        //📡 카테고리 삭제 통신
     }
 }
 

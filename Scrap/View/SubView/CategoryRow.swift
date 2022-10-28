@@ -59,6 +59,7 @@ struct CategoryRow: View {
                 Button(action:{
                     self.isEditing = false //edit mode 종료
                     //📡 카테고리 이름 수정 서버 통신
+                    vm.modifyCategory(categoryID: userVM.userIdx, categoryName: category.name)
                     //modify category name in local category list
                     print("exit edit mode")
                 }){

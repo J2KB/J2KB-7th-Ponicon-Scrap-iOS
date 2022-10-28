@@ -58,7 +58,7 @@ struct SubHomeView: View {
 
 struct SubHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        MainHomeView(popRootView: .constant(true))
+        MainHomeView(popRootView: .constant(true), autoLogin: .constant(true))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
     }

@@ -10,6 +10,7 @@ import UniformTypeIdentifiers
 
 struct PageView: View {
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
+    @EnvironmentObject var userVM : UserViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @Binding var data : DataResponse.Datas
     @Binding var isOneCol : Bool
     @State private var height = 200
@@ -140,7 +141,7 @@ struct PageView: View {
                         }
                         Section {
                             Button(action: {
-                                self.isPresentHalfModal = false  //이거 안됨🚨
+                                self.isPresentHalfModal = false
                                 self.isShowMovingCategory = true
                             }) {
                                 NavigationLink(destination: MoveCategoryView(categoryList: $vm.categoryList.result, data: $data, currentCategory: $currentCategory).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){
@@ -150,7 +151,7 @@ struct PageView: View {
                             }
                             .foregroundColor(.black)
                             Button(action:{
-                                //이 자료의 인덱스를 찾아서 삭제해야됨...
+                                vm.deleteData(userID: userVM.userIdx, linkID: data.linkId!)
                                 vm.removeData(linkID: data.linkId!)
                                 self.isPresentHalfModal = false
                             }){
@@ -177,6 +178,7 @@ struct PageView_Previews: PreviewProvider {
     static var previews: some View {
         PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), isOneCol: .constant(false), currentCategory: .constant(0))
             .environmentObject(ScrapViewModel())
+            .environmentObject(UserViewModel())
     }
 }
 

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+//import Scrap
 
 struct CategoryResponseInShare: Decodable{
     struct Result: Decodable {
@@ -46,12 +47,15 @@ class CategoryViewModel: ObservableObject{ //감시할 data model
     
     func getCategoryDataInShare(userIdx: Int){
         print("user index : \(userIdx)")
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category/all?id=\(userIdx)") else {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/category/all?id=\(userIdx)") else {
             print("invalid url")
             return
         }
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             do{
+                if let response = response as? HTTPURLResponse {
+                    print(response.statusCode)
+                }
                 if let data = data {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(CategoryResponseInShare.self, from: data)
@@ -83,7 +87,7 @@ struct ShareUIView: View {
 
     var body: some View {
         if userIdx == 0 {
-            Text("로그인 하셈")
+            Text("Scrap에 로그인해주세요.")
         } else { //사용자 로그인되어있는 상태라면
             List{
                 ForEach($vm.categoryList.result.categories){ $category in

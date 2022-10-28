@@ -13,8 +13,9 @@ struct MoveCategoryView: View {
     @Binding var data : DataResponse.Datas
     @Binding var currentCategory : Int //현재 카테고리id
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
+    @EnvironmentObject var userVM : UserViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode> //pop
-
+    
     //선택된 row는 색칠해줘야됨
     var body: some View {
         List{
@@ -47,6 +48,7 @@ struct MoveCategoryView: View {
                 Button(action: {
                     //📡 자료의 카테고리 이동 서버 통신
                     //로컬(프론트)에서는 현재 카테고리에서 삭제해야됨 (dataList에서 해당 자료 삭제)
+                    vm.modifyData(userID: userVM.userIdx, linkID: data.linkId!, categoryId: selection)
                     vm.removeData(linkID: data.linkId!)
                     self.presentationMode.wrappedValue.dismiss() //pop
                 }) {

@@ -93,7 +93,7 @@ class ShareViewController: UIViewController{
     }
     
     func addNewData(baseurl: String, catID: Int, userIdx: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data?id=\(userIdx)&category=\(catID)") else {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=\(userIdx)&category=\(catID)") else {
             print("invalid url")
             return
         }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NewCategoryModel: Decodable{ //카테고리 추가 -> response 데이터로 받을 user id
+struct CategoryModel: Decodable{ //카테고리 추가 -> response 데이터로 받을 user id
     struct Result: Decodable {
         var categoryId: Int
         
@@ -40,6 +40,15 @@ struct NewDataModel: Decodable{ //자료 저장 -> response 데이터로 받을 
         self.code = code
         self.message = message
         self.result = result
+    }
+}
+
+struct NoResultModel: Decodable {
+    var code: Int
+    var message: String
+    init(code: Int, message: String){
+        self.code = code
+        self.message = message
     }
 }
 
@@ -85,7 +94,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //GET
     //카테고리 전체 조회
     func getCategoryData(userID: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category/all?id=\(userID)") else {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/category/all?id=\(userID)") else {
             print("invalid url")
             return
         }
@@ -103,6 +112,129 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                 }
             }catch (let error){
                 print("error")
+                print(String(describing: error))
+            }
+        }.resume()
+    }
+    
+    //POST
+    //카테고리 추가
+    func addNewCategory(newCat: String, userID: Int){
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category?id=\(userID)") else {
+            print("invalid url")
+            return
+        }
+        
+        let name = newCat
+        let body: [String: Any] = ["name": name]
+        let finalData = try! JSONSerialization.data(withJSONObject: body)
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = finalData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(CategoryModel.self, from: data)
+                    self.categoryID = result.result?.categoryId ?? 0 //필요한지 모르겠음
+                    print(result)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print(String(describing: error))
+            }
+        }.resume()
+    }
+    
+    //카테고리 삭제 -> query: category id
+    func deleteCategory(categoryID: Int) {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category?category=\(categoryID)") else {
+            print("invalid url")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(NoResultModel.self, from: data)
+                    print(result)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print(String(describing: error))
+            }
+        }.resume()
+    }
+    
+    //PUT
+    //카테고리 수정 -> query: category id
+    func modifyCategory(categoryID: Int, categoryName: String){
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category?category=\(categoryID)") else {
+            print("invalid url")
+            return
+        }
+        
+        let name = categoryName
+        let body: [String: Any] = ["name": name]
+        let finalData = try! JSONSerialization.data(withJSONObject: body)
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.httpBody = finalData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(CategoryModel.self, from: data)
+                    print(result)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print(String(describing: error))
+            }
+        }.resume()
+    }
+    
+    //PUT
+    //카테고리 순서 수정 -> query: from, to
+    func movingCategory(userID: Int, startIdx: Int, endIdx: Int){
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category/all?id=\(userID)") else {
+            print("invalid url")
+            return
+        }
+        
+        let startIdx = startIdx
+        let endIdx = endIdx
+        let body: [String: Any] = ["startIdx": startIdx, "endIdx": endIdx]
+        let finalData = try! JSONSerialization.data(withJSONObject: body)
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.httpBody = finalData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(NoResultModel.self, from: data)
+                    print(result)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
                 print(String(describing: error))
             }
         }.resume()
@@ -158,6 +290,63 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
+    //DEL
+    //자료 삭제 -> query: user idx, link id
+    func deleteData(userID: Int, linkID: Int) {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data/\(userID)?link_id=\(linkID)") else {
+            print("invalid url")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(NoResultModel.self, from: data)
+                    print(result)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print(String(describing: error))
+            }
+        }.resume()
+    }
+    
+    //PATCH
+    //자료 수정 -> query: user idex, link id
+    func modifyData(userID: Int, linkID: Int, categoryId: Int) {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data/\(userID)?link_id=\(linkID)") else {
+            print("invalid url")
+            return
+        }
+        let categoryIdx = categoryId
+        let body: [String: Any] = ["categoryId": categoryIdx]
+        let finalData = try! JSONSerialization.data(withJSONObject: body)
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.httpBody = finalData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(DataResponse.self, from: data)
+                    print(result)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print(String(describing: error))
+            }
+        }.resume()
+    }
+    
     //마이 페이지 -> query: user id
     func getMyPageData(userID: Int){
         guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/mypage?id=\(userID)") else {
@@ -182,36 +371,5 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
-    //POST
-    //카테고리 추가
-    func addNewCategory(newCat: String, userID: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category?id=\(userID)") else {
-            print("invalid url")
-            return
-        }
-        
-        let name = newCat
-        let body: [String: Any] = ["name": name]
-        let finalData = try! JSONSerialization.data(withJSONObject: body)
 
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = finalData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            do{
-                if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(NewCategoryModel.self, from: data)
-                    self.categoryID = result.result?.categoryId ?? 0 //필요한지 모르겠음
-                    print(result)
-                } else {
-                    print("no data")
-                }
-            }catch (let error){
-                print(String(describing: error))
-            }
-        }.resume()
-    }
 }

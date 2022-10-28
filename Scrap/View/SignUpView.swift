@@ -46,6 +46,12 @@ struct SignUpView: View {
 //        return pred.evaluate(with: name)
 //    }
     
+    func isValidEmail(email:String) -> Bool {
+       let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+       let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+       return emailTest.evaluate(with: email)
+    }
+    
     var body: some View {
         ScrollView(.vertical, showsIndicators: false){
             ZStack{
@@ -91,7 +97,7 @@ struct SignUpView: View {
                                 .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2, alignment: .leading)
                         }
                     }
-                    VStack{ //아이디 입력창
+                    VStack{ //이메일 입력창
                         HStack{
                             Text("이메일")
                                 .font(.system(size: 20, weight: .semibold))
@@ -107,10 +113,8 @@ struct SignUpView: View {
                                     .frame(width: UIScreen.main.bounds.width/1.65, height: 28, alignment: .leading)
                                     .onSubmit {
                                         //이메일 형식이 아닌 경우
-                                        let countLetter = id.filter({$0.isLetter}).count
-                                        let countNumber = id.filter({$0.isNumber}).count
-                                        if id.filter({$0.isUppercase}).count != 0 || countLetter+countNumber != id.count || countNumber == 0 || countLetter == 0 || 1...4 ~= id.count {
-                                            self.checkInfo[1] = 2
+                                        if isValidEmail(email: id) == false {
+                                            self.checkInfo[1] = 10
                                         }
                                         //0자 입력시
                                         else if id.isEmpty {
@@ -128,7 +132,10 @@ struct SignUpView: View {
                                     .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2 - 88, alignment: .leading)
                                 Button(action: {
                                     //아이디 중복 확인 버튼
-                                    //api 통신
+                                    vm.checkDuplication(email: id) //api 통신
+                                    if vm.duplicate {
+                                        self.checkInfo[1] = 4
+                                    }
                                 }){
                                     Text("중복 확인")
                                         .padding()
@@ -243,7 +250,7 @@ struct SignUpView: View {
                         }
                         if isValidSignUp() { //회원가입 모든 조건 통과
                             movingToSignUp = false //LoginView로 이동 -> 위 코드랑 같이 조건 체크 통과시에만
-                            vm.postSignUp(userid: id, password: pw, name: username) //모든 조건 통과한 경우에만 POST 통신
+                            vm.postSignUp(email: id, password: pw, name: username) //모든 조건 통과한 경우에만 POST 통신
                         }
                     }){
                         Text("회원가입")

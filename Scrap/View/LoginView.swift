@@ -19,12 +19,13 @@ struct LoginView: View {
     @State private var movingToSignUp = false
     @State var timeRemaining = 0.01
     let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
-    @Binding var autoLogin : Bool
-    
+    @State private var autoLogin = false
+    let userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID")
+
     var body: some View {
         NavigationView{
-            if autoLogin { //자동 로그인의 경우, 바로 HomeView로 이동
-                NavigationLink("", destination: MainHomeView(popRootView: $popRootView).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $popRootView)
+            if /*autoLogin*/userIdx != 0 { //자동 로그인의 경우, 바로 HomeView로 이동
+                NavigationLink("", destination: MainHomeView(popRootView: $popRootView, autoLogin: $autoLogin).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $popRootView)
                 .onReceive(timer) { _ in
                     if timeRemaining > 0 {
                         timeRemaining -= 0.01
@@ -150,7 +151,7 @@ struct LoginView: View {
                                 .background(Color("main_accent"))
                                 .cornerRadius(12)
                         }
-                        NavigationLink("", destination: MainHomeView(popRootView: $popRootView).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $userVM.loginState)
+                        NavigationLink("", destination: MainHomeView(popRootView: $popRootView, autoLogin: $autoLogin).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $userVM.loginState)
                         HStack{
                             Rectangle()
                                 .frame(width: UIScreen.main.bounds.width/3.5, height: 1)
@@ -208,7 +209,7 @@ struct LoginView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView(autoLogin: .constant(true))
+        LoginView(/*autoLogin: .constant(true)*/)
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
     }

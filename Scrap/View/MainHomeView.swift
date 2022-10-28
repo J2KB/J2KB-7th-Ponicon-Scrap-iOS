@@ -16,6 +16,7 @@ struct MainHomeView: View {
     @State private var isShowingCategory = false
     @State private var isShowingMyPage = false
     @Binding var popRootView : Bool //로그아웃시 LoginView로 pop!
+    @Binding var autoLogin : Bool
     @State private var selected = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "lastCategory") ?? 0 //last category id 가져오기
     
     //만약 categoryList안에 아무것도 없다면 전체 자료를 나타내야 됨
@@ -50,7 +51,7 @@ struct MainHomeView: View {
                 .toolbar{
                     ToolbarItem(placement: .navigationBarTrailing){
                         VStack{
-                            NavigationLink(destination: MyPageView(userData: $scrapVM.user.result, popRootView: $popRootView, isShowingMyPage: $isShowingMyPage), isActive: $isShowingMyPage) {
+                            NavigationLink(destination: MyPageView(userData: $scrapVM.user.result, popRootView: $popRootView, isShowingMyPage: $isShowingMyPage, autoLogin: $autoLogin), isActive: $isShowingMyPage) {
                                 Button(action: {
                                     self.isShowingMyPage.toggle()
                                     scrapVM.getMyPageData(userID: userVM.userIdx)
@@ -86,23 +87,23 @@ struct MainHomeView: View {
             }
             print("Main Home View")
         }
-        .gesture(DragGesture().onEnded({
-            if $0.translation.width < -100 {
-                withAnimation(.easeInOut) {
-                    self.isShowingCategory = false
-                }
-            }else if $0.translation.width > 100 {
-                withAnimation(.easeInOut) {
-                    self.isShowingCategory = true
-                }
-            }
-        }))
+//        .gesture(DragGesture().onEnded({
+//            if $0.translation.width < -100 {
+//                withAnimation(.easeInOut) {
+//                    self.isShowingCategory = false
+//                }
+//            }else if $0.translation.width > 100 {
+//                withAnimation(.easeInOut) {
+//                    self.isShowingCategory = true
+//                }
+//            }
+//        }))
     }
 }
 
 struct MainHomeView_Previews: PreviewProvider { 
     static var previews: some View {
-        MainHomeView(popRootView: .constant(true))
+        MainHomeView(popRootView: .constant(true), autoLogin: .constant(true))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
     }
