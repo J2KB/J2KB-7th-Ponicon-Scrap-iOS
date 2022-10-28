@@ -9,7 +9,6 @@ import SwiftUI
 import KakaoSDKAuth
 import KakaoSDKCommon
 
-
 @main
 struct ScrapApp: App {
     @StateObject var scrapVM = ScrapViewModel()
@@ -20,7 +19,6 @@ struct ScrapApp: App {
     
     init(){
         KakaoSDK.initSDK(appKey: "7942e72a93d27c86ee00caec504989f7") //native app key
-//        checkAutoLogin(autoLogin: autoLogin)
     }
     
     var body: some Scene {
@@ -44,11 +42,5 @@ struct ScrapApp: App {
                 OfflineView()
             }
         }
-        
     }
-    
-//    func checkAutoLogin(autoLogin: Bool) {
-//        if userIdx == 0 { self.autoLogin = false; print(self.autoLogin) }
-//        else { self.autoLogin = true; print(self.autoLogin) }
-//    }
 }

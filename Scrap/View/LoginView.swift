@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-//import KakaoSDKUser
+import KakaoSDKUser
 
 struct LoginView: View {
     @EnvironmentObject var userVM : UserViewModel
@@ -167,23 +167,23 @@ struct LoginView: View {
                         .frame(width: UIScreen.main.bounds.width / 1.5)
                         .padding(.bottom, 10)
                         Button(action: { //kakao login button
-//                            if (UserApi.isKakaoTalkLoginAvailable()) {
-//                                UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
-//                                    if let oauthToken = oauthToken {
-//                                        userVM.postKaKaoLogin(accessToken: oauthToken.accessToken, refreshToken: oauthToken.refreshToken)
-//                                    } else {
-//                                        print(String(describing: error))
-//                                    }
-//                                }
-//                            } else {
-//                                UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
-//                                    if let oauthToken = oauthToken {
-//                                        userVM.postKaKaoLogin(accessToken: oauthToken.accessToken, refreshToken: oauthToken.refreshToken)
-//                                    } else {
-//                                        print(String(describing: error))
-//                                    }
-//                                }
-//                            }
+                            if (UserApi.isKakaoTalkLoginAvailable()) {
+                                UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+                                    if let oauthToken = oauthToken {
+                                        userVM.postKaKaoLogin(accessToken: oauthToken.accessToken, refreshToken: oauthToken.refreshToken, autoLogin: keepLogin)
+                                    } else {
+                                        print(String(describing: error))
+                                    }
+                                }
+                            } else {
+                                UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
+                                    if let oauthToken = oauthToken {
+                                        userVM.postKaKaoLogin(accessToken: oauthToken.accessToken, refreshToken: oauthToken.refreshToken, autoLogin: keepLogin)
+                                    } else {
+                                        print(String(describing: error))
+                                    }
+                                }
+                            }
                         }) {
                             Image("kakao_login_large_narrow")
                                 .resizable()

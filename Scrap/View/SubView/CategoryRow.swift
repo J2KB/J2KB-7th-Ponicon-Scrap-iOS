@@ -12,6 +12,7 @@ struct CategoryRow: View {
     @State private var isEditing = false
     @State private var categoryName = "category"
     @Binding var selected : Int
+    @State private var isChangeRow = true
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @EnvironmentObject var userVM : UserViewModel //여기서 로그아웃
     var body: some View {
@@ -22,20 +23,23 @@ struct CategoryRow: View {
                         .font(.system(size: 16))
                         .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 1.8), alignment: .leading)
                         .foregroundColor(.black)
-                        .onTapGesture {
-                            self.selected = category.categoryId
-                            self.isEditing = false //edit mode 아님
-                            UserDefaults(suiteName: "group.com.thk.Scrap")?.set(selected, forKey: "lastCategory") //마지막 카테고리 id 저장
-                            print("\(selected) is selected category id")
-                            vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
-                        }
                     Text("\(category.numOfLink)")
                         .font(.system(size: 16))
                         .frame(width: 30, alignment: .trailing)
                     .foregroundColor(.black)
                 }
+                .onTapGesture {
+                    self.selected = category.categoryId
+                    self.isEditing = false //edit mode 아님
+                    self.isChangeRow = true
+                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(selected, forKey: "lastCategory") //마지막 카테고리 id 저장
+                    print("\(selected) is selected category id")
+                    vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
+                }
                 Button(action:{
-                    self.isEditing = true //edit mode로 변경
+//                    if self.isChangeRow == false {
+                        self.isEditing = true //edit mode로 변경
+//                    }
                     self.selected = category.categoryId
                     print("enter edit mode")
                 }){

@@ -87,15 +87,8 @@ struct SideMenuView: View {
                     List{
                         //📌 real
                         ForEach($categoryList.categories) { $category in
-                            if category.order != 0 && category.order != 1 {
-                                CategoryRow(category: $category, selected: $selected)
-                                .onDrag {
-                                    self.dragging = category
-                                    return NSItemProvider(object: NSString())
-                                }
-                                .onDrop(of: [UTType.text], delegate: DragDelegate(current: $dragging))
-                            } else { //모든 자료, 분류x자료 카테고리만
-                                HStack{
+                            if category.order == 0 || category.order == 1 {
+                                HStack{ //모든 자료
                                     Text(category.name)
                                         .font(.system(size: 16))
                                         .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2), alignment: .leading)
@@ -108,12 +101,21 @@ struct SideMenuView: View {
                                 .onTapGesture { //클릭하면 현재 categoryID
                                     self.selected = category.categoryId
                                     if category.order == 0 {
-                                        //모든 자료의 경우 -> 전체 자료 조회 api 따로 진행해야됨 📡
                                         vm.getAllData(userID: userVM.userIdx)
                                     } else {
                                         vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
                                     }
                                 }
+                            }
+                        }
+                        ForEach($categoryList.categories) { $category in
+                            if category.order != 0 && category.order != 1 {
+                                CategoryRow(category: $category, selected: $selected)
+                                .onDrag {
+                                    self.dragging = category
+                                    return NSItemProvider(object: NSString())
+                                }
+                                .onDrop(of: [UTType.text], delegate: DragDelegate(current: $dragging))
                             }
                         }
                         .onDelete(perform: delete)
@@ -148,10 +150,6 @@ struct SideMenuView: View {
             .background(.white)
         }
     }
-    
-//    private func move(from source: IndexSet, to destination: Int) {
-//        arr.move(fromOffsets: source, toOffset: destination)
-//    }
 
     private func delete(indexSet: IndexSet) {
         for index in indexSet {
