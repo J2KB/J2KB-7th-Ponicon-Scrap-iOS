@@ -27,7 +27,7 @@ struct MainHomeView: View {
         ZStack{
             //Main Home
             NavigationView{
-                SubHomeView(datas: $scrapVM.dataList.result) //⭐️여기로 category 데이터 넘겨줘야 됨
+                SubHomeView(datas: $scrapVM.dataList.result, currentCategory: $selected) //⭐️여기로 category 데이터 넘겨줘야 됨
                 .navigationBarTitle("", displayMode: .inline)
                 .toolbar{
                     ToolbarItem(placement: .navigationBarLeading){

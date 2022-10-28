@@ -31,9 +31,8 @@ struct Item: Identifiable, Equatable{ //category item
 
 struct SideMenuView: View {
     //📌 test
-    @State private var arr = [Item(id: 1, title: "Algorithm", num: 2), Item(id: 2, title: "DataStructure", num: 5), Item(id: 3, title: "Network", num: 4), Item(id: 4, title: "SQL", num: 6)]
+//    @State private var arr = [Item(id: 1, title: "Algorithm", num: 2), Item(id: 2, title: "DataStructure", num: 5), Item(id: 3, title: "Network", num: 4), Item(id: 4, title: "SQL", num: 6)]
     @State private var dragging: CategoryResponse.Category?
-//    @State private var dragging: Item?
     @Binding var categoryList : CategoryResponse.Result
     @State private var newCat = ""
     @State private var isAddingCategory = false
