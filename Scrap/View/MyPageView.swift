@@ -13,6 +13,7 @@ struct MyPageView: View {
     @State private var username = ""
     @State private var iconArr = ["camping", "circus", "classical", "compass", "palette", "rocket", "ufo"]
     @Binding var popRootView : Bool
+    @Binding var isShowingMyPage : Bool
     @EnvironmentObject var vm : UserViewModel //여기서 로그아웃
     @Environment(\.presentationMode) var presentationMode //pop sheet
     
@@ -55,8 +56,9 @@ struct MyPageView: View {
                 Spacer()
                 Button(action:{
                     vm.logOut() //logout 서버에 보내기
-                    popRootView = false                     //NavigationLink로 LoginView로 이동
-                    vm.loginState = false
+                    popRootView = false //NavigationLink로 LoginView로 이동
+                    isShowingMyPage = false
+                    vm.loginState = false //NavigationLink로 LoginView로 이동
                     //데이터 지우기 -> user id 데이터 지우기
                     print("log out")
                     print(vm.userIdx)
@@ -71,12 +73,15 @@ struct MyPageView: View {
             .navigationBarBackButtonHidden(true)
         }//VStack1
         .frame(height: UIScreen.main.bounds.height - 100, alignment: .top)
+        .onAppear {
+            print("My Page View")
+        }
     }
 }
 
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
-        MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")), popRootView: .constant(true))
+        MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")), popRootView: .constant(true), isShowingMyPage: .constant(true))
             .environmentObject(ScrapViewModel())
     }
 }

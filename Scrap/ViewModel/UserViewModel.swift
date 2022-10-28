@@ -216,11 +216,16 @@ class UserViewModel: ObservableObject{
                 if let data = data {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(LogOutModel.self, from: data)
+                    DispatchQueue.main.async {
+                        //initialized
+                        //모든 자료 카테고리 id로 변경
+                        UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "ID")
+                        self.userIdx = 0
+                        UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "iconIdx")
+                        self.iconIdx = 0
+                        UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "lastCategory")
+                    }
                     print(result)
-                    //initialized
-                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "ID")
-                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "iconIdx")
-                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "lastCategory") //모든 자료 카테고리 id로 변경
                 } else {
                     print("no data")
                 }

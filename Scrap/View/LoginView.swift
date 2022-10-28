@@ -15,7 +15,7 @@ struct LoginView: View {
     @State private var pw: String = ""
     @State private var showPW = false //비밀번호 visible, invisible
     @State private var keepLogin = false
-    @State private var popRootView = false
+    @State private var popRootView = false //LoginView -> MainHome -> MyPage - logout - LoginView
     @State private var movingToSignUp = false
     @State var timeRemaining = 0.01
     let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
@@ -199,6 +199,9 @@ struct LoginView: View {
                     .padding(.top, 20)
                 }
             }
+        }
+        .onAppear {
+            print("Login View")
         }
     }
 }
