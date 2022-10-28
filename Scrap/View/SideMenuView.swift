@@ -31,7 +31,6 @@ struct Item: Identifiable, Equatable{ //category item
 
 struct SideMenuView: View {
     //📌 test
-//    @State private var arr = [Item(id: 1, title: "Algorithm", num: 2), Item(id: 2, title: "DataStructure", num: 5), Item(id: 3, title: "Network", num: 4), Item(id: 4, title: "SQL", num: 6)]
     @State private var dragging: CategoryResponse.Category?
     @Binding var categoryList : CategoryResponse.Result
     @State private var newCat = ""
@@ -124,19 +123,21 @@ struct SideMenuView: View {
                         })
                         if isAddingCategory { //카테고리 추가 버튼을 누른 경우 -> 보여짐
                             HStack{
-                                TextField("새로운 카테고리", text: $newCat,
-                                  onCommit: {
-                                    vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
-                                    let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: 0)
+                                TextField("새로운 카테고리", text: $newCat)
+                                .padding(.leading, 12)
+                                .frame(width: 220)
+                                .disableAutocorrection(true) //자동 수정 비활성화
+                                Button(action: {
+//                                    vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
+                                    let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
                                     vm.appendCategory(newCategory: newCategory) //post로 추가된 카테고리 이름 서버에 전송
                                     newCat = ""
                                     isAddingCategory = false
-                                  })
-                                .padding(.leading, 16)
-                                .disableAutocorrection(true) //자동 수정 비활성화
-                                if !newCat.isEmpty {
-                                    Image(systemName: "checkmark") //한 글자라도 있어야 버튼 활성화
-                                        .foregroundColor(.gray_bold)
+                                }) {
+                                    if !newCat.isEmpty { //입력값이 있으면
+                                        Image(systemName: "checkmark") //한 글자라도 있어야 버튼 활성화
+                                            .foregroundColor(.gray_bold)
+                                    }
                                 }
                             }
                         }
@@ -164,5 +165,8 @@ struct SideMenuView_Previews: PreviewProvider {
            CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2),
            CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCateogry: .constant(true), selected: .constant(0))
             .environmentObject(ScrapViewModel())
+//        MainHomeView(popRootView: .constant(true))
+//            .environmentObject(ScrapViewModel())
+//            .environmentObject(UserViewModel())
     }
 }
