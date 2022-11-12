@@ -86,8 +86,13 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
 
     //categoryList의 category 위치 이동
     func moveCategory(from oldIndex: Int, to newIndex: Int) {
+        print("\(oldIndex), \(newIndex)")
         if oldIndex == newIndex { return }
         if abs(newIndex - oldIndex) == 1 { return categoryList.result.categories.swapAt(oldIndex, newIndex) }
+        if newIndex >= categoryList.result.categories.count {
+            categoryList.result.categories.append(categoryList.result.categories.remove(at: oldIndex)) //맨 뒤에 추가
+            return
+        }
         categoryList.result.categories.insert(categoryList.result.categories.remove(at: oldIndex), at: newIndex)
     }
     

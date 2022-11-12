@@ -18,7 +18,7 @@ struct MainHomeView: View {
     @Binding var popRootView : Bool //로그아웃시 LoginView로 pop!
     @Binding var autoLogin : Bool
     @State private var selected = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "lastCategory") ?? 0 //last category id 가져오기
-    
+        
     //만약 categoryList안에 아무것도 없다면 전체 자료를 나타내야 됨
     var categoryTitle : String {
         return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"
@@ -34,7 +34,7 @@ struct MainHomeView: View {
                     ToolbarItem(placement: .navigationBarLeading){
                         HStack(spacing: 2){
                             Button(action: {
-                                withAnimation(.easeInOut){
+                                withAnimation(.easeInOut.delay(0.3)){
                                     self.isShowingCategory = true
                                 }
                             }) {

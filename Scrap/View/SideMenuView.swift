@@ -47,7 +47,7 @@ struct SideMenuView: View {
                 HStack{
                     HStack(spacing: 16){
                         Button(action: {
-                            withAnimation(.easeInOut){
+                            withAnimation(.easeInOut.delay(0.3)){
                                 isShowingCateogry = false
                             }
                         }){
@@ -63,6 +63,9 @@ struct SideMenuView: View {
                     Spacer()
                     Button(action: {
                         self.isAddingCategory.toggle() //카테고리 추가 토글
+                        if !isAddingCategory { //plus icon
+                            newCat = "" //초기화
+                        }
                         withAnimation {
                             proxy.scrollTo(categoryList.categories.count) //scroll to last element(category)
                         }
@@ -77,7 +80,7 @@ struct SideMenuView: View {
                 .frame(height: 40)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 10)
-                .padding(.top, 12)
+                .padding(.top, 4)
                 .background(.white)
                 //Category LIST
                 VStack{
@@ -87,7 +90,7 @@ struct SideMenuView: View {
                                 HStack{ //모든 자료, 분류되지 않은 자료
                                     Text(category.name)
                                         .font(.system(size: 16))
-                                        .frame(width: UIScreen.main.bounds.width - 140, alignment: .leading)
+                                        .frame(width: UIScreen.main.bounds.width - 120, alignment: .leading)
                                     Text("\(category.numOfLink)")
                                         .font(.system(size: 16))
                                         .frame(width: 30, alignment: .trailing)
@@ -101,12 +104,15 @@ struct SideMenuView: View {
                                     } else {
                                         vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
                                     }
+                                    withAnimation(.easeInOut.delay(0.3)){
+                                        isShowingCateogry = false
+                                    }
                                 }
                             }
                         }
                         ForEach($categoryList.categories) { $category in
                             if category.order != 0 && category.order != 1 {
-                                CategoryRow(category: $category, selected: $selected)
+                                CategoryRow(category: $category, isShowingCateogry: $isShowingCateogry, selected: $selected)
                                 .onDrag {
                                     self.dragging = category
                                     return NSItemProvider(object: NSString())
@@ -126,7 +132,7 @@ struct SideMenuView: View {
                             HStack{
                                 TextField("새로운 카테고리", text: $newCat)
                                 .padding(.leading, 12)
-                                .frame(width: UIScreen.main.bounds.width - 140)
+                                .frame(width: UIScreen.main.bounds.width - 120)
                                 .disableAutocorrection(true) //자동 수정 비활성화
                                 Spacer()
                                 Button(action: {
@@ -145,7 +151,8 @@ struct SideMenuView: View {
                             .frame(width: UIScreen.main.bounds.width - 67)
                         }
                     }
-                    .frame(width: UIScreen.main.bounds.width - 40)
+                    .frame(width: UIScreen.main.bounds.width)
+                    .padding(.trailing, 10)
                     .listStyle(PlainListStyle())
                 }
             }

@@ -11,6 +11,7 @@ struct CategoryRow: View {
     @Binding var category : CategoryResponse.Category
     @State private var isEditing = false
     @State private var categoryName = "category"
+    @Binding var isShowingCateogry : Bool
     @Binding var selected : Int
     @State private var isChangeRow = true
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
@@ -22,7 +23,7 @@ struct CategoryRow: View {
                 HStack{
                     Text(category.name)
                         .font(.system(size: 16))
-                        .frame(width: UIScreen.main.bounds.width - 140, alignment: .leading)
+                        .frame(width: UIScreen.main.bounds.width - 120, alignment: .leading)
                         .foregroundColor(.black)
                     Text("\(category.numOfLink)")
                         .font(.system(size: 16))
@@ -36,6 +37,9 @@ struct CategoryRow: View {
                     UserDefaults(suiteName: "group.com.thk.Scrap")?.set(selected, forKey: "lastCategory") //마지막 카테고리 id 저장
                     print("\(selected) is selected category id")
                     vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
+                    withAnimation(.easeInOut.delay(0.3)){
+                        isShowingCateogry = false
+                    }
                 }
                 //modal shet 등장
                 Button(action:{
@@ -77,6 +81,6 @@ struct CategoryRow: View {
 
 struct CategoryRow_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryRow(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), selected: .constant(0))
+        CategoryRow(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), isShowingCateogry: .constant(true), selected: .constant(0))
     }
 }
