@@ -15,13 +15,14 @@ struct CategoryRow: View {
     @State private var isChangeRow = true
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @EnvironmentObject var userVM : UserViewModel //여기서 로그아웃
+    
     var body: some View {
-        if !isEditing { //edit mode가 아닐 때
+//        if !isEditing { //edit mode가 아닐 때
             HStack{
                 HStack{
                     Text(category.name)
                         .font(.system(size: 16))
-                        .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 1.8), alignment: .leading)
+                        .frame(width: UIScreen.main.bounds.width - 140, alignment: .leading)
                         .foregroundColor(.black)
                     Text("\(category.numOfLink)")
                         .font(.system(size: 16))
@@ -36,42 +37,41 @@ struct CategoryRow: View {
                     print("\(selected) is selected category id")
                     vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
                 }
+                //modal shet 등장
                 Button(action:{
-//                    if self.isChangeRow == false {
-                        self.isEditing = true //edit mode로 변경
-//                    }
+                    self.isEditing = true //edit mode로 변경
                     self.selected = category.categoryId
-                    print("enter edit mode")
+                    print("click option button")
                 }){
-                    Image(systemName: "pencil")
-                        .resizable()
+                    Image(systemName: "ellipsis")
                         .foregroundColor(.gray_bold)
                 }
-                .frame(width: 18, height: 18)
+                .frame(width: 24, height: 32)
             }
             .padding(.leading, 10)
             .listRowBackground(self.selected == category.categoryId ? .gray_sub : Color(.white))
-        } else {
-            HStack{
-                TextField(category.name, text: $category.name)
-                    .font(.system(size: 16))
-                    .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.3), alignment: .leading)
-                Button(action:{
-                    self.isEditing = false //edit mode 종료
-                    //📡 카테고리 이름 수정 서버 통신
-                    vm.modifyCategory(categoryID: userVM.userIdx, categoryName: category.name)
-                    //modify category name in local category list
-                    print("exit edit mode")
-                }){
-                    Image(systemName: "checkmark")
-                        .resizable()
-                        .foregroundColor(.gray_bold)
-                }
-                .frame(width: 18, height: 18)
-            }
-            .padding(.leading, 10)
-            .listRowBackground(self.selected == category.categoryId ? .gray_sub : Color(.white))
-        }
+//        }
+//        else {
+//            HStack{
+//                TextField(category.name, text: $category.name)
+//                    .font(.system(size: 16))
+//                    .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.3), alignment: .leading)
+//                Button(action:{
+//                    self.isEditing = false //edit mode 종료
+//                    //📡 카테고리 이름 수정 서버 통신
+//                    vm.modifyCategory(categoryID: userVM.userIdx, categoryName: category.name)
+//                    //modify category name in local category list
+//                    print("exit edit mode")
+//                }){
+//                    Image(systemName: "checkmark")
+//                        .resizable()
+//                        .foregroundColor(.gray_bold)
+//                }
+//                .frame(width: 18, height: 18)
+//            }
+//            .padding(.leading, 10)
+//            .listRowBackground(self.selected == category.categoryId ? .gray_sub : Color(.white))
+//        }
     }
 }
 

@@ -30,7 +30,6 @@ struct Item: Identifiable, Equatable{ //category item
 }
 
 struct SideMenuView: View {
-    //📌 test
     @State private var dragging: CategoryResponse.Category?
     @Binding var categoryList : CategoryResponse.Result
     @State private var newCat = ""
@@ -46,7 +45,7 @@ struct SideMenuView: View {
             VStack(spacing: -2){
                 //HEADER
                 HStack{
-                    HStack(spacing: 12){
+                    HStack(spacing: 16){
                         Button(action: {
                             withAnimation(.easeInOut){
                                 isShowingCateogry = false
@@ -66,7 +65,6 @@ struct SideMenuView: View {
                         self.isAddingCategory.toggle() //카테고리 추가 토글
                         withAnimation {
                             proxy.scrollTo(categoryList.categories.count) //scroll to last element(category)
-//                            proxy.scrollTo(arr.count, anchor: .top)
                         }
                     }){
                         Image(systemName: isAddingCategory ? "xmark" : "plus")
@@ -76,20 +74,20 @@ struct SideMenuView: View {
                     }
                     .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 2))
                 }
-                .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2.72), height: 40)
-                .padding(.horizontal, 16)
+                .frame(height: 40)
+                .padding(.horizontal, 20)
                 .padding(.bottom, 10)
+                .padding(.top, 12)
                 .background(.white)
                 //Category LIST
                 VStack{
                     List{
-                        //📌 real
                         ForEach($categoryList.categories) { $category in
                             if category.order == 0 || category.order == 1 {
-                                HStack{ //모든 자료
+                                HStack{ //모든 자료, 분류되지 않은 자료
                                     Text(category.name)
                                         .font(.system(size: 16))
-                                        .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 2), alignment: .leading)
+                                        .frame(width: UIScreen.main.bounds.width - 140, alignment: .leading)
                                     Text("\(category.numOfLink)")
                                         .font(.system(size: 16))
                                         .frame(width: 30, alignment: .trailing)
@@ -128,8 +126,9 @@ struct SideMenuView: View {
                             HStack{
                                 TextField("새로운 카테고리", text: $newCat)
                                 .padding(.leading, 12)
-                                .frame(width: 220)
+                                .frame(width: UIScreen.main.bounds.width - 140)
                                 .disableAutocorrection(true) //자동 수정 비활성화
+                                Spacer()
                                 Button(action: {
                                     vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
                                     let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
@@ -143,13 +142,13 @@ struct SideMenuView: View {
                                     }
                                 }
                             }
+                            .frame(width: UIScreen.main.bounds.width - 67)
                         }
                     }
-                    .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 3.5))
+                    .frame(width: UIScreen.main.bounds.width - 40)
                     .listStyle(PlainListStyle())
                 }
             }
-            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 3.5))
             .background(.white)
         }
     }

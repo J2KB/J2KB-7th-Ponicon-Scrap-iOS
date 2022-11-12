@@ -64,18 +64,10 @@ struct MainHomeView: View {
                     }
                 }
             }
-            .frame(width: UIScreen.main.bounds.width)
-            if isShowingCategory {
-                Rectangle()
-                    .background(.black)
-                    .opacity(0.4)
-                    .ignoresSafeArea()
-            }
             //Drawer
             SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCateogry: $isShowingCategory, selected: $selected)
-                .offset(x: isShowingCategory ? -(UIScreen.main.bounds.width / 6) : -UIScreen.main.bounds.width)
+                .offset(x: isShowingCategory ? 0 : -UIScreen.main.bounds.width)
         }
-        .frame(width: UIScreen.main.bounds.width)
         .onAppear{ //MainHomeView 등장하면 api 통신
             userVM.userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ? userVM.userIdx : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
             print("user idx: \(userVM.userIdx)")
