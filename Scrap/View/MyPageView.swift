@@ -56,7 +56,7 @@ struct MyPageView: View {
                     .padding(.top, 12)
                 Spacer()
                 Button(action:{
-                    vm.logOut() //logout 서버에 보내기
+                    vm.logOut() //📡 LogOut API
                     autoLogin = false
                     print(autoLogin)
                     popRootView = false //NavigationLink로 LoginView로 이동

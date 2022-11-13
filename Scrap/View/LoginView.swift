@@ -140,7 +140,7 @@ struct LoginView: View {
                     }
                     VStack(spacing: 10){ //Buttons
                         Button(action:{
-                            userVM.postLogin(userid: id, password: pw, autoLogin: keepLogin) //login api
+                            userVM.postLogin(userid: id, password: pw, autoLogin: keepLogin) //📡 LogIn API
                             id = ""
                             pw = ""
                         }){

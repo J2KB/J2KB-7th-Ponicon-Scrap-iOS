@@ -7,6 +7,8 @@
 
 import Foundation
 
+//CategoryData
+
 struct CategoryResponse: Decodable{
     struct Result: Decodable {
         var categories: [Category]

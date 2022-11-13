@@ -48,7 +48,7 @@ struct MoveCategoryView: View {
                 Button(action: {
                     //📡 자료의 카테고리 이동 서버 통신
                     //로컬(프론트)에서는 현재 카테고리에서 삭제해야됨 (dataList에서 해당 자료 삭제)
-                    vm.modifyData(userID: userVM.userIdx, linkID: data.linkId!, categoryId: selection)
+                    vm.modifyDatasCategory(userID: userVM.userIdx, linkID: data.linkId!, categoryId: selection)
                     vm.removeData(linkID: data.linkId!)
                     self.presentationMode.wrappedValue.dismiss() //pop
                 }) {

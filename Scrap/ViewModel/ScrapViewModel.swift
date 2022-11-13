@@ -64,6 +64,9 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     var failedLoginToastMessage = ""
     var categoryID = 0
     
+    
+    //local에서 수행할 함수
+    
     //categoryList에 category 추가 함수 (카테고리 추가 기능)
     func appendCategory(newCategory: CategoryResponse.Category){
         categoryList.result.categories.append(newCategory)
@@ -79,14 +82,13 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         for i in 0..<dataList.result.links.count {
             if dataList.result.links[i].linkId == linkID {
                 dataList.result.links.remove(at: i)
-                break
+                return
             }
         }
     }
 
     //categoryList의 category 위치 이동
     func moveCategory(from oldIndex: Int, to newIndex: Int) {
-        print("\(oldIndex), \(newIndex)")
         if oldIndex == newIndex { return }
         if abs(newIndex - oldIndex) == 1 { return categoryList.result.categories.swapAt(oldIndex, newIndex) }
         if newIndex >= categoryList.result.categories.count {
@@ -96,10 +98,23 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         categoryList.result.categories.insert(categoryList.result.categories.remove(at: oldIndex), at: newIndex)
     }
     
-    //GET
+    //categoryList의 category 이름 수정
+//    func renameCategory(id categoryID: Int, renamed rname: String){
+//        for i in 0..<categoryList.result.categories.count {
+//            if categoryList.result.categories[i].categoryId == categoryID {
+//                categoryList.result.categories[i].name = rname
+//                return
+//            }
+//        }
+//    }
+    
+    private let baseUrl = "https://scrap.hana-umc.shop"
+    
+    //=========GET=========
     //카테고리 전체 조회
+    //query: user id
     func getCategoryData(userID: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/category/all?id=\(userID)") else {
+        guard let url = URL(string: "\(baseUrl)/category/all?id=\(userID)") else {
             print("invalid url")
             return
         }
@@ -122,10 +137,12 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
-    //POST
+    //=========POST========
     //카테고리 추가
+    //query: userId/newCatName
+    //body: newCatName
     func addNewCategory(newCat: String, userID: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category?id=\(userID)") else {
+        guard let url = URL(string: "\(baseUrl)/auth/category?id=\(userID)") else {
             print("invalid url")
             return
         }
@@ -144,7 +161,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                 if let data = data {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(CategoryModel.self, from: data)
-                    self.categoryID = result.result?.categoryId ?? 0 //필요한지 모르겠음
+//                    self.categoryID = result.result?.categoryId ?? 0 //필요한지 모르겠음
                     print(result)
                 } else {
                     print("no data")
@@ -155,9 +172,11 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
-    //카테고리 삭제 -> query: category id
+    //=========DELETE========
+    //카테고리 삭제
+    //query: category id
     func deleteCategory(categoryID: Int) {
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category?category=\(categoryID)") else {
+        guard let url = URL(string: "\(baseUrl)/auth/category?category=\(categoryID)") else {
             print("invalid url")
             return
         }
@@ -180,10 +199,12 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
-    //PUT
-    //카테고리 수정 -> query: category id
+    //==========PUT=========
+    //카테고리 수정
+    //query: category id
+    //body: category name
     func modifyCategory(categoryID: Int, categoryName: String){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category?category=\(categoryID)") else {
+        guard let url = URL(string: "\(baseUrl)/auth/category?category=\(categoryID)") else {
             print("invalid url")
             return
         }
@@ -212,10 +233,11 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
-    //PUT
-    //카테고리 순서 수정 -> query: from, to
+    //카테고리 순서 수정
+    //query: user id
+    //body: from, to
     func movingCategory(userID: Int, startIdx: Int, endIdx: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/category/all?id=\(userID)") else {
+        guard let url = URL(string: "\(baseUrl)/auth/category/all?id=\(userID)") else {
             print("invalid url")
             return
         }
@@ -245,34 +267,43 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
-    //자료 조회 -> query: category id
+    //=======GET=======
+    //자료 조회
+    //query: user id, category id, seq
     func getData(userID: Int, catID: Int, seq: String){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data?id=\(userID)&category=\(catID)&seq=\(seq)") else {
+        guard let url = URL(string: "\(baseUrl)/auth/data?id=\(userID)&category=\(catID)&seq=\(seq)") else {
             print("invalid url")
             return
         }
         URLSession.shared.dataTask(with: url) { (data, response, error) in
-            do{
+            DispatchQueue.main.async {
                 if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(DataResponse.self, from: data)
-                    DispatchQueue.main.async {
-                        self.dataList = result
+                    guard let httpResponse = response as? HTTPURLResponse else {return}
+                    if httpResponse.statusCode == 200 {
+                        do {
+                            let decoder = JSONDecoder()
+                            let result = try decoder.decode(DataResponse.self, from: data)
+                            self.dataList = result
+                        } catch let error {
+                            print("error")
+                            print(String(describing: error))
+                        }
+                    }else {
+                        print("invalid data error")
                     }
-                    print(result)
-                } else {
-                    print("no data")
+                }else if let error = error {
+                    print("error")
+                    print(String(describing: error))
                 }
-            }catch (let error){
-                print("error")
-                print(String(describing: error))
             }
         }.resume()
     }
     
-    //자료 전체 조회 -> query: category id
+    //========GET========
+    //자료 전체 조회
+    //query: user id
     func getAllData(userID: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data/all?id=\(userID)") else {
+        guard let url = URL(string: "\(baseUrl)/auth/data/all?id=\(userID)") else {
             print("invalid url")
             return
         }
@@ -295,10 +326,11 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
-    //DEL
-    //자료 삭제 -> query: user idx, link id
+    //======DEL========
+    //자료 삭제
+    //query: user idx, link id
     func deleteData(userID: Int, linkID: Int) {
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data/\(userID)?link_id=\(linkID)") else {
+        guard let url = URL(string: "\(baseUrl)/auth/data/\(userID)?link_id=\(linkID)") else {
             print("invalid url")
             return
         }
@@ -321,10 +353,12 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
-    //PATCH
-    //자료 수정 -> query: user idex, link id
-    func modifyData(userID: Int, linkID: Int, categoryId: Int) {
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data/\(userID)?link_id=\(linkID)") else {
+    //======PATCH======
+    //자료 수정
+    //query: user idex, link id
+    //body: category id
+    func modifyDatasCategory(userID: Int, linkID: Int, categoryId: Int) {
+        guard let url = URL(string: "\(baseUrl)/auth/data/\(userID)?link_id=\(linkID)") else {
             print("invalid url")
             return
         }
@@ -352,9 +386,11 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
-    //마이 페이지 -> query: user id
+    //======GET=======
+    //마이 페이지
+    //query: user id
     func getMyPageData(userID: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/mypage?id=\(userID)") else {
+        guard let url = URL(string: "\(baseUrl)/auth/user/mypage?id=\(userID)") else {
             print("invalid url")
             return
         }
@@ -376,5 +412,4 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
-
 }

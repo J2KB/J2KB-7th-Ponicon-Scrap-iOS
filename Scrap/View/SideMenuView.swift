@@ -100,9 +100,9 @@ struct SideMenuView: View {
                                 .onTapGesture { //클릭하면 현재 categoryID
                                     self.selected = category.categoryId
                                     if category.order == 0 {
-                                        vm.getAllData(userID: userVM.userIdx)
+                                        vm.getAllData(userID: userVM.userIdx) //📡 카테고리에 해당하는 자료 가져오는 통신
                                     } else {
-                                        vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
+                                        vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq") //📡 카테고리에 해당하는 자료 가져오는 통신
                                     }
                                     withAnimation(.easeInOut.delay(0.3)){
                                         isShowingCateogry = false
@@ -157,6 +157,9 @@ struct SideMenuView: View {
                 }
             }
             .background(.white)
+        }
+        .onAppear {
+            print("🚨🚨SideMenuView 나타남🚨🚨")
         }
     }
 

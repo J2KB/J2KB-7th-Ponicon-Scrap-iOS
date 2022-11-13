@@ -250,7 +250,8 @@ struct SignUpView: View {
                         }
                         if isValidSignUp() { //회원가입 모든 조건 통과
                             movingToSignUp = false //LoginView로 이동 -> 위 코드랑 같이 조건 체크 통과시에만
-                            vm.postSignUp(email: id, password: pw, name: username) //모든 조건 통과한 경우에만 POST 통신
+                            //모든 조건 통과한 경우에만 POST 통신
+                            vm.postSignUp(email: id, password: pw, name: username) //📡 SignUp API
                         }
                     }){
                         Text("회원가입")

@@ -70,14 +70,14 @@ struct MainHomeView: View {
         }
         .onAppear{ //MainHomeView 등장하면 api 통신
             userVM.userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ? userVM.userIdx : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
-            print("user idx: \(userVM.userIdx)")
+//            print("user idx: \(userVM.userIdx)")
             scrapVM.getCategoryData(userID: userVM.userIdx)
             if self.selected == 0 {
                 scrapVM.getAllData(userID: userVM.userIdx)
             } else {
                 scrapVM.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
             }
-            print("Main Home View")
+            print("🚨🚨Main Home View 나타남🚨🚨")
         }
 //        .gesture(DragGesture().onEnded({
 //            if $0.translation.width < -100 {

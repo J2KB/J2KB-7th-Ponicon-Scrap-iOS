@@ -65,16 +65,19 @@ struct LogOutModel: Decodable{
 }
 
 class UserViewModel: ObservableObject{
-    @Published var loginState = false
-    @Published var loginToastMessage = ""
-    @Published var userIdx = 0 //initial value
-    @Published var iconIdx = 0 //initial value
-    @Published var duplicate = false
-
-    //POST
+    @Published var loginState = false               //로그인 상태 변수
+    @Published var loginToastMessage = ""           //로그인 토스트 메세지
+    @Published var userIdx = 0 //initial value      //사용자 idx
+    @Published var iconIdx = 0 //initial value      //사용자 아이콘 idx
+    @Published var duplicate = false                //이메일 중복 상태 변수
+    
+    private let baseUrl = "https://scrap.hana-umc.shop/user"
+    
+    //=========POST=========
     //로그인
+    //body: userid/pw/autoLogin
     func postLogin(userid: String, password: String, autoLogin: Bool){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/user/login") else {
+        guard let url = URL(string: "\(baseUrl)/login") else {
             print("invalid url")
             return
         }
@@ -97,10 +100,10 @@ class UserViewModel: ObservableObject{
                     let result = try decoder.decode(LoginModel.self, from: data)
                     DispatchQueue.main.async {
                         if let response = response as? HTTPURLResponse {
-                            if response.statusCode != 200 {
+                            if response.statusCode != 200 { //통신 실패 시
                                 self.loginState = false
                                 self.loginToastMessage = result.message
-                            } else {
+                            } else {                        //통신 성공 시
                                 self.loginState = true
                                 self.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
                                 self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
@@ -111,7 +114,7 @@ class UserViewModel: ObservableObject{
                                     print("save user idx, iconIdx to UserDefaults")
                                     print(self.iconIdx)
                                 }
-                                print("UserDefaults에 저장된 ID 값은? \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID"))")
+                                print("UserDefaults에 저장된 ID 값은? \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0)")
                             }
                         }
                     }
@@ -125,10 +128,12 @@ class UserViewModel: ObservableObject{
             }
         }.resume()
     }
+    
     //카카오로그인
+    //body: accessToken/refreshToken/autoLogin
     func postKaKaoLogin(accessToken: String, refreshToken: String, autoLogin: Bool){
         print("kakao login")
-        guard let url = URL(string: "https://scrap.hana-umc.shop/user/login/kakao/v2") else {
+        guard let url = URL(string: "\(baseUrl)/login/kakao/v2") else {
             print("invalid url")
             return
         }
@@ -162,7 +167,8 @@ class UserViewModel: ObservableObject{
                                     print("save user idx, iconIdx to UserDefaults")
                                     print(self.iconIdx)
                                 }
-                                print("UserDefaults에 저장된 ID 값은? \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID"))")                            }
+                                print("UserDefaults에 저장된 ID 값은? \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0)")
+                            }
                         }
                     }
                     print(result)
@@ -175,9 +181,11 @@ class UserViewModel: ObservableObject{
             }
         }.resume()
     }
+    
     //회원가입
+    //body: email/pw/name
     func postSignUp(email: String, password: String, name: String){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/user/join") else {
+        guard let url = URL(string: "\(baseUrl)/join") else {
             print("invalid url")
             return
         }
@@ -206,10 +214,11 @@ class UserViewModel: ObservableObject{
             }
         }.resume()
     }
-    //GET
+    
+    //=========GET=========
     //로그아웃
     func logOut(){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/user/logout") else {
+        guard let url = URL(string: "\(baseUrl)/logout") else {
             print("invalid url")
             return
         }
@@ -237,9 +246,11 @@ class UserViewModel: ObservableObject{
             }
         }.resume()
     }
+    
     //이메일 중복확인
+    //query: email
     func checkDuplication(email: String){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/user/dupulication?id=\(email)") else {
+        guard let url = URL(string: "\(baseUrl)/dupulication?id=\(email)") else {
             print("invalid url")
             return
         }
