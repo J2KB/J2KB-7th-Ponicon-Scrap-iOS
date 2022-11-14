@@ -15,6 +15,7 @@ struct CategoryRow: View {
     @Binding var selected : Int
     @State private var isChangeRow = true
     @State private var isPresentHalfModal = false
+    @Binding var selectedOrder : Int
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @EnvironmentObject var userVM : UserViewModel //여기서 로그아웃
     @Environment(\.colorScheme) var scheme //Light/Dark mode
@@ -41,6 +42,7 @@ struct CategoryRow: View {
             }
             .onTapGesture {
                 self.selected = category.categoryId
+                self.selectedOrder = category.order
                 self.isEditing = false //edit mode 아님
                 self.isChangeRow = true
                 UserDefaults(suiteName: "group.com.thk.Scrap")?.set(selected, forKey: "lastCategory") //마지막 카테고리 id 저장
@@ -107,7 +109,7 @@ struct CategoryRow: View {
 
 struct CategoryRow_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryRow(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), isShowingCateogry: .constant(true), selected: .constant(0))
+        CategoryRow(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), isShowingCateogry: .constant(true), selected: .constant(0), selectedOrder: .constant(0))
 //            .preferredColorScheme(.dark)
     }
 }

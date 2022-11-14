@@ -39,6 +39,7 @@ struct SideMenuView: View {
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @EnvironmentObject var userVM : UserViewModel //ScrapApp에서 연결받은 EnvironmentObject
     @Binding var selected : Int
+    @Binding var selectedOrder : Int
     @Environment(\.colorScheme) var scheme //Light/Dark mode
 
     
@@ -103,6 +104,7 @@ struct SideMenuView: View {
                                 .listRowBackground(self.selected == category.categoryId ? (scheme == .light ? .gray_sub : .black_accent) : scheme == .light ? Color(.white) : .black_bg)
                                 .onTapGesture { //클릭하면 현재 categoryID
                                     self.selected = category.categoryId
+                                    self.selectedOrder = category.order
                                     if category.order == 0 {
                                         vm.getAllData(userID: userVM.userIdx) //📡 카테고리에 해당하는 자료 가져오는 통신
                                     } else {
@@ -116,7 +118,7 @@ struct SideMenuView: View {
                         }
                         ForEach($categoryList.categories) { $category in
                             if category.order != 0 && category.order != 1 {
-                                CategoryRow(category: $category, isShowingCateogry: $isShowingCateogry, selected: $selected)
+                                CategoryRow(category: $category, isShowingCateogry: $isShowingCateogry, selected: $selected, selectedOrder: $selectedOrder)
                                 .onDrag {
                                     self.dragging = category
                                     return NSItemProvider(object: NSString())
@@ -179,7 +181,7 @@ struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
         SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 0),
            CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2),
-           CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCateogry: .constant(true), selected: .constant(0))
+                                                                                  CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCateogry: .constant(true), selected: .constant(0), selectedOrder: .constant(0))
             .environmentObject(ScrapViewModel())
             .preferredColorScheme(.dark)
 //        MainHomeView(popRootView: .constant(true))

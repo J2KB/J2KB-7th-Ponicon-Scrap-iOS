@@ -64,14 +64,20 @@ struct LogOutModel: Decodable{
     }
 }
 
+struct FailModel: Decodable {
+    let code: Int
+    let message: String
+}
+
 class UserViewModel: ObservableObject{
     @Published var loginState = false               //로그인 상태 변수
-    @Published var loginToastMessage = ""           //로그인 토스트 메세지
     @Published var userIdx = 0 //initial value      //사용자 idx
     @Published var iconIdx = 0 //initial value      //사용자 아이콘 idx
     @Published var duplicate = false                //이메일 중복 상태 변수
     
     private let baseUrl = "https://scrap.hana-umc.shop/user"
+    
+    private let decoder = JSONDecoder()
     
     //=========POST=========
     //로그인
@@ -94,38 +100,71 @@ class UserViewModel: ObservableObject{
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            do{
+            DispatchQueue.main.async {
                 if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(LoginModel.self, from: data)
-                    DispatchQueue.main.async {
-                        if let response = response as? HTTPURLResponse {
-                            if response.statusCode != 200 { //통신 실패 시
-                                self.loginState = false
-                                self.loginToastMessage = result.message
-                            } else {                        //통신 성공 시
-                                self.loginState = true
-                                self.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
-                                self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
-                                print("user idx: \(self.userIdx)")
-                                if autoLogin { //autoLogin일 때만 저장
-                                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(result.result.id, forKey: "ID") //login해서 받은 id를 user defaults에 저장
-                                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx") //login했을 때 생성한 랜덤 icon idx를 user defaults에 저장
-                                    print("save user idx, iconIdx to UserDefaults")
-                                    print(self.iconIdx)
-                                }
-                                print("UserDefaults에 저장된 ID 값은? \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0)")
+                    guard let httpResponse = response as? HTTPURLResponse else {return}
+                    if httpResponse.statusCode != 200 { //로그인 실패
+                        self.loginState = false
+//                        do{
+//                            let failMessage = try self.decoder.decode(FailModel.self, from: data)
+//                            self.loginToastMessage = failMessage.message
+//                        } catch let error {
+//                            print("error")
+//                            print(String(describing: error))
+//                        }
+                    } else { //로그인 성공
+                        do {
+                            let result = try self.decoder.decode(LoginModel.self, from: data)
+                            self.loginState = true
+                            self.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
+                            self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
+                            print("user idx: \(self.userIdx)")
+                            if autoLogin { //autoLogin일 때만 저장
+                                UserDefaults(suiteName: "group.com.thk.Scrap")?.set(result.result.id, forKey: "ID") //login해서 받은 id를 user defaults에 저장
+                                UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx") //login했을 때 생성한 랜덤 icon idx를 user defaults에 저장
+                                print("save user idx, iconIdx to UserDefaults")
+                                print(self.iconIdx)
                             }
+                            print("UserDefaults에 저장된 ID 값은? \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0)")
+                        } catch let error {
+                            print("error")
+                            print(String(describing: error))
                         }
                     }
-                    print(result)
-                } else {
-                    print("no data")
                 }
-            }catch (let error){
-                print("🚨🚨error🚨🚨")
-                print(String(describing: error))
             }
+//            do{
+//                if let data = data {
+//                    let decoder = JSONDecoder()
+//                    let result = try decoder.decode(LoginModel.self, from: data)
+//                    DispatchQueue.main.async {
+//                        if let response = response as? HTTPURLResponse {
+//                            if response.statusCode != 200 { //통신 실패 시
+//                                self.loginState = false
+//                                self.loginToastMessage = result.message
+//                            } else {                        //통신 성공 시
+//                                self.loginState = true
+//                                self.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
+//                                self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
+//                                print("user idx: \(self.userIdx)")
+//                                if autoLogin { //autoLogin일 때만 저장
+//                                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(result.result.id, forKey: "ID") //login해서 받은 id를 user defaults에 저장
+//                                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx") //login했을 때 생성한 랜덤 icon idx를 user defaults에 저장
+//                                    print("save user idx, iconIdx to UserDefaults")
+//                                    print(self.iconIdx)
+//                                }
+//                                print("UserDefaults에 저장된 ID 값은? \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0)")
+//                            }
+//                        }
+//                    }
+//                    print(result)
+//                } else {
+//                    print("no data")
+//                }
+//            }catch (let error){
+//                print("🚨🚨error🚨🚨")
+//                print(String(describing: error))
+//            }
         }.resume()
     }
     
@@ -155,7 +194,6 @@ class UserViewModel: ObservableObject{
                         if let response = response as? HTTPURLResponse {
                             if response.statusCode != 200 {
                                 self.loginState = false
-                                self.loginToastMessage = result.message
                             } else {
                                 self.loginState = true
                                 self.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)

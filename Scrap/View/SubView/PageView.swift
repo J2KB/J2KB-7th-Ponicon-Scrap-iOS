@@ -17,6 +17,7 @@ struct PageView: View {
     @State private var isPresentHalfModal = false
     @State private var isShowMovingCategory = false
     @Binding var currentCategory : Int
+    @Binding var currentCatOrder : Int
     @Environment(\.colorScheme) var scheme //Light/Dark mode
 
     var body: some View {
@@ -142,16 +143,18 @@ struct PageView: View {
                             .foregroundColor(.black)
                         }
                         Section {
-                            Button(action: {
-                                self.isPresentHalfModal = false
-                                self.isShowMovingCategory = true
-                            }) {
-                                NavigationLink(destination: MoveCategoryView(categoryList: $vm.categoryList.result, data: $data, currentCategory: $currentCategory).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){
-                                    Label("카테고리 이동", systemImage: "arrow.turn.down.right")
-                                        .foregroundColor(.black)
+                            if currentCatOrder != 0 { //전체 자료는 카테고리 이동 불가
+                                Button(action: {
+                                    self.isPresentHalfModal = false
+                                    self.isShowMovingCategory = true
+                                }) {
+                                    NavigationLink(destination: MoveCategoryView(categoryList: $vm.categoryList.result, data: $data, currentCategory: $currentCategory).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){
+                                        Label("카테고리 이동", systemImage: "arrow.turn.down.right")
+                                            .foregroundColor(.black)
+                                    }
                                 }
+                                .foregroundColor(.black)
                             }
-                            .foregroundColor(.black)
                             Button(action:{
                                 vm.deleteData(userID: userVM.userIdx, linkID: data.linkId!)
 //                                vm.removeData(linkID: data.linkId!)
@@ -178,7 +181,7 @@ struct PageView: View {
 
 struct PageView_Previews: PreviewProvider {
     static var previews: some View {
-        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), isOneCol: .constant(true), currentCategory: .constant(0))
+        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), isOneCol: .constant(true), currentCategory: .constant(0), currentCatOrder: .constant(0))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
             .preferredColorScheme(.dark)

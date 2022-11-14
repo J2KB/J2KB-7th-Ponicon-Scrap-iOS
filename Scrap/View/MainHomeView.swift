@@ -18,6 +18,7 @@ struct MainHomeView: View {
 //    @Binding var autoLogin : Bool
     @Environment(\.colorScheme) var scheme //Light/Dark mode
     @State private var selected = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "lastCategory") ?? 0 //last category id 가져오기
+    @State private var selectedOrder = 0
     
     //만약 categoryList안에 아무것도 없다면 전체 자료를 나타내야 됨
     var categoryTitle : String {
@@ -28,7 +29,7 @@ struct MainHomeView: View {
         ZStack{
             //Main Home
             NavigationView{
-                SubHomeView(datas: $scrapVM.dataList.result, currentCategory: $selected) //⭐️여기로 category 데이터 넘겨줘야 됨
+                SubHomeView(datas: $scrapVM.dataList.result, currentCategory: $selected, currentCategoryOrder: $selectedOrder) //⭐️여기로 category 데이터 넘겨줘야 됨
                 .navigationBarTitle("", displayMode: .inline)
                 .toolbar{
                     ToolbarItem(placement: .navigationBarLeading){
@@ -65,7 +66,7 @@ struct MainHomeView: View {
                 }
             }
             //Drawer
-            SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCateogry: $isShowingCategory, selected: $selected)
+            SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCateogry: $isShowingCategory, selected: $selected, selectedOrder: $selectedOrder)
                 .offset(x: isShowingCategory ? 0 : -UIScreen.main.bounds.width - 5)
         }
         .background(scheme == .light ? .white : .black_bg)

@@ -12,7 +12,7 @@ struct SubHomeView: View {
     @State private var isRecent = true;
     @Binding var datas : DataResponse.Result
     @Binding var currentCategory : Int
-//    @Binding var currentCategoryOrder : Int
+    @Binding var currentCategoryOrder : Int
     @Environment(\.colorScheme) var scheme //Light/Dark mode
 
     var body: some View {
@@ -39,12 +39,12 @@ struct SubHomeView: View {
                 LazyVGrid(columns: isOneCol ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: UIScreen.main.bounds.width / 2.5))], spacing: 10){
                     if isRecent {
                         ForEach($datas.links.reversed()) { data in
-                            PageView(data: data, isOneCol: $isOneCol, currentCategory: $currentCategory)
+                            PageView(data: data, isOneCol: $isOneCol, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
                                 .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                         }
                     }else {
                         ForEach($datas.links) { data in
-                            PageView(data: data, isOneCol: $isOneCol, currentCategory: $currentCategory)
+                            PageView(data: data, isOneCol: $isOneCol, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
                                 .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                         }
                     }

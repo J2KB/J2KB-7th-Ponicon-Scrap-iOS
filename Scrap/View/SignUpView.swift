@@ -9,20 +9,27 @@ import SwiftUI
 import Combine
 
 struct SignUpView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode> //pop
     @EnvironmentObject var vm : UserViewModel
+    @Binding var movingToSignUp : Bool
+    @State private var checkInfo = [9,9,9,9]
     @State private var username = ""
     @State private var id = ""
     @State private var pw = ""
     @State private var checkPW = ""
     let maxUserName = 30
     let maxIdPw = 16
-    @Binding var movingToSignUp : Bool
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode> //pop
-    
-    let toastMessages = [0 : "한글 또는 영어로만 이뤄질 수 있습니다", 1: "이름을 입력하세요", 2: "5~15자의 영문 소문자, 숫자를 포함해야 합니다",
-                         3: "이메일을 입력하세요", 4: "이미 가입된 이메일입니다", 5: "비밀번호를 입력하세요", 6: "5~15자의 영어, 숫자를 포함해야 합니다",
-                         7: "비밀번호와 일치하지 않습니다", 8: "비밀번호 확인을 입력하세요", 9: "", 10: "이메일 형식으로 입력해주세요"] //Dictionary 형태로 메세지 모음
-    @State private var checkInfo = [9,9,9,9]
+    let toastMessages = [0 : "한글 또는 영어로만 이뤄질 수 있습니다",
+                         1: "이름을 입력하세요",
+                         2: "5~15자의 영문 소문자, 숫자를 포함해야 합니다",
+                         3: "이메일을 입력하세요",
+                         4: "이미 가입된 이메일입니다",
+                         5: "비밀번호를 입력하세요",
+                         6: "5~15자의 영어, 숫자를 포함해야 합니다",
+                         7: "비밀번호와 일치하지 않습니다",
+                         8: "비밀번호 확인을 입력하세요",
+                         9: "",
+                         10: "이메일 형식으로 입력해주세요"] //Dictionary 형태로 메세지 모음
     
     var backButton : some View { //custom back button
         Button(action: {
@@ -46,6 +53,7 @@ struct SignUpView: View {
 //        return pred.evaluate(with: name)
 //    }
     
+    //email 형식이 맞는지 체크
     func isValidEmail(email:String) -> Bool {
        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
