@@ -12,7 +12,9 @@ struct SubHomeView: View {
     @State private var isRecent = true;
     @Binding var datas : DataResponse.Result
     @Binding var currentCategory : Int
-    
+//    @Binding var currentCategoryOrder : Int
+    @Environment(\.colorScheme) var scheme //Light/Dark mode
+
     var body: some View {
         VStack{
             ScrollView(.vertical, showsIndicators: false){
@@ -50,6 +52,7 @@ struct SubHomeView: View {
                 .padding(.horizontal, isOneCol ? 0 : 8)
             }//ScrollView
         }//VStack
+        .background(scheme == .light ? .white : .black_bg)
         .onAppear{
             UITableView.appearance().backgroundColor = .clear
         }
@@ -58,8 +61,9 @@ struct SubHomeView: View {
 
 struct SubHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        MainHomeView(popRootView: .constant(true), autoLogin: .constant(true))
+        MainHomeView()
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
+            .preferredColorScheme(.dark)
     }
 }

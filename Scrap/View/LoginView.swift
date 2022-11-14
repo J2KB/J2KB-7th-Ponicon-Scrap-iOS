@@ -20,27 +20,29 @@ struct LoginView: View {
     @State var timeRemaining = 0.01
     let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
     @State private var autoLogin = false
-    let userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID")
+//    let userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID")
+    @Environment(\.colorScheme) var scheme //Light/Dark mode
 
     var body: some View {
         NavigationView{
-            if /*autoLogin*/userIdx != 0 { //자동 로그인의 경우, 바로 HomeView로 이동
-                NavigationLink("", destination: MainHomeView(popRootView: $popRootView, autoLogin: $autoLogin).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $popRootView)
-                .onReceive(timer) { _ in
-                    if timeRemaining > 0 {
-                        timeRemaining -= 0.01
-                    }
-                    if timeRemaining == 0 { //0.1 시간 지나면 화면 이동하기
-                        self.popRootView = true
-                    }
-                }
-            }
-            else { //no autoLogin
+//            if /*autoLogin*/userIdx != 0 { //자동 로그인의 경우, 바로 HomeView로 이동
+//                NavigationLink("", destination: MainHomeView(popRootView: $popRootView, autoLogin: $autoLogin).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $popRootView)
+//                .onReceive(timer) { _ in
+//                    if timeRemaining > 0 {
+//                        timeRemaining -= 0.01
+//                    }
+//                    if timeRemaining == 0 { //0.1 시간 지나면 화면 이동하기
+//                        self.popRootView = true
+//                    }
+//                }
+//            }
+//            else { //no autoLogin
                 VStack{
                     VStack(spacing: 8){
                         VStack(spacing: 64){
                             Text("스크랩")
                                 .font(.system(size: 64, weight: .bold))
+                                .foregroundColor(scheme == .light ? .black : .gray_sub)
                                 .multilineTextAlignment(.center)
                                 .padding(.top, UIScreen.main.bounds.height / 40)
                             VStack(spacing: 16){ // id/pw textfield
@@ -151,7 +153,7 @@ struct LoginView: View {
                                 .background(Color("main_accent"))
                                 .cornerRadius(12)
                         }
-                        NavigationLink("", destination: MainHomeView(popRootView: $popRootView, autoLogin: $autoLogin).navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $userVM.loginState)
+                        NavigationLink("", destination: MainHomeView().navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $userVM.loginState)
                         HStack{
                             Rectangle()
                                 .frame(width: UIScreen.main.bounds.width/3.5, height: 1)
@@ -199,10 +201,8 @@ struct LoginView: View {
                     }
                     .padding(.top, 20)
                 }
-            }
-        }
-        .onAppear {
-            print("Login View")
+//                .background(scheme == .light ? .white : .black_bg)
+//            }
         }
     }
 }
@@ -212,6 +212,7 @@ struct ContentView_Previews: PreviewProvider {
         LoginView(/*autoLogin: .constant(true)*/)
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
+//            .preferredColorScheme(.dark)
     }
 }
 

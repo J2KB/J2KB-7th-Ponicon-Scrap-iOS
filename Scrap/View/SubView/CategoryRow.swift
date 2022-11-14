@@ -17,7 +17,8 @@ struct CategoryRow: View {
     @State private var isPresentHalfModal = false
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @EnvironmentObject var userVM : UserViewModel //여기서 로그아웃
-    
+    @Environment(\.colorScheme) var scheme //Light/Dark mode
+
     var title: String {
         var cnt = 0
         var tmp = category.name
@@ -34,11 +35,9 @@ struct CategoryRow: View {
                 Text(title)
                     .font(.system(size: 16))
                     .frame(width: UIScreen.main.bounds.width - 120, alignment: .leading)
-                    .foregroundColor(.black)
                 Text("\(category.numOfLink)")
                     .font(.system(size: 16))
                     .frame(width: 30, alignment: .trailing)
-                .foregroundColor(.black)
             }
             .onTapGesture {
                 self.selected = category.categoryId
@@ -63,7 +62,7 @@ struct CategoryRow: View {
             .frame(width: 24, height: 32)
         }
         .padding(.leading, 10)
-        .listRowBackground(self.selected == category.categoryId ? .gray_sub : Color(.white))
+        .listRowBackground(self.selected == category.categoryId ? (scheme == .light ? .gray_sub : .black_accent) : scheme == .light ? Color(.white) : .black_bg)
 //        .alert("카테고리 이름 수정", isPresented: $isPresentHalfModal, actions: {
 //            TextField("수정할 카테고리 이름", text: $category.name)
 //            Button("취소", role: .cancel) {}
@@ -109,5 +108,6 @@ struct CategoryRow: View {
 struct CategoryRow_Previews: PreviewProvider {
     static var previews: some View {
         CategoryRow(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), isShowingCateogry: .constant(true), selected: .constant(0))
+//            .preferredColorScheme(.dark)
     }
 }

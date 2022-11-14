@@ -39,6 +39,8 @@ struct SideMenuView: View {
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @EnvironmentObject var userVM : UserViewModel //ScrapApp에서 연결받은 EnvironmentObject
     @Binding var selected : Int
+    @Environment(\.colorScheme) var scheme //Light/Dark mode
+
     
     var body: some View {
         ScrollViewReader { proxy in
@@ -54,11 +56,12 @@ struct SideMenuView: View {
                             Image(systemName: "chevron.backward")
                                 .resizable()
                                 .frame(width: 10, height: 16)
-                                .foregroundColor(.black)
+                                .foregroundColor(scheme == .light ? .black : .gray_sub)
                         }
                         Text("카테고리")
                             .font(.system(size: 18, weight: .semibold))
                             .frame(width: 70, height: 20, alignment: .leading)
+                            .foregroundColor(scheme == .light ? .black : .gray_sub)
                     }
                     Spacer()
                     Button(action: {
@@ -73,7 +76,7 @@ struct SideMenuView: View {
                         Image(systemName: isAddingCategory ? "xmark" : "plus")
                             .resizable()
                             .frame(width: 16, height: 16)
-                            .foregroundColor(.black)
+                            .foregroundColor(scheme == .light ? .black : .gray_sub)
                     }
                     .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 2))
                 }
@@ -81,7 +84,8 @@ struct SideMenuView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 10)
                 .padding(.top, 4)
-                .background(.white)
+                .background(scheme == .light ? .white : .black_bg)
+
                 //Category LIST
                 VStack{
                     List{
@@ -96,7 +100,7 @@ struct SideMenuView: View {
                                         .frame(width: 30, alignment: .trailing)
                                 }
                                 .padding(.leading, 10)
-                                .listRowBackground(self.selected == category.categoryId ? .gray_sub : Color(.white))
+                                .listRowBackground(self.selected == category.categoryId ? (scheme == .light ? .gray_sub : .black_accent) : scheme == .light ? Color(.white) : .black_bg)
                                 .onTapGesture { //클릭하면 현재 categoryID
                                     self.selected = category.categoryId
                                     if category.order == 0 {
@@ -156,7 +160,7 @@ struct SideMenuView: View {
                     .listStyle(PlainListStyle())
                 }
             }
-            .background(.white)
+            .background(scheme == .light ? .white : .black_bg)
         }
         .onAppear {
             print("🚨🚨SideMenuView 나타남🚨🚨")
@@ -177,6 +181,7 @@ struct SideMenuView_Previews: PreviewProvider {
            CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2),
            CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCateogry: .constant(true), selected: .constant(0))
             .environmentObject(ScrapViewModel())
+            .preferredColorScheme(.dark)
 //        MainHomeView(popRootView: .constant(true))
 //            .environmentObject(ScrapViewModel())
 //            .environmentObject(UserViewModel())

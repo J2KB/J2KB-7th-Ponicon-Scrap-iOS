@@ -15,10 +15,10 @@ struct MainHomeView: View {
     @EnvironmentObject var userVM : UserViewModel //ScrapApp에서 연결받은 EnvironmentObject
     @State private var isShowingCategory = false
     @State private var isShowingMyPage = false
-    @Binding var popRootView : Bool //로그아웃시 LoginView로 pop!
-    @Binding var autoLogin : Bool
+//    @Binding var autoLogin : Bool
+    @Environment(\.colorScheme) var scheme //Light/Dark mode
     @State private var selected = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "lastCategory") ?? 0 //last category id 가져오기
-        
+    
     //만약 categoryList안에 아무것도 없다면 전체 자료를 나타내야 됨
     var categoryTitle : String {
         return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"
@@ -41,7 +41,7 @@ struct MainHomeView: View {
                                 Image(systemName: "line.3.horizontal")
                                     .resizable()
                                     .frame(width: 20, height: 14)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(scheme == .light ? .black : .gray_sub)
                             }
                             Text(categoryTitle)
                                 .fontWeight(.bold)
@@ -51,13 +51,13 @@ struct MainHomeView: View {
                 .toolbar{
                     ToolbarItem(placement: .navigationBarTrailing){
                         VStack{
-                            NavigationLink(destination: MyPageView(userData: $scrapVM.user.result, popRootView: $popRootView, isShowingMyPage: $isShowingMyPage, autoLogin: $autoLogin), isActive: $isShowingMyPage) {
+                            NavigationLink(destination: MyPageView(userData: $scrapVM.user.result, isShowingMyPage: $isShowingMyPage).navigationBarHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowingMyPage) {
                                 Button(action: {
                                     self.isShowingMyPage.toggle()
                                     scrapVM.getMyPageData(userID: userVM.userIdx)
                                 }) {
                                     Image(systemName: "person.circle")
-                                        .foregroundColor(.black)
+                                        .foregroundColor(scheme == .light ? .black : .gray_sub)
                                 }
                             }
                         }
@@ -66,14 +66,14 @@ struct MainHomeView: View {
             }
             //Drawer
             SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCateogry: $isShowingCategory, selected: $selected)
-                .offset(x: isShowingCategory ? 0 : -UIScreen.main.bounds.width)
+                .offset(x: isShowingCategory ? 0 : -UIScreen.main.bounds.width - 5)
         }
+        .background(scheme == .light ? .white : .black_bg)
         .onAppear{ //MainHomeView 등장하면 api 통신
             userVM.userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ? userVM.userIdx : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
-//            print("user idx: \(userVM.userIdx)")
             scrapVM.getCategoryData(userID: userVM.userIdx)
             if self.selected == 0 {
-                scrapVM.getAllData(userID: userVM.userIdx)
+            scrapVM.getAllData(userID: userVM.userIdx)
             } else {
                 scrapVM.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
             }
@@ -95,8 +95,9 @@ struct MainHomeView: View {
 
 struct MainHomeView_Previews: PreviewProvider { 
     static var previews: some View {
-        MainHomeView(popRootView: .constant(true), autoLogin: .constant(true))
+        MainHomeView()
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
+//            .preferredColorScheme(.dark)
     }
 }

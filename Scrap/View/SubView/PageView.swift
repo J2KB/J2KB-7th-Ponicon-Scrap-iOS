@@ -17,6 +17,7 @@ struct PageView: View {
     @State private var isPresentHalfModal = false
     @State private var isShowMovingCategory = false
     @Binding var currentCategory : Int
+    @Environment(\.colorScheme) var scheme //Light/Dark mode
 
     var body: some View {
         VStack(spacing: 0){
@@ -27,19 +28,18 @@ struct PageView: View {
                         if let Url = url {
                             Link(destination: Url, label:{
                                 Rectangle()
-                                    .foregroundColor(.light_blue)
+                                    .foregroundColor(scheme == .light ? .light_blue : .black_light)
                                     .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
                                     .cornerRadius(10, corners: .topLeft)
                                     .cornerRadius(10, corners: .topRight)
                                     .shadow(radius: 2)
                             })
-                            .foregroundColor(.black)
                         }
                     }
                     ZStack{
                         Rectangle()
                             .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 5) : (UIScreen.main.bounds.width / 2.5) / 2.3)
-                            .foregroundColor(.white)
+                            .foregroundColor(scheme == .light ? .white : .black_accent)
                             .cornerRadius(10, corners: .bottomLeft)
                             .cornerRadius(10, corners: .bottomRight)
                             .shadow(radius: 2)
@@ -47,11 +47,12 @@ struct PageView: View {
                             Text(data.title ?? "")
                                 .lineLimit(2)
                                 .font(.system(size: 13, weight: .medium))
+                                .foregroundColor(scheme == .light ? .black : .gray_sub)
                                 .frame(width: isOneCol ? UIScreen.main.bounds.width - 90 : UIScreen.main.bounds.width / 3 - 14, height: 40, alignment: .topLeading)
                                 .padding(.trailing, 40)
                             Text(data.domain ?? "") //출처 -> link에서 자르기
                                 .font(.caption)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.gray_sub)
                                 .lineLimit(1)
                                 .padding(.horizontal, 5)
                                 .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, alignment: .leading)
@@ -70,7 +71,7 @@ struct PageView: View {
                 VStack(spacing: -2){
                     ZStack {
                         Rectangle()
-                            .foregroundColor(.light_blue)
+                            .foregroundColor(scheme == .light ? .light_blue : .black_light)
                             .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
                             .cornerRadius(10, corners: .topLeft)
                             .cornerRadius(10, corners: .topRight)
@@ -94,7 +95,7 @@ struct PageView: View {
                     ZStack{
                         Rectangle()
                             .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 5) : (UIScreen.main.bounds.width / 2.5) / 2.3)
-                            .foregroundColor(.white)
+                            .foregroundColor(scheme == .light ? .white : .black_accent)
                             .cornerRadius(10, corners: .bottomLeft)
                             .cornerRadius(10, corners: .bottomRight)
                             .shadow(radius: 2)
@@ -102,11 +103,12 @@ struct PageView: View {
                             Text(data.title ?? "")
                                 .lineLimit(2)
                                 .font(.system(size: 13, weight: .medium))
+                                .foregroundColor(scheme == .light ? .black : .gray_sub)
                                 .frame(width: isOneCol ? UIScreen.main.bounds.width - 90 : UIScreen.main.bounds.width / 3 - 14, height: 40, alignment: .topLeading)
                                 .padding(.trailing, 40)
                             Text(data.domain ?? "") //출처 -> link에서 자르기
                                 .font(.caption)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.gray_sub)
                                 .lineLimit(1)
                                 .padding(.horizontal, 5)
                                 .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, alignment: .leading)
@@ -152,7 +154,7 @@ struct PageView: View {
                             .foregroundColor(.black)
                             Button(action:{
                                 vm.deleteData(userID: userVM.userIdx, linkID: data.linkId!)
-                                vm.removeData(linkID: data.linkId!)
+//                                vm.removeData(linkID: data.linkId!)
                                 self.isPresentHalfModal = false
                             }){
                                 Label("삭제", systemImage: "trash")
@@ -176,9 +178,10 @@ struct PageView: View {
 
 struct PageView_Previews: PreviewProvider {
     static var previews: some View {
-        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), isOneCol: .constant(false), currentCategory: .constant(0))
+        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), isOneCol: .constant(true), currentCategory: .constant(0))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
+            .preferredColorScheme(.dark)
     }
 }
 
