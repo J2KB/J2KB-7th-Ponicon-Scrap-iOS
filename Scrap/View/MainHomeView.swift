@@ -99,6 +99,6 @@ struct MainHomeView_Previews: PreviewProvider {
         MainHomeView()
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
-//            .preferredColorScheme(.dark)
+            .preferredColorScheme(.dark)
     }
 }

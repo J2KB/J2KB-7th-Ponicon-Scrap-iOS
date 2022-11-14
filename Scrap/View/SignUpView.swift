@@ -9,6 +9,7 @@ import SwiftUI
 import Combine
 
 struct SignUpView: View {
+    @Environment(\.colorScheme) var scheme //Light/Dark mode
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode> //pop
     @EnvironmentObject var vm : UserViewModel
     @Binding var movingToSignUp : Bool
@@ -69,6 +70,7 @@ struct SignUpView: View {
                         HStack{
                             Text("이름")
                                 .font(.system(size: 20, weight: .semibold))
+                                .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
                             Text("*")
                                 .foregroundColor(.blue_bold)
                                 .padding(.leading, -2)
@@ -108,6 +110,7 @@ struct SignUpView: View {
                     VStack{ //이메일 입력창
                         HStack{
                             Text("이메일")
+                                .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
                                 .font(.system(size: 20, weight: .semibold))
                             Text("*")
                                 .foregroundColor(.blue_bold)
@@ -166,6 +169,7 @@ struct SignUpView: View {
                     VStack{ //비밀번호 입력창
                         HStack{
                             Text("비밀번호")
+                                .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
                                 .font(.system(size: 20, weight: .semibold))
                             Text("*")
                                 .foregroundColor(.blue_bold)
@@ -208,6 +212,7 @@ struct SignUpView: View {
                     VStack{ //비밀번호 확인 입력창
                         HStack{
                             Text("비밀번호 확인")
+                                .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
                                 .font(.system(size: 20, weight: .semibold))
                             Text("*")
                                 .foregroundColor(.blue_bold)
@@ -265,18 +270,18 @@ struct SignUpView: View {
                         Text("회원가입")
                             .font(.system(size: 16, weight: .semibold))
                             .frame(width: UIScreen.main.bounds.width / 2.2, height: 44, alignment: .center)
-                            .foregroundColor(Color.white)
+                            .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
                             .background(Color("main_accent"))
                             .cornerRadius(10)
                     }
-                    .padding(.bottom, -30)
+                    .padding(.bottom, -40)
                 }
                 .ignoresSafeArea(.keyboard)
             }
         }
         .frame(width: UIScreen.main.bounds.width, alignment: .center)
         .navigationBarTitle("",displayMode: .inline)
-        .background(.white)
+        .background(scheme == .light ? .white : .black_bg)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: backButton)
     }
@@ -290,5 +295,6 @@ struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
         SignUpView(movingToSignUp: .constant(true))
             .environmentObject(ScrapViewModel())
+            .preferredColorScheme(.dark)
     }
 }

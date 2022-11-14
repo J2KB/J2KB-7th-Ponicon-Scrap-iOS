@@ -131,6 +131,7 @@ struct PageView: View {
                 VStack{
                     Text(data.title ?? "")
                         .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
+                        .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
                     List {
                         Section {
                             Button(action:{
@@ -138,22 +139,21 @@ struct PageView: View {
                                 self.isPresentHalfModal = false
                             }){
                                 Label("링크 복사", systemImage: "doc.on.doc")
-                                    .foregroundColor(.black)
+                                    .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
                             }
-                            .foregroundColor(.black)
                         }
+                        .listRowBackground(scheme == .light ? Color(.white) : .black_bold)
                         Section {
                             if currentCatOrder != 0 { //전체 자료는 카테고리 이동 불가
                                 Button(action: {
                                     self.isPresentHalfModal = false
                                     self.isShowMovingCategory = true
                                 }) {
-                                    NavigationLink(destination: MoveCategoryView(categoryList: $vm.categoryList.result, data: $data, currentCategory: $currentCategory).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){
+                                    NavigationLink(destination: MoveCategoryView(categoryList: $vm.categoryList.result, data: $data, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){
                                         Label("카테고리 이동", systemImage: "arrow.turn.down.right")
-                                            .foregroundColor(.black)
+                                            .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
                                     }
                                 }
-                                .foregroundColor(.black)
                             }
                             Button(action:{
                                 vm.deleteData(userID: userVM.userIdx, linkID: data.linkId!)
@@ -163,13 +163,14 @@ struct PageView: View {
                                 Label("삭제", systemImage: "trash")
                                     .foregroundColor(.red)
                             }
-                            .foregroundColor(.red)
                         }
+                        .listRowBackground(scheme == .light ? Color(.white) : .black_bold)
                     }
-                    .background(Color("background"))
+                    .background(scheme == .light ? Color("background") : .black_bg)
+
                 }
                 .padding(.top, 48)
-                .background(Color("background"))
+                .background(scheme == .light ? Color("background") : .black_bg)
             }
             .ignoresSafeArea()
         }
@@ -181,7 +182,7 @@ struct PageView: View {
 
 struct PageView_Previews: PreviewProvider {
     static var previews: some View {
-        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), isOneCol: .constant(true), currentCategory: .constant(0), currentCatOrder: .constant(0))
+        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), isOneCol: .constant(true), currentCategory: .constant(0), currentCatOrder: .constant(1))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
             .preferredColorScheme(.dark)

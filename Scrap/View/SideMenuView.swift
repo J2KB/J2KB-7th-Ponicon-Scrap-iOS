@@ -86,7 +86,6 @@ struct SideMenuView: View {
                 .padding(.bottom, 10)
                 .padding(.top, 4)
                 .background(scheme == .light ? .white : .black_bg)
-
                 //Category LIST
                 VStack{
                     List{

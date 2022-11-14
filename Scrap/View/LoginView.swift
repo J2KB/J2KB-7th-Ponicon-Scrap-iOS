@@ -26,8 +26,8 @@ struct LoginView: View {
     var body: some View {
         NavigationView{
             VStack(spacing: 12){
-                VStack(spacing: 10){
-                    VStack(spacing: 64){
+                VStack(spacing: 16){
+                    VStack(spacing: 80){
                         Text("스크랩")
                             .font(.system(size: 64, weight: .bold))
                             .foregroundColor(scheme == .light ? .black : .gray_sub)
@@ -92,8 +92,8 @@ struct LoginView: View {
                         }
                     }
                     VStack(spacing: 4){ //로그인 유지 체크 박스
-                        if (!userVM.loginState && isClickedLogin) || messageIndex == 0 { //로그인 실패 -> 에러 메세지
-                            Text(message[messageIndex]) //관련 에러 메세지 출력되도록
+                        if !userVM.loginState /*&& isClickedLogin) || messageIndex == 0*/ { //로그인 실패 -> 에러 메세지
+                            Text(message[1]) //관련 에러 메세지 출력되도록
                                 .font(.caption)
                                 .foregroundColor(.red_error)
                                 .lineLimit(1)
@@ -118,10 +118,10 @@ struct LoginView: View {
                                     Image(systemName: "square")
                                         .resizable()
                                         .frame(width: 12, height: 12)
-                                        .foregroundColor(.black_bold)
+                                        .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
                                     Text("자동 로그인")
                                         .font(.system(size: 12, weight: .regular))
-                                        .foregroundColor(.black_bold)
+                                        .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
                                 }
                             }
                         }
@@ -194,7 +194,9 @@ struct LoginView: View {
                 }
                 .padding(.top, 20)
             }
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             .background(scheme == .light ? .white : .black_bg)
+            .ignoresSafeArea()
         }
     }
 }
@@ -204,7 +206,7 @@ struct ContentView_Previews: PreviewProvider {
         LoginView(/*autoLogin: .constant(true)*/)
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
-//            .preferredColorScheme(.dark)
+            .preferredColorScheme(.dark)
     }
 }
 
