@@ -11,6 +11,7 @@ struct SubHomeView: View {
     @State private var isOneCol = true;
     @State private var isRecent = true;
     @Binding var datas : DataResponse.Result
+    @Binding var isPresentHalfModal : Bool
     @Binding var currentCategory : Int
     @Binding var currentCategoryOrder : Int
     @Environment(\.colorScheme) var scheme //Light/Dark mode
@@ -19,7 +20,11 @@ struct SubHomeView: View {
         VStack{
             ScrollView(.vertical, showsIndicators: false){
                 HStack{
-                    Button(action: { self.isOneCol.toggle() }){
+                    Button(action: {
+                        if !isPresentHalfModal {
+                            self.isOneCol.toggle()
+                        }
+                    }){
                         Image(systemName: isOneCol ? "square.grid.2x2.fill" : "line.3.horizontal")
                             .resizable()
                             .frame(width: 16, height: isOneCol ? 16 : 12)
@@ -28,7 +33,11 @@ struct SubHomeView: View {
                     Text(isRecent ? "최신순" : "오래된 순") //정렬 순서에 따라 달라짐 (최신순/오래된순)
                         .font(.system(size: 14))
                         .foregroundColor(.gray)
-                    Button(action: { self.isRecent.toggle() }){
+                    Button(action: {
+                        if !isPresentHalfModal {
+                            self.isRecent.toggle()
+                        }
+                    }){
                         Image(systemName: "arrow.up.arrow.down")
                             .resizable()
                             .frame(width: 16, height: 16)
@@ -39,12 +48,12 @@ struct SubHomeView: View {
                 LazyVGrid(columns: isOneCol ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: UIScreen.main.bounds.width / 2.5))], spacing: 10){
                     if isRecent {
                         ForEach($datas.links.reversed()) { data in
-                            PageView(data: data, isOneCol: $isOneCol, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
+                            PageView(data: data, isOneCol: $isOneCol, isPresentHalfModal: $isPresentHalfModal, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
                                 .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                         }
                     }else {
                         ForEach($datas.links) { data in
-                            PageView(data: data, isOneCol: $isOneCol, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
+                            PageView(data: data, isOneCol: $isOneCol, isPresentHalfModal: $isPresentHalfModal, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
                                 .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                         }
                     }

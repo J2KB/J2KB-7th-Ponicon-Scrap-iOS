@@ -139,6 +139,7 @@ struct SideMenuView: View {
                                 .padding(.leading, 12)
                                 .frame(width: UIScreen.main.bounds.width - 120)
                                 .disableAutocorrection(true) //자동 수정 비활성화
+                                .background(scheme == .light ? .white : .black_bg)
                                 Spacer()
                                 Button(action: {
                                     vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
@@ -153,6 +154,7 @@ struct SideMenuView: View {
                                     }
                                 }
                             }
+                            .listRowBackground(scheme == .light ? Color(.white) : .black_bg)
                             .frame(width: UIScreen.main.bounds.width - 67)
                         }
                     }

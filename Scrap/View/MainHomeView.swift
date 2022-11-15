@@ -15,7 +15,7 @@ struct MainHomeView: View {
     @EnvironmentObject var userVM : UserViewModel //ScrapApp에서 연결받은 EnvironmentObject
     @State private var isShowingCategory = false
     @State private var isShowingMyPage = false
-//    @Binding var autoLogin : Bool
+    @State private var isPresentHalfModal = false
     @Environment(\.colorScheme) var scheme //Light/Dark mode
     @State private var selected = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "lastCategory") ?? 0 //last category id 가져오기
     @State private var selectedOrder = 0
@@ -29,14 +29,16 @@ struct MainHomeView: View {
         ZStack{
             //Main Home
             NavigationView{
-                SubHomeView(datas: $scrapVM.dataList.result, currentCategory: $selected, currentCategoryOrder: $selectedOrder) //⭐️여기로 category 데이터 넘겨줘야 됨
+                SubHomeView(datas: $scrapVM.dataList.result, isPresentHalfModal: $isPresentHalfModal, currentCategory: $selected, currentCategoryOrder: $selectedOrder) //⭐️여기로 category 데이터 넘겨줘야 됨
                 .navigationBarTitle("", displayMode: .inline)
                 .toolbar{
                     ToolbarItem(placement: .navigationBarLeading){
                         HStack(spacing: 2){
                             Button(action: {
-                                withAnimation(.easeInOut.delay(0.3)){
-                                    self.isShowingCategory = true
+                                if !isPresentHalfModal {
+                                    withAnimation(.easeInOut.delay(0.3)){
+                                        self.isShowingCategory = true
+                                    }
                                 }
                             }) {
                                 Image(systemName: "line.3.horizontal")
@@ -54,8 +56,10 @@ struct MainHomeView: View {
                         VStack{
                             NavigationLink(destination: MyPageView(userData: $scrapVM.user.result, isShowingMyPage: $isShowingMyPage).navigationBarHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowingMyPage) {
                                 Button(action: {
-                                    self.isShowingMyPage.toggle()
-                                    scrapVM.getMyPageData(userID: userVM.userIdx)
+                                    if !isPresentHalfModal {
+                                        self.isShowingMyPage.toggle()
+                                        scrapVM.getMyPageData(userID: userVM.userIdx)
+                                    }
                                 }) {
                                     Image(systemName: "person.circle")
                                         .foregroundColor(scheme == .light ? .black : .gray_sub)

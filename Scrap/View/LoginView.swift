@@ -12,16 +12,14 @@ struct LoginView: View {
     @Environment(\.colorScheme) var scheme //Light/Dark mode
     @EnvironmentObject var userVM : UserViewModel
     @EnvironmentObject var scrapVM : ScrapViewModel
-    @State private var id: String = ""
+    @State private var email: String = ""
     @State private var pw: String = ""
     @State private var showPW = false //비밀번호 visible, invisible
     @State private var keepLogin = false
     @State private var popRootView = false //LoginView -> MainHome -> MyPage - logout - LoginView
     @State private var movingToSignUp = false
-    let message = ["이메일/비밀번호를 입력해주세요", "이메일/비밀번호가 일치하지 않습니다"]
-    @State private var messageIndex = -1
+//    let message = ["이메일/비밀번호를 입력해주세요", "이메일/비밀번호가 일치하지 않습니다", ""]
     @State private var autoLogin = false
-    @State private var isClickedLogin = false
     
     var body: some View {
         NavigationView{
@@ -34,7 +32,7 @@ struct LoginView: View {
                             .multilineTextAlignment(.center)
                             .padding(.top, UIScreen.main.bounds.height / 40)
                         VStack(spacing: 16){ // id/pw textfield
-                            TextField("아이디", text: $id)
+                            TextField("이메일", text: $email)
                                 .textInputAutocapitalization(.never) //자동 대문자 비활성화
                                 .disableAutocorrection(true) //자동 수정 비활성화
                                 .frame(width: UIScreen.main.bounds.width / 1.5 - 24, height: 38)
@@ -92,8 +90,8 @@ struct LoginView: View {
                         }
                     }
                     VStack(spacing: 4){ //로그인 유지 체크 박스
-                        if !userVM.loginState /*&& isClickedLogin) || messageIndex == 0*/ { //로그인 실패 -> 에러 메세지
-                            Text(message[1]) //관련 에러 메세지 출력되도록
+                        if !userVM.loginState { //로그인 실패 -> 에러 메세지
+                            Text(userVM.loginToastMessage) //관련 에러 메세지 출력되도록
                                 .font(.caption)
                                 .foregroundColor(.red_error)
                                 .lineLimit(1)
@@ -130,14 +128,9 @@ struct LoginView: View {
                 }
                 VStack(spacing: 10){ //Buttons
                     Button(action:{
-                        if id.isEmpty || pw.isEmpty { //아이디/비번 비어있으면 입력할 것 toast message 출력
-                            messageIndex = 0
-                        }else {
-                            self.isClickedLogin = true
-                            userVM.postLogin(userid: id, password: pw, autoLogin: keepLogin) //📡 LogIn API
-                            id = ""
-                            pw = ""
-                        }
+                        userVM.postLogin(email: email, password: pw, autoLogin: keepLogin) //📡 LogIn API
+                        email = ""
+                        pw = ""
                     }){
                         Text("로그인")
                             .frame(width: UIScreen.main.bounds.width / 1.5, height: 40, alignment: .center)

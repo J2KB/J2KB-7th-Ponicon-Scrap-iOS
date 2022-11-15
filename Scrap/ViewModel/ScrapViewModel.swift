@@ -58,16 +58,11 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //카테고리에 따른 자료 정보를 담은 dataList 객체
     //사용자 정보를 담는 user 객체 -> 마이페이지에서 사용할 것
     @Published var dataList = DataResponse(code: 0, message: "", result: DataResponse.Result(links: [DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")]))
-//    @Published var alldataList = DataResponse(code: 0, message: "", result: DataResponse.Result(links: [DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")]))
-//    @Published var dList : [[DataResponse]] = [[]]  //2차원 배열
     @Published var user = UserResponse(code: 0, message: "", result: UserResponse.Result(name: "", username: ""))
     @Published var categoryList = CategoryResponse(code: 0, message: "", result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)]))
-
-    var failedLoginToastMessage = ""
     var categoryID = 0
     
-    //local에서 수행할 함수
-    
+    //======== 로컬 함수 ========
     //categoryList에 category 추가 함수 (카테고리 추가 기능)
     func appendCategory(newCategory: CategoryResponse.Category){
         categoryList.result.categories.append(newCategory)
@@ -78,23 +73,15 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         categoryList.result.categories.remove(at: index)
     }
     
-//    func printAll(){
-//        for i in 0..<dList.count {
-//            for j in 0..<dList[i].count {
-//                print(dList[i][j])
-//            }
-//        }
-//    }
-
     //dataList에 data 삭제 함수
-//    func removeData(linkID: Int){ //더 효율적인 방법 찾아보기
-//        for i in 0..<dataList.result.links.count {
-//            if dataList.result.links[i].linkId == linkID {
-//                dataList.result.links.remove(at: i)
-//                return
-//            }
-//        }
-//    }
+    func removeData(linkID: Int){ //더 효율적인 방법 찾아보기
+        for i in 0..<dataList.result.links.count {
+            if dataList.result.links[i].linkId == linkID {
+                dataList.result.links.remove(at: i)
+                return
+            }
+        }
+    }
 
     //categoryList의 category 위치 이동
     func moveCategory(from oldIndex: Int, to newIndex: Int) {
@@ -108,14 +95,14 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     }
     
     //categoryList의 category 이름 수정
-//    func renameCategory(id categoryID: Int, renamed rname: String){
-//        for i in 0..<categoryList.result.categories.count {
-//            if categoryList.result.categories[i].categoryId == categoryID {
-//                categoryList.result.categories[i].name = rname
-//                return
-//            }
-//        }
-//    }
+    func renameCategory(id categoryID: Int, renamed rname: String){
+        for i in 0..<categoryList.result.categories.count {
+            if categoryList.result.categories[i].categoryId == categoryID {
+                categoryList.result.categories[i].name = rname
+                return
+            }
+        }
+    }
     
     private let baseUrl = "https://scrap.hana-umc.shop"
     
@@ -293,7 +280,6 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                             let decoder = JSONDecoder()
                             let result = try decoder.decode(DataResponse.self, from: data)
                             self.dataList = result
-//                            self.dList.appendData(dataList) //2차원 배열에 넣기
                         } catch let error {
                             print("error")
                             print(String(describing: error))

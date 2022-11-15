@@ -14,7 +14,7 @@ struct PageView: View {
     @Binding var data : DataResponse.Datas
     @Binding var isOneCol : Bool
     @State private var height = 200
-    @State private var isPresentHalfModal = false
+    @Binding var isPresentHalfModal : Bool
     @State private var isShowMovingCategory = false
     @Binding var currentCategory : Int
     @Binding var currentCatOrder : Int
@@ -115,7 +115,7 @@ struct PageView: View {
                                 .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, alignment: .leading)
                         }
                         Button(action: {
-                            self.isPresentHalfModal = true //half-modal view 등장
+                            isPresentHalfModal = true //half-modal view 등장
                         }){
                             Image(systemName: "ellipsis")
                                 .rotationEffect(.degrees(90))
@@ -136,7 +136,7 @@ struct PageView: View {
                         Section {
                             Button(action:{
                                 UIPasteboard.general.setValue(data.link ?? "", forPasteboardType: UTType.plainText.identifier)
-                                self.isPresentHalfModal = false
+                                isPresentHalfModal = false
                             }){
                                 Label("링크 복사", systemImage: "doc.on.doc")
                                     .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
@@ -146,7 +146,7 @@ struct PageView: View {
                         Section {
                             if currentCatOrder != 0 { //전체 자료는 카테고리 이동 불가
                                 Button(action: {
-                                    self.isPresentHalfModal = false
+                                    isPresentHalfModal = false
                                     self.isShowMovingCategory = true
                                 }) {
                                     NavigationLink(destination: MoveCategoryView(categoryList: $vm.categoryList.result, data: $data, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){
@@ -157,8 +157,8 @@ struct PageView: View {
                             }
                             Button(action:{
                                 vm.deleteData(userID: userVM.userIdx, linkID: data.linkId!)
-//                                vm.removeData(linkID: data.linkId!)
-                                self.isPresentHalfModal = false
+                                vm.removeData(linkID: data.linkId!)
+                                isPresentHalfModal = false
                             }){
                                 Label("삭제", systemImage: "trash")
                                     .foregroundColor(.red)
@@ -182,7 +182,7 @@ struct PageView: View {
 
 struct PageView_Previews: PreviewProvider {
     static var previews: some View {
-        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), isOneCol: .constant(true), currentCategory: .constant(0), currentCatOrder: .constant(1))
+        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), isOneCol: .constant(true), isPresentHalfModal: .constant(false), currentCategory: .constant(0), currentCatOrder: .constant(1))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
             .preferredColorScheme(.dark)

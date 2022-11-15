@@ -71,6 +71,7 @@ struct FailModel: Decodable {
 
 class UserViewModel: ObservableObject{
     @Published var loginState = false               //로그인 상태 변수
+    @Published var loginToastMessage = ""
     @Published var userIdx = 0 //initial value      //사용자 idx
     @Published var iconIdx = 0 //initial value      //사용자 아이콘 idx
     @Published var duplicate = false                //이메일 중복 상태 변수
@@ -82,16 +83,16 @@ class UserViewModel: ObservableObject{
     //=========POST=========
     //로그인
     //body: userid/pw/autoLogin
-    func postLogin(userid: String, password: String, autoLogin: Bool){
+    func postLogin(email: String, password: String, autoLogin: Bool){
         guard let url = URL(string: "\(baseUrl)/login") else {
             print("invalid url")
             return
         }
         
-        let id = userid
+        let email = email
         let pw = password
         let autoLogin = autoLogin
-        let body: [String: Any] = ["username": id, "password": pw, "autoLogin": autoLogin]
+        let body: [String: Any] = ["email": email, "password": pw, "autoLogin": autoLogin]
         let finalData = try! JSONSerialization.data(withJSONObject: body)
 
         var request = URLRequest(url: url)
@@ -105,16 +106,22 @@ class UserViewModel: ObservableObject{
                     guard let httpResponse = response as? HTTPURLResponse else {return}
                     if httpResponse.statusCode != 200 { //로그인 실패
                         self.loginState = false
-//                        do{
-//                            let failMessage = try self.decoder.decode(FailModel.self, from: data)
-//                            self.loginToastMessage = failMessage.message
-//                        } catch let error {
-//                            print("error")
-//                            print(String(describing: error))
-//                        }
+                        do{
+                            let failMessage = try self.decoder.decode(FailModel.self, from: data)
+                            print(failMessage)
+                            if failMessage.code == 2001 {
+                                self.loginToastMessage = "이메일/비밀번호는 필수값입니다"
+                            } else if failMessage.code == 3003 {
+                                self.loginToastMessage = "해당하는 이메일/비밀번호가 없습니다"
+                            }
+                        } catch let error {
+                            print("error")
+                            print(String(describing: error))
+                        }
                     } else { //로그인 성공
                         do {
                             let result = try self.decoder.decode(LoginModel.self, from: data)
+                            print(result)
                             self.loginState = true
                             self.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
                             self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
@@ -293,21 +300,46 @@ class UserViewModel: ObservableObject{
             return
         }
         URLSession.shared.dataTask(with: url) { (data, response, error) in
-            do{
+            DispatchQueue.main.async {
                 if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(CheckDuplication.self, from: data)
-                    DispatchQueue.main.async {
-                        self.duplicate = result.result.isDuplicate
+                    guard let httpResponse = response as? HTTPURLResponse else {return}
+                    if httpResponse.statusCode != 200 {
+                        do {
+                            let decoder = JSONDecoder()
+                            let fail = try decoder.decode(FailModel.self, from: data)
+                            print(fail)
+                        } catch let error {
+                            print("🚨error")
+                            print(String(describing: error))
+                        }
+                    }else{
+                        do {
+                            let decoder = JSONDecoder()
+                            let result = try decoder.decode(CheckDuplication.self, from: data)
+                            self.duplicate = result.result.isDuplicate
+                            print(result)
+                        } catch let error {
+                            print("🚨🚨error")
+                            print(String(describing: error))
+                        }
                     }
-                    print(result)
-                } else {
-                    print("no data")
                 }
-            }catch (let error){
-                print("error")
-                print(String(describing: error))
             }
         }.resume()
+//            do{
+//                if let data = data {
+//                    let decoder = JSONDecoder()
+//                    let result = try decoder.decode(CheckDuplication.self, from: data)
+//                    DispatchQueue.main.async {
+//                        self.duplicate = result.result.isDuplicate
+//                    }
+//                    print(result)
+//                } else {
+//                    print("no data")
+//                }
+//            }catch (let error){
+//                print("error")
+//                print(String(describing: error))
+//            }
     }
 }
