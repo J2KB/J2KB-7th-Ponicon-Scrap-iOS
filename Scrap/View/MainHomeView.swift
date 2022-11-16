@@ -19,11 +19,8 @@ struct MainHomeView: View {
     @Environment(\.colorScheme) var scheme //Light/Dark mode
     @State private var selected = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "lastCategory") ?? 0 //last category id 가져오기
     @State private var selectedOrder = 0
-    
     //만약 categoryList안에 아무것도 없다면 전체 자료를 나타내야 됨
-    var categoryTitle : String {
-        return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"
-    }
+    var categoryTitle : String { return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"}
     
     var body: some View {
         ZStack{

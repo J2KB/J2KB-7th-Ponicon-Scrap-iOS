@@ -382,6 +382,43 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
+    //=======POST=======
+    //자료 저장
+    //query: category id, user id
+    //body: url
+    func addNewData(baseurl: String, catID: Int, userIdx: Int){
+        guard let url = URL(string: "\(baseurl)/data?id=\(userIdx)&category=\(catID)") else {
+            print("invalid url")
+            return
+        }
+
+        let baseURL = baseurl
+        let body: [String: Any] = ["baseURL" : baseURL]
+        let finalData = try! JSONSerialization.data(withJSONObject: body)
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = finalData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(NewDataModel.self, from: data)
+                    print(result)
+                    print("post saving data : SUCCESS")
+                    print(catID)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print("error")
+                print(String(describing: error))
+            }
+        }.resume()
+    }
+    
     //======GET=======
     //마이 페이지
     //query: user id

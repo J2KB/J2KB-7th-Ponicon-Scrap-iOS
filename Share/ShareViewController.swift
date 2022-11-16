@@ -43,8 +43,8 @@ class ShareViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        handleIncomingURL()
-        openMainApp()
+        handleIncomingURL()
+//        openMainApp()
     }
     
     @objc func openURL(_ url: URL) -> Bool { //create custom OpenURL
@@ -59,12 +59,11 @@ class ShareViewController: UIViewController{
     }
     
     private func openMainApp() { //open main app
-        //USerDefaults에 host app에서 자료저장하려고 scrap app으로 넘어온거라고 알려줘야됨
-//        UserDefaults(suiteName: "group.com.thk.Scrap")?.setValue(true, forKey: "isFromHostApp")
         self.extensionContext?.completeRequest(returningItems: nil, completionHandler: { _ in
             guard let url = URL(string: self.appURLString) else { return }
             _ = self.openURL(url)
         })
+        //default stubbed out code which can pass data back to the host app.
     }
     
     //URL✅, Title, ImageURL 가져오기
@@ -75,19 +74,18 @@ class ShareViewController: UIViewController{
         print(itemProvider)
         
         //pull the url out
+        //request to server with this base url
         if itemProvider.hasItemConformingToTypeIdentifier("public.url") {
             itemProvider.loadItem(forTypeIdentifier: "public.url", options: nil) { (url, error) in
                 let baseURL = url as! NSURL
                 print(baseURL)
-                //request to server with this base url
-                UserDefaults(suiteName: "group.com.thk.Scrap")?.setValue(baseURL, forKey: "WebURL")
+                //USerDefaults에 host app에서 자료저장하려고 scrap app으로 넘어온거라고 알려줘야됨
+                UserDefaults(suiteName: "group.com.thk.Scrap")?.set(baseURL.absoluteString!, forKey: "WebURL")
+                print("\(String(describing: UserDefaults(suiteName: "group.com.thk.Scrap")?.string(forKey: "WebURL")))")
+                self.openMainApp()
             }
-            openMainApp()
         }
-        //default stubbed out code which can pass data back to the host app.
-        extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
     }
-    
     
 //    override func viewDidLoad() {
 //        super.viewDidLoad()

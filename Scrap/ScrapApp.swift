@@ -14,9 +14,10 @@ struct ScrapApp: App {
     @StateObject var scrapVM = ScrapViewModel()
     @StateObject var userVM = UserViewModel()
     @StateObject var network = Network()
-    
-    var userIdx : Int {
-        return UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0
+    var userIdx : Int { return UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0 }
+    @State private var isWebUrl = true
+    var webUrl : String {
+        return UserDefaults(suiteName: "group.com.thk.Scrap")?.string(forKey: "WebURL") ?? ""
     }
     
     init(){
@@ -39,11 +40,22 @@ struct ScrapApp: App {
                             }
                         }
                 } else { //auto login o -> Main Home View
-                    MainHomeView()
-                        .navigationBarBackButtonHidden(true)
-                        .navigationBarHidden(true)
-                        .environmentObject(scrapVM)
-                        .environmentObject(userVM)
+                    if webUrl != "" {
+                        MainHomeView()
+                            .sheet(isPresented: $isWebUrl) {
+                                SaveDataView(categoryList: $scrapVM.categoryList.result)
+                            }
+                            .navigationBarBackButtonHidden(true)
+                            .navigationBarHidden(true)
+                            .environmentObject(scrapVM)
+                            .environmentObject(userVM)
+                    }else {
+                        MainHomeView()
+                            .navigationBarBackButtonHidden(true)
+                            .navigationBarHidden(true)
+                            .environmentObject(scrapVM)
+                            .environmentObject(userVM)
+                    }
                 }
             } else {
                 OfflineView()

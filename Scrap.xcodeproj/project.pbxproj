@@ -37,6 +37,7 @@
 		F8CFE8FB28FD508C005DB6F5 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */; };
 		F8CFE8FE28FD8D9F005DB6F5 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */; };
 		F8D18E4829051B16008479BA /* CategoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D18E4729051B16008479BA /* CategoryRow.swift */; };
+		F8DE0EE9292521C3007CA593 /* SaveDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DE0EE8292521C3007CA593 /* SaveDataView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 		F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		F8D18E4729051B16008479BA /* CategoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryRow.swift; sourceTree = "<group>"; };
+		F8DE0EE8292521C3007CA593 /* SaveDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveDataView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				F8740C2128C988E1009D6F8C /* PageView.swift */,
 				F8D18E4729051B16008479BA /* CategoryRow.swift */,
 				F8A8972628D2F531006CEC60 /* MoveCategoryView.swift */,
+				F8DE0EE8292521C3007CA593 /* SaveDataView.swift */,
 			);
 			path = SubView;
 			sourceTree = "<group>";
@@ -351,6 +354,7 @@
 				F8740C2A28C9BD63009D6F8C /* MyPageView.swift in Sources */,
 				F88435AA29223838007F88E7 /* RootView.swift in Sources */,
 				F89BED8828C5F1EE0053D406 /* SignUpView.swift in Sources */,
+				F8DE0EE9292521C3007CA593 /* SaveDataView.swift in Sources */,
 				F863276029068A43004982EA /* Network.swift in Sources */,
 				F8740C2828C99EB0009D6F8C /* SubHomeView.swift in Sources */,
 				F88A67BF28E95BB6003BD8A6 /* UserViewModel.swift in Sources */,
