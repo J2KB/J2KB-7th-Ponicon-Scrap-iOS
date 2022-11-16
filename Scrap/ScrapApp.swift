@@ -26,7 +26,8 @@ struct ScrapApp: App {
     var body: some Scene {
         WindowGroup {
             if !network.connected {
-//                RootView()
+                //자료 저장인지 확인하기....
+                //ViewController에서 자료 저장인지 알아와야됨... 넘길 수 있는지 확인하기
                 if userIdx == 0 { //auto login X -> Login View
                     LoginView()
                         .onAppear(perform: UIApplication.shared.addTargetGestureRecognizer)
@@ -44,20 +45,6 @@ struct ScrapApp: App {
                         .environmentObject(scrapVM)
                         .environmentObject(userVM)
                 }
-////                if userIdx == 0 { //auto login X -> Login View
-//                    LoginView(/*autoLogin: .constant(false)*/)
-//                        .environmentObject(scrapVM)
-//                        .environmentObject(userVM)
-//                        .onOpenURL{ url in
-//                            if (AuthApi.isKakaoTalkLoginUrl(url)) {
-//                                  _ = AuthController.handleOpenUrl(url: url)
-//                            }
-//                        }
-////                } else { //auto login o -> Main Home View
-////                    LoginView(/*autoLogin: .constant(true)*/)
-////                        .environmentObject(scrapVM)
-////                        .environmentObject(userVM)
-////                }
             } else {
                 OfflineView()
             }
@@ -74,12 +61,6 @@ extension UIApplication {
         tapGesture.delegate = self
         window.addGestureRecognizer(tapGesture)
     }
-    
-//    func handleTap(sender: UITapGestureRecognizer) {
-//        if sender.state == .ended { //터치했
-//
-//        }
-//    }
 }
 
 extension UIApplication : UIGestureRecognizerDelegate {
