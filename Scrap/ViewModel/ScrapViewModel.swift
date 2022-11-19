@@ -70,7 +70,20 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     
     //categoryList에 category 삭제 함수
     func removeCategory(index: Int){
-        categoryList.result.categories.remove(at: index)
+        //order도 변경해줘야됨
+//        if index != categoryList.result.categories.count {
+//            for i in index+1..<categoryList.result.categories.count {
+//                categoryList.result.categories[i].order -= 1
+//            }
+//        }
+        for i in 0..<categoryList.result.categories.count{
+            if categoryList.result.categories[i].order == index {
+                categoryList.result.categories.remove(at: i)
+//                deleteCategory(categoryID: categoryList.result.categories[i].categoryId)
+                return
+            }
+        }
+//        categoryList.result.categories.remove(at: index)
     }
     
     //dataList에 data 삭제 함수
@@ -115,20 +128,31 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
             return
         }
         URLSession.shared.dataTask(with: url) { (data, response, error) in
-            do{
+            DispatchQueue.main.async {
                 if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(CategoryResponse.self, from: data)
-                    DispatchQueue.main.async {
-                        self.categoryList = result
+                    guard let httpResponse = response as? HTTPURLResponse else {return}
+                    print(httpResponse.statusCode)
+                    if httpResponse.statusCode != 200 { //카테고리 조회 실패
+                        do{
+                            let decoder = JSONDecoder()
+                            let failMessage = try decoder.decode(NoResultModel.self, from: data)
+                            print(failMessage)
+                        } catch let error {
+                            print("fail error")
+                            print(String(describing: error))
+                        }
+                    }else {
+                        do{
+                            let decoder = JSONDecoder()
+                            let result = try decoder.decode(CategoryResponse.self, from: data)
+                            self.categoryList = result
+                            print(result)
+                        }catch (let error){
+                            print("success error")
+                            print(String(describing: error))
+                        }
                     }
-                    print(result)
-                } else {
-                    print("no data")
                 }
-            }catch (let error){
-                print("error")
-                print(String(describing: error))
             }
         }.resume()
     }
@@ -157,7 +181,6 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                 if let data = data {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(CategoryModel.self, from: data)
-//                    self.categoryID = result.result?.categoryId ?? 0 //필요한지 모르겠음
                     print(result)
                 } else {
                     print("no data")
@@ -172,6 +195,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //카테고리 삭제
     //query: category id
     func deleteCategory(categoryID: Int) {
+        print(categoryID)
         guard let url = URL(string: "\(baseUrl)/auth/category?category=\(categoryID)") else {
             print("invalid url")
             return
@@ -186,6 +210,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(NoResultModel.self, from: data)
                     print(result)
+                    print(categoryID)
                 } else {
                     print("no data")
                 }
@@ -280,6 +305,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                             let decoder = JSONDecoder()
                             let result = try decoder.decode(DataResponse.self, from: data)
                             self.dataList = result
+                            print(result)
                         } catch let error {
                             print("error")
                             print(String(describing: error))
@@ -387,15 +413,15 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //query: category id, user id
     //body: url
     func addNewData(baseurl: String, catID: Int, userIdx: Int){
-        guard let url = URL(string: "\(baseurl)/data?id=\(userIdx)&category=\(catID)") else {
+        guard let url = URL(string: "\(baseurl)/auth/data?id=\(userIdx)&category=\(catID)") else {
             print("invalid url")
             return
         }
-
+        
         let baseURL = baseurl
         let body: [String: Any] = ["baseURL" : baseURL]
         let finalData = try! JSONSerialization.data(withJSONObject: body)
-
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = finalData

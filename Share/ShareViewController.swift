@@ -83,6 +83,7 @@ class ShareViewController: UIViewController{
                 UserDefaults(suiteName: "group.com.thk.Scrap")?.set(baseURL.absoluteString!, forKey: "WebURL")
                 print("\(String(describing: UserDefaults(suiteName: "group.com.thk.Scrap")?.string(forKey: "WebURL")))")
                 self.openMainApp()
+                self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
             }
         }
     }

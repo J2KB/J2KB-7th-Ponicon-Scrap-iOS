@@ -31,7 +31,8 @@ struct SignUpView: View {
                          7: "비밀번호와 일치하지 않습니다",
                          8: "비밀번호 확인을 입력하세요",
                          9: "",
-                         10: "이메일 형식으로 입력해주세요"] //Dictionary 형태로 메세지 모음
+                         10: "이메일 형식으로 입력해주세요",
+                         11: "사용 가능한 이메일입니다"] //Dictionary 형태로 메세지 모음
     
     var backButton : some View { //custom back button
         Button(action: {
@@ -152,10 +153,10 @@ struct SignUpView: View {
                                     .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 2 - 88, alignment: .leading)
                                 Button(action: {
                                     //아이디 중복 확인 버튼
-                                    vm.checkDuplication(email: email) //api 통신
-                                    if vm.duplicate {
-                                        self.checkInfo[1] = 4
-                                    }
+                                    vm.checkDuplication(email: email) //📡 이메일 중복 확인 api 통신 -> 동기적으로 진행해야 됨
+                                    print(vm.duplicateMessage)
+                                    self.checkInfo[1] = vm.duplicateMessage //4: duplicate, 9: duplicate
+                                    print(vm.duplicateMessage)
                                 }){
                                     Text("중복 확인")
                                         .padding()

@@ -41,9 +41,9 @@ struct ScrapApp: App {
                         }
                 } else { //auto login o -> Main Home View
                     if webUrl != "" {
-                        MainHomeView()
-                            .sheet(isPresented: $isWebUrl) {
-                                SaveDataView(categoryList: $scrapVM.categoryList.result)
+                        Text("")
+                            .fullScreenCover(isPresented: $isWebUrl) {
+                                SaveDataView()
                             }
                             .navigationBarBackButtonHidden(true)
                             .navigationBarHidden(true)

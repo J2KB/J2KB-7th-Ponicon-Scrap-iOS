@@ -10,7 +10,6 @@ import SwiftUI
 struct SaveDataView: View {
     @Environment(\.colorScheme) var scheme //Light/Dark mode
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode> //pop
-    @Binding var categoryList : CategoryResponse.Result
     @State private var selection = 0
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @EnvironmentObject var userVM : UserViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
@@ -37,6 +36,7 @@ struct SaveDataView: View {
             .navigationBarTitle("자료 저장", displayMode: .inline)
             .foregroundColor(scheme == .light ? .black : .gray_sub)
             .navigationBarItems(leading: Button(action: {
+                UserDefaults(suiteName: "group.com.thk.Scrap")?.set("", forKey: "WebURL") //""로 업데이트
                 self.presentationMode.wrappedValue.dismiss()
             }){
                 Text("취소")
@@ -47,6 +47,7 @@ struct SaveDataView: View {
                 print("add new data?")
                 print("url: \(url)")
                 vm.addNewData(baseurl: url, catID: selection, userIdx: userVM.userIdx) //📡데이터 저장 서버 통신
+                UserDefaults(suiteName: "group.com.thk.Scrap")?.set("", forKey: "WebURL") //""로 업데이트
                 self.presentationMode.wrappedValue.dismiss()
             }){
                 Text("저장")
@@ -60,10 +61,9 @@ struct SaveDataView: View {
 
 struct SaveDataView_Previews: PreviewProvider {
     static var previews: some View {
-        SaveDataView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 0), CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2), CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])))
+        SaveDataView()
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
             .preferredColorScheme(.dark)
-        
     }
 }

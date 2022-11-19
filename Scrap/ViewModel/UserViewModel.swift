@@ -74,7 +74,7 @@ class UserViewModel: ObservableObject{
     @Published var loginToastMessage = ""
     @Published var userIdx = 0 //initial value      //사용자 idx
     @Published var iconIdx = 0 //initial value      //사용자 아이콘 idx
-    @Published var duplicate = false                //이메일 중복 상태 변수
+    @Published var duplicateMessage = 4            //이메일 중복 상태 변수
     
     private let baseUrl = "https://scrap.hana-umc.shop/user"
     
@@ -191,38 +191,44 @@ class UserViewModel: ObservableObject{
         request.httpMethod = "POST"
         request.httpBody = finalData
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
+        
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            do{
+            DispatchQueue.main.async {
                 if let data = data {
                     let decoder = JSONDecoder()
-                    let result = try decoder.decode(LoginModel.self, from: data)
-                    DispatchQueue.main.async {
-                        if let response = response as? HTTPURLResponse {
-                            if response.statusCode != 200 {
-                                self.loginState = false
-                            } else {
-                                self.loginState = true
-                                self.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
-                                self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
-                                print("user idx: \(self.userIdx)")
-                                if autoLogin { //autoLogin일 때만 저장
-                                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(result.result.id, forKey: "ID") //login해서 받은 id를 user defaults에 저장
-                                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx") //login했을 때 생성한 랜덤 icon idx를 user defaults에 저장
-                                    print("save user idx, iconIdx to UserDefaults")
-                                    print(self.iconIdx)
-                                }
-                                print("UserDefaults에 저장된 ID 값은? \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0)")
+                    guard let httpResponse = response as? HTTPURLResponse else {return}
+                    if httpResponse.statusCode != 200 { //카카오 로그인(리디렉션) 실패
+                        self.loginState = false
+                        do{
+                            print("Kakao Login")
+                            let failMessage = try self.decoder.decode(NoResultModel.self, from: data)
+                            print(failMessage)
+                        } catch let error {
+                            print("error")
+                            print(String(describing: error))
+                        }
+                    }else {
+                        do{
+                            let result = try decoder.decode(LoginModel.self, from: data)
+                            //카카오로 로그인 -> accessToken/refreshToken 모두 받아와서 POST하면 서버로부터 사용자의 ID를 받음.
+                            self.loginState = true
+                            self.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
+                            self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
+                            print("user idx: \(self.userIdx)")
+                            if autoLogin { //autoLogin일 때만 저장
+                                UserDefaults(suiteName: "group.com.thk.Scrap")?.set(result.result.id, forKey: "ID") //login해서 받은 id를 user defaults에 저장
+                                UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx") //login했을 때 생성한 랜덤 icon idx를 user defaults에 저장
+                                print("save user idx, iconIdx to UserDefaults")
+                                print(self.iconIdx)
                             }
+                            print("UserDefaults에 저장된 ID 값은? \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0)")
+                            print(result)
+                        }catch (let error){
+                            print("error")
+                            print(String(describing: error))
                         }
                     }
-                    print(result)
-                } else {
-                    print("no data")
                 }
-            }catch (let error){
-                print("error")
-                print(String(describing: error))
             }
         }.resume()
     }
@@ -294,8 +300,9 @@ class UserViewModel: ObservableObject{
     
     //이메일 중복확인
     //query: email
+    
     func checkDuplication(email: String){
-        guard let url = URL(string: "\(baseUrl)/dupulication?id=\(email)") else {
+        guard let url = URL(string: "\(baseUrl)/duplicate?id=\(email)") else {
             print("invalid url")
             return
         }
@@ -316,7 +323,7 @@ class UserViewModel: ObservableObject{
                         do {
                             let decoder = JSONDecoder()
                             let result = try decoder.decode(CheckDuplication.self, from: data)
-                            self.duplicate = result.result.isDuplicate
+                            self.duplicateMessage = result.result.isDuplicate ? 11 : 4
                             print(result)
                         } catch let error {
                             print("🚨🚨error")
@@ -326,20 +333,7 @@ class UserViewModel: ObservableObject{
                 }
             }
         }.resume()
-//            do{
-//                if let data = data {
-//                    let decoder = JSONDecoder()
-//                    let result = try decoder.decode(CheckDuplication.self, from: data)
-//                    DispatchQueue.main.async {
-//                        self.duplicate = result.result.isDuplicate
-//                    }
-//                    print(result)
-//                } else {
-//                    print("no data")
-//                }
-//            }catch (let error){
-//                print("error")
-//                print(String(describing: error))
-//            }
     }
 }
+
+

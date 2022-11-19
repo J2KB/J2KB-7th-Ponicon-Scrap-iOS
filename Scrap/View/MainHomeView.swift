@@ -55,7 +55,6 @@ struct MainHomeView: View {
                                 Button(action: {
                                     if !isPresentHalfModal {
                                         self.isShowingMyPage.toggle()
-                                        scrapVM.getMyPageData(userID: userVM.userIdx)
                                     }
                                 }) {
                                     Image(systemName: "person.circle")
@@ -74,6 +73,7 @@ struct MainHomeView: View {
         .onAppear{ //MainHomeView 등장하면 api 통신
             userVM.userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ? userVM.userIdx : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
             scrapVM.getCategoryData(userID: userVM.userIdx)
+            scrapVM.getMyPageData(userID: userVM.userIdx)
             if self.selected == 0 {
             scrapVM.getAllData(userID: userVM.userIdx)
             } else {
