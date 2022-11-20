@@ -41,7 +41,6 @@ struct SideMenuView: View {
     @Binding var selected : Int
     @Binding var selectedOrder : Int
     @Environment(\.colorScheme) var scheme //Light/Dark mode
-
     
     var body: some View {
         ScrollViewReader { proxy in
@@ -51,7 +50,7 @@ struct SideMenuView: View {
                     HStack(spacing: 16){
                         Button(action: {
                             if !isAddingCategory {
-                                withAnimation(.easeInOut.delay(0.3)){
+                                withAnimation(.spring()){
                                     isShowingCateogry = false
                                 }
                             }
@@ -68,12 +67,12 @@ struct SideMenuView: View {
                     }
                     Spacer()
                     Button(action: {
+                        withAnimation {
+                            proxy.scrollTo(categoryList.categories.count) //scroll to last element(category)
+                        }
                         self.isAddingCategory.toggle() //카테고리 추가 토글
                         if !isAddingCategory { //plus icon
                             newCat = "" //초기화
-                        }
-                        withAnimation {
-                            proxy.scrollTo(categoryList.categories.count) //scroll to last element(category)
                         }
                     }){
                         Image(systemName: isAddingCategory ? "xmark" : "plus")
@@ -105,16 +104,29 @@ struct SideMenuView: View {
                                 .listRowBackground(self.selected == category.categoryId ? (scheme == .light ? .gray_sub : .black_accent) : scheme == .light ? Color(.white) : .black_bg)
                                 .onTapGesture { //클릭하면 현재 categoryID
                                     if !isAddingCategory {
+                                        vm.isLoading = .loading
+                                        withAnimation(.spring()){
+                                            isShowingCateogry = false
+                                        }
                                         self.selected = category.categoryId
                                         self.selectedOrder = category.order
+//                                        await vm.getAllData(userID: userVM.userIdx) //📡 카테고리에 해당하는 자료 가져오는 통신
                                         if category.order == 0 {
                                             vm.getAllData(userID: userVM.userIdx) //📡 카테고리에 해당하는 자료 가져오는 통신
                                         } else {
                                             vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq") //📡 카테고리에 해당하는 자료 가져오는 통신
                                         }
-                                        withAnimation(.easeInOut.delay(0.3)){
-                                            isShowingCateogry = false
-                                        }
+//                                        Task {
+//                                            await vm.getAllData(userID: userVM.userIdx) //📡 카테고리에 해당하는 자료 가져오는 통신
+//                                            await vm.whenGetData(selected: selected, userIdx: userVM.userIdx)
+//                                        }
+//                                        Task {
+//                                            if category.order == 0 {
+//                                                await vm.getAllData(userID: userVM.userIdx) //📡 카테고리에 해당하는 자료 가져오는 통신
+//                                            } else {
+//                                                await vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq") //📡 카테고리에 해당하는 자료 가져오는 통신
+//                                            }
+//                                        }
                                     }
                                 }
                             }
@@ -162,6 +174,9 @@ struct SideMenuView: View {
                             .frame(width: UIScreen.main.bounds.width - 67)
                         }
                     }
+//                    .refreshable {
+//                        await vm.getCategoryData(userID: userVM.userIdx)
+//                    }
                     .frame(width: UIScreen.main.bounds.width)
                     .padding(.trailing, 10)
                     .listStyle(PlainListStyle())

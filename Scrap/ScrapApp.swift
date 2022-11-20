@@ -40,22 +40,25 @@ struct ScrapApp: App {
                             }
                         }
                 } else { //auto login o -> Main Home View
-                    if webUrl != "" {
-                        Text("")
-                            .fullScreenCover(isPresented: $isWebUrl) {
-                                SaveDataView()
-                            }
-                            .navigationBarBackButtonHidden(true)
-                            .navigationBarHidden(true)
-                            .environmentObject(scrapVM)
-                            .environmentObject(userVM)
-                    }else {
+//                    if webUrl != "" {
+//                        Text("")
+//                            .fullScreenCover(isPresented: $isWebUrl) {
+//                                SaveDataView()
+//                            }
+//                            .navigationBarBackButtonHidden(true)
+//                            .navigationBarHidden(true)
+//                            .environmentObject(scrapVM)
+//                            .environmentObject(userVM)
+//                    }else {
+//                    if scrapVM.isLoading {
+//                        ProgressView()
+//                    }else {
                         MainHomeView()
                             .navigationBarBackButtonHidden(true)
                             .navigationBarHidden(true)
                             .environmentObject(scrapVM)
                             .environmentObject(userVM)
-                    }
+//                    }
                 }
             } else {
                 OfflineView()

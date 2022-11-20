@@ -61,6 +61,9 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     @Published var user = UserResponse(code: 0, message: "", result: UserResponse.Result(name: "", username: ""))
     @Published var categoryList = CategoryResponse(code: 0, message: "", result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)]))
     var categoryID = 0
+    @Published var isLoading : ServerState = .none //서버 통신 중
+//    @Published var state : [ServerState] = [.none, .none, .none, .none] //아무것도 안한 상태
+    //getcategory, getalldata, getdata, getMydata
     
     //======== 로컬 함수 ========
     //categoryList에 category 추가 함수 (카테고리 추가 기능)
@@ -71,19 +74,12 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //categoryList에 category 삭제 함수
     func removeCategory(index: Int){
         //order도 변경해줘야됨
-//        if index != categoryList.result.categories.count {
-//            for i in index+1..<categoryList.result.categories.count {
-//                categoryList.result.categories[i].order -= 1
-//            }
-//        }
         for i in 0..<categoryList.result.categories.count{
             if categoryList.result.categories[i].order == index {
                 categoryList.result.categories.remove(at: i)
-//                deleteCategory(categoryID: categoryList.result.categories[i].categoryId)
                 return
             }
         }
-//        categoryList.result.categories.remove(at: index)
     }
     
     //dataList에 data 삭제 함수
@@ -116,13 +112,31 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
             }
         }
     }
+
+//    @MainActor
+//    func whenMainHomeAppear(selected: Int, userIdx: Int) async {
+//        isLoading = true
+//        await getCategoryData(userID: userIdx) //카테고리 조회 통신 📡
+//        await getMyPageData(userID: userIdx) //마이페이지 데이터 조회 통신 📡
+//        if selected == 0 { await getAllData(userID: userIdx) } //자료 조회 통신 📡 case01
+//        else { await getData(userID: userIdx, catID: selected, seq: "seq") } //자료 조회 통신 📡 case02
+//        isLoading = false
+//    }
+//
+//    @MainActor
+//    func whenGetData(selected: Int, userIdx: Int) async{
+//        isLoading = true
+//        await getData(userID: userIdx, catID: selected, seq: "seq")
+//        isLoading = false
+//    }
     
     private let baseUrl = "https://scrap.hana-umc.shop"
     
     //=========GET=========
     //카테고리 전체 조회
     //query: user id
-    func getCategoryData(userID: Int){
+    func getCategoryData(userID: Int) {
+        print("카테고리 조회")
         guard let url = URL(string: "\(baseUrl)/category/all?id=\(userID)") else {
             print("invalid url")
             return
@@ -291,7 +305,8 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //=======GET=======
     //자료 조회
     //query: user id, category id, seq
-    func getData(userID: Int, catID: Int, seq: String){
+    func getData(userID: Int, catID: Int, seq: String) {
+        print("자료 조회")
         guard let url = URL(string: "\(baseUrl)/auth/data?id=\(userID)&category=\(catID)&seq=\(seq)") else {
             print("invalid url")
             return
@@ -300,18 +315,28 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
             DispatchQueue.main.async {
                 if let data = data {
                     guard let httpResponse = response as? HTTPURLResponse else {return}
-                    if httpResponse.statusCode == 200 {
+                    
+                    if httpResponse.statusCode != 200 {
+                        do{
+                            let decoder = JSONDecoder()
+                            let failMessage = try decoder.decode(NoResultModel.self, from: data)
+                            print(failMessage)
+                            self.isLoading = .failure
+                        } catch let error {
+                            print("fail error")
+                            print(String(describing: error))
+                        }
+                    }else{
                         do {
                             let decoder = JSONDecoder()
                             let result = try decoder.decode(DataResponse.self, from: data)
                             self.dataList = result
+                            self.isLoading = .success
                             print(result)
                         } catch let error {
                             print("error")
                             print(String(describing: error))
                         }
-                    }else {
-                        print("invalid data error")
                     }
                 }else if let error = error {
                     print("error")
@@ -324,26 +349,42 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //========GET========
     //자료 전체 조회
     //query: user id
-    func getAllData(userID: Int){
+    func getAllData(userID: Int) {
+        print("자료 전체 조회")
         guard let url = URL(string: "\(baseUrl)/auth/data/all?id=\(userID)") else {
             print("invalid url")
             return
         }
         URLSession.shared.dataTask(with: url) { (data, response, error) in
-            do{
+            DispatchQueue.main.async {
                 if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(DataResponse.self, from: data)
-                    DispatchQueue.main.async {
-                        self.dataList = result
+                    guard let httpResponse = response as? HTTPURLResponse else {return}
+                    if httpResponse.statusCode != 200 {
+                        do{
+                            let decoder = JSONDecoder()
+                            let failMessage = try decoder.decode(NoResultModel.self, from: data)
+                            print(failMessage)
+                            self.isLoading = .failure
+                        } catch let error {
+                            print("fail error")
+                            print(String(describing: error))
+                        }
+                    }else{
+                        do{
+                            let decoder = JSONDecoder()
+                            let result = try decoder.decode(DataResponse.self, from: data)
+                            self.dataList = result
+                            print(result)
+                            self.isLoading = .success
+                        }catch let error{
+                            print("error")
+                            print(String(describing: error))
+                        }
                     }
-                    print(result)
-                } else {
-                    print("no data")
+                }else if let error = error {
+                    print("error")
+                    print(String(describing: error))
                 }
-            }catch (let error){
-                print("error")
-                print(String(describing: error))
             }
         }.resume()
     }
@@ -448,7 +489,8 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //======GET=======
     //마이 페이지
     //query: user id
-    func getMyPageData(userID: Int){
+    func getMyPageData(userID: Int) {
+        print("마이페이지 데이터 조회")
         guard let url = URL(string: "\(baseUrl)/auth/user/mypage?id=\(userID)") else {
             print("invalid url")
             return
@@ -461,6 +503,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                     DispatchQueue.main.async {
                         self.user = result
                     }
+                    print(result)
                 } else {
                     print("no data")
                 }

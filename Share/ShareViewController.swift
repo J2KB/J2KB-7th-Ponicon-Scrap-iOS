@@ -9,6 +9,8 @@ import UIKit
 import Social
 import SwiftUI
 import Combine
+import MobileCoreServices
+import UniformTypeIdentifiers
 
 //struct NewDataModel: Decodable{ //자료 저장 -> response 데이터로 받을 link id
 //    struct Result: Decodable {
@@ -32,7 +34,6 @@ class ShareViewController: UIViewController{
 //    private var cancellable: AnyCancellable!
 //    private var catID = 0
     private var userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID")
-    
     private var appURLString = "ScrapShareExtension://"
     
     override func viewDidAppear(_ animated: Bool) {
@@ -43,7 +44,7 @@ class ShareViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        handleIncomingURL()
+        handleIncomingInfo()
 //        openMainApp()
     }
     
@@ -67,25 +68,47 @@ class ShareViewController: UIViewController{
     }
     
     //URL✅, Title, ImageURL 가져오기
-    private func handleIncomingURL() {
+    private func handleIncomingInfo() {
+        print(UTType.propertyList)
+        print(UTType.url)
+        print(UTType.image)
         let item : NSExtensionItem = self.extensionContext?.inputItems[0] as! NSExtensionItem
-        print(item)
-        let itemProvider: NSItemProvider = item.attachments?[0] as! NSItemProvider
-        print(itemProvider)
+//        print(item.userInfo![NSExtensionItemAttributedContentTextKey] ?? "")
+//        print("⭐️⭐️⭐️item ")
+//        print(item)
+        print("item's attachments")
+        print(item.attachments ?? "no attachment")
+        print("item's attributedTitle")
+        print(item.attributedTitle ?? "no title")
+        print("item's userInfo")
+        print(item.userInfo ?? "no userInfo")
+        print("item's attributedContentTitle")
+        print(item.attributedContentText?.string ?? "no contentText")
         
+        let itemProvider: NSItemProvider = item.attachments?[0] as! NSItemProvider
+//        print("⭐️⭐️⭐️itemProvider: ")
+//        print(itemProvider)
+
         //pull the url out
         //request to server with this base url
         if itemProvider.hasItemConformingToTypeIdentifier("public.url") {
             itemProvider.loadItem(forTypeIdentifier: "public.url", options: nil) { (url, error) in
                 let baseURL = url as! NSURL
-                print(baseURL)
+                print("📌base url: \(baseURL)")
                 //USerDefaults에 host app에서 자료저장하려고 scrap app으로 넘어온거라고 알려줘야됨
                 UserDefaults(suiteName: "group.com.thk.Scrap")?.set(baseURL.absoluteString!, forKey: "WebURL")
-                print("\(String(describing: UserDefaults(suiteName: "group.com.thk.Scrap")?.string(forKey: "WebURL")))")
-                self.openMainApp()
-                self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
+                print("UserDefaults에 저장된 값: \(String(describing: UserDefaults(suiteName: "group.com.thk.Scrap")?.string(forKey: "WebURL")))")
+//                self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
             }
         }
+        if itemProvider.hasItemConformingToTypeIdentifier("public.image") {
+            itemProvider.loadItem(forTypeIdentifier: "public.image", options: nil) { (image, error) in
+                let baseImage = image as! NSURL
+                print("📌base iamge: \(baseImage)")
+            }
+        }
+        //        self.openMainApp()
+        self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
     }
     
 //    override func viewDidLoad() {
