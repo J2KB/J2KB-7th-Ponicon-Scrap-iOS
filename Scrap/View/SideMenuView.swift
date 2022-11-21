@@ -110,23 +110,8 @@ struct SideMenuView: View {
                                         }
                                         self.selected = category.categoryId
                                         self.selectedOrder = category.order
-//                                        await vm.getAllData(userID: userVM.userIdx) //📡 카테고리에 해당하는 자료 가져오는 통신
-                                        if category.order == 0 {
-                                            vm.getAllData(userID: userVM.userIdx) //📡 카테고리에 해당하는 자료 가져오는 통신
-                                        } else {
-                                            vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq") //📡 카테고리에 해당하는 자료 가져오는 통신
-                                        }
-//                                        Task {
-//                                            await vm.getAllData(userID: userVM.userIdx) //📡 카테고리에 해당하는 자료 가져오는 통신
-//                                            await vm.whenGetData(selected: selected, userIdx: userVM.userIdx)
-//                                        }
-//                                        Task {
-//                                            if category.order == 0 {
-//                                                await vm.getAllData(userID: userVM.userIdx) //📡 카테고리에 해당하는 자료 가져오는 통신
-//                                            } else {
-//                                                await vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq") //📡 카테고리에 해당하는 자료 가져오는 통신
-//                                            }
-//                                        }
+                                        if category.order == 0 { vm.getAllData(userID: userVM.userIdx) } //📡 카테고리에 해당하는 자료 가져오는 통신
+                                        else { vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq") } //📡 카테고리에 해당하는 자료 가져오는 통신
                                     }
                                 }
                             }
