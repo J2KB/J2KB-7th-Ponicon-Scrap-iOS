@@ -44,8 +44,23 @@ class ShareViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        handleIncomingInfo()
-//        openMainApp()
+        //URL, Title, ImageURL 가져오기
+        if let extensionItem = extensionContext?.inputItems.first as? NSExtensionItem {
+            let propertyList = UTType.propertyList.identifier
+            for attachment in extensionItem.attachments! where attachment.hasItemConformingToTypeIdentifier(propertyList) {
+                attachment.loadItem(forTypeIdentifier: propertyList, options: nil, completionHandler: { (item, error) -> Void in
+                    guard let dictionary = item as? NSDictionary,
+                          let results = dictionary[NSExtensionJavaScriptPreprocessingResultsKey] as? NSDictionary,
+                          let title = results["currentTitle"] as? String,
+                          let hostname = results["currentUrl"] as? String,
+                          let image = results["images"] as? [String] else { return }
+                    print(results)
+                    print(title)
+                    print(hostname)
+                    print(image[0])
+                }
+            )}
+        }
     }
     
     @objc func openURL(_ url: URL) -> Bool { //create custom OpenURL
@@ -58,57 +73,12 @@ class ShareViewController: UIViewController{
         }
         return false
     }
-    
-    private func openMainApp() { //open main app
+
+    private func openMainApp() { //open the containing app
         self.extensionContext?.completeRequest(returningItems: nil, completionHandler: { _ in
             guard let url = URL(string: self.appURLString) else { return }
             _ = self.openURL(url)
         })
-        //default stubbed out code which can pass data back to the host app.
-    }
-    
-    //URL✅, Title, ImageURL 가져오기
-    private func handleIncomingInfo() {
-        print(UTType.propertyList)
-        print(UTType.url)
-        print(UTType.image)
-        let item : NSExtensionItem = self.extensionContext?.inputItems[0] as! NSExtensionItem
-//        print(item.userInfo![NSExtensionItemAttributedContentTextKey] ?? "")
-//        print("⭐️⭐️⭐️item ")
-//        print(item)
-        print("item's attachments")
-        print(item.attachments ?? "no attachment")
-        print("item's attributedTitle")
-        print(item.attributedTitle ?? "no title")
-        print("item's userInfo")
-        print(item.userInfo ?? "no userInfo")
-        print("item's attributedContentTitle")
-        print(item.attributedContentText?.string ?? "no contentText")
-        
-        let itemProvider: NSItemProvider = item.attachments?[0] as! NSItemProvider
-//        print("⭐️⭐️⭐️itemProvider: ")
-//        print(itemProvider)
-
-        //pull the url out
-        //request to server with this base url
-        if itemProvider.hasItemConformingToTypeIdentifier("public.url") {
-            itemProvider.loadItem(forTypeIdentifier: "public.url", options: nil) { (url, error) in
-                let baseURL = url as! NSURL
-                print("📌base url: \(baseURL)")
-                //USerDefaults에 host app에서 자료저장하려고 scrap app으로 넘어온거라고 알려줘야됨
-                UserDefaults(suiteName: "group.com.thk.Scrap")?.set(baseURL.absoluteString!, forKey: "WebURL")
-                print("UserDefaults에 저장된 값: \(String(describing: UserDefaults(suiteName: "group.com.thk.Scrap")?.string(forKey: "WebURL")))")
-//                self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
-            }
-        }
-        if itemProvider.hasItemConformingToTypeIdentifier("public.image") {
-            itemProvider.loadItem(forTypeIdentifier: "public.image", options: nil) { (image, error) in
-                let baseImage = image as! NSURL
-                print("📌base iamge: \(baseImage)")
-            }
-        }
-        //        self.openMainApp()
-        self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
     }
     
 //    override func viewDidLoad() {
@@ -218,3 +188,4 @@ class ShareViewController: UIViewController{
 //        super.init(coder: aDecoder)
 //    }
 //}
+

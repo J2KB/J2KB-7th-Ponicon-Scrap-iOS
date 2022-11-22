@@ -22,6 +22,7 @@
 		F87BB3F729211D8C00BCD78D /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87BB3F629211D8C00BCD78D /* Theme.swift */; };
 		F88435AA29223838007F88E7 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88435A929223838007F88E7 /* RootView.swift */; };
 		F88A67BF28E95BB6003BD8A6 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88A67BE28E95BB6003BD8A6 /* UserViewModel.swift */; };
+		F88CEFC3292C9D5800EF0EE0 /* ExtensionClass.js in Resources */ = {isa = PBXBuildFile; fileRef = F88CEFC2292C9D5800EF0EE0 /* ExtensionClass.js */; };
 		F88E3FEC28EEB4FD002A6385 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F88E3FEB28EEB4FD002A6385 /* KakaoSDKAuth */; };
 		F88E3FEE28EEB4FD002A6385 /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = F88E3FED28EEB4FD002A6385 /* KakaoSDKCommon */; };
 		F88E3FF028EEB4FD002A6385 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = F88E3FEF28EEB4FD002A6385 /* KakaoSDKUser */; };
@@ -82,6 +83,7 @@
 		F87BB3F629211D8C00BCD78D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		F88435A929223838007F88E7 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		F88A67BE28E95BB6003BD8A6 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		F88CEFC2292C9D5800EF0EE0 /* ExtensionClass.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ExtensionClass.js; sourceTree = "<group>"; };
 		F88E3FF128EEB538002A6385 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F88E7E2E28C5CDDB00C3CCA8 /* Scrap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scrap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F88E7E3128C5CDDB00C3CCA8 /* ScrapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapApp.swift; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 				F89494B028DAF9D10087304B /* ShareViewController.swift */,
 				F89494B528DAF9D10087304B /* Info.plist */,
 				F802200E28F2C3F40032DAD0 /* ShareUIView.swift */,
+				F88CEFC2292C9D5800EF0EE0 /* ExtensionClass.js */,
 			);
 			path = Share;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F88CEFC3292C9D5800EF0EE0 /* ExtensionClass.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

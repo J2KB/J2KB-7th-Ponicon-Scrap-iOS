@@ -30,6 +30,7 @@ struct Item: Identifiable, Equatable{ //category item
 }
 
 struct SideMenuView: View {
+    @Environment(\.colorScheme) var scheme //Light/Dark mode
     @State private var dragging: CategoryResponse.Category?
     @Binding var categoryList : CategoryResponse.Result
     @State private var newCat = ""
@@ -40,7 +41,7 @@ struct SideMenuView: View {
     @EnvironmentObject var userVM : UserViewModel //ScrapApp에서 연결받은 EnvironmentObject
     @Binding var selected : Int
     @Binding var selectedOrder : Int
-    @Environment(\.colorScheme) var scheme //Light/Dark mode
+    @State private var scrollProxy: ScrollViewProxy? = nil
     
     var body: some View {
         ScrollViewReader { proxy in
@@ -67,9 +68,9 @@ struct SideMenuView: View {
                     }
                     Spacer()
                     Button(action: {
-                        withAnimation {
-                            proxy.scrollTo(categoryList.categories.count) //scroll to last element(category)
-                        }
+//                            withAnimation {
+//                                proxy.scrollTo(categoryList.categories.count) //scroll to last element(category)
+//                            }
                         self.isAddingCategory.toggle() //카테고리 추가 토글
                         if !isAddingCategory { //plus icon
                             newCat = "" //초기화
@@ -119,6 +120,7 @@ struct SideMenuView: View {
                         ForEach($categoryList.categories) { $category in
                             if category.order != 0 && category.order != 1 {
                                 CategoryRow(category: $category, isShowingCateogry: $isShowingCateogry, selected: $selected, isAddingCategory: $isAddingCategory, selectedOrder: $selectedOrder)
+                                    .id(category.id)
                                 .onDrag {
                                     self.dragging = category
                                     return NSItemProvider(object: NSString())
@@ -132,7 +134,7 @@ struct SideMenuView: View {
                             source.forEach {
                                 vm.moveCategory(from: $0, to: destination)
                                 vm.movingCategory(userID: userVM.userIdx, startIdx: $0, endIdx: destination)
-                            } //카테고리 이동 배열 순서 변경
+                            }
                         })
                         if isAddingCategory { //카테고리 추가 버튼을 누른 경우 -> 보여짐
                             HStack{
@@ -143,11 +145,13 @@ struct SideMenuView: View {
                                 .background(scheme == .light ? .white : .black_bg)
                                 Spacer()
                                 Button(action: {
-                                    vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
-                                    let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
-                                    vm.appendCategory(newCategory: newCategory) //post로 추가된 카테고리 이름 서버에 전송
-                                    newCat = ""
-                                    isAddingCategory = false
+                                    Task{
+                                        await vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
+                                        let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
+                                        vm.appendCategory(newCategory: newCategory) //post로 추가된 카테고리 이름 서버에 전송
+                                        newCat = ""
+                                        isAddingCategory = false
+                                    }
                                 }) {
                                     if !newCat.isEmpty { //입력값이 있으면
                                         Image(systemName: "checkmark") //한 글자라도 있어야 버튼 활성화
@@ -159,18 +163,27 @@ struct SideMenuView: View {
                             .frame(width: UIScreen.main.bounds.width - 67)
                         }
                     }
-//                    .refreshable {
-//                        await vm.getCategoryData(userID: userVM.userIdx)
-//                    }
+                    .refreshable {
+                        await vm.getCategoryData(userID: userVM.userIdx)
+                    }
                     .frame(width: UIScreen.main.bounds.width)
                     .padding(.trailing, 10)
                     .listStyle(PlainListStyle())
                 }
             }
             .background(scheme == .light ? .white : .black_bg)
+            .onAppear{
+                scrollProxy = proxy
+            }
         }
-        .onAppear {
-            print("🚨🚨SideMenuView 나타남🚨🚨")
+        .onChange(of: isAddingCategory, perform: { _ in
+            scrollToBottom()
+        })
+    }
+    
+    func scrollToBottom(){
+        withAnimation{
+            scrollProxy?.scrollTo(categoryList.categories.last?.id, anchor: .bottom)
         }
     }
 
@@ -188,8 +201,5 @@ struct SideMenuView_Previews: PreviewProvider {
            CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2), CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCateogry: .constant(true), selected: .constant(0), selectedOrder: .constant(0))
             .environmentObject(ScrapViewModel())
             .preferredColorScheme(.dark)
-//        MainHomeView(popRootView: .constant(true))
-//            .environmentObject(ScrapViewModel())
-//            .environmentObject(UserViewModel())
     }
 }
