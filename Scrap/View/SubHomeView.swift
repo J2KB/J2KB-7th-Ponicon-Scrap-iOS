@@ -45,16 +45,16 @@ struct SubHomeView: View {
                     }
                 }
                 .frame(width: UIScreen.main.bounds.width - 32, height: 40, alignment: .trailing)
-                LazyVGrid(columns: isOneCol ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: UIScreen.main.bounds.width / 2.5))], spacing: 10){
+                LazyVGrid(columns: isOneCol ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: UIScreen.main.bounds.width / 3))], spacing: 10){
                     if isRecent {
                         ForEach($datas.links.reversed()) { data in
                             PageView(data: data, isOneCol: $isOneCol, isPresentHalfModal: $isPresentHalfModal, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
-                                .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+                                .padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 5))
                         }
                     }else {
                         ForEach($datas.links) { data in
                             PageView(data: data, isOneCol: $isOneCol, isPresentHalfModal: $isPresentHalfModal, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
-                                .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+                                .padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 5))
                         }
                     }
                 } //LAZYGRID

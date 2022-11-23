@@ -44,7 +44,7 @@ struct SideMenuView: View {
     @State private var scrollProxy: ScrollViewProxy? = nil
     
     var body: some View {
-        ScrollViewReader { proxy in
+        ZStack{
             VStack(spacing: -2){
                 //HEADER
                 HStack{
@@ -68,21 +68,15 @@ struct SideMenuView: View {
                     }
                     Spacer()
                     Button(action: {
-//                            withAnimation {
-//                                proxy.scrollTo(categoryList.categories.count) //scroll to last element(category)
-//                            }
                         self.isAddingCategory.toggle() //카테고리 추가 토글
-                        if !isAddingCategory { //plus icon
-                            newCat = "" //초기화
-                        }
                     }){
-                        Image(systemName: isAddingCategory ? "xmark" : "plus")
+                        Image(systemName: "plus")
                             .resizable()
                             .frame(width: 16, height: 16)
                             .foregroundColor(scheme == .light ? .black : .gray_sub)
                     }
                     .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 2))
-                }
+                }//Header HStack
                 .frame(height: 40)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 10)
@@ -128,7 +122,6 @@ struct SideMenuView: View {
                                 .onDrop(of: [UTType.text], delegate: DragDelegate(current: $dragging))
                             }
                         }
-//                        .onDelete(perform: delete)
                         .onMove(perform: {source, destination in //from source: IndexSet, to destination: Int
                             //📡 카테고리 이동 통신
                             source.forEach {
@@ -136,63 +129,30 @@ struct SideMenuView: View {
                                 vm.movingCategory(userID: userVM.userIdx, startIdx: $0, endIdx: destination)
                             }
                         })
-                        if isAddingCategory { //카테고리 추가 버튼을 누른 경우 -> 보여짐
-                            HStack{
-                                TextField("새로운 카테고리", text: $newCat)
-                                .padding(.leading, 12)
-                                .frame(width: UIScreen.main.bounds.width - 120)
-                                .disableAutocorrection(true) //자동 수정 비활성화
-                                .background(scheme == .light ? .white : .black_bg)
-                                Spacer()
-                                Button(action: {
-                                    Task{
-                                        await vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
-                                        let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
-                                        vm.appendCategory(newCategory: newCategory) //post로 추가된 카테고리 이름 서버에 전송
-                                        newCat = ""
-                                        isAddingCategory = false
-                                    }
-                                }) {
-                                    if !newCat.isEmpty { //입력값이 있으면
-                                        Image(systemName: "checkmark") //한 글자라도 있어야 버튼 활성화
-                                            .foregroundColor(.gray_bold)
-                                    }
-                                }
-                            }
-                            .listRowBackground(scheme == .light ? Color(.white) : .black_bg)
-                            .frame(width: UIScreen.main.bounds.width - 67)
-                        }
-                    }
-                    .refreshable {
-                        await vm.getCategoryData(userID: userVM.userIdx)
-                    }
-                    .frame(width: UIScreen.main.bounds.width)
-                    .padding(.trailing, 10)
-                    .listStyle(PlainListStyle())
+                        }//List
+                }//CategoryList VStack
+                .refreshable {
+                    await vm.getCategoryData(userID: userVM.userIdx)
                 }
-            }
+                .frame(width: UIScreen.main.bounds.width)
+                .padding(.trailing, 10)
+                .listStyle(PlainListStyle())
+            }//VStack
             .background(scheme == .light ? .white : .black_bg)
-            .onAppear{
-                scrollProxy = proxy
+            if isAddingCategory { //카테고리 추가 alert창 켜지면 뒷 배경 블러 처리
+                Color(scheme == .light ? "blur_gray" : "black_bg").opacity(0.5).ignoresSafeArea()
             }
-        }
-        .onChange(of: isAddingCategory, perform: { _ in
-            scrollToBottom()
+        }//ZStack
+        .addCategoryAlert(isPresented: $isAddingCategory, newCategoryTitle: $newCat, placeholder: "새로운 카테고리 이름을 입력해주세요", title: "카테고리 추가하기", action: { _ in
+            Task{
+                await vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
+                let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
+                vm.appendCategory(newCategory: newCategory) //post로 추가된 카테고리 이름 서버에 전송
+                newCat = ""
+                isAddingCategory.toggle()
+            }
         })
-    }
-    
-    func scrollToBottom(){
-        withAnimation{
-            scrollProxy?.scrollTo(categoryList.categories.last?.id, anchor: .bottom)
-        }
-    }
-
-//    private func delete(indexSet: IndexSet) {
-//        for index in indexSet {
-//            vm.removeCategory(index: index)
-//            vm.deleteCategory(categoryID: index) //📡 카테고리 삭제 통신
-//        }
-//    }
+    }//body
 }
 
 struct SideMenuView_Previews: PreviewProvider {
@@ -200,6 +160,6 @@ struct SideMenuView_Previews: PreviewProvider {
         SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 0),
            CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2), CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCateogry: .constant(true), selected: .constant(0), selectedOrder: .constant(0))
             .environmentObject(ScrapViewModel())
-            .preferredColorScheme(.dark)
+//            .preferredColorScheme(.dark)
     }
 }

@@ -86,6 +86,6 @@ struct CategoryRow_Previews: PreviewProvider {
         CategoryRow(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), isShowingCateogry: .constant(true), selected: .constant(0), isAddingCategory: .constant(true), selectedOrder: .constant(0))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
-            .preferredColorScheme(.dark)
+//            .preferredColorScheme(.dark)
     }
 }

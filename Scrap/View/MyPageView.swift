@@ -15,9 +15,12 @@ struct MyPageView: View {
 //    @Binding var popRootView : Bool
     @Binding var isShowingMyPage : Bool
     @EnvironmentObject var vm : UserViewModel //여기서 로그아웃
-//    @Binding var autoLogin : Bool
     @Environment(\.presentationMode) var presentationMode //pop sheet
     @Environment(\.colorScheme) var scheme //Light/Dark mode
+    
+    var isKakaoLogin : Bool {
+        return !userData.username.contains(where: {$0.isLetter})
+    }
     
     var body: some View {
         NavigationView {
@@ -34,7 +37,7 @@ struct MyPageView: View {
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(scheme == .light ? .black : .gray_sub)
                                 .frame(width: UIScreen.main.bounds.width / 1.5, height: 30, alignment: .leading)
-                            Text("\(userData.username)")
+                            Text(isKakaoLogin ? "" : "\(userData.username)")
                                 .font(.system(size: 12, weight: .regular))
                                 .foregroundColor(.gray_bold)
                                 .frame(width: UIScreen.main.bounds.width / 1.5, alignment: .leading)
@@ -49,10 +52,6 @@ struct MyPageView: View {
                     Button(action:{
                         print("log out")
                         vm.logOut() //📡 LogOut API
-//                        autoLogin = false
-//                        print(autoLogin)
-//                        popRootView = false //NavigationLink로 LoginView로 이동
-//                        print(popRootView)
                         vm.loginState = false //NavigationLink로 LoginView로 이동
                         print(vm.loginState)
                         vm.userIdx = 0
@@ -64,9 +63,10 @@ struct MyPageView: View {
                     }){
                         Text("로그아웃")
                             .underline()
-                            .font(.system(size: 14, weight: .semibold))
+                            .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(.gray_bold)
                     }
+                    .padding(.bottom, 20)
                 }//VStack2
             }//VStack1
             .toolbar{

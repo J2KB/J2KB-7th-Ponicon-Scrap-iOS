@@ -41,6 +41,7 @@
 		F8CFE8FE28FD8D9F005DB6F5 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */; };
 		F8D18E4829051B16008479BA /* CategoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D18E4729051B16008479BA /* CategoryRow.swift */; };
 		F8DE0EE9292521C3007CA593 /* SaveDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DE0EE8292521C3007CA593 /* SaveDataView.swift */; };
+		F8F8F94E292DDC420058FA75 /* AddCategoryAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F8F94D292DDC420058FA75 /* AddCategoryAlert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +105,7 @@
 		F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		F8D18E4729051B16008479BA /* CategoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryRow.swift; sourceTree = "<group>"; };
 		F8DE0EE8292521C3007CA593 /* SaveDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveDataView.swift; sourceTree = "<group>"; };
+		F8F8F94D292DDC420058FA75 /* AddCategoryAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryAlert.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				F82C610028FFF716000C2C92 /* HalfSheetController.swift */,
+				F8F8F94D292DDC420058FA75 /* AddCategoryAlert.swift */,
 			);
 			path = Modifier;
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 				F88A67BF28E95BB6003BD8A6 /* UserViewModel.swift in Sources */,
 				F87109F628E3327F009AFA8F /* DataResponse.swift in Sources */,
 				F82C610128FFF716000C2C92 /* HalfSheetController.swift in Sources */,
+				F8F8F94E292DDC420058FA75 /* AddCategoryAlert.swift in Sources */,
 				F87BB3F729211D8C00BCD78D /* Theme.swift in Sources */,
 				F88E7E3228C5CDDB00C3CCA8 /* ScrapApp.swift in Sources */,
 				F8D18E4829051B16008479BA /* CategoryRow.swift in Sources */,

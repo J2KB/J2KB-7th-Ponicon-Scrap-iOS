@@ -30,7 +30,7 @@ struct PageView: View {
                             Link(destination: Url, label:{
                                 Rectangle()
                                     .foregroundColor(scheme == .light ? .light_blue : .black_light)
-                                    .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
+                                    .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
                                     .cornerRadius(10, corners: .topLeft)
                                     .cornerRadius(10, corners: .topRight)
                                     .shadow(radius: 2)
@@ -39,7 +39,7 @@ struct PageView: View {
                     }
                     ZStack{
                         Rectangle()
-                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 5) : (UIScreen.main.bounds.width / 2.5) / 2.3)
+                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 5) : (UIScreen.main.bounds.width / 2.5) / 2.3)
                             .foregroundColor(scheme == .light ? .white : .black_accent)
                             .cornerRadius(10, corners: .bottomLeft)
                             .cornerRadius(10, corners: .bottomRight)
@@ -49,14 +49,14 @@ struct PageView: View {
                                 .lineLimit(2)
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundColor(scheme == .light ? .black : .gray_sub)
-                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 90 : UIScreen.main.bounds.width / 3 - 14, height: 40, alignment: .topLeading)
+                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 90 : UIScreen.main.bounds.width / 3.3, height: 40, alignment: .topLeading)
                                 .padding(.trailing, 40)
                             Text(data.domain ?? "") //출처 -> link에서 자르기
                                 .font(.caption)
                                 .foregroundColor(.gray_sub)
                                 .lineLimit(1)
                                 .padding(.horizontal, 5)
-                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, alignment: .leading)
+                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, alignment: .leading)
                         }
                         Button(action: {
                             self.isPresentHalfModal = true //half-modal view 등장
@@ -73,7 +73,7 @@ struct PageView: View {
                     ZStack {
                         Rectangle()
                             .foregroundColor(scheme == .light ? .light_blue : .black_light)
-                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
+                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
                             .cornerRadius(10, corners: .topLeft)
                             .cornerRadius(10, corners: .topRight)
                             .shadow(radius: 2)
@@ -85,7 +85,7 @@ struct PageView: View {
                                         .imageData(url: URL(string: data.imgUrl!)!)
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
-                                        .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
+                                        .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.65)
                                         .cornerRadius(10, corners: .topLeft)
                                         .cornerRadius(10, corners: .topRight)
                                 })
@@ -95,7 +95,7 @@ struct PageView: View {
                     }
                     ZStack{
                         Rectangle()
-                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 5) : (UIScreen.main.bounds.width / 2.5) / 2.3)
+                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 5) : (UIScreen.main.bounds.width / 2.5) / 2.3)
                             .foregroundColor(scheme == .light ? .white : .black_accent)
                             .cornerRadius(10, corners: .bottomLeft)
                             .cornerRadius(10, corners: .bottomRight)
@@ -105,14 +105,14 @@ struct PageView: View {
                                 .lineLimit(2)
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundColor(scheme == .light ? .black : .gray_sub)
-                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 90 : UIScreen.main.bounds.width / 3 - 14, height: 40, alignment: .topLeading)
+                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 90 : UIScreen.main.bounds.width / 3.3, height: 40, alignment: .topLeading)
                                 .padding(.trailing, 40)
                             Text(data.domain ?? "") //출처 -> link에서 자르기
                                 .font(.caption)
                                 .foregroundColor(.gray_sub)
                                 .lineLimit(1)
                                 .padding(.horizontal, 5)
-                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 10, alignment: .leading)
+                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, alignment: .leading)
                         }
                         Button(action: {
                             isPresentHalfModal = true //half-modal view 등장
@@ -182,10 +182,10 @@ struct PageView: View {
 
 struct PageView_Previews: PreviewProvider {
     static var previews: some View {
-        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), isOneCol: .constant(true), isPresentHalfModal: .constant(false), currentCategory: .constant(0), currentCatOrder: .constant(1))
+        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "명탐정코난재미있네허허남도일!이름도잘지었어", domain: "naver.com", imgUrl: "")), isOneCol: .constant(false), isPresentHalfModal: .constant(false), currentCategory: .constant(0), currentCatOrder: .constant(1))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
-            .preferredColorScheme(.dark)
+//            .preferredColorScheme(.dark)
     }
 }
 
