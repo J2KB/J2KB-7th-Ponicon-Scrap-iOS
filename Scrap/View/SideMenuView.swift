@@ -68,7 +68,7 @@ struct SideMenuView: View {
                     }
                     Spacer()
                     Button(action: {
-                        self.isAddingCategory.toggle() //카테고리 추가 토글
+                        self.isAddingCategory = true //카테고리 추가 토글
                     }){
                         Image(systemName: "plus")
                             .resizable()
@@ -149,7 +149,7 @@ struct SideMenuView: View {
                 let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
                 vm.appendCategory(newCategory: newCategory) //post로 추가된 카테고리 이름 서버에 전송
                 newCat = ""
-                isAddingCategory.toggle()
+                isAddingCategory = false
             }
         })
     }//body
