@@ -15,9 +15,9 @@ struct MainHomeView: View {
     @EnvironmentObject var userVM : UserViewModel //ScrapApp에서 연결받은 EnvironmentObject
     @State private var isShowingCategory = false
     @State private var isShowingMyPage = false
-    @State private var isPresentHalfModal = false
+    @State private var isPresentHalfModal = false //sheet가 열려있는지 체크하기 위한 변수
     @Environment(\.colorScheme) var scheme //Light/Dark mode
-    @State private var selected = 0/*UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "lastCategory") ?? */ //last category id 가져오기
+    @State private var selected = 0 /*UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "lastCategory") ?? */ //last category id 가져오기
     @State private var selectedOrder = 0
     //만약 categoryList안에 아무것도 없다면 전체 자료를 나타내야 됨
     var categoryTitle : String { return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"}
@@ -26,17 +26,17 @@ struct MainHomeView: View {
         ZStack{
             //Main Home
             NavigationView{
-                if scrapVM.isLoading == .loading {
+                if scrapVM.isLoading == .loading { //서버통신(로딩)중이면 progress view 등장(loading indicator)
                     ProgressView()
                         .background(scheme == .light ? .white : .black_bg)
                 }else {
-                    SubHomeView(datas: $scrapVM.dataList.result, isPresentHalfModal: $isPresentHalfModal, currentCategory: $selected, currentCategoryOrder: $selectedOrder) //⭐️여기로 category 데이터 넘겨줘야 됨
+                    SubHomeView(datas: $scrapVM.dataList.result, isPresentHalfModal: $isPresentHalfModal, currentCategory: $selected, currentCategoryOrder: $selectedOrder)
                         .navigationBarTitle("", displayMode: .inline)
                         .toolbar{
                             ToolbarItem(placement: .navigationBarLeading){
                                 HStack(spacing: 2){
                                     Button(action: {
-                                        if !isPresentHalfModal {
+                                        if !isPresentHalfModal {                        //modal sheet가 열려있으면 카테고리뷰를 열 수 없다
                                             withAnimation(.spring()){
                                                 self.isShowingCategory = true
                                             }
@@ -56,7 +56,7 @@ struct MainHomeView: View {
                             ToolbarItem(placement: .navigationBarTrailing){
                                 VStack{
                                     NavigationLink(destination: MyPageView(userData: $scrapVM.user.result, isShowingMyPage: $isShowingMyPage).navigationBarHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowingMyPage) {
-                                        Button(action: {
+                                        Button(action: {                                //modal sheet가 열려있으면 마이페이지뷰를 열 수 없다
                                             if !isPresentHalfModal {
                                                 self.isShowingMyPage.toggle()
                                             }

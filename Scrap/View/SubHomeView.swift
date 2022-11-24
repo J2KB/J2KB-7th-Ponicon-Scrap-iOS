@@ -9,26 +9,24 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct SubHomeView: View {
-    @State private var isOneCol = true
-    @State private var isRecent = true
-    @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
-    @EnvironmentObject var userVM : UserViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
-    @Binding var datas : DataResponse.Result
-    @State private var isShowMovingCategory = false
-    @Binding var isPresentHalfModal : Bool
-    @Binding var currentCategory : Int
-    @Binding var currentCategoryOrder : Int
+    @Environment(\.colorScheme) var scheme              //Light/Dark mode
+    @EnvironmentObject var vm : ScrapViewModel
+    @EnvironmentObject var userVM : UserViewModel
+    @State private var isShowMovingCategory = false     //카테고리 이동을 위해 view를 열었는지에 대한 상태 변수
+    @State private var isOneCol = true                  //1열인가?
+    @State private var isRecent = true                  //최신순인가?
+    @Binding var datas : DataResponse.Result            //선택한 카테고리에 따른 자료 배열
+    @Binding var isPresentHalfModal : Bool              //카테고리 더보기 sheet가 열려있는지에 대한 상태 변수
+    @Binding var currentCategory : Int                  //현재 카테고리 id
+    @Binding var currentCategoryOrder : Int             //현재 카테고리 order
     @State private var detailData = DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")
-    @Environment(\.colorScheme) var scheme //Light/Dark mode
-    
-//    @State private var test = [DataResponse.Datas.init(linkId: 0, link: "https://www.apple.com", title: "명탐정코난보고싶다", domain: "명탐정코난", imgUrl: "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbWD4nB%2FbtqDTkNXVOo%2Fl9GRUtr0TmblyFySCOpam0%2Fimg.png"), DataResponse.Datas.init(linkId: 0, link: "https://www.apple.com", title: "명탐정코난보고싶다정말로", domain: "명탐정코난", imgUrl: "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbWD4nB%2FbtqDTkNXVOo%2Fl9GRUtr0TmblyFySCOpam0%2Fimg.png"), DataResponse.Datas.init(linkId: 0, link: "https://www.apple.com", title: "명탐정코난보고싶다잠도자고싶다", domain: "명탐정코난", imgUrl: "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbWD4nB%2FbtqDTkNXVOo%2Fl9GRUtr0TmblyFySCOpam0%2Fimg.png"), DataResponse.Datas.init(linkId: 0, link: "", title: "명탐정코난보고싶다남도일이름도이뻐", domain: "명탐정코난", imgUrl: "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbWD4nB%2FbtqDTkNXVOo%2Fl9GRUtr0TmblyFySCOpam0%2Fimg.png"), DataResponse.Datas.init(linkId: 0, link: "", title: "명탐정코난보고싶다오글거리지만재미잇어", domain: "명탐정코난", imgUrl: "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbWD4nB%2FbtqDTkNXVOo%2Fl9GRUtr0TmblyFySCOpam0%2Fimg.png"), DataResponse.Datas.init(linkId: 0, link: "https://www.apple/com", title: "명탐정코난보고싶다진짜졸리다흑흑", domain: "명탐정코난", imgUrl: "")]
 
     var body: some View {
         VStack{
             ScrollView(.vertical, showsIndicators: false){
                 HStack{
                     Button(action: {
-                        if !isPresentHalfModal {
+                        if !isPresentHalfModal {       //카테고리더보기sheet가 열려있으면 배경 버튼 비활성화
                             self.isOneCol.toggle()
                         }
                     }){
@@ -41,7 +39,7 @@ struct SubHomeView: View {
                         .font(.system(size: 14))
                         .foregroundColor(.gray)
                     Button(action: {
-                        if !isPresentHalfModal {
+                        if !isPresentHalfModal {      //카테고리더보기sheet가 열려있으면 배경 버튼 비활성화
                             self.isRecent.toggle()
                         }
                     }){
@@ -53,22 +51,72 @@ struct SubHomeView: View {
                 }
                 .frame(width: UIScreen.main.bounds.width - 32, height: 40, alignment: .trailing)
                 LazyVGrid(columns: isOneCol ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: UIScreen.main.bounds.width / 3))], spacing: 10){
-                    if isRecent {
+                    if isRecent { //최신순
                         ForEach($datas.links.reversed()) { info in
-                            PageView(data: info, isOneCol: $isOneCol, isPresentHalfModal: $isPresentHalfModal, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
+                            PageView(isPresentHalfModal: $isPresentHalfModal, data: info, detailData: $detailData, isOneCol: $isOneCol, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
                                 .padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
                         }
-                    } else {
+                    } else {      //오래된순
                         ForEach($datas.links) { info in
-                            PageView(data: info, isOneCol: $isOneCol, isPresentHalfModal: $isPresentHalfModal, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
+                            PageView(isPresentHalfModal: $isPresentHalfModal, data: info, detailData: $detailData, isOneCol: $isOneCol, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
                                 .padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
                         }
                     }
                 } //LAZYGRID
                 .padding(.horizontal, isOneCol ? 0 : 15)
             }//ScrollView
+            NavigationLink(destination: MoveCategoryView(isShowMovingCategory: $isShowMovingCategory, categoryList: $vm.categoryList.result, data: $detailData, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){ EmptyView() }
         }//VStack
-        .background(scheme == .light ? .white : .black_bg)
+        .background(scheme == .light ? .white : Color("black_bg"))
+        .sheet(isPresented: $isPresentHalfModal){ //isPresentHalfModal == true일때 sheet 열림
+            HalfSheet {
+                DataSheetView(isShowMovingCategory: $isShowMovingCategory, data: $detailData, isPresentHalfModal: $isPresentHalfModal, currentCatOrder: $currentCategoryOrder, currentCategory: $currentCategory)
+//                VStack{
+//                    Text(detailData.title ?? "")
+//                        .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
+//                        .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+//                    List {
+//                        Section {
+//                            Button(action:{
+//                                UIPasteboard.general.setValue(detailData.link ?? "", forPasteboardType: UTType.plainText.identifier)
+//                                isPresentHalfModal = false
+//                            }){
+//                                Label("링크 복사", systemImage: "doc.on.doc")
+//                                    .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+//                            }
+//                        }
+//                        .listRowBackground(scheme == .light ? Color(.white) : .black_bold)
+//                        Section {
+//                            if currentCategoryOrder != 0 { //전체 자료는 카테고리 이동 불가
+//                                Button(action: {
+//                                    self.isShowMovingCategory.toggle()
+//                                    isPresentHalfModal = false
+//                                    print("✅ Show Moving Category View")
+//                                }) {
+//                                    NavigationLink(destination: MoveCategoryView(isShowMovingCategory: $isShowMovingCategory, categoryList: $vm.categoryList.result, data: $detailData, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){
+//                                        Label("카테고리 이동", systemImage: "arrow.turn.down.right")
+//                                            .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+//                                    }
+//                                }
+//                            }
+//                            Button(action:{
+//                                vm.deleteData(userID: userVM.userIdx, linkID: detailData.linkId!)
+//                                vm.removeData(linkID: detailData.linkId!)
+//                                isPresentHalfModal = false
+//                            }){
+//                                Label("삭제", systemImage: "trash")
+//                                    .foregroundColor(.red)
+//                            }
+//                        }
+//                        .listRowBackground(scheme == .light ? Color(.white) : .black_bold)
+//                    }
+//                    .background(scheme == .light ? Color("background") : .black_bg)
+//                }
+//                .padding(.top, 48)
+//                .background(scheme == .light ? Color("background") : .black_bg)
+            }
+            .ignoresSafeArea()
+        }
         .onAppear{
             UITableView.appearance().backgroundColor = .clear
         }

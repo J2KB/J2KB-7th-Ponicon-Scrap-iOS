@@ -9,16 +9,16 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct PageView: View {
-    @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
-    @EnvironmentObject var userVM : UserViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
-    @Binding var data : DataResponse.Datas
-    @Binding var isOneCol : Bool
-    @State private var height = 200
-    @Binding var isPresentHalfModal : Bool
-    @State private var isShowMovingCategory = false
-    @Binding var currentCategory : Int
-    @Binding var currentCatOrder : Int
-    @Environment(\.colorScheme) var scheme //Light/Dark mode
+    @Environment(\.colorScheme) var scheme              //Light/Dark mode
+    @EnvironmentObject var vm : ScrapViewModel
+    @EnvironmentObject var userVM : UserViewModel
+    @Binding var isPresentHalfModal : Bool              //카테고리 더보기 sheet가 열려있는지에 대한 상태 변수
+//    @State private var isShowMovingCategory = false     //카테고리 이동을 위해 view를 열었는지에 대한 상태 변수
+    @Binding var data : DataResponse.Datas              //해당 자료 데이터
+    @Binding var detailData : DataResponse.Datas
+    @Binding var isOneCol : Bool                        //1열인가?
+    @Binding var currentCategory : Int                  //현재 카테고리 id
+    @Binding var currentCatOrder : Int                  //현재 카테고리 order
 
     var body: some View {
         VStack(spacing: 0){
@@ -58,9 +58,10 @@ struct PageView: View {
                                 .padding(.horizontal, 5)
                                 .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, alignment: .leading)
                         }
-                        Button(action: {
-                            self.isPresentHalfModal.toggle() //half-modal view 등장
+                        Button(action: {                     //더보기 버튼 클릭하면 isPresentHalfModal = true, sheet 올라옴
+                            isPresentHalfModal = true        //half-modal view 등장
                             print("✅ page view에서 더보기 버튼을 누름")
+                            detailData = data
                             print(data.linkId)
                             print(data.title)
                             print(data.imgUrl)
@@ -119,8 +120,9 @@ struct PageView: View {
                                 .padding(.horizontal, 5)
                                 .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, alignment: .leading)
                         }
-                        Button(action: {
-                            isPresentHalfModal.toggle() //half-modal view 등장
+                        Button(action: {                //더보기 버튼 클릭하면 isPresentHalfModal = true, sheet 올라옴
+                            isPresentHalfModal = true   //half-modal view 등장
+                            detailData = data
                             print("✅ page view에서 더보기 버튼을 누름")
                             print(data.linkId)
                             print(data.title)
@@ -136,69 +138,71 @@ struct PageView: View {
                 }
             }
         }
-        .sheet(isPresented: $isPresentHalfModal){
-            HalfSheet {
-                VStack{
-                    Text(data.title ?? "")
-                        .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
-                        .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
-                    List {
-                        Section {
-                            Button(action:{
-                                UIPasteboard.general.setValue(data.link ?? "", forPasteboardType: UTType.plainText.identifier)
-                                isPresentHalfModal = false
-                            }){
-                                Label("링크 복사", systemImage: "doc.on.doc")
-                                    .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
-                            }
-                        }
-                        .listRowBackground(scheme == .light ? Color(.white) : .black_bold)
-                        Section {
-                            if currentCatOrder != 0 { //전체 자료는 카테고리 이동 불가
-                                Button(action: {
-                                    isPresentHalfModal = false
-                                    self.isShowMovingCategory = true
-                                    print("isShowMovingCategory true!")
-                                }) {
-                                    NavigationLink(destination: MoveCategoryView(categoryList: $vm.categoryList.result, data: $data, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){
-                                        Label("카테고리 이동", systemImage: "arrow.turn.down.right")
-                                            .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
-                                    }
-                                }
-                            }
-                            Button(action:{
-                                vm.deleteData(userID: userVM.userIdx, linkID: data.linkId!)
-                                vm.removeData(linkID: data.linkId!)
-                                isPresentHalfModal = false
-                            }){
-                                Label("삭제", systemImage: "trash")
-                                    .foregroundColor(.red)
-                            }
-                        }
-                        .listRowBackground(scheme == .light ? Color(.white) : .black_bold)
-                    }
-                    .background(scheme == .light ? Color("background") : .black_bg)
-
-                }
-                .padding(.top, 48)
-                .background(scheme == .light ? Color("background") : .black_bg)
-            }
-            .ignoresSafeArea()
+        .onAppear{   //pageView가 등장
+            print("⭐️⭐️⭐️\(data.title)의 pageView 등장⭐️⭐️⭐️")
+//            UITableView.appearance().backgroundColor = .clear
         }
-        .onAppear{
-            print("🌥🌥 modal sheet 나타남")
-            print(data.title)
-            print(data.linkId)
-            print(data.imgUrl)
-            print(data.domain)
-            UITableView.appearance().backgroundColor = .clear
-        }
+//        .sheet(isPresented: $isPresentHalfModal){
+//            HalfSheet {
+//                VStack{
+//                    Text(data.title ?? "")
+//                        .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
+//                        .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+//                    List {
+//                        Section {
+//                            Button(action:{
+//                                UIPasteboard.general.setValue(data.link ?? "", forPasteboardType: UTType.plainText.identifier)
+//                                isPresentHalfModal = false
+//                            }){
+//                                Label("링크 복사", systemImage: "doc.on.doc")
+//                                    .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+//                            }
+//                        }
+//                        .listRowBackground(scheme == .light ? Color(.white) : .black_bold)
+//                        Section {
+//                            if currentCatOrder != 0 { //전체 자료는 카테고리 이동 불가
+//                                Button(action: {
+//                                    isPresentHalfModal = false
+//                                    self.isShowMovingCategory = true
+//                                    print("isShowMovingCategory true!")
+//                                }) {
+//                                    NavigationLink(destination: MoveCategoryView(categoryList: $vm.categoryList.result, data: $data, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){
+//                                        Label("카테고리 이동", systemImage: "arrow.turn.down.right")
+//                                            .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+//                                    }
+//                                }
+//                            }
+//                            Button(action:{
+//                                vm.deleteData(userID: userVM.userIdx, linkID: data.linkId!)
+//                                vm.removeData(linkID: data.linkId!)
+//                                isPresentHalfModal = false
+//                            }){
+//                                Label("삭제", systemImage: "trash")
+//                                    .foregroundColor(.red)
+//                            }
+//                        }
+//                        .listRowBackground(scheme == .light ? Color(.white) : .black_bold)
+//                    }
+//                    .background(scheme == .light ? Color("background") : .black_bg)
+//
+//                }
+//                .padding(.top, 48)
+//                .background(scheme == .light ? Color("background") : .black_bg)
+//            }
+//            .ignoresSafeArea()
+//        }
     }
 }
 
 struct PageView_Previews: PreviewProvider {
     static var previews: some View {
-        PageView(data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도일! 이름도 참 잘지었어 유명한 이름도 진짜 독특하고 잘지은듯 유명한 탐정 유명한!ㅋㅋㅋㅋ", domain: "naver.com", imgUrl: /*"https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbWD4nB%2FbtqDTkNXVOo%2Fl9GRUtr0TmblyFySCOpam0%2Fimg.png"*/"")), isOneCol: .constant(true), isPresentHalfModal: .constant(false), currentCategory: .constant(0), currentCatOrder: .constant(1))
+        PageView(
+            isPresentHalfModal: .constant(false),
+            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도", domain: "naver.com", imgUrl: "")),
+            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneCol: .constant(true),
+            currentCategory: .constant(0),
+            currentCatOrder: .constant(1)
+        )
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
             .preferredColorScheme(.dark)

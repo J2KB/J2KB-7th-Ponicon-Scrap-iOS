@@ -10,6 +10,7 @@ import SwiftUI
 struct MoveCategoryView: View {
     @Environment(\.colorScheme) var scheme //Light/Dark mode
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode> //pop
+    @Binding var isShowMovingCategory : Bool     //카테고리 이동을 위해 view를 열었는지에 대한 상태 변수
     @Binding var categoryList : CategoryResponse.Result
     @State private var selection = 0
     @Binding var data : DataResponse.Datas
@@ -39,7 +40,8 @@ struct MoveCategoryView: View {
         .toolbar{
             ToolbarItem(placement: .navigationBarLeading){
                 Button(action: {
-                    self.presentationMode.wrappedValue.dismiss() //pop
+//                    self.presentationMode.wrappedValue.dismiss() //pop
+                    isShowMovingCategory.toggle()
                 }){
                     Text("취소")
                         .fontWeight(.semibold)
@@ -54,7 +56,8 @@ struct MoveCategoryView: View {
                     //로컬(프론트)에서는 현재 카테고리에서 삭제해야됨 (dataList에서 해당 자료 삭제)
                     vm.modifyDatasCategory(userID: userVM.userIdx, linkID: data.linkId!, categoryId: selection)
                     vm.removeData(linkID: data.linkId!)
-                    self.presentationMode.wrappedValue.dismiss() //pop
+                    isShowMovingCategory.toggle()
+//                    self.presentationMode.wrappedValue.dismiss() //pop
                 }) {
                     Text("저장")
                         .fontWeight(.semibold)
@@ -67,9 +70,12 @@ struct MoveCategoryView: View {
 
 struct MoveCategoryView_Previews: PreviewProvider {
     static var previews: some View {
-        MoveCategoryView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 0),
-            CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2),
-            CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")), currentCategory: .constant(0))
-            .preferredColorScheme(.dark)
+        MoveCategoryView(
+            isShowMovingCategory: .constant(true),
+            categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 0), CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2), CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])),
+            data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")),
+            currentCategory: .constant(0)
+        )
+        .preferredColorScheme(.dark)
     }
 }
