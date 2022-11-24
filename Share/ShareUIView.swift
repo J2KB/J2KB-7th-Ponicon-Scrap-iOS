@@ -86,26 +86,22 @@ struct ShareUIView: View {
     private let userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") //user id 가져오기
 
     var body: some View {
-        if userIdx == 0 {
-            Text("Scrap에 로그인해주세요.")
-        } else { //사용자 로그인되어있는 상태라면
-            List{
-                ForEach($vm.categoryList.result.categories){ $category in
-                    if category.order != 0 { //모든 자료는 제외
-                        Text(category.name)
-                        .listRowBackground(self.selected == category.categoryId ? light_gray : Color(.white))
-                        .onTapGesture { //클릭하면 현재 categoryID
-                            self.selected = category.categoryId
-                            self.delegate.categoryID = category.categoryId
-                        }
+        List{
+            ForEach($vm.categoryList.result.categories){ $category in
+                if category.order != 0 { //모든 자료는 제외
+                    Text(category.name)
+                    .listRowBackground(self.selected == category.categoryId ? light_gray : Color(.white))
+                    .onTapGesture { //클릭하면 현재 categoryID
+                        self.selected = category.categoryId
+                        self.delegate.categoryID = category.categoryId
                     }
                 }
             }
-            .listStyle(InsetListStyle())
-            .onAppear{
-                print("user idx: \(self.userIdx!)")
-                vm.getCategoryDataInShare(userIdx: self.userIdx!)
-            }
+        }
+        .listStyle(InsetListStyle())
+        .onAppear{
+            print("user idx: \(self.userIdx!)")
+            vm.getCategoryDataInShare(userIdx: self.userIdx!)
         }
     }
 }

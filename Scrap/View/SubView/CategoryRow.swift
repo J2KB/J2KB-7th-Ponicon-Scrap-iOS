@@ -50,9 +50,7 @@ struct CategoryRow: View {
                     self.selected = category.categoryId
                     self.selectedOrder = category.order
                     self.isChangeRow = true
-//                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(selected, forKey: "lastCategory") //마지막 카테고리 id 저장
-                    print("\(selected) is selected category id")
-                    vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq")
+                    vm.getData(userID: userVM.userIdx, catID: selected)
                 }
             }
             //modal shet 등장

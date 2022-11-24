@@ -62,8 +62,6 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     @Published var categoryList = CategoryResponse(code: 0, message: "", result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)]))
     var categoryID = 0
     @Published var isLoading : ServerState = .none //서버 통신 중
-//    @Published var state : [ServerState] = [.none, .none, .none, .none] //아무것도 안한 상태
-    //getcategory, getalldata, getdata, getMydata
     
     //======== 로컬 함수 ========
     //categoryList에 category 추가 함수 (카테고리 추가 기능)
@@ -113,23 +111,6 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }
     }
 
-//    @MainActor
-//    func whenMainHomeAppear(selected: Int, userIdx: Int) async {
-//        isLoading = true
-//        await getCategoryData(userID: userIdx) //카테고리 조회 통신 📡
-//        await getMyPageData(userID: userIdx) //마이페이지 데이터 조회 통신 📡
-//        if selected == 0 { await getAllData(userID: userIdx) } //자료 조회 통신 📡 case01
-//        else { await getData(userID: userIdx, catID: selected, seq: "seq") } //자료 조회 통신 📡 case02
-//        isLoading = false
-//    }
-//
-//    @MainActor
-//    func whenGetData(selected: Int, userIdx: Int) async{
-//        isLoading = true
-//        await getData(userID: userIdx, catID: selected, seq: "seq")
-//        isLoading = false
-//    }
-    
     private let baseUrl = "https://scrap.hana-umc.shop"
     
     //=========GET=========
@@ -305,9 +286,9 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //=======GET=======
     //자료 조회
     //query: user id, category id, seq
-    func getData(userID: Int, catID: Int, seq: String) {
+    func getData(userID: Int, catID: Int) {
         print("자료 조회")
-        guard let url = URL(string: "\(baseUrl)/auth/data?id=\(userID)&category=\(catID)&seq=\(seq)") else {
+        guard let url = URL(string: "\(baseUrl)/auth/data?id=\(userID)&category=\(catID)") else {
             print("invalid url")
             return
         }

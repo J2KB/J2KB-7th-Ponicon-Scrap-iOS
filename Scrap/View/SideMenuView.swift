@@ -106,7 +106,7 @@ struct SideMenuView: View {
                                         self.selected = category.categoryId
                                         self.selectedOrder = category.order
                                         if category.order == 0 { vm.getAllData(userID: userVM.userIdx) } //📡 카테고리에 해당하는 자료 가져오는 통신
-                                        else { vm.getData(userID: userVM.userIdx, catID: selected, seq: "seq") } //📡 카테고리에 해당하는 자료 가져오는 통신
+                                        else { vm.getData(userID: userVM.userIdx, catID: selected) } //📡 카테고리에 해당하는 자료 가져오는 통신
                                     }
                                 }
                             }

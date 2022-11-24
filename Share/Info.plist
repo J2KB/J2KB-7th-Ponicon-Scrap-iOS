@@ -5,7 +5,7 @@
         <key>NSExtension</key>
         <dict>
             <key>NSExtensionPrincipalClass</key>
-            <string>Share.ShareViewController</string>
+            <string>ShareNavigationController</string>
             <key>NSExtensionAttributes</key>
             <dict>
                 <key>NSExtensionJavaScriptPreprocessingFile</key>

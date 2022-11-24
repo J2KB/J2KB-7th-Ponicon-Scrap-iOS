@@ -80,7 +80,7 @@ struct MainHomeView: View {
 //            scrapVM.getCategoryData(userID: userVM.userIdx) //카테고리 조회 통신 📡
             scrapVM.getMyPageData(userID: userVM.userIdx) //마이페이지 데이터 조회 통신 📡
             if self.selected == 0 { scrapVM.getAllData(userID: userVM.userIdx) } //자료 조회 통신 📡 case01
-            else { scrapVM.getData(userID: userVM.userIdx, catID: selected, seq: "seq") } //자료 조회 통신 📡 case02
+            else { scrapVM.getData(userID: userVM.userIdx, catID: selected) } //자료 조회 통신 📡 case02
         }
         .task{
 //            await scrapVM.whenMainHomeAppear(selected: selected, userIdx: userVM.userIdx)

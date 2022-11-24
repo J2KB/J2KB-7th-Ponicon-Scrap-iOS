@@ -59,7 +59,12 @@ struct PageView: View {
                                 .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, alignment: .leading)
                         }
                         Button(action: {
-                            self.isPresentHalfModal = true //half-modal view 등장
+                            self.isPresentHalfModal.toggle() //half-modal view 등장
+                            print("✅ page view에서 더보기 버튼을 누름")
+                            print(data.linkId)
+                            print(data.title)
+                            print(data.imgUrl)
+                            print(data.domain)
                         }){
                             Image(systemName: "ellipsis")
                                 .rotationEffect(.degrees(90))
@@ -115,7 +120,12 @@ struct PageView: View {
                                 .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, alignment: .leading)
                         }
                         Button(action: {
-                            isPresentHalfModal = true //half-modal view 등장
+                            isPresentHalfModal.toggle() //half-modal view 등장
+                            print("✅ page view에서 더보기 버튼을 누름")
+                            print(data.linkId)
+                            print(data.title)
+                            print(data.imgUrl)
+                            print(data.domain)
                         }){
                             Image(systemName: "ellipsis")
                                 .rotationEffect(.degrees(90))
@@ -148,6 +158,7 @@ struct PageView: View {
                                 Button(action: {
                                     isPresentHalfModal = false
                                     self.isShowMovingCategory = true
+                                    print("isShowMovingCategory true!")
                                 }) {
                                     NavigationLink(destination: MoveCategoryView(categoryList: $vm.categoryList.result, data: $data, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){
                                         Label("카테고리 이동", systemImage: "arrow.turn.down.right")
@@ -175,6 +186,11 @@ struct PageView: View {
             .ignoresSafeArea()
         }
         .onAppear{
+            print("🌥🌥 modal sheet 나타남")
+            print(data.title)
+            print(data.linkId)
+            print(data.imgUrl)
+            print(data.domain)
             UITableView.appearance().backgroundColor = .clear
         }
     }
