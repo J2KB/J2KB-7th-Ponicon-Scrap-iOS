@@ -116,7 +116,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //=========GET=========
     //카테고리 전체 조회
     //query: user id
-    func getCategoryData(userID: Int) async {
+    func getCategoryData(userID: Int) {
         print("카테고리 조회")
         guard let url = URL(string: "\(baseUrl)/category/all?id=\(userID)") else {
             print("invalid url")
@@ -156,7 +156,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //카테고리 추가
     //query: userId/newCatName
     //body: newCatName
-    func addNewCategory(newCat: String, userID: Int) async {
+    func addNewCategory(newCat: String, userID: Int) {
         guard let url = URL(string: "\(baseUrl)/auth/category?id=\(userID)") else {
             print("invalid url")
             return

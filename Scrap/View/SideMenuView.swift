@@ -59,12 +59,12 @@ struct SideMenuView: View {
                             Image(systemName: "chevron.backward")
                                 .resizable()
                                 .frame(width: 10, height: 16)
-                                .foregroundColor(scheme == .light ? .black : .gray_sub)
+                                .foregroundColor(Color("basic_text"))
                         }
                         Text("카테고리")
                             .font(.system(size: 18, weight: .semibold))
                             .frame(width: 70, height: 20, alignment: .leading)
-                            .foregroundColor(scheme == .light ? .black : .gray_sub)
+                            .foregroundColor(Color("basic_text"))
                     }
                     Spacer()
                     Button(action: {
@@ -73,7 +73,7 @@ struct SideMenuView: View {
                         Image(systemName: "plus")
                             .resizable()
                             .frame(width: 16, height: 16)
-                            .foregroundColor(scheme == .light ? .black : .gray_sub)
+                            .foregroundColor(Color("basic_text"))
                     }
                     .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 2))
                 }//Header HStack
@@ -81,7 +81,7 @@ struct SideMenuView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 10)
                 .padding(.top, 4)
-                .background(scheme == .light ? .white : .black_bg)
+                .background(Color("background"))
                 //Category LIST
                 VStack{
                     List{
@@ -90,13 +90,15 @@ struct SideMenuView: View {
                                 HStack{ //모든 자료, 분류되지 않은 자료
                                     Text(category.name)
                                         .font(.system(size: 16))
+                                        .foregroundColor(Color("basic_text"))
                                         .frame(width: UIScreen.main.bounds.width - 120, alignment: .leading)
                                     Text("\(category.numOfLink)")
                                         .font(.system(size: 16))
+                                        .foregroundColor(Color("basic_text"))
                                         .frame(width: 30, alignment: .trailing)
                                 }
                                 .padding(.leading, 10)
-                                .listRowBackground(self.selected == category.categoryId ? (scheme == .light ? .gray_sub : .black_accent) : scheme == .light ? Color(.white) : .black_bg)
+                                .listRowBackground(self.selected == category.categoryId ? Color("selected_color") : Color("background"))
                                 .onTapGesture { //클릭하면 현재 categoryID
                                     if !isAddingCategory {
                                         vm.isLoading = .loading
@@ -131,26 +133,24 @@ struct SideMenuView: View {
                         })
                         }//List
                 }//CategoryList VStack
-                .refreshable {
-                    await vm.getCategoryData(userID: userVM.userIdx)
-                }
+//                .refreshable {
+//                    await vm.getCategoryData(userID: userVM.userIdx)
+//                }
                 .frame(width: UIScreen.main.bounds.width)
                 .padding(.trailing, 10)
                 .listStyle(PlainListStyle())
             }//VStack
-            .background(scheme == .light ? .white : .black_bg)
+            .background(Color("background"))
             if isAddingCategory { //카테고리 추가 alert창 켜지면 뒷 배경 블러 처리
-                Color(scheme == .light ? "blur_gray" : "black_bg").opacity(0.5).ignoresSafeArea()
+                Color("blur_background").ignoresSafeArea()
             }
         }//ZStack
         .addCategoryAlert(isPresented: $isAddingCategory, newCategoryTitle: $newCat, placeholder: "새로운 카테고리 이름을 입력해주세요", title: "카테고리 추가하기", action: { _ in
-            Task{
-                await vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
-                let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
-                vm.appendCategory(newCategory: newCategory) //post로 추가된 카테고리 이름 서버에 전송
-                newCat = ""
-                isAddingCategory = false
-            }
+            vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
+            let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
+            vm.appendCategory(newCategory: newCategory) //post로 추가된 카테고리 이름 서버에 전송
+            newCat = ""
+            isAddingCategory = false
         })
     }//body
 }
@@ -160,6 +160,6 @@ struct SideMenuView_Previews: PreviewProvider {
         SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 0),
            CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2), CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCateogry: .constant(true), selected: .constant(0), selectedOrder: .constant(0))
             .environmentObject(ScrapViewModel())
-//            .preferredColorScheme(.dark)
+            .preferredColorScheme(.dark)
     }
 }

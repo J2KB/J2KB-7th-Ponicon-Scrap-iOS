@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MoveCategoryView: View {
     @Environment(\.colorScheme) var scheme //Light/Dark mode
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode> //pop
     @Binding var isShowMovingCategory : Bool     //카테고리 이동을 위해 view를 열었는지에 대한 상태 변수
     @Binding var categoryList : CategoryResponse.Result
     @State private var selection = 0
@@ -24,7 +23,7 @@ struct MoveCategoryView: View {
             List{
                 ForEach($categoryList.categories) { $category in
                     Text(category.name)
-                        .listRowBackground(self.selection == category.categoryId ? (scheme == .light ? .gray_sub : .black_accent) : scheme == .light ? Color(.white) : .black_bg)
+                        .listRowBackground(self.selection == category.categoryId ? Color("selected_color") : Color("background"))
                         .onTapGesture { //클릭하면 현재 categoryID
                             self.selection = category.categoryId
                         }
@@ -35,17 +34,16 @@ struct MoveCategoryView: View {
                 self.selection = currentCategory
             }
         }
-        .background(scheme == .light ? .white : .black_bg)
+        .background(Color("background"))
         .navigationBarTitle("카테고리 이동", displayMode: .inline)
         .toolbar{
             ToolbarItem(placement: .navigationBarLeading){
                 Button(action: {
-//                    self.presentationMode.wrappedValue.dismiss() //pop
                     isShowMovingCategory.toggle()
                 }){
                     Text("취소")
                         .fontWeight(.semibold)
-                        .foregroundColor(scheme == .light ? .black : .gray_sub)
+                        .foregroundColor(Color("basic_text"))
                 }
             }
         }
@@ -57,7 +55,6 @@ struct MoveCategoryView: View {
                     vm.modifyDatasCategory(userID: userVM.userIdx, linkID: data.linkId!, categoryId: selection)
                     vm.removeData(linkID: data.linkId!)
                     isShowMovingCategory.toggle()
-//                    self.presentationMode.wrappedValue.dismiss() //pop
                 }) {
                     Text("저장")
                         .fontWeight(.semibold)

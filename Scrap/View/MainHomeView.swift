@@ -28,7 +28,8 @@ struct MainHomeView: View {
             NavigationView{
                 if scrapVM.isLoading == .loading { //서버통신(로딩)중이면 progress view 등장(loading indicator)
                     ProgressView()
-                        .background(scheme == .light ? .white : .black_bg)
+                        .background(Color("background"))
+                        .ignoresSafeArea()
                 }else {
                     SubHomeView(datas: $scrapVM.dataList.result, isPresentHalfModal: $isPresentHalfModal, currentCategory: $selected, currentCategoryOrder: $selectedOrder)
                         .navigationBarTitle("", displayMode: .inline)
@@ -45,10 +46,11 @@ struct MainHomeView: View {
                                         Image(systemName: "line.3.horizontal")
                                             .resizable()
                                             .frame(width: 20, height: 14)
-                                            .foregroundColor(scheme == .light ? .black : .gray_sub)
+                                            .foregroundColor(Color("basic_text"))
                                     }
                                     Text(categoryTitle)
                                         .fontWeight(.bold)
+                                        .foregroundColor(Color("basic_text"))
                                 }
                             }
                         }
@@ -62,7 +64,7 @@ struct MainHomeView: View {
                                             }
                                         }) {
                                             Image(systemName: "person.circle")
-                                                .foregroundColor(scheme == .light ? .black : .gray_sub)
+                                                .foregroundColor(Color("basic_text"))
                                         }
                                     }
                                 }
@@ -74,21 +76,22 @@ struct MainHomeView: View {
             SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCateogry: $isShowingCategory, selected: $selected, selectedOrder: $selectedOrder)
                 .offset(x: isShowingCategory ? 0 : -UIScreen.main.bounds.width - 5)
         }
-        .background(scheme == .light ? .white : .black_bg)
+        .background(Color("background"))
         .onAppear{ //MainHomeView 등장하면 api 통신
+            scrapVM.isLoading = .loading
             userVM.userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ? userVM.userIdx : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
-//            scrapVM.getCategoryData(userID: userVM.userIdx) //카테고리 조회 통신 📡
+            scrapVM.getCategoryData(userID: userVM.userIdx) //카테고리 조회 통신 📡
             scrapVM.getMyPageData(userID: userVM.userIdx) //마이페이지 데이터 조회 통신 📡
             if self.selected == 0 { scrapVM.getAllData(userID: userVM.userIdx) } //자료 조회 통신 📡 case01
             else { scrapVM.getData(userID: userVM.userIdx, catID: selected) } //자료 조회 통신 📡 case02
         }
-        .task{
+//        .task{
 //            await scrapVM.whenMainHomeAppear(selected: selected, userIdx: userVM.userIdx)
-            await scrapVM.getCategoryData(userID: userVM.userIdx) //카테고리 조회 통신 📡
+//            scrapVM.getCategoryData(userID: userVM.userIdx) //카테고리 조회 통신 📡
 //            scrapVM.getMyPageData(userID: userVM.userIdx) //마이페이지 데이터 조회 통신 📡
 //            if self.selected == 0 { scrapVM.getAllData(userID: userVM.userIdx) } //자료 조회 통신 📡 case01
 //            else { scrapVM.getData(userID: userVM.userIdx, catID: selected, seq: "seq") } //자료 조회 통신 📡 case02
-        }
+//        }
     }
 }
 

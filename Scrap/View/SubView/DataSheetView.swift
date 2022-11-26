@@ -22,28 +22,24 @@ struct DataSheetView: View {
         VStack{
             Text(data.title ?? "")
                 .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
-                .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+                .foregroundColor(Color("basic_text"))
             List {
                 Section {
                     Button(action:{
                         UIPasteboard.general.setValue(data.link ?? "", forPasteboardType: UTType.plainText.identifier)
                         isPresentHalfModal.toggle()
                     }){
-                        Label("링크 복사", systemImage: "doc.on.doc")
-                            .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+                        Label("링크 복사", systemImage: "doc.on.doc").foregroundColor(Color("basic_text"))
                     }
                 }
-                .listRowBackground(scheme == .light ? Color(.white) : .black_bold)
+                .listRowBackground(Color("list_color"))
                 Section {
                     if currentCatOrder != 0 { //전체 자료는 카테고리 이동 불가
                         Button(action: {
                             isShowMovingCategory = true
                             isPresentHalfModal.toggle()
                         }) {
-//                            NavigationLink(destination: MoveCategoryView(isShowMovingCategory: $isShowMovingCategory, categoryList: $vm.categoryList.result, data: $data, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){
-                            Label("카테고리 이동", systemImage: "arrow.turn.down.right")
-                                .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
-//                            }
+                            Label("카테고리 이동", systemImage: "arrow.turn.down.right").foregroundColor(Color("basic_text"))
                         }
                     }
                     Button(action:{
@@ -55,12 +51,12 @@ struct DataSheetView: View {
                             .foregroundColor(.red)
                     }
                 }
-                .listRowBackground(scheme == .light ? Color(.white) : .black_bold)
+                .listRowBackground(Color("list_color"))
             }
-            .background(scheme == .light ? Color("background") : .black_bg)
+            .background(Color("sheet_background"))
         }
         .padding(.top, 48)
-        .background(scheme == .light ? Color("background") : .black_bg)
+        .background(Color("sheet_background"))
     }
 }
 

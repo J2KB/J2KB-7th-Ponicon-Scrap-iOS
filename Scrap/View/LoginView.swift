@@ -28,7 +28,7 @@ struct LoginView: View {
                     VStack(spacing: 80){
                         Text("스크랩")
                             .font(.system(size: 64, weight: .bold))
-                            .foregroundColor(scheme == .light ? .black : .gray_sub)
+                            .foregroundColor(Color("basic_text"))
                             .multilineTextAlignment(.center)
                             .padding(.top, UIScreen.main.bounds.height / 40)
                         VStack(spacing: 16){ // id/pw textfield
@@ -38,7 +38,7 @@ struct LoginView: View {
                                 .frame(width: UIScreen.main.bounds.width / 1.5 - 24, height: 38)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .stroke(scheme == .light ? Color("gray_sub") : .gray_sub)
+                                        .stroke(Color("gray_sub"))
                                         .frame(width: UIScreen.main.bounds.width / 1.5, height: 40, alignment: .center)
                                 )
                             HStack{ //password textfield
@@ -106,20 +106,20 @@ struct LoginView: View {
                                     Image(systemName: "checkmark.square.fill")
                                         .resizable()
                                         .frame(width: 12, height: 12)
-                                        .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+                                        .foregroundColor(Color("basic_text"))
                                     Text("자동 로그인")
                                         .font(.system(size: 12, weight: .regular))
-                                        .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+                                        .foregroundColor(Color("basic_text"))
                                 }
                             }else{
                                 HStack(spacing: 5){
                                     Image(systemName: "square")
                                         .resizable()
                                         .frame(width: 12, height: 12)
-                                        .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+                                        .foregroundColor(Color("basic_text"))
                                     Text("자동 로그인")
                                         .font(.system(size: 12, weight: .regular))
-                                        .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+                                        .foregroundColor(Color("basic_text"))
                                 }
                             }
                         }
@@ -188,7 +188,7 @@ struct LoginView: View {
                 .padding(.top, 20)
             }
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-            .background(scheme == .light ? .white : .black_bg)
+            .background(Color("background"))
             .ignoresSafeArea()
         }
     }

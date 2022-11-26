@@ -36,9 +36,11 @@ struct CategoryRow: View {
             HStack{
                 Text(title)
                     .font(.system(size: 16))
+                    .foregroundColor(Color("basic_text"))
                     .frame(width: UIScreen.main.bounds.width - 120, alignment: .leading)
                 Text("\(category.numOfLink)")
                     .font(.system(size: 16))
+                    .foregroundColor(Color("basic_text"))
                     .frame(width: 30, alignment: .trailing)
             }
             .onTapGesture {
@@ -61,12 +63,12 @@ struct CategoryRow: View {
                 }
             }){
                 Image(systemName: "ellipsis")
-                    .foregroundColor(.gray_bold)
+                    .foregroundColor(Color("option_button"))
             }
             .frame(width: 24, height: 32)
         }
         .padding(.leading, 10)
-        .listRowBackground(self.selected == category.categoryId ? (scheme == .light ? .gray_sub : .black_accent) : scheme == .light ? Color(.white) : .black_bg)
+        .listRowBackground(self.selected == category.categoryId ? Color("selected_color"): Color("background"))
         .sheet(isPresented: $isPresentHalfModal){
             HalfSheet {
                 CategorySheetView(category: $category, isPresentHalfModal: $isPresentHalfModal)

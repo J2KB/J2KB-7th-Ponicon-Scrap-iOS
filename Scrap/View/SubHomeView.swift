@@ -67,53 +67,10 @@ struct SubHomeView: View {
             }//ScrollView
             NavigationLink(destination: MoveCategoryView(isShowMovingCategory: $isShowMovingCategory, categoryList: $vm.categoryList.result, data: $detailData, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){ EmptyView() }
         }//VStack
-        .background(scheme == .light ? .white : Color("black_bg"))
+        .background(Color("background"))
         .sheet(isPresented: $isPresentHalfModal){ //isPresentHalfModal == true일때 sheet 열림
             HalfSheet {
                 DataSheetView(isShowMovingCategory: $isShowMovingCategory, data: $detailData, isPresentHalfModal: $isPresentHalfModal, currentCatOrder: $currentCategoryOrder, currentCategory: $currentCategory)
-//                VStack{
-//                    Text(detailData.title ?? "")
-//                        .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
-//                        .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
-//                    List {
-//                        Section {
-//                            Button(action:{
-//                                UIPasteboard.general.setValue(detailData.link ?? "", forPasteboardType: UTType.plainText.identifier)
-//                                isPresentHalfModal = false
-//                            }){
-//                                Label("링크 복사", systemImage: "doc.on.doc")
-//                                    .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
-//                            }
-//                        }
-//                        .listRowBackground(scheme == .light ? Color(.white) : .black_bold)
-//                        Section {
-//                            if currentCategoryOrder != 0 { //전체 자료는 카테고리 이동 불가
-//                                Button(action: {
-//                                    self.isShowMovingCategory.toggle()
-//                                    isPresentHalfModal = false
-//                                    print("✅ Show Moving Category View")
-//                                }) {
-//                                    NavigationLink(destination: MoveCategoryView(isShowMovingCategory: $isShowMovingCategory, categoryList: $vm.categoryList.result, data: $detailData, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){
-//                                        Label("카테고리 이동", systemImage: "arrow.turn.down.right")
-//                                            .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
-//                                    }
-//                                }
-//                            }
-//                            Button(action:{
-//                                vm.deleteData(userID: userVM.userIdx, linkID: detailData.linkId!)
-//                                vm.removeData(linkID: detailData.linkId!)
-//                                isPresentHalfModal = false
-//                            }){
-//                                Label("삭제", systemImage: "trash")
-//                                    .foregroundColor(.red)
-//                            }
-//                        }
-//                        .listRowBackground(scheme == .light ? Color(.white) : .black_bold)
-//                    }
-//                    .background(scheme == .light ? Color("background") : .black_bg)
-//                }
-//                .padding(.top, 48)
-//                .background(scheme == .light ? Color("background") : .black_bg)
             }
             .ignoresSafeArea()
         }
@@ -128,6 +85,6 @@ struct SubHomeView_Previews: PreviewProvider {
         MainHomeView()
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
-//            .preferredColorScheme(.dark)
+            .preferredColorScheme(.dark)
     }
 }
