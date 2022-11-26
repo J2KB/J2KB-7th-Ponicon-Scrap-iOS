@@ -271,6 +271,13 @@ struct SignUpView: View {
         .background(Color("background"))
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: backButton)
+        .gesture(DragGesture().onEnded({
+             if $0.translation.width > 100 {
+                 withAnimation(.easeInOut) {
+                     self.presentationMode.wrappedValue.dismiss()
+                 }
+             }
+         }))
     }
     
     func isValidSignUp() -> Bool { //전체 조회

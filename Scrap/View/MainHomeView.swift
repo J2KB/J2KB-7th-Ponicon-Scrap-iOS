@@ -17,7 +17,7 @@ struct MainHomeView: View {
     @State private var isShowingMyPage = false
     @State private var isPresentHalfModal = false //sheet가 열려있는지 체크하기 위한 변수
     @Environment(\.colorScheme) var scheme //Light/Dark mode
-    @State private var selected = 0 /*UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "lastCategory") ?? */ //last category id 가져오기
+    @State private var selected = -1 /*UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "lastCategory") ?? */ //last category id 가져오기
     @State private var selectedOrder = 0
     //만약 categoryList안에 아무것도 없다면 전체 자료를 나타내야 됨
     var categoryTitle : String { return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"}
@@ -28,8 +28,9 @@ struct MainHomeView: View {
             NavigationView{
                 if scrapVM.isLoading == .loading { //서버통신(로딩)중이면 progress view 등장(loading indicator)
                     ProgressView()
-                        .background(Color("background"))
                         .ignoresSafeArea()
+                        .progressViewStyle(CircularProgressViewStyle(tint: Color.gray))
+                        .background(Color("background"))
                 }else {
                     SubHomeView(datas: $scrapVM.dataList.result, isPresentHalfModal: $isPresentHalfModal, currentCategory: $selected, currentCategoryOrder: $selectedOrder)
                         .navigationBarTitle("", displayMode: .inline)
@@ -92,6 +93,18 @@ struct MainHomeView: View {
 //            if self.selected == 0 { scrapVM.getAllData(userID: userVM.userIdx) } //자료 조회 통신 📡 case01
 //            else { scrapVM.getData(userID: userVM.userIdx, catID: selected, seq: "seq") } //자료 조회 통신 📡 case02
 //        }
+        .gesture(DragGesture().onEnded({
+             if $0.translation.width < -100 {
+                 withAnimation(.easeInOut) {
+                     self.isShowingCategory = false
+                 }
+             }
+            else if $0.translation.width > 100 {
+                 withAnimation(.easeInOut) {
+                     self.isShowingCategory = true
+                 }
+             }
+         }))
     }
 }
 

@@ -133,9 +133,9 @@ struct SideMenuView: View {
                         })
                         }//List
                 }//CategoryList VStack
-//                .refreshable {
-//                    await vm.getCategoryData(userID: userVM.userIdx)
-//                }
+                .refreshable {
+                    vm.getCategoryData(userID: userVM.userIdx)
+                }
                 .frame(width: UIScreen.main.bounds.width)
                 .padding(.trailing, 10)
                 .listStyle(PlainListStyle())
