@@ -41,7 +41,7 @@ struct AddCategoryAlert: ViewModifier {
                         Spacer()
                         Button(role: .cancel) {
                             withAnimation{
-                                isPresented.toggle()
+                                isPresented = false
                             }
                         } label: {
                             Text("취소").fontWeight(.bold)
@@ -52,7 +52,7 @@ struct AddCategoryAlert: ViewModifier {
                         Button(){
                             action(newCategoryTitle) //closure
                             withAnimation{
-                                isPresented.toggle()
+                                isPresented = false
                             }
                         } label : {
                             Text("추가").fontWeight(.bold)

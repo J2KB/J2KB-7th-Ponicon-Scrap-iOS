@@ -79,9 +79,12 @@ class CategoryIDDelegate: ObservableObject {
 }
 
 struct ShareUIView: View {
+    @Environment(\.colorScheme) var scheme //Light/Dark mode
     @ObservedObject var delegate : CategoryIDDelegate
     @StateObject var vm = CategoryViewModel()
-    let light_gray = Color(red: 217/255, green: 217/255, blue: 217/255)
+    let selectedColor_dark = Color(red: 32/255, green: 32/255, blue: 32/255)
+    let selectedColor_light = Color(red: 217/255, green: 217/255, blue: 217/255)
+
     @State private var selected : Int = 0 //이 값을 ShareViewController로 넘겨줘야 한다.
     private let userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") //user id 가져오기
 
@@ -89,12 +92,20 @@ struct ShareUIView: View {
         List{
             ForEach($vm.categoryList.result.categories){ $category in
                 if category.order != 0 { //모든 자료는 제외
-                    Text(category.name)
-                    .listRowBackground(self.selected == category.categoryId ? light_gray : Color(.white))
-                    .onTapGesture { //클릭하면 현재 categoryID
-                        self.selected = category.categoryId
-                        self.delegate.categoryID = category.categoryId
+                    ZStack{
+                        Text(category.name)
+                            .foregroundColor(scheme == .light ? .black : .white)
+                            .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
+                        Button(action: {
+                            self.selected = category.categoryId
+                            self.delegate.categoryID = category.categoryId
+                        }) {
+                            Rectangle()
+                                .frame(width: UIScreen.main.bounds.width - 20)
+                                .opacity(0)
+                        }
                     }
+                    .listRowBackground(self.selected == category.categoryId ? scheme == .light ? selectedColor_light : selectedColor_dark : .none)
                 }
             }
         }

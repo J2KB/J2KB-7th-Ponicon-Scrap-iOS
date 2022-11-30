@@ -19,7 +19,7 @@ struct PageView: View {
     @Binding var isOneCol : Bool                        //1열인가?
     @Binding var currentCategory : Int                  //현재 카테고리 id
     @Binding var currentCatOrder : Int                  //현재 카테고리 order
-
+    
     var body: some View {
         VStack(spacing: 0){
             if data.imgUrl == "" || data.imgUrl == nil { //image 없으면 default color

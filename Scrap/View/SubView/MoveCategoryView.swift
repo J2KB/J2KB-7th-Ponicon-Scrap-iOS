@@ -22,11 +22,20 @@ struct MoveCategoryView: View {
         ZStack{
             List{
                 ForEach($categoryList.categories) { $category in
-                    Text(category.name)
-                        .listRowBackground(self.selection == category.categoryId ? Color("selected_color") : Color("background"))
-                        .onTapGesture { //클릭하면 현재 categoryID
-                            self.selection = category.categoryId
+                    if category.order != 0 {
+                        ZStack{
+                            Text(category.name)
+                                .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
+                            Button(action: {
+                                self.selection = category.categoryId
+                            }) {
+                                Rectangle()
+                                    .frame(width: UIScreen.main.bounds.width - 20)
+                                    .opacity(0)
+                            }
                         }
+                        .listRowBackground(self.selection == category.categoryId ? Color("selected_color") : Color("background"))
+                    }
                 }
             }
             .listStyle(PlainListStyle())
@@ -53,7 +62,7 @@ struct MoveCategoryView: View {
                     //📡 자료의 카테고리 이동 서버 통신
                     //로컬(프론트)에서는 현재 카테고리에서 삭제해야됨 (dataList에서 해당 자료 삭제)
                     vm.modifyDatasCategory(userID: userVM.userIdx, linkID: data.linkId!, categoryId: selection)
-                    vm.removeData(linkID: data.linkId!)
+//                    vm.movingData(linkID: data.link!, categoryID: selection)
                     isShowMovingCategory.toggle()
                 }) {
                     Text("저장")

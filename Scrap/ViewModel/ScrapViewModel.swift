@@ -57,6 +57,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //카테고리 정보를 담은 categoryList 객체
     //카테고리에 따른 자료 정보를 담은 dataList 객체
     //사용자 정보를 담는 user 객체 -> 마이페이지에서 사용할 것
+    //⭐️refactoring
     @Published var dataList = DataResponse(code: 0, message: "", result: DataResponse.Result(links: [DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")]))
     @Published var user = UserResponse(code: 0, message: "", result: UserResponse.Result(name: "", username: ""))
     @Published var categoryList = CategoryResponse(code: 0, message: "", result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)]))
@@ -88,6 +89,12 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                 return
             }
         }
+    }
+    
+    //data의 카테고리 이동 함수
+    func movingData(linkID link: DataResponse.Datas, fromCategoryID from: Int, toCategoryID to: Int) { //이동할 자료id, 선택한 카테고리Id
+        //해당 자료를 to 카테고리에 넣기
+        //from 카테고리에서 해당 자료 제거
     }
 
     //categoryList의 category 위치 이동

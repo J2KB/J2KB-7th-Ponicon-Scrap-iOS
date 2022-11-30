@@ -39,12 +39,6 @@ class ShareViewController: UIViewController{
     private var webpageUrl : String = ""
     private var webpageImageUrl : String = ""
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-////        self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
-//        //will prevent the app from seemingly freezing as there is no UI.
-//    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -53,7 +47,7 @@ class ShareViewController: UIViewController{
             self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
             return
         }
-        self.view.backgroundColor = .systemGray6
+
         configureNavBar()
         let delegate = CategoryIDDelegate()
         let childView = UIHostingController(rootView: ShareUIView(delegate: delegate))
@@ -91,8 +85,10 @@ class ShareViewController: UIViewController{
         self.navigationItem.title = "자료 저장"
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelAction))
         self.navigationItem.setLeftBarButton(cancelButton, animated: false)
+        self.navigationItem.leftBarButtonItem?.tintColor = .systemBlue
         let postButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(postAction))
         self.navigationItem.setRightBarButton(postButton, animated: false)
+        self.navigationItem.rightBarButtonItem?.tintColor = .systemBlue
     }
     
     //3. define the actions for the navigation items - cancel
@@ -113,15 +109,15 @@ class ShareViewController: UIViewController{
                           let results = dictionary[NSExtensionJavaScriptPreprocessingResultsKey] as? NSDictionary,
                           let title = results["currentTitle"] as? String,
                           let hostname = results["currentUrl"] as? String,
-                          let image = results["images"] as? [String] else { return }
+                          let image = results["images"] as? String else { return }
                     print(results)
                     self.webpageTitle = title
                     self.webpageUrl = hostname
-                    self.webpageImageUrl = image.filter{$0.contains(".png") || $0.contains(".jpg")}[0]
+                    self.webpageImageUrl = image
                     print(self.webpageTitle)
                     print(self.webpageUrl)
                     print(self.webpageImageUrl)
-//                self.addNewData(baseurl: baseURL.absoluteString!, catID: self.catID, userIdx: self.userIdx!)
+                    self.addNewData(catID: self.catID, userIdx: self.userIdx!)
                 }
             )}
         }
@@ -129,17 +125,17 @@ class ShareViewController: UIViewController{
         extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
     }
     
-    func addNewData(baseurl: String, catID: Int, userIdx: Int){
+    func addNewData(catID: Int, userIdx: Int){
         guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=\(userIdx)&category=\(catID)") else {
             print("invalid url")
             return
         }
-
-        let baseURL = baseurl
-
-        let body: [String: Any] = ["baseURL" : baseURL]
+        let link = self.webpageUrl
+        let title = self.webpageTitle
+        let imgUrl = self.webpageImageUrl
+        let body: [String: Any] = ["link" : link, "title" : title, "imgUrl" : imgUrl]
         let finalData = try! JSONSerialization.data(withJSONObject: body)
-
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = finalData

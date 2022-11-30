@@ -68,7 +68,7 @@ struct SideMenuView: View {
                     }
                     Spacer()
                     Button(action: {
-                        self.isAddingCategory = true //카테고리 추가 토글
+                        self.isAddingCategory = true //카테고리 추가 -> 추가 버튼 누름
                     }){
                         Image(systemName: "plus")
                             .resizable()
@@ -87,30 +87,35 @@ struct SideMenuView: View {
                     List{
                         ForEach($categoryList.categories) { $category in
                             if category.order == 0 || category.order == 1 {
-                                HStack{ //모든 자료, 분류되지 않은 자료
-                                    Text(category.name)
-                                        .font(.system(size: 16))
-                                        .foregroundColor(Color("basic_text"))
-                                        .frame(width: UIScreen.main.bounds.width - 120, alignment: .leading)
-                                    Text("\(category.numOfLink)")
-                                        .font(.system(size: 16))
-                                        .foregroundColor(Color("basic_text"))
-                                        .frame(width: 30, alignment: .trailing)
-                                }
-                                .padding(.leading, 10)
-                                .listRowBackground(self.selected == category.categoryId ? Color("selected_color") : Color("background"))
-                                .onTapGesture { //클릭하면 현재 categoryID
-                                    if !isAddingCategory {
-                                        vm.isLoading = .loading
-                                        withAnimation(.spring()){
-                                            isShowingCateogry = false
+                                ZStack {
+                                    HStack{ //모든 자료, 분류되지 않은 자료
+                                        Text(category.name)
+                                            .font(.system(size: 16))
+                                            .foregroundColor(Color("basic_text"))
+                                            .frame(width: UIScreen.main.bounds.width - 120, alignment: .leading)
+                                        Text("\(category.numOfLink)")
+                                            .font(.system(size: 16))
+                                            .foregroundColor(Color("basic_text"))
+                                            .frame(width: 30, alignment: .trailing)
+                                    }
+                                    Button(action: {
+                                        if !isAddingCategory {
+                                            vm.isLoading = .loading
+                                            withAnimation(.spring()){
+                                                isShowingCateogry = false
+                                            }
+                                            self.selected = category.categoryId
+                                            self.selectedOrder = category.order
+                                            if category.order == 0 { vm.getAllData(userID: userVM.userIdx) } //📡 카테고리에 해당하는 자료 가져오는 통신
+                                            else { vm.getData(userID: userVM.userIdx, catID: selected) } //📡 카테고리에 해당하는 자료 가져오는 통신
                                         }
-                                        self.selected = category.categoryId
-                                        self.selectedOrder = category.order
-                                        if category.order == 0 { vm.getAllData(userID: userVM.userIdx) } //📡 카테고리에 해당하는 자료 가져오는 통신
-                                        else { vm.getData(userID: userVM.userIdx, catID: selected) } //📡 카테고리에 해당하는 자료 가져오는 통신
+                                    }) {
+                                        Rectangle()
+                                            .frame(width: UIScreen.main.bounds.width - 60)
+                                            .opacity(0)
                                     }
                                 }
+                                .listRowBackground(self.selected == category.categoryId ? Color("selected_color") : Color("background"))
                             }
                         }
                         ForEach($categoryList.categories) { $category in
@@ -150,7 +155,6 @@ struct SideMenuView: View {
             let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
             vm.appendCategory(newCategory: newCategory) //post로 추가된 카테고리 이름 서버에 전송
             newCat = ""
-            isAddingCategory = false
         })
     }//body
 }

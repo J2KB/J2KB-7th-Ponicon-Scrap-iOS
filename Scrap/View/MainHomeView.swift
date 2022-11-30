@@ -28,9 +28,10 @@ struct MainHomeView: View {
             NavigationView{
                 if scrapVM.isLoading == .loading { //서버통신(로딩)중이면 progress view 등장(loading indicator)
                     ProgressView()
-                        .ignoresSafeArea()
+                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                         .progressViewStyle(CircularProgressViewStyle(tint: Color.gray))
                         .background(Color("background"))
+                        .ignoresSafeArea()
                 }else {
                     SubHomeView(datas: $scrapVM.dataList.result, isPresentHalfModal: $isPresentHalfModal, currentCategory: $selected, currentCategoryOrder: $selectedOrder)
                         .navigationBarTitle("", displayMode: .inline)

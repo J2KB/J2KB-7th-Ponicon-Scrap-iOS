@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import KakaoSDKUser
 
 struct MyPageView: View {
     @Binding var userData : UserResponse.Result
@@ -26,8 +27,8 @@ struct MyPageView: View {
             VStack(spacing: 40){
                 VStack{
                     HStack(spacing: 10){
-    //                    Image("\(iconArr[vm.iconIdx])") //랜덤 출력 <- 에러
-                        Image(systemName: "person")
+                        Image("\(iconArr[vm.iconIdx])") //랜덤 출력 <- 에러
+//                        Image(systemName: "person")
                             .resizable()
                             .frame(width: 70, height: 70)
                         VStack(spacing: 8){
@@ -50,6 +51,16 @@ struct MyPageView: View {
                         .padding(.top, 20)
                     Spacer()
                     Button(action:{
+                        if isKakaoLogin {
+                            UserApi.shared.logout {(error) in
+                                if let error = error {
+                                    print(error)
+                                }
+                                else {
+                                    print("logout() success.")
+                                }
+                            }
+                        }
                         print("log out")
                         vm.logOut() //📡 LogOut API
                         vm.loginState = false //NavigationLink로 LoginView로 이동

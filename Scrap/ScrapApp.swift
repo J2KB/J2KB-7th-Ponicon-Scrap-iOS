@@ -26,7 +26,7 @@ struct ScrapApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if !network.connected {
+//            if !network.connected {
                 //자료 저장인지 확인하기....
                 //ViewController에서 자료 저장인지 알아와야됨... 넘길 수 있는지 확인하기
                 if userIdx == 0 { //auto login X -> Login View
@@ -60,9 +60,9 @@ struct ScrapApp: App {
                             .environmentObject(userVM)
 //                    }
                 }
-            } else {
-                OfflineView()
-            }
+//            } else {
+//                OfflineView()
+//            }
         }
     }
 }

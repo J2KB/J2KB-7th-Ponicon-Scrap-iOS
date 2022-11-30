@@ -144,15 +144,15 @@ class UserViewModel: ObservableObject{
 //                if let data = data {
 //                    let decoder = JSONDecoder()
 //                    let result = try decoder.decode(LoginModel.self, from: data)
-//                    DispatchQueue.main.async {
+//                    DispatchQueue.main.async { [weak self] in
 //                        if let response = response as? HTTPURLResponse {
 //                            if response.statusCode != 200 { //통신 실패 시
-//                                self.loginState = false
-//                                self.loginToastMessage = result.message
+//                                self?.loginState = false
+//                                self?.loginToastMessage = result.message
 //                            } else {                        //통신 성공 시
-//                                self.loginState = true
-//                                self.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
-//                                self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
+//                                self?.loginState = true
+//                                self?.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
+//                                self?.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
 //                                print("user idx: \(self.userIdx)")
 //                                if autoLogin { //autoLogin일 때만 저장
 //                                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(result.result.id, forKey: "ID") //login해서 받은 id를 user defaults에 저장
