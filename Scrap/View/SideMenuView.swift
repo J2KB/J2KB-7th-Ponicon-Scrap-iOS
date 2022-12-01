@@ -130,13 +130,14 @@ struct SideMenuView: View {
                             }
                         }
                         .onMove(perform: {source, destination in //from source: IndexSet, to destination: Int
-                            //📡 카테고리 이동 통신
                             source.forEach {
-                                vm.moveCategory(from: $0, to: destination)
-                                vm.movingCategory(userID: userVM.userIdx, startIdx: $0, endIdx: destination)
+                                print($0)
+                                print(destination)
+                                vm.moveCategoryRowInList(from: $0, to: destination)
+                                vm.movingCategory(userID: userVM.userIdx, startIdx: $0, endIdx: destination) //📡 카테고리 이동 통신
                             }
                         })
-                        }//List
+                    }
                 }//CategoryList VStack
                 .refreshable {
                     vm.getCategoryData(userID: userVM.userIdx)
@@ -145,15 +146,15 @@ struct SideMenuView: View {
                 .padding(.trailing, 10)
                 .listStyle(PlainListStyle())
             }//VStack
-            .background(Color("background"))
             if isAddingCategory { //카테고리 추가 alert창 켜지면 뒷 배경 블러 처리
                 Color("blur_background").ignoresSafeArea()
             }
         }//ZStack
+        .background(Color("background"))
         .addCategoryAlert(isPresented: $isAddingCategory, newCategoryTitle: $newCat, placeholder: "새로운 카테고리 이름을 입력해주세요", title: "카테고리 추가하기", action: { _ in
             vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
             let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
-            vm.appendCategory(newCategory: newCategory) //post로 추가된 카테고리 이름 서버에 전송
+            vm.appendNewCategoryToCategoryList(new: newCategory) //post로 추가된 카테고리 이름 서버에 전송
             newCat = ""
         })
     }//body

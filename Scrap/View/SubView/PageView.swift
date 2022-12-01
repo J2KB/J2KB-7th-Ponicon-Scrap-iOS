@@ -20,14 +20,21 @@ struct PageView: View {
     @Binding var currentCategory : Int                  //현재 카테고리 id
     @Binding var currentCatOrder : Int                  //현재 카테고리 order
     
+    func isValidURL(url: String?) -> Bool {
+        guard url != "" else { return false } //비어있으면"" -> return false
+        guard url != nil else { return false }
+        if url!.range(of: "[가-힣]", options: .regularExpression) != nil { return false } //한국어가 들어감
+        return true
+    }
+    
     var body: some View {
-        VStack(spacing: 0){
-            if data.imgUrl == "" || data.imgUrl == nil { //image 없으면 default color
+        VStack(spacing: 0) {
+            if !isValidURL(url: data.imgUrl) { //image 없으면 default color
                 VStack(spacing: -2){
                     if let urlString = data.link {          //urlString = 자료 링크
                         let url = URL(string: urlString)    //URL값으로 변경
                         if let Url = url {                  //URL값이 nil이 아니면
-                            Link(destination: Url, label:{
+                            Link(destination: Url, label: {
                                 Rectangle()
                                     .foregroundColor(Color("image"))
                                     .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.6)
@@ -83,13 +90,18 @@ struct PageView: View {
                             let url = URL(string: urlString)
                             if let Url = url {
                                 Link(destination: Url, label:{
-                                    Image(systemName: "rectangle.fill")
-                                        .imageData(url: URL(string: data.imgUrl ?? "")!)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.6)
-                                        .cornerRadius(10, corners: .topLeft)
-                                        .cornerRadius(10, corners: .topRight)
+//                                    Image(systemName: "rectangle.fill")
+//                                        .imageData(url: URL(string: data.imgUrl ?? "")!)
+                                    AsyncImage(url: URL(string: data.imgUrl ?? "")!) { image in
+                                        image
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
+                                    .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.6)
+                                    .cornerRadius(10, corners: .topLeft)
+                                    .cornerRadius(10, corners: .topRight)
                                 })
                             }
                         }
@@ -161,12 +173,12 @@ extension View {
         clipShape( RoundedCorner(radius: radius, corners: corners) )
     }
 }
-
-extension Image {
-    func imageData(url: URL) -> Self {
-        if let data = try? Data(contentsOf: url){
-            return Image(uiImage: UIImage(data: data)!)
-        }
-        return self
-    }
-}
+//
+//extension Image {
+//    func imageData(url: URL) -> Self {
+//        if let data = try? Data(contentsOf: url){
+//            return Image(uiImage: UIImage(data: data)!)
+//        }
+//        return self
+//    }
+//}

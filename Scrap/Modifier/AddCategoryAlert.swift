@@ -21,9 +21,9 @@ struct AddCategoryAlert: ViewModifier {
             content
                 .disabled(isPresented) //isPresented = true일때 content 보여짐
             if isPresented {
-                VStack{
+                VStack {
                     Text(title).font(.headline).padding(.top, 20)
-                    ZStack{
+                    ZStack {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(scheme == .light ? Color("gray_sub") : .black_accent)
                             .opacity(0.5)
@@ -37,25 +37,25 @@ struct AddCategoryAlert: ViewModifier {
                     .padding(.bottom, 10)
                     .padding(.top, 4)
                     Divider().overlay(scheme == .light ? Color("gray_bold") : Color("black_light"))
-                    HStack{
+                    HStack {
                         Spacer()
                         Button(role: .cancel) {
-                            withAnimation{
+                            withAnimation {
                                 isPresented = false
                             }
                         } label: {
-                            Text("취소").fontWeight(.bold)
+                            Text("취소").fontWeight(.semibold).foregroundColor(.blue)
                         }
                         Spacer()
                         Divider().overlay(scheme == .light ? Color("gray_bold") : Color("black_light"))
                         Spacer()
-                        Button(){
+                        Button() {
                             action(newCategoryTitle) //closure
-                            withAnimation{
+                            withAnimation {
                                 isPresented = false
                             }
                         } label : {
-                            Text("추가").fontWeight(.bold)
+                            Text("추가").fontWeight(.bold).foregroundColor(.blue)
                         }
                         Spacer()
                     }
@@ -64,7 +64,9 @@ struct AddCategoryAlert: ViewModifier {
                 .frame(width: UIScreen.main.bounds.width / 1.35, height: UIScreen.main.bounds.height / 5)
                 .background(scheme == .light ? Color("background") : Color("black_bold"))
                 .cornerRadius(20)
-                .overlay { RoundedRectangle(cornerRadius: 20).stroke(.quaternary, lineWidth: 1) }
+                .overlay {
+                    RoundedRectangle(cornerRadius: 20).stroke(.quaternary, lineWidth: 1)
+                }
             }
         }
     }

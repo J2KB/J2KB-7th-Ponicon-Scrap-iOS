@@ -44,7 +44,7 @@ struct DataSheetView: View {
                     }
                     Button(action:{
                         vm.deleteData(userID: userVM.userIdx, linkID: data.linkId!)
-                        vm.removeData(linkID: data.linkId!)
+                        vm.removeDataFromDataList(dataID: data.linkId!, categoryID: currentCategory)
                         isPresentHalfModal.toggle()
                     }){
                         Label("삭제", systemImage: "trash")

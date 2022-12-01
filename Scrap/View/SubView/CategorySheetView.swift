@@ -74,7 +74,7 @@ struct CategorySheetView: View {
             Button("삭제", role: .destructive) {
                 //📡 카테고리 삭제 서버 통신
                 vm.deleteCategory(categoryID: category.categoryId) //📡 카테고리 삭제 통신
-                vm.removeCategory(index: category.order) //선택한 카테고리의 인덱스
+                vm.removeCategoryFromCategoryList(categoryID: category.categoryId) //선택한 카테고리의 인덱스
                 self.isPresentHalfModal = false
                 self.isDelete = false
             }

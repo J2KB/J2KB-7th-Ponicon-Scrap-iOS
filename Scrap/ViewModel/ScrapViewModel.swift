@@ -65,47 +65,59 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     @Published var isLoading : ServerState = .none //서버 통신 중
     
     //======== 로컬 함수 ========
-    //categoryList에 category 추가 함수 (카테고리 추가 기능)
-    func appendCategory(newCategory: CategoryResponse.Category){
+    //카테고리 추가 기능: categoryList 맨 뒤에 newCategory를 추가
+    func appendNewCategoryToCategoryList(new newCategory: CategoryResponse.Category){
         categoryList.result.categories.append(newCategory)
     }
     
-    //categoryList에 category 삭제 함수
-    func removeCategory(index: Int){
-        //order도 변경해줘야됨
-        for i in 0..<categoryList.result.categories.count{
-            if categoryList.result.categories[i].order == index {
+    //카테고리 삭제 기능: categoryId를 통해 categoryList의 category 삭제 함수
+    func removeCategoryFromCategoryList(categoryID id: Int) {
+        for i in 0..<categoryList.result.categories.count {
+            if categoryList.result.categories[i].categoryId == id {
                 categoryList.result.categories.remove(at: i)
                 return
             }
         }
     }
     
-    //dataList에 data 삭제 함수
-    func removeData(linkID: Int){ //더 효율적인 방법 찾아보기
+    //자료 삭제 기능: 삭제할 자료id를 받아서 dataList의 data 삭제 함수
+    func removeDataFromDataList(dataID dataId: Int, categoryID categoryId: Int) {
         for i in 0..<dataList.result.links.count {
-            if dataList.result.links[i].linkId == linkID {
+            if dataList.result.links[i].linkId == dataId {
                 dataList.result.links.remove(at: i)
+                break
+            }
+        }
+        //해당 카테고리의 numOfLink -= 1
+        for i in 0..<categoryList.result.categories.count {
+            if categoryList.result.categories[i].categoryId == categoryId {
+                categoryList.result.categories[i].numOfLink -= 1
                 return
             }
         }
     }
     
     //data의 카테고리 이동 함수
-    func movingData(linkID link: DataResponse.Datas, fromCategoryID from: Int, toCategoryID to: Int) { //이동할 자료id, 선택한 카테고리Id
-        //해당 자료를 to 카테고리에 넣기
-        //from 카테고리에서 해당 자료 제거
+    func moveDataToOtherCategory(_ data: DataResponse.Datas, from fromCategoryID: Int, to toCategoryID: Int) { //이동할 자료id, 선택한 카테고리id, 이동될 카테고리id
+        //해당 자료를 to 카테고리에 넣기 -> 해당 카테고리를 클릭하면 어차피 데이터 통신이 진행되므로 할 필요 x, 해당 카테고리의 numOfLink += 1 -> 이것만 진행
+        for i in 0..<categoryList.result.categories.count {
+            if categoryList.result.categories[i].categoryId == toCategoryID {
+                categoryList.result.categories[i].numOfLink += 1
+                break
+            }
+        }
+        removeDataFromDataList(dataID: data.linkId!, categoryID: fromCategoryID) //from 카테고리에서 해당 자료 제거
     }
-
+    
     //categoryList의 category 위치 이동
-    func moveCategory(from oldIndex: Int, to newIndex: Int) {
-        if oldIndex == newIndex { return }
-        if abs(newIndex - oldIndex) == 1 { return categoryList.result.categories.swapAt(oldIndex, newIndex) }
-        if newIndex >= categoryList.result.categories.count {
+    func moveCategoryRowInList(from oldIndex: Int, to newIndex: Int) {
+        guard oldIndex == newIndex else { return } //제자리면 바로 return
+        guard abs(newIndex - oldIndex) == 1 else { return categoryList.result.categories.swapAt(oldIndex, newIndex) } //바로 아래, 위면 swap
+        if newIndex >= categoryList.result.categories.count { //맨 마지막으로 이동
             categoryList.result.categories.append(categoryList.result.categories.remove(at: oldIndex)) //맨 뒤에 추가
             return
         }
-        categoryList.result.categories.insert(categoryList.result.categories.remove(at: oldIndex), at: newIndex)
+        categoryList.result.categories.insert(categoryList.result.categories.remove(at: oldIndex), at: newIndex - 1)
     }
     
     //categoryList의 category 이름 수정

@@ -59,10 +59,8 @@ struct MoveCategoryView: View {
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing){
                 Button(action: {
-                    //📡 자료의 카테고리 이동 서버 통신
-                    //로컬(프론트)에서는 현재 카테고리에서 삭제해야됨 (dataList에서 해당 자료 삭제)
-                    vm.modifyDatasCategory(userID: userVM.userIdx, linkID: data.linkId!, categoryId: selection)
-//                    vm.movingData(linkID: data.link!, categoryID: selection)
+                    vm.modifyDatasCategory(userID: userVM.userIdx, linkID: data.linkId!, categoryId: selection) //📡 자료의 카테고리 이동 서버 통신
+                    vm.moveDataToOtherCategory(data, from: currentCategory, to: selection)
                     isShowMovingCategory.toggle()
                 }) {
                     Text("저장")

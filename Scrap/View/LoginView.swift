@@ -33,8 +33,8 @@ struct LoginView: View {
                             .padding(.top, UIScreen.main.bounds.height / 40)
                         VStack(spacing: 16){ // id/pw textfield
                             TextField("이메일", text: $email)
-                                .textInputAutocapitalization(.never) //자동 대문자 비활성화
-                                .disableAutocorrection(true) //자동 수정 비활성화
+                                .textInputAutocapitalization(.never)                //자동 대문자 비활성화
+                                .disableAutocorrection(true)                        //자동 수정 비활성화
                                 .frame(width: UIScreen.main.bounds.width / 1.5 - 24, height: 38)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 8)
