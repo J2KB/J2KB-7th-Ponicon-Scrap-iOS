@@ -71,6 +71,6 @@ struct DataSheetView_Previews: PreviewProvider {
         )
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
-            .preferredColorScheme(.dark)
+//            .preferredColorScheme(.dark)
     }
 }

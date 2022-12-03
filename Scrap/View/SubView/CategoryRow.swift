@@ -52,7 +52,7 @@ struct CategoryRow: View {
                     self.selected = category.categoryId
                     self.selectedOrder = category.order
                     self.isChangeRow = true
-                    vm.getData(userID: userVM.userIdx, catID: selected)
+                    vm.inquiryData(userID: userVM.userIdx, catID: selected)
                 }
             }
             //modal shet 등장

@@ -41,7 +41,6 @@ struct SideMenuView: View {
     @EnvironmentObject var userVM : UserViewModel //ScrapApp에서 연결받은 EnvironmentObject
     @Binding var selected : Int
     @Binding var selectedOrder : Int
-    @State private var scrollProxy: ScrollViewProxy? = nil
     
     var body: some View {
         ZStack{
@@ -100,14 +99,14 @@ struct SideMenuView: View {
                                     }
                                     Button(action: {
                                         if !isAddingCategory {
-                                            vm.isLoading = .loading
+//                                            vm.isLoading = .loading
                                             withAnimation(.spring()){
                                                 isShowingCateogry = false
                                             }
                                             self.selected = category.categoryId
                                             self.selectedOrder = category.order
-                                            if category.order == 0 { vm.getAllData(userID: userVM.userIdx) } //📡 카테고리에 해당하는 자료 가져오는 통신
-                                            else { vm.getData(userID: userVM.userIdx, catID: selected) } //📡 카테고리에 해당하는 자료 가져오는 통신
+                                            if category.order == 0 { vm.inquiryAllData(userID: userVM.userIdx) } //📡 카테고리에 해당하는 자료 가져오는 통신
+                                            else { vm.inquiryData(userID: userVM.userIdx, catID: selected) } //📡 카테고리에 해당하는 자료 가져오는 통신
                                         }
                                     }) {
                                         Rectangle()
@@ -140,7 +139,7 @@ struct SideMenuView: View {
                     }
                 }//CategoryList VStack
                 .refreshable {
-                    vm.getCategoryData(userID: userVM.userIdx)
+                    vm.inquiryCategoryData(userID: userVM.userIdx)
                 }
                 .frame(width: UIScreen.main.bounds.width)
                 .padding(.trailing, 10)

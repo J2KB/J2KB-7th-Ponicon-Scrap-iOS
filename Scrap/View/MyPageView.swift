@@ -28,7 +28,6 @@ struct MyPageView: View {
                 VStack{
                     HStack(spacing: 10){
                         Image("\(iconArr[vm.iconIdx])") //랜덤 출력 <- 에러
-//                        Image(systemName: "person")
                             .resizable()
                             .frame(width: 70, height: 70)
                         VStack(spacing: 8){

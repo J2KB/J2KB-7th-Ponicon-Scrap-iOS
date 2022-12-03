@@ -57,9 +57,8 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //카테고리 정보를 담은 categoryList 객체
     //카테고리에 따른 자료 정보를 담은 dataList 객체
     //사용자 정보를 담는 user 객체 -> 마이페이지에서 사용할 것
-    //⭐️refactoring
-    @Published var dataList = DataResponse(code: 0, message: "", result: DataResponse.Result(links: [DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")]))
-    @Published var user = UserResponse(code: 0, message: "", result: UserResponse.Result(name: "", username: ""))
+    @Published var dataList = DataResponse.Result(links: [])
+    @Published var user = UserResponse.Result(name: "", username: "")
     @Published var categoryList = CategoryResponse(code: 0, message: "", result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)]))
     var categoryID = 0
     @Published var isLoading : ServerState = .none //서버 통신 중
@@ -72,22 +71,12 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     
     //카테고리 삭제 기능: categoryId를 통해 categoryList의 category 삭제 함수
     func removeCategoryFromCategoryList(categoryID id: Int) {
-        for i in 0..<categoryList.result.categories.count {
-            if categoryList.result.categories[i].categoryId == id {
-                categoryList.result.categories.remove(at: i)
-                return
-            }
-        }
+        categoryList.result.categories = categoryList.result.categories.filter{ $0.categoryId != id }
     }
     
     //자료 삭제 기능: 삭제할 자료id를 받아서 dataList의 data 삭제 함수
     func removeDataFromDataList(dataID dataId: Int, categoryID categoryId: Int) {
-        for i in 0..<dataList.result.links.count {
-            if dataList.result.links[i].linkId == dataId {
-                dataList.result.links.remove(at: i)
-                break
-            }
-        }
+        dataList.links = dataList.links.filter { $0.linkId != dataId }
         //해당 카테고리의 numOfLink -= 1
         for i in 0..<categoryList.result.categories.count {
             if categoryList.result.categories[i].categoryId == categoryId {
@@ -129,184 +118,63 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
             }
         }
     }
-
+    
     private let baseUrl = "https://scrap.hana-umc.shop"
+    
+    private func fetchDataCompletionHandler(fromURL url: URL, completionHandler: @escaping (_ data: Data?, _ error: Error?) -> ()) {
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data, error == nil, let response = response as? HTTPURLResponse else {
+                completionHandler(nil, NetworkErrors.requestFailed)
+                return
+            }
+            guard (200..<300) ~= response.statusCode else {
+                completionHandler(nil, NetworkErrors.responseUnsuccessFul(statusCode: response.statusCode))
+                return
+            }
+            completionHandler(data, nil)
+        }.resume()
+    }
+    
+    private func networkingServerCompletionHandler(withRequest request: URLRequest, completionHandler: @escaping (_ data: Data?, _ error: Error?) -> ()) {
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data, error == nil, let response = response as? HTTPURLResponse else {
+                completionHandler(nil, NetworkErrors.requestFailed)
+                return
+            }
+            guard (200..<300) ~= response.statusCode else {
+                completionHandler(nil, NetworkErrors.responseUnsuccessFul(statusCode: response.statusCode))
+                return
+            }
+            completionHandler(data, nil)
+        }.resume()
+    }
     
     //=========GET=========
     //카테고리 전체 조회
     //query: user id
-    func getCategoryData(userID: Int) {
-        print("카테고리 조회")
+    func inquiryCategoryData(userID: Int) {
         guard let url = URL(string: "\(baseUrl)/category/all?id=\(userID)") else {
             print("invalid url")
             return
         }
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            DispatchQueue.main.async {
-                if let data = data {
-                    guard let httpResponse = response as? HTTPURLResponse else {return}
-                    print(httpResponse.statusCode)
-                    if httpResponse.statusCode != 200 { //카테고리 조회 실패
-                        do{
-                            let decoder = JSONDecoder()
-                            let failMessage = try decoder.decode(NoResultModel.self, from: data)
-                            print(failMessage)
-                        } catch let error {
-                            print("fail error")
-                            print(String(describing: error))
-                        }
-                    }else {
-                        do{
-                            let decoder = JSONDecoder()
-                            let result = try decoder.decode(CategoryResponse.self, from: data)
-                            self.categoryList = result
-                            print(result)
-                        }catch (let error){
-                            print("success error")
-                            print(String(describing: error))
-                        }
-                    }
+        fetchDataCompletionHandler(fromURL: url) { (data, error) in
+            if let data = data {
+                guard let result = try? JSONDecoder().decode(CategoryResponse.self, from: data) else { //jsonParsingError
+                    return
                 }
+                print(result)
+                DispatchQueue.main.async { [weak self] in
+                    self?.categoryList = result
+                }
+            }else{
+                print(String(describing: error?.localizedDescription))
             }
-        }.resume()
-    }
-    
-    //=========POST========
-    //카테고리 추가
-    //query: userId/newCatName
-    //body: newCatName
-    func addNewCategory(newCat: String, userID: Int) {
-        guard let url = URL(string: "\(baseUrl)/auth/category?id=\(userID)") else {
-            print("invalid url")
-            return
         }
-        
-        let name = newCat
-        let body: [String: Any] = ["name": name]
-        let finalData = try! JSONSerialization.data(withJSONObject: body)
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = finalData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            do{
-                if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(CategoryModel.self, from: data)
-                    print(result)
-                } else {
-                    print("no data")
-                }
-            }catch (let error){
-                print(String(describing: error))
-            }
-        }.resume()
     }
     
-    //=========DELETE========
-    //카테고리 삭제
-    //query: category id
-    func deleteCategory(categoryID: Int) {
-        print(categoryID)
-        guard let url = URL(string: "\(baseUrl)/auth/category?category=\(categoryID)") else {
-            print("invalid url")
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "DELETE"
-
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            do{
-                if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(NoResultModel.self, from: data)
-                    print(result)
-                    print(categoryID)
-                } else {
-                    print("no data")
-                }
-            }catch (let error){
-                print(String(describing: error))
-            }
-        }.resume()
-    }
-    
-    //==========PUT=========
-    //카테고리 수정
-    //query: category id
-    //body: category name
-    func modifyCategory(categoryID: Int, categoryName: String){
-        guard let url = URL(string: "\(baseUrl)/auth/category?category=\(categoryID)") else {
-            print("invalid url")
-            return
-        }
-        
-        let name = categoryName
-        let body: [String: Any] = ["name": name]
-        let finalData = try! JSONSerialization.data(withJSONObject: body)
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "PUT"
-        request.httpBody = finalData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            do{
-                if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(CategoryModel.self, from: data)
-                    print(result)
-                } else {
-                    print("no data")
-                }
-            }catch (let error){
-                print(String(describing: error))
-            }
-        }.resume()
-    }
-    
-    //카테고리 순서 수정
-    //query: user id
-    //body: from, to
-    func movingCategory(userID: Int, startIdx: Int, endIdx: Int){
-        guard let url = URL(string: "\(baseUrl)/auth/category/all?id=\(userID)") else {
-            print("invalid url")
-            return
-        }
-        
-        let startIdx = startIdx
-        let endIdx = endIdx
-        let body: [String: Any] = ["startIdx": startIdx, "endIdx": endIdx]
-        let finalData = try! JSONSerialization.data(withJSONObject: body)
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "PUT"
-        request.httpBody = finalData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            do{
-                if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(NoResultModel.self, from: data)
-                    print(result)
-                } else {
-                    print("no data")
-                }
-            }catch (let error){
-                print(String(describing: error))
-            }
-        }.resume()
-    }
-    
-    //=======GET=======
     //자료 조회
-    //query: user id, category id, seq
-    func getData(userID: Int, catID: Int) {
-        print("자료 조회")
+    //query: user id, category id
+    func inquiryData(userID: Int, catID: Int) {
         guard let url = URL(string: "\(baseUrl)/auth/data?id=\(userID)&category=\(catID)") else {
             print("invalid url")
             return
@@ -330,7 +198,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                         do {
                             let decoder = JSONDecoder()
                             let result = try decoder.decode(DataResponse.self, from: data)
-                            self.dataList = result
+                            self.dataList = result.result
                             self.isLoading = .success
                             print(result)
                         } catch let error {
@@ -346,50 +214,145 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         }.resume()
     }
     
-    //========GET========
     //자료 전체 조회
     //query: user id
-    func getAllData(userID: Int) {
-        print("자료 전체 조회")
+    func inquiryAllData(userID: Int) {
         guard let url = URL(string: "\(baseUrl)/auth/data/all?id=\(userID)") else {
             print("invalid url")
             return
         }
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            DispatchQueue.main.async {
-                if let data = data {
-                    guard let httpResponse = response as? HTTPURLResponse else {return}
-                    if httpResponse.statusCode != 200 {
-                        do{
-                            let decoder = JSONDecoder()
-                            let failMessage = try decoder.decode(NoResultModel.self, from: data)
-                            print(failMessage)
-                            self.isLoading = .failure
-                        } catch let error {
-                            print("fail error")
-                            print(String(describing: error))
-                        }
-                    }else{
-                        do{
-                            let decoder = JSONDecoder()
-                            let result = try decoder.decode(DataResponse.self, from: data)
-                            self.dataList = result
-                            print(result)
-                            self.isLoading = .success
-                        }catch let error{
-                            print("error")
-                            print(String(describing: error))
-                        }
-                    }
-                }else if let error = error {
-                    print("error")
-                    print(String(describing: error))
+        fetchDataCompletionHandler(fromURL: url) { (data, error) in
+            if let data = data {
+                guard let result = try? JSONDecoder().decode(DataResponse.self, from: data) else { //jsonParsingError
+                    return
                 }
+                print(result)
+
+                DispatchQueue.main.async { [weak self] in
+                    self?.dataList = result.result
+                }
+            }else{
+                print(String(describing: error?.localizedDescription))
             }
-        }.resume()
+        }
     }
     
-    //======DEL========
+    //마이 페이지
+    //query: user id
+    func inquiryUserData(userID: Int) {
+        guard let url = URL(string: "\(baseUrl)/auth/user/mypage?id=\(userID)") else {
+            print("invalid url")
+            return
+        }
+        fetchDataCompletionHandler(fromURL: url) { (data, error) in
+            if let data = data {
+                guard let result = try? JSONDecoder().decode(UserResponse.self, from: data) else { //jsonParsingError
+                    return
+                }
+                DispatchQueue.main.async { [weak self] in
+                    self?.user = result.result
+                }
+            }else{
+                print(String(describing: error?.localizedDescription))
+            }
+        }
+    }
+    
+    //=========POST========
+    //카테고리 추가
+    //query: userId/newCatName
+    //body: newCatName
+    func addNewCategory(newCat: String, userID: Int) {
+        guard let url = URL(string: "\(baseUrl)/auth/category?id=\(userID)") else {
+            print("invalid url")
+            return
+        }
+        let name = newCat
+        let body: [String: Any] = ["name": name]
+        let finalData = try! JSONSerialization.data(withJSONObject: body)
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = finalData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        networkingServerCompletionHandler(withRequest: request) { data, error in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(CategoryModel.self, from: data)
+                    print(result)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print(String(describing: error))
+            }
+        }
+    }
+    
+    //자료 저장
+    //query: category id, user id
+    //body: url
+    func addNewData(baseurl: String, catID: Int, userIdx: Int){
+        guard let url = URL(string: "\(baseurl)/auth/data?id=\(userIdx)&category=\(catID)") else {
+            print("invalid url")
+            return
+        }
+        
+        let baseURL = baseurl
+        let body: [String: Any] = ["baseURL" : baseURL]
+        let finalData = try! JSONSerialization.data(withJSONObject: body)
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = finalData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        networkingServerCompletionHandler(withRequest: request) { data, error in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(NewDataModel.self, from: data)
+                    print(result)
+                    print("post saving data : SUCCESS")
+                    print(catID)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print(String(describing: error))
+            }
+        }
+    }
+    
+    //=========DELETE========
+    //카테고리 삭제
+    //query: category id
+    func deleteCategory(categoryID: Int) {
+        print(categoryID)
+        guard let url = URL(string: "\(baseUrl)/auth/category?category=\(categoryID)") else {
+            print("invalid url")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        
+        networkingServerCompletionHandler(withRequest: request) { data, error in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(NoResultModel.self, from: data)
+                    print(result)
+                    print(categoryID)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print(String(describing: error))
+            }
+        }
+    }
+    
     //자료 삭제
     //query: user idx, link id
     func deleteData(userID: Int, linkID: Int) {
@@ -400,8 +363,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
-
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        networkingServerCompletionHandler(withRequest: request) { data, error in
             do{
                 if let data = data {
                     let decoder = JSONDecoder()
@@ -413,7 +375,74 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
             }catch (let error){
                 print(String(describing: error))
             }
-        }.resume()
+        }
+    }
+    
+    //==========PUT=========
+    //카테고리 수정
+    //query: category id
+    //body: category name
+    func modifyCategory(categoryID: Int, categoryName: String){
+        guard let url = URL(string: "\(baseUrl)/auth/category?category=\(categoryID)") else {
+            print("invalid url")
+            return
+        }
+        
+        let name = categoryName
+        let body: [String: Any] = ["name": name]
+        let finalData = try! JSONSerialization.data(withJSONObject: body)
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.httpBody = finalData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        networkingServerCompletionHandler(withRequest: request) { data, error in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(CategoryModel.self, from: data)
+                    print(result)
+                    print(categoryID)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print(String(describing: error))
+            }
+        }
+    }
+    
+    //카테고리 순서 수정
+    //query: user id
+    //body: from, to
+    func movingCategory(userID: Int, startIdx: Int, endIdx: Int){
+        guard let url = URL(string: "\(baseUrl)/auth/category/all?id=\(userID)") else {
+            print("invalid url")
+            return
+        }
+        
+        let startIdx = startIdx
+        let endIdx = endIdx
+        let body: [String: Any] = ["startIdx": startIdx, "endIdx": endIdx]
+        let finalData = try! JSONSerialization.data(withJSONObject: body)
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.httpBody = finalData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        networkingServerCompletionHandler(withRequest: request) { data, error in
+            do{
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(NoResultModel.self, from: data)
+                    print(result)
+                } else {
+                    print("no data")
+                }
+            }catch (let error){
+                print(String(describing: error))
+            }
+        }
     }
     
     //======PATCH======
@@ -428,13 +457,11 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
         let categoryIdx = categoryId
         let body: [String: Any] = ["categoryId": categoryIdx]
         let finalData = try! JSONSerialization.data(withJSONObject: body)
-
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
         request.httpBody = finalData
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        networkingServerCompletionHandler(withRequest: request) { data, error in
             do{
                 if let data = data {
                     let decoder = JSONDecoder()
@@ -446,72 +473,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
             }catch (let error){
                 print(String(describing: error))
             }
-        }.resume()
-    }
-    
-    //=======POST=======
-    //자료 저장
-    //query: category id, user id
-    //body: url
-    func addNewData(baseurl: String, catID: Int, userIdx: Int){
-        guard let url = URL(string: "\(baseurl)/auth/data?id=\(userIdx)&category=\(catID)") else {
-            print("invalid url")
-            return
         }
-        
-        let baseURL = baseurl
-        let body: [String: Any] = ["baseURL" : baseURL]
-        let finalData = try! JSONSerialization.data(withJSONObject: body)
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = finalData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            do{
-                if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(NewDataModel.self, from: data)
-                    print(result)
-                    print("post saving data : SUCCESS")
-                    print(catID)
-                } else {
-                    print("no data")
-                }
-            }catch (let error){
-                print("error")
-                print(String(describing: error))
-            }
-        }.resume()
-    }
-    
-    //======GET=======
-    //마이 페이지
-    //query: user id
-    func getMyPageData(userID: Int) {
-        print("마이페이지 데이터 조회")
-        guard let url = URL(string: "\(baseUrl)/auth/user/mypage?id=\(userID)") else {
-            print("invalid url")
-            return
-        }
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            do{
-                if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(UserResponse.self, from: data)
-                    DispatchQueue.main.async {
-                        self.user = result
-                    }
-                    print(result)
-                } else {
-                    print("no data")
-                }
-            }catch (let error){
-                print("error")
-                print(String(describing: error))
-            }
-        }.resume()
     }
     
 }

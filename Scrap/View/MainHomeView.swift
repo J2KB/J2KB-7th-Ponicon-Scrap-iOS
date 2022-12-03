@@ -32,7 +32,7 @@ struct MainHomeView: View {
                         .background(Color("background"))
                         .ignoresSafeArea()
                 }else {
-                    SubHomeView(datas: $scrapVM.dataList.result, isPresentHalfModal: $isPresentHalfModal, currentCategory: $selected, currentCategoryOrder: $selectedOrder)
+                    SubHomeView(datas: $scrapVM.dataList, isPresentHalfModal: $isPresentHalfModal, currentCategory: $selected, currentCategoryOrder: $selectedOrder)
                         .navigationBarTitle("", displayMode: .inline)
                         .toolbar{
                             ToolbarItem(placement: .navigationBarLeading){
@@ -58,7 +58,7 @@ struct MainHomeView: View {
                         .toolbar{
                             ToolbarItem(placement: .navigationBarTrailing){
                                 VStack{
-                                    NavigationLink(destination: MyPageView(userData: $scrapVM.user.result, isShowingMyPage: $isShowingMyPage).navigationBarHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowingMyPage) {
+                                    NavigationLink(destination: MyPageView(userData: $scrapVM.user, isShowingMyPage: $isShowingMyPage).navigationBarHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowingMyPage) {
                                         Button(action: {                                //modal sheet가 열려있으면 마이페이지뷰를 열 수 없다
                                             if !isPresentHalfModal {
                                                 self.isShowingMyPage.toggle()
@@ -79,15 +79,14 @@ struct MainHomeView: View {
         }
         .background(Color("background"))
         .onAppear{ //MainHomeView 등장하면 api 통신
-            scrapVM.isLoading = .loading
             userVM.userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ? userVM.userIdx : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
-            scrapVM.getCategoryData(userID: userVM.userIdx) //카테고리 조회 통신 📡
-            scrapVM.getMyPageData(userID: userVM.userIdx) //마이페이지 데이터 조회 통신 📡
-            if self.selected == 0 { scrapVM.getAllData(userID: userVM.userIdx) } //자료 조회 통신 📡 case01
-            else { scrapVM.getData(userID: userVM.userIdx, catID: selected) } //자료 조회 통신 📡 case02
+            scrapVM.inquiryCategoryData(userID: userVM.userIdx) //카테고리 조회 통신 📡
+            scrapVM.inquiryUserData(userID: userVM.userIdx) //마이페이지 데이터 조회 통신 📡
+            if self.selected == 0 { scrapVM.inquiryAllData(userID: userVM.userIdx) } //자료 조회 통신 📡 case01
+            else { scrapVM.inquiryData(userID: userVM.userIdx, catID: selected) } //자료 조회 통신 📡 case02
         }
         .gesture(DragGesture().onEnded({
-            if !isShowingMyPage {
+            if !isShowingMyPage, !isPresentHalfModal {
                 if $0.translation.width < -100 {
                     withAnimation(.easeInOut) {
                         self.isShowingCategory = false

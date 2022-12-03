@@ -40,6 +40,7 @@
 		F8CFE8FB28FD508C005DB6F5 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */; };
 		F8CFE8FE28FD8D9F005DB6F5 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */; };
 		F8D18E4829051B16008479BA /* CategoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D18E4729051B16008479BA /* CategoryRow.swift */; };
+		F8D4A2072939F45000BAE93D /* NetworkErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D4A2062939F45000BAE93D /* NetworkErrors.swift */; };
 		F8DE0EE9292521C3007CA593 /* SaveDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DE0EE8292521C3007CA593 /* SaveDataView.swift */; };
 		F8F8F94E292DDC420058FA75 /* AddCategoryAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F8F94D292DDC420058FA75 /* AddCategoryAlert.swift */; };
 		F8F8F950292E06140058FA75 /* DataSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F8F94F292E06140058FA75 /* DataSheetView.swift */; };
@@ -105,6 +106,7 @@
 		F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		F8D18E4729051B16008479BA /* CategoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryRow.swift; sourceTree = "<group>"; };
+		F8D4A2062939F45000BAE93D /* NetworkErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrors.swift; sourceTree = "<group>"; };
 		F8DE0EE8292521C3007CA593 /* SaveDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveDataView.swift; sourceTree = "<group>"; };
 		F8F8F94D292DDC420058FA75 /* AddCategoryAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryAlert.swift; sourceTree = "<group>"; };
 		F8F8F94F292E06140058FA75 /* DataSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSheetView.swift; sourceTree = "<group>"; };
@@ -213,6 +215,7 @@
 				F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */,
 				F87BB3F629211D8C00BCD78D /* Theme.swift */,
 				F89DE8F2292A08D3001CE242 /* ServerState.swift */,
+				F8D4A2062939F45000BAE93D /* NetworkErrors.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 				F89BED8828C5F1EE0053D406 /* SignUpView.swift in Sources */,
 				F8DE0EE9292521C3007CA593 /* SaveDataView.swift in Sources */,
 				F863276029068A43004982EA /* Network.swift in Sources */,
+				F8D4A2072939F45000BAE93D /* NetworkErrors.swift in Sources */,
 				F8740C2828C99EB0009D6F8C /* SubHomeView.swift in Sources */,
 				F88A67BF28E95BB6003BD8A6 /* UserViewModel.swift in Sources */,
 				F87109F628E3327F009AFA8F /* DataResponse.swift in Sources */,

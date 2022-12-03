@@ -18,7 +18,7 @@ struct CategorySheetView: View {
     @State private var categoryName = ""
 
     var body: some View {
-        VStack{
+        VStack(spacing: 0){
             if isEditingName { //이름 수정시, textfield로 변경
                 ZStack{
                     RoundedRectangle(cornerRadius: 10)

@@ -93,7 +93,7 @@ struct SubHomeView: View {
                 NavigationLink(destination: MoveCategoryView(isShowMovingCategory: $isShowMovingCategory, categoryList: $vm.categoryList.result, data: $detailData, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){ EmptyView() }
             }//VStack
         } refreshable: {
-            vm.getData(userID: userVM.userIdx, catID: currentCategory)
+            vm.inquiryData(userID: userVM.userIdx, catID: currentCategory)
         }//Refreshable
         .background(Color("background"))
         .sheet(isPresented: $isPresentHalfModal){ //isPresentHalfModal == true일때 sheet 열림
@@ -101,9 +101,6 @@ struct SubHomeView: View {
                 DataSheetView(isShowMovingCategory: $isShowMovingCategory, data: $detailData, isPresentHalfModal: $isPresentHalfModal, currentCatOrder: $currentCategoryOrder, currentCategory: $currentCategory)
             }
             .ignoresSafeArea()
-        }
-        .onAppear{
-            UITableView.appearance().backgroundColor = .clear
         }
     }//body
 }
