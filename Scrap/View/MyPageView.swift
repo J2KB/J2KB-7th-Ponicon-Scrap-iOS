@@ -79,6 +79,7 @@ struct MyPageView: View {
                     .padding(.bottom, 20)
                 }//VStack2
             }//VStack1
+            .padding(.top, 24)
             .toolbar{
                 ToolbarItem(placement: .navigationBarLeading){
                     HStack(spacing: 8){

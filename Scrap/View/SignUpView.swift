@@ -21,18 +21,20 @@ struct SignUpView: View {
     @State private var checkPW = ""
     let maxUserName = 30
     let maxIdPw = 16
+    var checkDuplicatedEmail : Int { return vm.duplicateMessage }
+    @State private var isCheckingNow : Bool = false
+    
     let toastMessages = [0: "한글 또는 영어로만 이뤄질 수 있습니다",
                          1: "이름을 입력하세요",
-                         2: "5~15자의 영문 소문자, 숫자를 포함해야 합니다",
+                         2: "이메일 형식으로 입력해주세요",
                          3: "이메일을 입력하세요",
                          4: "이미 가입된 이메일입니다",
                          5: "비밀번호를 입력하세요",
-                         6: "5~15자의 영어, 숫자를 포함해야 합니다",
+                         6: "5~16자의 영어, 숫자를 포함해야 합니다",
                          7: "비밀번호와 일치하지 않습니다",
                          8: "비밀번호 확인을 입력하세요",
                          9: "",
-                         10: "이메일 형식으로 입력해주세요",
-                         11: "사용 가능한 이메일입니다"] //Dictionary 형태로 메세지 모음
+                         10: "사용 가능한 이메일입니다"] //Dictionary 형태로 메세지 모음
     
     var backButton : some View { //custom back button
         Button(action: {
@@ -41,9 +43,9 @@ struct SignUpView: View {
             HStack {
                 Image(systemName: "chevron.backward") // BackButton Image
                     .aspectRatio(contentMode: .fit)
-                    .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+                    .foregroundColor(Color("basic_text"))
                 Text("회원가입") //translated Back button title
-                    .foregroundColor(scheme == .light ? .black_bold : .gray_sub)
+                    .foregroundColor(Color("basic_text"))
                     .fontWeight(.semibold)
             }
         }
@@ -57,7 +59,7 @@ struct SignUpView: View {
         }
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         if email.range(of: emailRegEx, options: .regularExpression) == nil {
-            self.checkInfo[1] = 10
+            self.checkInfo[1] = 2
         }else {
             self.checkInfo[1] = 9
         }
@@ -142,18 +144,13 @@ struct SignUpView: View {
                                     .keyboardType(.asciiCapable)
                                     .onSubmit {
                                         isValidEmail(email: email)
+                                        isCheckingNow = false
                                     }
-                                    .onReceive(Just(email), perform: { _ in  //최대 15글자
-                                        if maxIdPw < email.count {
-                                            email = String(email.prefix(maxIdPw))
-                                        }
-                                    })
                                     .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 1.5 - 68, height: 28, alignment: .leading)
                                 Button(action: {
                                     //아이디 중복 확인 버튼
                                     vm.checkDuplication(email: email) //📡 이메일 중복 확인 api 통신 -> 동기적으로 진행해야 됨
-                                    print(vm.duplicateMessage)
-                                    self.checkInfo[1] = vm.duplicateMessage //4: duplicate, 9: duplicate
+                                    isCheckingNow = true
                                     print(vm.duplicateMessage)
                                 }){
                                     Text("중복 확인")
@@ -169,7 +166,7 @@ struct SignUpView: View {
                                 .foregroundColor(.gray_bold)
                                 .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 1.5, alignment: .leading)
                         }
-                        Text(toastMessages[checkInfo[1]]!) //관련 에러 메세지 따로 출력되도록
+                        Text(isCheckingNow ? toastMessages[checkDuplicatedEmail]! : toastMessages[checkInfo[1]]!) //관련 에러 메세지 따로 출력되도록
                             .font(.caption)
                             .foregroundColor(.red_error)
                             .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 1.5, alignment: .leading)
@@ -189,7 +186,6 @@ struct SignUpView: View {
                             .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 1.5, height: 28, alignment: .leading)
                             .onSubmit {
                                 //fail -> 영어만 있거나 숫자만 있는 경우 || 5보다 작은 문자열 길이
-//                                isValidPW(pw: pw)
                                 let countLetter = pw.filter({$0.isLetter}).count //영어 개수
                                 print(countLetter)
                                 let countNumber = pw.filter({$0.isNumber}).count //숫자 개수

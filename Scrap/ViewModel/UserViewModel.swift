@@ -69,15 +69,30 @@ struct FailModel: Decodable {
     let message: String
 }
 
+//enum LoginToastMessage : String {
+//    case nameRule = "한글 또는 영어로만 이뤄질 수 있습니다"
+//    case blankName = "이름을 입력하세요"
+//    case emailRules = "5~15자의 영문 소문자, 숫자를 포함해야 합니다"
+//    case blankEmail = "이메일을 입력하세요"
+//    case dulplicatedEmail = "이미 가입된 이메일입니다"
+//    case enabledEmail = "사용 가능한 이메일입니다"
+//    case wrongEmailFormat = "이메일 형식으로 입력해주세요"
+//    case passwordRules = "5~15자의 영어, 숫자를 포함해야 합니다"
+//    case blankPassword = "비밀번호를 입력하세요"
+//    case misMatchPassword = "비밀번호와 일치하지 않습니다"
+//    case blankCheckPassword = "비밀번호 확인을 입력하세요"
+//    case none = ""
+//}
+
 class UserViewModel: ObservableObject{
     @Published var loginState = false               //로그인 상태 변수
     @Published var loginToastMessage = ""
     @Published var userIdx = 0 //initial value      //사용자 idx
     @Published var iconIdx = 0 //initial value      //사용자 아이콘 idx
-    @Published var duplicateMessage = 4            //이메일 중복 상태 변수
+    @Published var duplicateMessage = 9            //이메일 중복 상태 변수
+    @Published var isLoading : ServerState = .none //서버 통신 중
     
     private let baseUrl = "https://scrap.hana-umc.shop/user"
-    
     private let decoder = JSONDecoder()
     
     //=========POST=========
@@ -105,6 +120,7 @@ class UserViewModel: ObservableObject{
                 if let data = data {
                     guard let httpResponse = response as? HTTPURLResponse else {return}
                     if httpResponse.statusCode != 200 { //로그인 실패
+                        self.isLoading = .failure
                         self.loginState = false
                         do{
                             let failMessage = try self.decoder.decode(FailModel.self, from: data)
@@ -119,6 +135,7 @@ class UserViewModel: ObservableObject{
                             print(String(describing: error))
                         }
                     } else { //로그인 성공
+                        self.isLoading = .success
                         do {
                             let result = try self.decoder.decode(LoginModel.self, from: data)
                             print(result)
@@ -140,38 +157,6 @@ class UserViewModel: ObservableObject{
                     }
                 }
             }
-//            do{
-//                if let data = data {
-//                    let decoder = JSONDecoder()
-//                    let result = try decoder.decode(LoginModel.self, from: data)
-//                    DispatchQueue.main.async { [weak self] in
-//                        if let response = response as? HTTPURLResponse {
-//                            if response.statusCode != 200 { //통신 실패 시
-//                                self?.loginState = false
-//                                self?.loginToastMessage = result.message
-//                            } else {                        //통신 성공 시
-//                                self?.loginState = true
-//                                self?.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
-//                                self?.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
-//                                print("user idx: \(self.userIdx)")
-//                                if autoLogin { //autoLogin일 때만 저장
-//                                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(result.result.id, forKey: "ID") //login해서 받은 id를 user defaults에 저장
-//                                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx") //login했을 때 생성한 랜덤 icon idx를 user defaults에 저장
-//                                    print("save user idx, iconIdx to UserDefaults")
-//                                    print(self.iconIdx)
-//                                }
-//                                print("UserDefaults에 저장된 ID 값은? \(UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0)")
-//                            }
-//                        }
-//                    }
-//                    print(result)
-//                } else {
-//                    print("no data")
-//                }
-//            }catch (let error){
-//                print("🚨🚨error🚨🚨")
-//                print(String(describing: error))
-//            }
         }.resume()
     }
     
@@ -301,7 +286,7 @@ class UserViewModel: ObservableObject{
     //이메일 중복확인
     //query: email
     
-    func checkDuplication(email: String){
+    func checkDuplication(email: String) {
         guard let url = URL(string: "\(baseUrl)/duplicate?id=\(email)") else {
             print("invalid url")
             return
@@ -323,7 +308,7 @@ class UserViewModel: ObservableObject{
                         do {
                             let decoder = JSONDecoder()
                             let result = try decoder.decode(CheckDuplication.self, from: data)
-                            self.duplicateMessage = result.result.isDuplicate ? 11 : 4
+                            self.duplicateMessage = result.result.isDuplicate ? 4 : 10
                             print(result)
                         } catch let error {
                             print("🚨🚨error")

@@ -90,8 +90,6 @@ struct PageView: View {
                             let url = URL(string: urlString)
                             if let Url = url {
                                 Link(destination: Url, label:{
-//                                    Image(systemName: "rectangle.fill")
-//                                        .imageData(url: URL(string: data.imgUrl ?? "")!)
                                     AsyncImage(url: URL(string: data.imgUrl ?? "")!) { image in
                                         image
                                             .resizable()

@@ -16,7 +16,7 @@ struct CategorySheetView: View {
     @Binding var isPresentHalfModal : Bool
     @State private var isDelete = false
     @State private var categoryName = ""
-
+    
     var body: some View {
         VStack(spacing: 20){
             if isEditingName { //이름 수정시, textfield로 변경
