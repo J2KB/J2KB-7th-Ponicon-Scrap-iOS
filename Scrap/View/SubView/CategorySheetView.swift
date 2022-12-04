@@ -18,15 +18,16 @@ struct CategorySheetView: View {
     @State private var categoryName = ""
 
     var body: some View {
-        VStack(spacing: 0){
+        VStack(spacing: 20){
             if isEditingName { //이름 수정시, textfield로 변경
                 ZStack{
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color("textfield_color"))
                         .opacity(0.4)
-                        .frame(width: UIScreen.main.bounds.width - 30, height: 32, alignment: .leading)
+                        .frame(width: UIScreen.main.bounds.width - 40, height: 40, alignment: .leading)
                     TextField("카테고리 이름", text: $categoryName)
-                        .frame(width: UIScreen.main.bounds.width - 50, alignment: .leading)
+                        .font(.system(size: 22, weight: .regular))
+                        .frame(width: UIScreen.main.bounds.width - 60, alignment: .leading)
                         .foregroundColor(Color("basic_text"))
                         .onSubmit{ //return 시 -> 서버 통신
                             //modify category name in local category list
@@ -36,33 +37,43 @@ struct CategorySheetView: View {
                             self.isEditingName.toggle()
                         }
                 }
+                .padding(.bottom, 10)
             } else { //아니면 그냥 text로 나타냄
                 Text(categoryName)
-                    .frame(width: UIScreen.main.bounds.width - 50, height: 32, alignment: .leading)
+                    .font(.system(size: 22, weight: .regular))
+                    .frame(width: UIScreen.main.bounds.width - 60, height: 40, alignment: .leading)
                     .foregroundColor(Color("basic_text"))
+                    .padding(.bottom, 10)
             }
-            List {
-                Section {
-                    Button(action: {
-                        if !isEditingName { //이름 수정하지 않을 때만 활성화
-                            self.isEditingName.toggle()
-                        }
-                    }){
-                        Label("이름 수정", systemImage: "pencil")
-                            .foregroundColor(Color("basic_text"))
-                    }
-                    Button(action: {
-                        if !isEditingName { //이름 수정하지 않을 때만 활성화
-                            self.isDelete = true
-                        }
-                    }){
-                        Label("삭제", systemImage: "trash")
-                            .foregroundColor(.red)
-                    }
+            Button(action: {
+                self.isEditingName.toggle()
+            }) {
+                ZStack{
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color("list_color"))
+                        .frame(width: UIScreen.main.bounds.width - 40, height: 46, alignment: .leading)
+                    Label(isEditingName ? "수정 완료" : "이름 수정", systemImage: isEditingName ? "checkmark" : "pencil")
+                        .foregroundColor(Color("basic_text"))
+                        .frame(width: UIScreen.main.bounds.width - 40, height: 46, alignment: .leading)
+                        .padding(.leading, 40)
                 }
-                .listRowBackground(Color("list_color"))
             }
-            .background(Color("sheet_background"))
+            Button(action: {
+                if !isEditingName { //이름 수정하지 않을 때만 활성화
+                    self.isDelete = true
+                }
+            }) {
+                ZStack{
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color("list_color"))
+                        .frame(width: UIScreen.main.bounds.width - 40, height: 46, alignment: .leading)
+                    Label("삭제", systemImage: "trash")
+                        .foregroundColor(.red)
+                        .frame(width: UIScreen.main.bounds.width - 40, height: 46, alignment: .leading)
+                        .padding(.leading, 40)
+                }
+            }
+            Spacer()
         }
         .padding(.top, 48)
         .background(Color("sheet_background"))
@@ -78,9 +89,7 @@ struct CategorySheetView: View {
                 self.isPresentHalfModal = false
                 self.isDelete = false
             }
-        }/*, message: {
-            Text("삭제한 카테고리는 복구할 수 없습니다")
-        }*/)
+        })
     }
 }
 

@@ -19,28 +19,41 @@ struct DataSheetView: View {
     @Binding var currentCategory : Int
 
     var body: some View {
-        VStack{
+        VStack(spacing: 24){
             Text(data.title ?? "")
                 .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
                 .foregroundColor(Color("basic_text"))
-            List {
-                Section {
-                    Button(action:{
-                        UIPasteboard.general.setValue(data.link ?? "", forPasteboardType: UTType.plainText.identifier)
-                        isPresentHalfModal.toggle()
-                    }){
-                        Label("링크 복사", systemImage: "doc.on.doc").foregroundColor(Color("basic_text"))
-                    }
+            Button(action: {
+                UIPasteboard.general.setValue(data.link ?? "", forPasteboardType: UTType.plainText.identifier)
+                isPresentHalfModal.toggle()
+            }) {
+                ZStack{
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color("list_color"))
+                        .frame(width: UIScreen.main.bounds.width - 40, height: 46, alignment: .leading)
+                    Label("링크 복사", systemImage: "doc.on.doc")
+                        .foregroundColor(Color("basic_text"))
+                        .frame(width: UIScreen.main.bounds.width - 40, height: 46, alignment: .leading)
+                        .padding(.leading, 40)
                 }
-                .listRowBackground(Color("list_color"))
-                Section {
-                    if currentCatOrder != 0 { //전체 자료는 카테고리 이동 불가
+            }
+            ZStack{
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color("list_color"))
+                    .frame(width: UIScreen.main.bounds.width - 40, height: currentCatOrder == 0 ? 46 : 100, alignment: .leading)
+                VStack(spacing: 4){
+                    if currentCatOrder != 0 {
                         Button(action: {
                             isShowMovingCategory = true
                             isPresentHalfModal.toggle()
                         }) {
-                            Label("카테고리 이동", systemImage: "arrow.turn.down.right").foregroundColor(Color("basic_text"))
+                            Label("카테고리 이동", systemImage: "arrow.turn.down.right")
+                                .foregroundColor(Color("basic_text"))
+                                .frame(width: UIScreen.main.bounds.width - 40, height: 40, alignment: .leading)
+                                .padding(.leading, 40)
                         }
+                        Divider()
+                            .frame(width: UIScreen.main.bounds.width - 40)
                     }
                     Button(action:{
                         vm.deleteData(userID: userVM.userIdx, linkID: data.linkId!)
@@ -49,11 +62,12 @@ struct DataSheetView: View {
                     }){
                         Label("삭제", systemImage: "trash")
                             .foregroundColor(.red)
+                            .frame(width: UIScreen.main.bounds.width - 40, height: 40, alignment: .leading)
+                            .padding(.leading, 40)
                     }
                 }
-                .listRowBackground(Color("list_color"))
             }
-            .background(Color("sheet_background"))
+            Spacer()
         }
         .padding(.top, 48)
         .background(Color("sheet_background"))
@@ -71,6 +85,6 @@ struct DataSheetView_Previews: PreviewProvider {
         )
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
-//            .preferredColorScheme(.dark)
+            .preferredColorScheme(.dark)
     }
 }
