@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct CategoryRow: View {
     @Environment(\.colorScheme) var scheme //Light/Dark mode
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
@@ -45,10 +44,10 @@ struct CategoryRow: View {
             }
             .onTapGesture {
                 if !isAddingCategory {
-                    vm.isLoading = .loading
                     withAnimation(.spring()){
                         isShowingCateogry = false
                     }
+                    vm.isLoading = .loading
                     self.selected = category.categoryId
                     self.selectedOrder = category.order
                     self.isChangeRow = true

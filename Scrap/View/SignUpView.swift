@@ -57,7 +57,7 @@ struct SignUpView: View {
             self.checkInfo[1] = 3
             return
         }
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailRegEx = "^([a-zA-Z0-9._-])+@[a-zA-Z0-9.-]+.[a-zA-Z]{3,20}$"
         if email.range(of: emailRegEx, options: .regularExpression) == nil {
             self.checkInfo[1] = 2
         }else {
@@ -71,10 +71,14 @@ struct SignUpView: View {
             self.checkInfo[0] = 1
             return
         }
-        let nameRegEx = "[가-힣A-Za-z]{1,30}"
-        if name.range(of: nameRegEx, options: .regularExpression) == nil {
+        let nameRegEx = "^[가-힣A-Za-z]{1,30}$"
+        let engRegEx = "^[A-Za-z]*$" //영어로만 이루어져있는지
+        let korRegEx = "^[가-힣]*$"    //한국어로만 이루어져있는지
+        if name.range(of: nameRegEx, options: .regularExpression) == nil ||
+            name.range(of: engRegEx, options: .regularExpression) == nil &&
+            name.range(of: korRegEx, options: .regularExpression) == nil {
             self.checkInfo[0] = 0
-        }else { //이름 형식 맞지 않음
+        }else {
             self.checkInfo[0] = 9
         }
     }

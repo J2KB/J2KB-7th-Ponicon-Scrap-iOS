@@ -25,53 +25,45 @@ struct MainHomeView: View {
         ZStack{
             //Main Home
             NavigationView{
-                if scrapVM.isLoading == .loading { //서버통신(로딩)중이면 progress view 등장(loading indicator)
-                    ProgressView()
-                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                        .progressViewStyle(CircularProgressViewStyle(tint: Color.gray))
-                        .background(Color("background"))
-                        .ignoresSafeArea()
-                }else {
-                    SubHomeView(datas: $scrapVM.dataList, isPresentHalfModal: $isPresentHalfModal, currentCategory: $selected, currentCategoryOrder: $selectedOrder)
-                        .navigationBarTitle("", displayMode: .inline)
-                        .toolbar{
-                            ToolbarItem(placement: .navigationBarLeading){
-                                HStack(spacing: 2){
-                                    Button(action: {
-                                        if !isPresentHalfModal {                        //modal sheet가 열려있으면 카테고리뷰를 열 수 없다
-                                            withAnimation(.spring()){
-                                                self.isShowingCategory = true
-                                            }
+                SubHomeView(datas: $scrapVM.dataList, isPresentHalfModal: $isPresentHalfModal, currentCategory: $selected, currentCategoryOrder: $selectedOrder)
+                    .navigationBarTitle("", displayMode: .inline)
+                    .toolbar{
+                        ToolbarItem(placement: .navigationBarLeading){
+                            HStack(spacing: 2){
+                                Button(action: {
+                                    if !isPresentHalfModal {                        //modal sheet가 열려있으면 카테고리뷰를 열 수 없다
+                                        withAnimation(.spring()){
+                                            self.isShowingCategory = true
                                         }
-                                    }) {
-                                        Image(systemName: "line.3.horizontal")
-                                            .resizable()
-                                            .frame(width: 20, height: 14)
-                                            .foregroundColor(Color("basic_text"))
                                     }
-                                    Text(categoryTitle)
-                                        .fontWeight(.bold)
+                                }) {
+                                    Image(systemName: "line.3.horizontal")
+                                        .resizable()
+                                        .frame(width: 20, height: 14)
                                         .foregroundColor(Color("basic_text"))
                                 }
+                                Text(categoryTitle)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color("basic_text"))
                             }
                         }
-                        .toolbar{
-                            ToolbarItem(placement: .navigationBarTrailing){
-                                VStack{
-                                    NavigationLink(destination: MyPageView(userData: $scrapVM.user, isShowingMyPage: $isShowingMyPage).navigationBarHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowingMyPage) {
-                                        Button(action: {                                //modal sheet가 열려있으면 마이페이지뷰를 열 수 없다
-                                            if !isPresentHalfModal {
-                                                self.isShowingMyPage.toggle()
-                                            }
-                                        }) {
-                                            Image(systemName: "person.circle")
-                                                .foregroundColor(Color("basic_text"))
+                    }
+                    .toolbar{
+                        ToolbarItem(placement: .navigationBarTrailing){
+                            VStack{
+                                NavigationLink(destination: MyPageView(userData: $scrapVM.user, isShowingMyPage: $isShowingMyPage).navigationBarHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowingMyPage) {
+                                    Button(action: {                                //modal sheet가 열려있으면 마이페이지뷰를 열 수 없다
+                                        if !isPresentHalfModal {
+                                            self.isShowingMyPage.toggle()
                                         }
+                                    }) {
+                                        Image(systemName: "person.circle")
+                                            .foregroundColor(Color("basic_text"))
                                     }
                                 }
                             }
                         }
-                }
+                    }
             }
             //Drawer
             SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCateogry: $isShowingCategory, selected: $selected, selectedOrder: $selectedOrder)
