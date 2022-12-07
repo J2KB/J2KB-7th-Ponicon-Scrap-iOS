@@ -268,7 +268,7 @@ struct SignUpView: View {
         }
         .frame(width: UIScreen.main.bounds.width, alignment: .center)
         .navigationBarTitle("",displayMode: .inline)
-        .background(Color("background"))
+//        .background(Color("background"))
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: backButton)
         .gesture(DragGesture().onEnded({

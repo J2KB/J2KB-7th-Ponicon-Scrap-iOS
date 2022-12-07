@@ -34,7 +34,7 @@ struct MoveCategoryView: View {
                                     .opacity(0)
                             }
                         }
-                        .listRowBackground(self.selection == category.categoryId ? Color("selected_color") : Color("background"))
+                        .listRowBackground(self.selection == category.categoryId ? Color("selected_color") : .none)
                     }
                 }
             }
@@ -43,7 +43,7 @@ struct MoveCategoryView: View {
                 self.selection = currentCategory
             }
         }
-        .background(Color("background"))
+//        .background(Color("background"))
         .navigationBarTitle("카테고리 이동", displayMode: .inline)
         .toolbar{
             ToolbarItem(placement: .navigationBarLeading){

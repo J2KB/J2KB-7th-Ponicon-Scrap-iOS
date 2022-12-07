@@ -37,7 +37,7 @@ struct PageView: View {
                             Link(destination: Url, label: {
                                 Rectangle()
                                     .foregroundColor(Color("image"))
-                                    .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.6)
+                                    .frame(width: isOneCol ? UIScreen.main.bounds.width - 20 : UIScreen.main.bounds.width / 2.2, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.4 : (UIScreen.main.bounds.width / 2.5) / 1.6)
                                     .cornerRadius(10, corners: .topLeft)
                                     .cornerRadius(10, corners: .topRight)
                                     .shadow(radius: 2)
@@ -46,7 +46,7 @@ struct PageView: View {
                     }
                     ZStack{ //정보칸
                         Rectangle()
-                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 5) : (UIScreen.main.bounds.width / 2.5) / 2.3)
+                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 20 : UIScreen.main.bounds.width / 2.2, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 5) : (UIScreen.main.bounds.width / 2.5) / 2.3)
                             .foregroundColor(Color("data_bottom"))
                             .cornerRadius(10, corners: .bottomLeft)
                             .cornerRadius(10, corners: .bottomRight)
@@ -56,14 +56,14 @@ struct PageView: View {
                                 .lineLimit(2)
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundColor(Color("basic_text"))
-                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 80 : UIScreen.main.bounds.width / 2.8, height: 40, alignment: .topLeading)
-                                .padding(.trailing, isOneCol ? 28 : 20)
+                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 60 : UIScreen.main.bounds.width / 2.8, height: 40, alignment: .topLeading)
+                                .padding(.trailing, isOneCol ? 28 : 30)
                             Text(data.domain ?? "") //출처 -> link에서 자르기
                                 .font(.caption)
                                 .foregroundColor(Color("domain_color"))
                                 .lineLimit(1)
                                 .padding(.horizontal, 6)
-                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, alignment: .leading)
+                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 24 : UIScreen.main.bounds.width / 2.2, alignment: .leading)
                         }
                         Button(action: {                     //더보기 버튼 클릭하면 isPresentHalfModal = true, sheet 올라옴
                             isPresentHalfModal = true        //half-modal view 등장
@@ -73,7 +73,7 @@ struct PageView: View {
                                 .rotationEffect(.degrees(90))
                                 .foregroundColor(Color("option_button"))
                         }
-                        .padding(EdgeInsets(top: 0, leading: isOneCol ? 320 : 240, bottom: 34, trailing: isOneCol ? 0 : 100))
+                        .padding(EdgeInsets(top: 0, leading: isOneCol ? UIScreen.main.bounds.width - 60 : UIScreen.main.bounds.width - 136, bottom: 35, trailing: isOneCol ? 0 : 100))
                     }
                 }
             }
@@ -82,14 +82,14 @@ struct PageView: View {
                     ZStack { //이미지칸
                         Rectangle()
                             .foregroundColor(Color("image"))
-                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.6)
+                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 20 : UIScreen.main.bounds.width / 2.2, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.4 : (UIScreen.main.bounds.width / 2.5) / 1.6)
                             .cornerRadius(10, corners: .topLeft)
                             .cornerRadius(10, corners: .topRight)
                             .shadow(radius: 2)
                         if let urlString = data.link {
                             let url = URL(string: urlString)
                             if let Url = url {
-                                Link(destination: Url, label:{
+                                Link(destination: Url, label: {
                                     AsyncImage(url: URL(string: data.imgUrl ?? "")!) { image in
                                         image
                                             .resizable()
@@ -97,7 +97,7 @@ struct PageView: View {
                                     } placeholder: {
                                         ProgressView()
                                     }
-                                    .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.5 : (UIScreen.main.bounds.width / 2.5) / 1.6)
+                                    .frame(width: isOneCol ? UIScreen.main.bounds.width - 20 : UIScreen.main.bounds.width / 2.2, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 2) / 1.4 : (UIScreen.main.bounds.width / 2.5) / 1.6)
                                     .cornerRadius(10, corners: .topLeft)
                                     .cornerRadius(10, corners: .topRight)
                                 })
@@ -106,24 +106,24 @@ struct PageView: View {
                     }
                     ZStack{ //정보칸
                         Rectangle()
-                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 5) : (UIScreen.main.bounds.width / 2.5) / 2.3)
+                            .frame(width: isOneCol ? UIScreen.main.bounds.width - 20 : UIScreen.main.bounds.width / 2.2, height: isOneCol ? ((UIScreen.main.bounds.width - 40) / 4.8) : (UIScreen.main.bounds.width / 2.5) / 2.3)
                             .foregroundColor(Color("data_bottom"))
                             .cornerRadius(10, corners: .bottomLeft)
                             .cornerRadius(10, corners: .bottomRight)
                             .shadow(radius: 2)
-                        VStack(spacing: 2){
+                        VStack(spacing: 2) {
                             Text(data.title ?? "")
                                 .lineLimit(2)
-                                .font(.system(size: 13, weight: .medium))
+                                .font(.system(size: 12, weight: .medium))
                                 .foregroundColor(Color("basic_text"))
-                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 80 : UIScreen.main.bounds.width / 2.8, height: 40, alignment: .topLeading)
-                                .padding(.trailing, isOneCol ? 28 : 20)
+                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 60 : UIScreen.main.bounds.width / 2.8, height: 40, alignment: .topLeading)
+                                .padding(.trailing, isOneCol ? 28 : 30)
                             Text(data.domain ?? "")
                                 .font(.caption)
                                 .foregroundColor(Color("domain_color"))
                                 .lineLimit(1)
                                 .padding(.horizontal, 6)
-                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 40 : UIScreen.main.bounds.width / 2.5 + 12, alignment: .leading)
+                                .frame(width: isOneCol ? UIScreen.main.bounds.width - 24 : UIScreen.main.bounds.width / 2.2, alignment: .leading)
                         }
                         Button(action: {                //더보기 버튼 클릭하면 isPresentHalfModal = true, sheet 올라옴
                             isPresentHalfModal = true   //half-modal view 등장
@@ -133,7 +133,7 @@ struct PageView: View {
                                 .rotationEffect(.degrees(90))
                                 .foregroundColor(Color("option_button"))
                         }
-                        .padding(EdgeInsets(top: 0, leading: isOneCol ? 320 : 240, bottom: 34, trailing: isOneCol ? 0 : 100))
+                        .padding(EdgeInsets(top: 0, leading: isOneCol ? UIScreen.main.bounds.width - 60 : UIScreen.main.bounds.width - 136, bottom: 35, trailing: isOneCol ? 0 : 100))
                     }
                 }
             }
@@ -145,7 +145,7 @@ struct PageView_Previews: PreviewProvider {
     static var previews: some View {
         PageView(
             isPresentHalfModal: .constant(false),
-            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도", domain: "naver.com", imgUrl: "http://static1.squarespace.com/static/5e9672644b617e2a1765d11c/t/5eddc91b1cb53938998c7a67/1591593250119/Codable+Crash+Data+Missing.png?format=1500w")),
+            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도", domain: "naver.com", imgUrl:"" /*"http://static1.squarespace.com/static/5e9672644b617e2a1765d11c/t/5eddc91b1cb53938998c7a67/1591593250119/Codable+Crash+Data+Missing.png?format=1500w"*/)),
             detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneCol: .constant(false),
             currentCategory: .constant(0),
             currentCatOrder: .constant(1)

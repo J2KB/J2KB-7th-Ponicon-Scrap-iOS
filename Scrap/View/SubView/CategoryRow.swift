@@ -67,7 +67,7 @@ struct CategoryRow: View {
             .frame(width: 24, height: 32)
         }
         .padding(.leading, 10)
-        .listRowBackground(self.selected == category.categoryId ? Color("selected_color"): Color("background"))
+        .listRowBackground(self.selected == category.categoryId ? Color("selected_color"): .none)
         .sheet(isPresented: $isPresentHalfModal){
             HalfSheet {
                 CategorySheetView(category: $category, isPresentHalfModal: $isPresentHalfModal)

@@ -100,7 +100,7 @@ struct MyPageView: View {
                     }
                 }
             }
-            .background(Color("background"))
+//            .background(Color("background"))
         }
         .gesture(DragGesture().onEnded({
             if $0.translation.width > 100 {

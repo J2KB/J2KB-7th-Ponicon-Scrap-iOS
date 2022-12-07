@@ -50,7 +50,7 @@ struct SubHomeView: View {
             ProgressView()
                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                 .progressViewStyle(CircularProgressViewStyle(tint: Color.gray))
-                .background(Color("background"))
+//                .background(Color("background"))
                 .ignoresSafeArea()
         }else {
             RefreshableScrollView {
@@ -82,27 +82,28 @@ struct SubHomeView: View {
                             }
                         }
                         .frame(width: UIScreen.main.bounds.width - 32, height: 40, alignment: .trailing)
-                        LazyVGrid(columns: isOneCol ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: UIScreen.main.bounds.width / 3))], spacing: 10){
+                        LazyVGrid(columns: isOneCol ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: UIScreen.main.bounds.width / 2.8 ))], spacing: 10){
                             if isRecent { //최신순
                                 ForEach($datas.links.reversed()) { info in
                                     PageView(isPresentHalfModal: $isPresentHalfModal, data: info, detailData: $detailData, isOneCol: $isOneCol, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
-                                        .padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
+                                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                                 }
                             } else {      //오래된순
                                 ForEach($datas.links) { info in
                                     PageView(isPresentHalfModal: $isPresentHalfModal, data: info, detailData: $detailData, isOneCol: $isOneCol, currentCategory: $currentCategory, currentCatOrder: $currentCategoryOrder)
-                                        .padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
+                                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                                 }
                             }
                         } //LAZYGRID
-                        .padding(.horizontal, isOneCol ? 0 : 15)
+//                        .padding(.horizontal, isOneCol ? 0 : 15)
                     }//ScrollView
-                    NavigationLink(destination: MoveCategoryView(isShowMovingCategory: $isShowMovingCategory, categoryList: $vm.categoryList.result, data: $detailData, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory){ EmptyView() }
+                    NavigationLink(destination: MoveCategoryView(isShowMovingCategory: $isShowMovingCategory, categoryList: $vm.categoryList.result, data: $detailData, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory) { EmptyView() }
+                        .opacity(0)
                 }//VStack
             } refreshable: {
                 vm.inquiryData(userID: userVM.userIdx, catID: currentCategory)
             }//Refreshable
-            .background(Color("background"))
+//            .background(Color("background"))
             .sheet(isPresented: $isPresentHalfModal){ //isPresentHalfModal == true일때 sheet 열림
                 HalfSheet {
                     DataSheetView(isShowMovingCategory: $isShowMovingCategory, data: $detailData, isPresentHalfModal: $isPresentHalfModal, currentCatOrder: $currentCategoryOrder, currentCategory: $currentCategory)

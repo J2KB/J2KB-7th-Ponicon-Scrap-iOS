@@ -188,7 +188,7 @@ struct LoginView: View {
                 .padding(.top, 20)
             }
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-            .background(Color("background"))
+//            .background(Color("background"))
             .ignoresSafeArea()
         }
     }

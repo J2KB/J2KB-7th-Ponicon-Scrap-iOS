@@ -77,10 +77,9 @@ struct SideMenuView: View {
                     .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 2))
                 }//Header HStack
                 .frame(height: 40)
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 16)
                 .padding(.bottom, 10)
-                .padding(.top, 4)
-                .background(Color("background"))
+                .background(scheme == .light ? .white : .black)
                 //Category LIST
                 VStack{
                     List{
@@ -114,7 +113,7 @@ struct SideMenuView: View {
                                             .opacity(0)
                                     }
                                 }
-                                .listRowBackground(self.selected == category.categoryId ? Color("selected_color") : Color("background"))
+                                .listRowBackground(self.selected == category.categoryId ? Color("selected_color") : .none)
                             }
                         }
                         ForEach($categoryList.categories) { $category in
@@ -141,16 +140,13 @@ struct SideMenuView: View {
                 .refreshable {
                     vm.inquiryCategoryData(userID: userVM.userIdx)
                 }
-                .frame(width: UIScreen.main.bounds.width)
-                .padding(.trailing, 10)
                 .listStyle(PlainListStyle())
             }//VStack
-            .background(Color("background"))
             if isAddingCategory { //카테고리 추가 alert창 켜지면 뒷 배경 블러 처리
                 Color("blur_background").ignoresSafeArea()
             }
         }//ZStack
-        .background(Color("background"))
+        .background(scheme == .light ? .white : .black)
         .addCategoryAlert(isPresented: $isAddingCategory, newCategoryTitle: $newCat, placeholder: "새로운 카테고리 이름을 입력해주세요", title: "카테고리 추가하기", action: { _ in
             vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
             let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
@@ -165,6 +161,6 @@ struct SideMenuView_Previews: PreviewProvider {
         SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 0),
            CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2), CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCateogry: .constant(true), selected: .constant(0), selectedOrder: .constant(0))
             .environmentObject(ScrapViewModel())
-            .preferredColorScheme(.dark)
+//            .preferredColorScheme(.dark)
     }
 }

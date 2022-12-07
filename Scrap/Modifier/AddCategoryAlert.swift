@@ -62,7 +62,7 @@ struct AddCategoryAlert: ViewModifier {
                     .padding(.bottom, 6)
                 }
                 .frame(width: UIScreen.main.bounds.width / 1.35, height: UIScreen.main.bounds.height / 5.2)
-                .background(scheme == .light ? Color("background") : Color("black_bold"))
+                .background(scheme == .light ? .white : Color("black_bold"))
                 .cornerRadius(20)
                 .overlay {
                     RoundedRectangle(cornerRadius: 20).stroke(.quaternary, lineWidth: 1)
