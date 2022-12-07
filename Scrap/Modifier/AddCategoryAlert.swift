@@ -31,7 +31,7 @@ struct AddCategoryAlert: ViewModifier {
                         TextField(placeholder, text: $newCategoryTitle)
                             .disableAutocorrection(true) //자동 수정 비활성화
                             .padding(.horizontal)
-                            .frame(width: UIScreen.main.bounds.width / 1.44, height: 40, alignment: .leading)
+                            .frame(width: UIScreen.main.bounds.width / 1.44, height: 36, alignment: .leading)
                             .padding(.leading, -10)
                     }
                     .padding(.bottom, 10)
@@ -59,9 +59,9 @@ struct AddCategoryAlert: ViewModifier {
                         }
                         Spacer()
                     }
-                    .padding(.bottom, 4)
+                    .padding(.bottom, 6)
                 }
-                .frame(width: UIScreen.main.bounds.width / 1.35, height: UIScreen.main.bounds.height / 5)
+                .frame(width: UIScreen.main.bounds.width / 1.35, height: UIScreen.main.bounds.height / 5.2)
                 .background(scheme == .light ? Color("background") : Color("black_bold"))
                 .cornerRadius(20)
                 .overlay {

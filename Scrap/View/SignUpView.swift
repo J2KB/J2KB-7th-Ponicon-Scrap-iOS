@@ -72,8 +72,8 @@ struct SignUpView: View {
             return
         }
         let nameRegEx = "^[가-힣A-Za-z]{1,30}$"
-        let engRegEx = "^[A-Za-z]*$" //영어로만 이루어져있는지
-        let korRegEx = "^[가-힣]*$"    //한국어로만 이루어져있는지
+        let engRegEx = "^[A-Za-z]*$"  //isOnlyEnglish?
+        let korRegEx = "^[가-힣]*$"    //isOnlyKorean?
         if name.range(of: nameRegEx, options: .regularExpression) == nil ||
             name.range(of: engRegEx, options: .regularExpression) == nil &&
             name.range(of: korRegEx, options: .regularExpression) == nil {

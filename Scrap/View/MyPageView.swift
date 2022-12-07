@@ -102,6 +102,13 @@ struct MyPageView: View {
             }
             .background(Color("background"))
         }
+        .gesture(DragGesture().onEnded({
+            if $0.translation.width > 100 {
+                withAnimation(.easeInOut) {
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+            }
+        }))
     }
 }
 

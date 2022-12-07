@@ -145,6 +145,7 @@ struct SideMenuView: View {
                 .padding(.trailing, 10)
                 .listStyle(PlainListStyle())
             }//VStack
+            .background(Color("background"))
             if isAddingCategory { //카테고리 추가 alert창 켜지면 뒷 배경 블러 처리
                 Color("blur_background").ignoresSafeArea()
             }
