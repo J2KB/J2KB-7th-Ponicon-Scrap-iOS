@@ -12,6 +12,7 @@ struct DataSheetView: View {
     @Environment(\.colorScheme) var scheme //Light/Dark mode
     @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
     @EnvironmentObject var userVM : UserViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
+    @State private var isDelete = false
     @Binding var isShowMovingCategory : Bool
     @Binding var data : DataResponse.Datas
     @Binding var isPresentHalfModal : Bool
@@ -56,9 +57,7 @@ struct DataSheetView: View {
                             .frame(width: UIScreen.main.bounds.width - 40)
                     }
                     Button(action:{
-                        vm.deleteData(userID: userVM.userIdx, linkID: data.linkId!)
-                        vm.removeDataFromDataList(dataID: data.linkId!, categoryID: currentCategory)
-                        isPresentHalfModal.toggle()
+                        self.isDelete = true
                     }){
                         Label("삭제", systemImage: "trash")
                             .foregroundColor(.red)
@@ -71,6 +70,16 @@ struct DataSheetView: View {
         }
         .padding(.top, 48)
         .background(Color("sheet_background"))
+        .alert("정말 삭제하시겠습니까?", isPresented: $isDelete, actions: {
+            Button("취소", role: .cancel) {}
+            Button("삭제", role: .destructive) {
+                //📡 자료 삭제 서버 통신
+                vm.deleteData(userID: userVM.userIdx, linkID: data.linkId!)
+                vm.removeDataFromDataList(dataID: data.linkId!, categoryID: currentCategory)
+                isPresentHalfModal = false
+                self.isDelete = false
+            }
+        })
     }
 }
 
