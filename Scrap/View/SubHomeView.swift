@@ -31,7 +31,6 @@ struct RefreshableScrollView<Content: View> : View {
     }
 }
 
-
 struct SubHomeView: View {
     @Environment(\.colorScheme) var scheme              //Light/Dark mode
     @EnvironmentObject var vm : ScrapViewModel
@@ -101,7 +100,11 @@ struct SubHomeView: View {
                         .opacity(0)
                 }//VStack
             } refreshable: {
-                vm.inquiryData(userID: userVM.userIdx, catID: currentCategory)
+                if currentCategoryOrder == 0 {
+                    vm.inquiryAllData(userID: userVM.userIdx)
+                }else {
+                    vm.inquiryData(userID: userVM.userIdx, catID: currentCategory)
+                }
             }//Refreshable
 //            .background(Color("background"))
             .sheet(isPresented: $isPresentHalfModal){ //isPresentHalfModal == true일때 sheet 열림

@@ -175,6 +175,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //자료 조회
     //query: user id, category id
     func inquiryData(userID: Int, catID: Int) {
+        print("⭐️⭐️⭐️선택한 카테고리 id: \(catID)")
         guard let url = URL(string: "\(baseUrl)/auth/data?id=\(userID)&category=\(catID)") else {
             print("invalid url")
             return
@@ -217,6 +218,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //자료 전체 조회
     //query: user id
     func inquiryAllData(userID: Int) {
+        print("⭐️⭐️⭐️자료 전체 조회")
         guard let url = URL(string: "\(baseUrl)/auth/data/all?id=\(userID)") else {
             print("invalid url")
             return
