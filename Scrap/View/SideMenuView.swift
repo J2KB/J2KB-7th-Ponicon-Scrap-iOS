@@ -99,12 +99,12 @@ struct SideMenuView: View {
                                     Button(action: {
                                         if !isAddingCategory {
 //                                            vm.isLoading = .loading
+                                            self.selected = category.categoryId
+                                            self.selectedOrder = category.order
                                             withAnimation(.spring()){
                                                 isShowingCateogry = false
                                             }
-                                            self.selected = category.categoryId
-                                            self.selectedOrder = category.order
-                                            if category.order == 0 { vm.inquiryAllData(userID: userVM.userIdx) } //📡 카테고리에 해당하는 자료 가져오는 통신
+                                            if selectedOrder == 0 { vm.inquiryAllData(userID: userVM.userIdx) } //📡 카테고리에 해당하는 자료 가져오는 통신
                                             else { vm.inquiryData(userID: userVM.userIdx, catID: selected) } //📡 카테고리에 해당하는 자료 가져오는 통신
                                         }
                                     }) {

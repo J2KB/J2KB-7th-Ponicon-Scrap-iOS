@@ -49,7 +49,6 @@ struct SubHomeView: View {
             ProgressView()
                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                 .progressViewStyle(CircularProgressViewStyle(tint: Color.gray))
-//                .background(Color("background"))
                 .ignoresSafeArea()
         }else {
             RefreshableScrollView {
@@ -94,7 +93,6 @@ struct SubHomeView: View {
                                 }
                             }
                         } //LAZYGRID
-//                        .padding(.horizontal, isOneCol ? 0 : 15)
                     }//ScrollView
                     NavigationLink(destination: MoveCategoryView(isShowMovingCategory: $isShowMovingCategory, categoryList: $vm.categoryList.result, data: $detailData, currentCategory: $currentCategory).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory) { EmptyView() }
                         .opacity(0)
@@ -106,7 +104,6 @@ struct SubHomeView: View {
                     vm.inquiryData(userID: userVM.userIdx, catID: currentCategory)
                 }
             }//Refreshable
-//            .background(Color("background"))
             .sheet(isPresented: $isPresentHalfModal){ //isPresentHalfModal == true일때 sheet 열림
                 HalfSheet {
                     DataSheetView(isShowMovingCategory: $isShowMovingCategory, data: $detailData, isPresentHalfModal: $isPresentHalfModal, currentCatOrder: $currentCategoryOrder, currentCategory: $currentCategory)

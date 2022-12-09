@@ -57,7 +57,7 @@ struct PageView: View {
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundColor(Color("basic_text"))
                                 .frame(width: isOneCol ? UIScreen.main.bounds.width - 60 : UIScreen.main.bounds.width / 2.8, height: 40, alignment: .topLeading)
-                                .padding(.trailing, isOneCol ? 28 : 30)
+                                .padding(.trailing, UIScreen.main.bounds.width / 15)
                             Text(data.domain ?? "") //출처 -> link에서 자르기
                                 .font(.caption)
                                 .foregroundColor(Color("domain_color"))
@@ -73,7 +73,7 @@ struct PageView: View {
                                 .rotationEffect(.degrees(90))
                                 .foregroundColor(Color("option_button"))
                         }
-                        .padding(EdgeInsets(top: 0, leading: isOneCol ? UIScreen.main.bounds.width - 60 : UIScreen.main.bounds.width - 136, bottom: 35, trailing: isOneCol ? 0 : 100))
+                        .padding(EdgeInsets(top: 0, leading: isOneCol ? UIScreen.main.bounds.width - 60 : UIScreen.main.bounds.width - 136, bottom: UIScreen.main.bounds.width / 12, trailing: isOneCol ? 0 : UIScreen.main.bounds.width / 3.8))
                     }
                 }
             }
@@ -117,7 +117,7 @@ struct PageView: View {
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundColor(Color("basic_text"))
                                 .frame(width: isOneCol ? UIScreen.main.bounds.width - 60 : UIScreen.main.bounds.width / 2.8, height: 40, alignment: .topLeading)
-                                .padding(.trailing, isOneCol ? 28 : 30)
+                                .padding(.trailing, UIScreen.main.bounds.width / 15)
                             Text(data.domain ?? "")
                                 .font(.caption)
                                 .foregroundColor(Color("domain_color"))
@@ -133,7 +133,7 @@ struct PageView: View {
                                 .rotationEffect(.degrees(90))
                                 .foregroundColor(Color("option_button"))
                         }
-                        .padding(EdgeInsets(top: 0, leading: isOneCol ? UIScreen.main.bounds.width - 60 : UIScreen.main.bounds.width - 136, bottom: 35, trailing: isOneCol ? 0 : 100))
+                        .padding(EdgeInsets(top: 0, leading: isOneCol ? UIScreen.main.bounds.width - 60 : UIScreen.main.bounds.width - 136, bottom: UIScreen.main.bounds.width / 12, trailing: isOneCol ? 0 : UIScreen.main.bounds.width / 3.8))
                     }
                 }
             }
@@ -146,7 +146,7 @@ struct PageView_Previews: PreviewProvider {
         PageView(
             isPresentHalfModal: .constant(false),
             data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도", domain: "naver.com", imgUrl:"" /*"http://static1.squarespace.com/static/5e9672644b617e2a1765d11c/t/5eddc91b1cb53938998c7a67/1591593250119/Codable+Crash+Data+Missing.png?format=1500w"*/)),
-            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneCol: .constant(false),
+            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneCol: .constant(true),
             currentCategory: .constant(0),
             currentCatOrder: .constant(1)
         )
