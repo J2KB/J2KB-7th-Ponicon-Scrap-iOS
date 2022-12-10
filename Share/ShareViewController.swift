@@ -47,11 +47,9 @@ class ShareViewController: UIViewController{
             self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
             return
         }
-
         configureNavBar()
         let delegate = CategoryIDDelegate()
         let childView = UIHostingController(rootView: ShareUIView(delegate: delegate))
-        //이 view controller가 열릴 때, categoryList를 받아와야 함
         self.addChild(childView)
         childView.view.frame = self.view.bounds
         self.view.addSubview(childView.view)
@@ -125,6 +123,20 @@ class ShareViewController: UIViewController{
         extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
     }
     
+    private func addDataToScrapCompletionHandler(withRequest request: URLRequest, completionHandler: @escaping (_ data: Data?, _ error: Error?) -> ()) {
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data, error == nil, let response = response as? HTTPURLResponse else {
+                completionHandler(nil, error)
+                return
+            }
+            guard (200..<300) ~= response.statusCode else {
+                completionHandler(nil, error)
+                return
+            }
+            completionHandler(data, nil)
+        }.resume()
+    }
+    
     func addNewData(catID: Int, userIdx: Int){
         guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=\(userIdx)&category=\(catID)") else {
             print("invalid url")
@@ -141,22 +153,21 @@ class ShareViewController: UIViewController{
         request.httpBody = finalData
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            do{
+        addDataToScrapCompletionHandler(withRequest: request) { data, error in
+            do {
                 if let data = data {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(NewDataModel.self, from: data)
+                    print("post saving data: SUCCESS")
                     print(result)
-                    print("post saving data : SUCCESS")
                     print(catID)
-                } else {
+                }else {
                     print("no data")
                 }
-            }catch (let error){
-                print("error")
+            }catch let error {
                 print(String(describing: error))
             }
-        }.resume()
+        }
     }
 }
 

@@ -133,13 +133,15 @@ struct SideMenuView: View {
                                 print(destination)
                                 vm.moveCategoryRowInList(from: $0, to: destination)
                                 vm.movingCategory(userID: userVM.userIdx, startIdx: $0, endIdx: destination) //📡 카테고리 이동 통신
-//                                vm.inquiryCategoryData(userID: userVM.userIdx) //📡 카테고리 조회 다시 바로 진행
                             }
                         })
+                    }//List
+                    .task {
+                        await vm.inquiryCategoryData(userID: userVM.userIdx)
                     }
                 }//CategoryList VStack
                 .refreshable {
-                    vm.inquiryCategoryData(userID: userVM.userIdx)
+                    await vm.inquiryCategoryData(userID: userVM.userIdx)
                 }
                 .listStyle(PlainListStyle())
             }//VStack

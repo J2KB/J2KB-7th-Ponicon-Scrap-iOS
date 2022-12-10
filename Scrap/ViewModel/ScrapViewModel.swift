@@ -88,6 +88,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     
     //data의 카테고리 이동 함수
     func moveDataToOtherCategory(_ data: DataResponse.Datas, from fromCategoryID: Int, to toCategoryID: Int) { //이동할 자료id, 선택한 카테고리id, 이동될 카테고리id
+        
         //해당 자료를 to 카테고리에 넣기 -> 해당 카테고리를 클릭하면 어차피 데이터 통신이 진행되므로 할 필요 x, 해당 카테고리의 numOfLink += 1 -> 이것만 진행
         for i in 0..<categoryList.result.categories.count {
             if categoryList.result.categories[i].categoryId == toCategoryID {
@@ -100,13 +101,13 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     
     //categoryList의 category 위치 이동
     func moveCategoryRowInList(from oldIndex: Int, to newIndex: Int) {
-        guard oldIndex == newIndex else { return } //제자리면 바로 return
-        guard abs(newIndex - oldIndex) == 1 else { return categoryList.result.categories.swapAt(oldIndex, newIndex) } //바로 아래, 위면 swap
+        guard oldIndex != newIndex else { return }             //제자리 -> return
+        guard abs(newIndex - oldIndex) != 1 else { return categoryList.result.categories.swapAt(oldIndex, newIndex) } //바로 아래, 위면 swap
         if newIndex >= categoryList.result.categories.count { //맨 마지막으로 이동
             categoryList.result.categories.append(categoryList.result.categories.remove(at: oldIndex)) //맨 뒤에 추가
             return
         }
-        categoryList.result.categories.insert(categoryList.result.categories.remove(at: oldIndex), at: newIndex - 1)
+        categoryList.result.categories.insert(categoryList.result.categories.remove(at: oldIndex), at: oldIndex > newIndex ? newIndex : newIndex - 1)
     }
     
     //categoryList의 category 이름 수정
@@ -128,7 +129,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                 return
             }
             guard (200..<300) ~= response.statusCode else {
-                completionHandler(nil, NetworkErrors.responseUnsuccessFul(statusCode: response.statusCode))
+                completionHandler(nil, NetworkErrors.responseUnsuccessFul)
                 return
             }
             completionHandler(data, nil)
@@ -142,34 +143,70 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                 return
             }
             guard (200..<300) ~= response.statusCode else {
-                completionHandler(nil, NetworkErrors.responseUnsuccessFul(statusCode: response.statusCode))
+                completionHandler(nil, NetworkErrors.responseUnsuccessFul)
                 return
             }
             completionHandler(data, nil)
         }.resume()
     }
     
+    func getCategoryData(userID: Int) async throws -> CategoryResponse {
+        guard let url = URL(string: "\(baseUrl)/category/all?id=\(userID)") else {
+            throw NetworkErrors.invalidURL
+        }
+        
+        guard let (data, response) = try? await URLSession.shared.data(from: url) else {
+            throw NetworkErrors.requestFailed
+        }
+        
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            throw NetworkErrors.responseUnsuccessFul
+        }
+        
+        guard let result = try? JSONDecoder().decode(CategoryResponse.self, from: data) else {
+            throw NetworkErrors.jsonParsingFailure
+        }
+        
+        return result
+//        guard let (data, response) = try await URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
+//            if let data = data {
+//                guard let result = try? JSONDecoder().decode(CategoryResponse.self, from: data) else { //jsonParsingError
+//                    return
+//                }
+//                print(result)
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.categoryList = result
+//                }
+//            }else{
+//                print(String(describing: error?.localizedDescription))
+//            }
+//        })
+    }
+    
     //=========GET=========
     //카테고리 전체 조회
     //query: user id
-    func inquiryCategoryData(userID: Int) {
-        guard let url = URL(string: "\(baseUrl)/category/all?id=\(userID)") else {
-            print("invalid url")
+    func inquiryCategoryData(userID: Int) async {
+        guard let data = try? await getCategoryData(userID: userID) else {
+            print("async/await inquiring data error")
             return
         }
-        fetchDataCompletionHandler(fromURL: url) { (data, error) in
-            if let data = data {
-                guard let result = try? JSONDecoder().decode(CategoryResponse.self, from: data) else { //jsonParsingError
-                    return
-                }
-                print(result)
-                DispatchQueue.main.async { [weak self] in
-                    self?.categoryList = result
-                }
-            }else{
-                print(String(describing: error?.localizedDescription))
-            }
+        DispatchQueue.main.async {
+            self.categoryList = data
         }
+//        fetchDataCompletionHandler(fromURL: url) { (data, error) in
+//            if let data = data {
+//                guard let result = try? JSONDecoder().decode(CategoryResponse.self, from: data) else { //jsonParsingError
+//                    return
+//                }
+//                print(result)
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.categoryList = result
+//                }
+//            }else{
+//                print(String(describing: error?.localizedDescription))
+//            }
+//        }
     }
     
     //자료 조회
@@ -201,7 +238,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                             let result = try decoder.decode(DataResponse.self, from: data)
                             self.dataList = result.result
                             self.isLoading = .success
-                            print(result)
+//                            print(result)
                         } catch let error {
                             print("error")
                             print(String(describing: error))
@@ -445,6 +482,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                 print(String(describing: error))
             }
         }
+        
     }
     
     //======PATCH======

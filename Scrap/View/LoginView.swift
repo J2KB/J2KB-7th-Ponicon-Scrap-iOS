@@ -197,9 +197,10 @@ struct LoginView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         LoginView(/*autoLogin: .constant(true)*/)
+            .previewDevice(PreviewDevice(rawValue: "iPhone 14"))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
-            .preferredColorScheme(.dark)
+//            .preferredColorScheme(.dark)
     }
 }
 

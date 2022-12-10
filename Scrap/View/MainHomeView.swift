@@ -72,7 +72,9 @@ struct MainHomeView: View {
 //        .background(Color("background"))
         .onAppear{ //MainHomeView 등장하면 api 통신
             userVM.userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ? userVM.userIdx : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
-            scrapVM.inquiryCategoryData(userID: userVM.userIdx) //카테고리 조회 통신 📡
+            Task {
+                await scrapVM.inquiryCategoryData(userID: userVM.userIdx) //카테고리 조회 통신 📡
+            }
             scrapVM.inquiryUserData(userID: userVM.userIdx) //마이페이지 데이터 조회 통신 📡
             if self.selected == 0 { scrapVM.inquiryAllData(userID: userVM.userIdx) } //자료 조회 통신 📡 case01
             else { scrapVM.inquiryData(userID: userVM.userIdx, catID: selected) } //자료 조회 통신 📡 case02
@@ -97,6 +99,7 @@ struct MainHomeView: View {
 struct MainHomeView_Previews: PreviewProvider { 
     static var previews: some View {
         MainHomeView()
+            .previewDevice(PreviewDevice(rawValue: "iPhone 8"))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
 //            .preferredColorScheme(.dark)
