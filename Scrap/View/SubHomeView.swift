@@ -43,6 +43,7 @@ struct SubHomeView: View {
     @Binding var currentCategory : Int                  //현재 카테고리 id
     @Binding var currentCategoryOrder : Int             //현재 카테고리 order
     @State private var detailData = DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")
+    var newDataArray = [NewData]()
 
     var body: some View {
         if vm.isLoading == .loading { //서버통신(로딩)중이면 progress view 등장(loading indicator)
@@ -98,6 +99,14 @@ struct SubHomeView: View {
                         .opacity(0)
                 }//VStack
             } refreshable: {
+                if let data = UserDefaults(suiteName: "group.com.thk.Scrap")?.value(forKey: "NewData") as? Data {
+                    let newDataArray = try? PropertyListDecoder().decode(NewData.self,from: data)
+                    if newDataArray != nil { //안에 값이 있다면
+                        print(newDataArray!)
+                        vm.addNewData(baseurl: newDataArray?.url ?? "", title: newDataArray?.title ?? "", imgUrl: newDataArray?.imageUrl ?? "", catID: newDataArray?.categoryID ?? 0, userIdx: userVM.userIdx)
+                        UserDefaults(suiteName: "group.com.thk.Scrap")?.removeObject(forKey: "NewData")
+                    }
+                }
                 if currentCategoryOrder == 0 {
                     vm.inquiryAllData(userID: userVM.userIdx)
                 }else {

@@ -22,6 +22,7 @@ struct PageView: View {
     
     func isValidURL(url: String?) -> Bool {
         guard url != "" else { return false } //비어있으면"" -> return false
+        guard url != " " else { return false }
         guard url != nil else { return false }
         if url!.range(of: "[가-힣]", options: .regularExpression) != nil { return false } //한국어가 들어감
         return true
@@ -90,7 +91,7 @@ struct PageView: View {
                             let url = URL(string: urlString)
                             if let Url = url {
                                 Link(destination: Url, label: {
-                                    AsyncImage(url: URL(string: data.imgUrl ?? "")!) { image in
+                                    AsyncImage(url: URL(string: data.imgUrl!)!) { image in
                                         image
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)

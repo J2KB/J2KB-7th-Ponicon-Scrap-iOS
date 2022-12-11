@@ -25,6 +25,34 @@ struct CategoryModel: Decodable{ //카테고리 추가 -> response 데이터로 
     }
 }
 
+struct MoveDataModel: Decodable {
+    struct Result: Decodable {
+        var linkId: Int
+        var categoryId: Int
+        var url: String
+        var title: String
+        var imgUrl: String
+        var domain: String
+        
+        init(linkId: Int, categoryId: Int, url: String, title: String, imgUrl: String, domain: String){
+            self.linkId = linkId
+            self.categoryId = categoryId
+            self.url = url
+            self.title = title
+            self.imgUrl = imgUrl
+            self.domain = domain
+        }
+    }
+    var code: Int
+    var message: String
+    var result: Result?
+    init(code: Int, message: String, result: Result){
+        self.code = code
+        self.message = message
+        self.result = result
+    }
+}
+
 struct NewDataModel: Decodable{ //자료 저장 -> response 데이터로 받을 link id
     struct Result: Decodable {
         var linkId: Int
@@ -88,7 +116,6 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     
     //data의 카테고리 이동 함수
     func moveDataToOtherCategory(_ data: DataResponse.Datas, from fromCategoryID: Int, to toCategoryID: Int) { //이동할 자료id, 선택한 카테고리id, 이동될 카테고리id
-        
         //해당 자료를 to 카테고리에 넣기 -> 해당 카테고리를 클릭하면 어차피 데이터 통신이 진행되므로 할 필요 x, 해당 카테고리의 numOfLink += 1 -> 이것만 진행
         for i in 0..<categoryList.result.categories.count {
             if categoryList.result.categories[i].categoryId == toCategoryID {
@@ -143,6 +170,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
                 return
             }
             guard (200..<300) ~= response.statusCode else {
+                print(response.statusCode)
                 completionHandler(nil, NetworkErrors.responseUnsuccessFul)
                 return
             }
@@ -332,14 +360,19 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //자료 저장
     //query: category id, user id
     //body: url
-    func addNewData(baseurl: String, catID: Int, userIdx: Int){
-        guard let url = URL(string: "\(baseurl)/auth/data?id=\(userIdx)&category=\(catID)") else {
+    func addNewData(baseurl: String, title: String, imgUrl: String, catID: Int, userIdx: Int){
+        print("⭐️⭐️⭐️⭐️⭐️⭐️자료 저장!!!!!⭐️⭐️⭐️⭐️⭐️⭐️")
+        print(userIdx)
+        print(catID)
+        guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=\(userIdx)&category=\(catID)") else { //auth 추가해도 될 듯
             print("invalid url")
             return
         }
         
-        let baseURL = baseurl
-        let body: [String: Any] = ["baseURL" : baseURL]
+        let link = baseurl
+        let title = title
+        let imgUrl = imgUrl
+        let body: [String: Any] = ["link" : link, "title" : title, "imgUrl" : imgUrl]
         let finalData = try! JSONSerialization.data(withJSONObject: body)
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -490,7 +523,7 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
     //query: user idex, link id
     //body: category id
     func modifyDatasCategory(userID: Int, linkID: Int, categoryId: Int) {
-        guard let url = URL(string: "\(baseUrl)/auth/data/\(userID)?link_id=\(linkID)") else {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data/\(userID)?link_id=\(linkID)") else {
             print("invalid url")
             return
         }
@@ -505,8 +538,9 @@ class ScrapViewModel: ObservableObject{ //감시할 data model
             do{
                 if let data = data {
                     let decoder = JSONDecoder()
-                    let result = try decoder.decode(DataResponse.self, from: data)
+                    let result = try decoder.decode(MoveDataModel.self, from: data)
                     print(result)
+                    print("자료의 카테고리 이동 완료")
                 } else {
                     print("no data")
                 }

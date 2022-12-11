@@ -19,6 +19,9 @@ struct MainHomeView: View {
     @Environment(\.colorScheme) var scheme //Light/Dark mode
     @State private var selected = 0
     @State private var selectedOrder = 0
+    var newDataArray = [NewData]()
+//    var newDataArray = UserDefaults(suiteName: "group.com.thk.Scrap")?.array(forKey: "NewData") //저장된 데이터
+    
     var categoryTitle : String { return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"}
     
     var body: some View {
@@ -71,6 +74,14 @@ struct MainHomeView: View {
         }
         .onAppear{ //MainHomeView 등장하면 api 통신
             userVM.userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ? userVM.userIdx : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
+            if let data = UserDefaults(suiteName: "group.com.thk.Scrap")?.value(forKey: "NewData") as? Data {
+                let newDataArray = try? PropertyListDecoder().decode(NewData.self,from: data)
+                if newDataArray != nil { //안에 값이 있다면
+                    print(newDataArray!)
+                    scrapVM.addNewData(baseurl: newDataArray?.url ?? "", title: newDataArray?.title ?? "", imgUrl: newDataArray?.imageUrl ?? "", catID: newDataArray?.categoryID ?? 0, userIdx: userVM.userIdx)
+                    UserDefaults(suiteName: "group.com.thk.Scrap")?.removeObject(forKey: "NewData")
+                }
+            }
             Task {
                 await scrapVM.inquiryCategoryData(userID: userVM.userIdx) //카테고리 조회 통신 📡
             }

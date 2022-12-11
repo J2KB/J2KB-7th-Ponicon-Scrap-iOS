@@ -69,21 +69,6 @@ struct FailModel: Decodable {
     let message: String
 }
 
-//enum LoginToastMessage : String {
-//    case nameRule = "한글 또는 영어로만 이뤄질 수 있습니다"
-//    case blankName = "이름을 입력하세요"
-//    case emailRules = "5~15자의 영문 소문자, 숫자를 포함해야 합니다"
-//    case blankEmail = "이메일을 입력하세요"
-//    case dulplicatedEmail = "이미 가입된 이메일입니다"
-//    case enabledEmail = "사용 가능한 이메일입니다"
-//    case wrongEmailFormat = "이메일 형식으로 입력해주세요"
-//    case passwordRules = "5~15자의 영어, 숫자를 포함해야 합니다"
-//    case blankPassword = "비밀번호를 입력하세요"
-//    case misMatchPassword = "비밀번호와 일치하지 않습니다"
-//    case blankCheckPassword = "비밀번호 확인을 입력하세요"
-//    case none = ""
-//}
-
 class UserViewModel: ObservableObject{
     @Published var loginState = false               //로그인 상태 변수
     @Published var loginToastMessage = ""
