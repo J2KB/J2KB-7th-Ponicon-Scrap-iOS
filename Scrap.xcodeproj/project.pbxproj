@@ -11,8 +11,6 @@
 		F82C610128FFF716000C2C92 /* HalfSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82C610028FFF716000C2C92 /* HalfSheetController.swift */; };
 		F84C51CA28E5619300E5DECD /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84C51C928E5619300E5DECD /* UserResponse.swift */; };
 		F84C51CC28E58D0A00E5DECD /* ScrapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84C51CB28E58D0A00E5DECD /* ScrapViewModel.swift */; };
-		F863275E290685B9004982EA /* OfflineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F863275D290685B9004982EA /* OfflineView.swift */; };
-		F863276029068A43004982EA /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = F863275F29068A43004982EA /* Network.swift */; };
 		F87109F428E33275009AFA8F /* CategoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87109F328E33275009AFA8F /* CategoryResponse.swift */; };
 		F87109F628E3327F009AFA8F /* DataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87109F528E3327F009AFA8F /* DataResponse.swift */; };
 		F8740C2228C988E1009D6F8C /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2128C988E1009D6F8C /* PageView.swift */; };
@@ -20,7 +18,6 @@
 		F8740C2828C99EB0009D6F8C /* SubHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2728C99EB0009D6F8C /* SubHomeView.swift */; };
 		F8740C2A28C9BD63009D6F8C /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2928C9BD63009D6F8C /* MyPageView.swift */; };
 		F87BB3F729211D8C00BCD78D /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87BB3F629211D8C00BCD78D /* Theme.swift */; };
-		F88435AA29223838007F88E7 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88435A929223838007F88E7 /* RootView.swift */; };
 		F88A67BF28E95BB6003BD8A6 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88A67BE28E95BB6003BD8A6 /* UserViewModel.swift */; };
 		F88CEFC3292C9D5800EF0EE0 /* ExtensionClass.js in Resources */ = {isa = PBXBuildFile; fileRef = F88CEFC2292C9D5800EF0EE0 /* ExtensionClass.js */; };
 		F88E3FEC28EEB4FD002A6385 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F88E3FEB28EEB4FD002A6385 /* KakaoSDKAuth */; };
@@ -75,8 +72,6 @@
 		F82C610028FFF716000C2C92 /* HalfSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfSheetController.swift; sourceTree = "<group>"; };
 		F84C51C928E5619300E5DECD /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
 		F84C51CB28E58D0A00E5DECD /* ScrapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapViewModel.swift; sourceTree = "<group>"; };
-		F863275D290685B9004982EA /* OfflineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineView.swift; sourceTree = "<group>"; };
-		F863275F29068A43004982EA /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		F87109F328E33275009AFA8F /* CategoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryResponse.swift; sourceTree = "<group>"; };
 		F87109F528E3327F009AFA8F /* DataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataResponse.swift; sourceTree = "<group>"; };
 		F8740C2128C988E1009D6F8C /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
@@ -84,7 +79,6 @@
 		F8740C2728C99EB0009D6F8C /* SubHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubHomeView.swift; sourceTree = "<group>"; };
 		F8740C2928C9BD63009D6F8C /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		F87BB3F629211D8C00BCD78D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		F88435A929223838007F88E7 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		F88A67BE28E95BB6003BD8A6 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		F88CEFC2292C9D5800EF0EE0 /* ExtensionClass.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ExtensionClass.js; sourceTree = "<group>"; };
 		F88E3FF128EEB538002A6385 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -177,8 +171,6 @@
 				F88E7E3528C5CDDC00C3CCA8 /* Assets.xcassets */,
 				F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */,
 				F88E7E3728C5CDDC00C3CCA8 /* Preview Content */,
-				F863275F29068A43004982EA /* Network.swift */,
-				F88435A929223838007F88E7 /* RootView.swift */,
 			);
 			path = Scrap;
 			sourceTree = "<group>";
@@ -201,7 +193,6 @@
 				F8740C2328C99954009D6F8C /* SideMenuView.swift */,
 				F8740C2728C99EB0009D6F8C /* SubHomeView.swift */,
 				F8740C2928C9BD63009D6F8C /* MyPageView.swift */,
-				F863275D290685B9004982EA /* OfflineView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -362,7 +353,6 @@
 			files = (
 				F8740C2428C99954009D6F8C /* SideMenuView.swift in Sources */,
 				F87109F428E33275009AFA8F /* CategoryResponse.swift in Sources */,
-				F863275E290685B9004982EA /* OfflineView.swift in Sources */,
 				F8CFE8FE28FD8D9F005DB6F5 /* ColorExtension.swift in Sources */,
 				F88F6D4B292B0E8700F34D59 /* CategorySheetView.swift in Sources */,
 				F84C51CC28E58D0A00E5DECD /* ScrapViewModel.swift in Sources */,
@@ -373,10 +363,8 @@
 				F89DE8F3292A08D4001CE242 /* ServerState.swift in Sources */,
 				F89BED8D28C5FC680053D406 /* MainHomeView.swift in Sources */,
 				F8740C2A28C9BD63009D6F8C /* MyPageView.swift in Sources */,
-				F88435AA29223838007F88E7 /* RootView.swift in Sources */,
 				F89BED8828C5F1EE0053D406 /* SignUpView.swift in Sources */,
 				F8DE0EE9292521C3007CA593 /* SaveDataView.swift in Sources */,
-				F863276029068A43004982EA /* Network.swift in Sources */,
 				F8D4A2072939F45000BAE93D /* NetworkErrors.swift in Sources */,
 				F8740C2828C99EB0009D6F8C /* SubHomeView.swift in Sources */,
 				F88A67BF28E95BB6003BD8A6 /* UserViewModel.swift in Sources */,

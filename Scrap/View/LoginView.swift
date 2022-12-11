@@ -18,7 +18,6 @@ struct LoginView: View {
     @State private var keepLogin = false
     @State private var popRootView = false //LoginView -> MainHome -> MyPage - logout - LoginView
     @State private var movingToSignUp = false
-//    let message = ["이메일/비밀번호를 입력해주세요", "이메일/비밀번호가 일치하지 않습니다", ""]
     @State private var autoLogin = false
     
     var body: some View {
@@ -200,14 +199,5 @@ struct ContentView_Previews: PreviewProvider {
             .previewDevice(PreviewDevice(rawValue: "iPhone 14"))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
-//            .preferredColorScheme(.dark)
     }
 }
-
-//#if canImport(UIKit)
-//extension View {
-//    func hideKeyboard() {
-//        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
-//    }
-//}
-//#endif

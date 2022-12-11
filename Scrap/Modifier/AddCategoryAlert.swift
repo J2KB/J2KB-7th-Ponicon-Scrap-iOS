@@ -21,51 +21,69 @@ struct AddCategoryAlert: ViewModifier {
             content
                 .disabled(isPresented) //isPresented = true일때 content 보여짐
             if isPresented {
-                VStack {
-                    Text(title).font(.headline).padding(.top, 20)
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(scheme == .light ? Color("gray_sub") : .black_accent)
-                            .opacity(0.5)
-                            .frame(width: UIScreen.main.bounds.width / 1.5, height: 40, alignment: .center)
-                        TextField(placeholder, text: $newCategoryTitle)
-                            .disableAutocorrection(true) //자동 수정 비활성화
-                            .padding(.horizontal)
-                            .frame(width: UIScreen.main.bounds.width / 1.44, height: 36, alignment: .leading)
-                            .padding(.leading, -10)
-                    }
-                    .padding(.bottom, 10)
-                    .padding(.top, 4)
-                    Divider().overlay(scheme == .light ? Color("gray_bold") : Color("black_light"))
-                    HStack {
-                        Spacer()
-                        Button(role: .cancel) {
-                            withAnimation {
-                                isPresented = false
+                VStack(spacing: 0){
+                    ZStack{
+                        //Text, TextField
+                        Rectangle()
+                            .fill(scheme == .light ? Color(.systemGray6) : .black_bold)
+                            .frame(width: UIScreen.main.bounds.width / 1.4, height: UIScreen.main.bounds.height / 7.5, alignment: .center)
+                            .cornerRadius(14, corners: .topLeft)
+                            .cornerRadius(14, corners: .topRight)
+                        VStack(spacing: 12){
+                            Text(title)
+                                .font(.system(size: 16, weight: .semibold))
+                                .padding(.top, 6)
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(scheme == .light ? .white : .black_accent)
+                                    .shadow(radius: 1)
+                                    .frame(width: UIScreen.main.bounds.width / 1.7, height: UIScreen.main.bounds.height / 26, alignment: .center)
+                                TextField("새로운 카테고리 이름", text: $newCategoryTitle)
+                                    .font(.system(size: 13))
+                                    .disableAutocorrection(true) //자동 수정 비활성화
+                                    .padding(.horizontal)
+                                    .frame(width: UIScreen.main.bounds.width / 1.62, height: UIScreen.main.bounds.height / 30, alignment: .leading)
+                                    .padding(.leading, -10)
                             }
-                        } label: {
-                            Text("취소").fontWeight(.semibold).foregroundColor(.blue)
                         }
-                        Spacer()
-                        Divider().overlay(scheme == .light ? Color("gray_bold") : Color("black_light"))
-                        Spacer()
-                        Button() {
-                            action(newCategoryTitle) //closure
-                            withAnimation {
-                                isPresented = false
-                            }
-                        } label : {
-                            Text("추가").fontWeight(.bold).foregroundColor(.blue)
-                        }
-                        Spacer()
                     }
-                    .padding(.bottom, 6)
-                }
-                .frame(width: UIScreen.main.bounds.width / 1.35, height: UIScreen.main.bounds.height / 5.2)
-                .background(scheme == .light ? .white : Color("black_bold"))
-                .cornerRadius(20)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 20).stroke(.quaternary, lineWidth: 1)
+                    Divider()
+                        .overlay(scheme == .light ? Color(.systemGray5) : Color(.systemGray))
+                        .frame(width: UIScreen.main.bounds.width / 1.4)
+                    ZStack{
+                        //Buttons
+                        Rectangle()
+                            .fill(scheme == .light ? Color(.systemGray6) : .black_bold)
+                            .frame(width: UIScreen.main.bounds.width / 1.4, height: UIScreen.main.bounds.height / 17, alignment: .center)
+                            .cornerRadius(14, corners: .bottomLeft)
+                            .cornerRadius(14, corners: .bottomRight)
+                        HStack(spacing: 0){
+                            Button(role: .cancel) {
+                                withAnimation {
+                                    isPresented = false
+                                }
+                            } label: {
+                                Text("취소")
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundColor(.blue)
+                            }
+                            .frame(width: UIScreen.main.bounds.width / 2.8, height: UIScreen.main.bounds.height / 17)
+                            Divider()
+                                .overlay(scheme == .light ? Color(.systemGray5) : Color(.systemGray))
+                                .frame(height: UIScreen.main.bounds.height / 17)
+                            Button() {
+                                action(newCategoryTitle)
+                                withAnimation {
+                                    isPresented = false
+                                }
+                            } label : {
+                                Text("추가")
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundColor(.blue)
+                            }
+                            .frame(width: UIScreen.main.bounds.width / 2.8, height: UIScreen.main.bounds.height / 17)
+                        }
+                    }
                 }
             }
         }

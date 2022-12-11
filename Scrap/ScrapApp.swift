@@ -13,12 +13,7 @@ import KakaoSDKCommon
 struct ScrapApp: App {
     @StateObject var scrapVM = ScrapViewModel()
     @StateObject var userVM = UserViewModel()
-    @StateObject var network = Network()
     var userIdx : Int { return UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0 }
-    @State private var isWebUrl = true
-    var webUrl : String {
-        return UserDefaults(suiteName: "group.com.thk.Scrap")?.string(forKey: "WebURL") ?? ""
-    }
     
     init(){
         KakaoSDK.initSDK(appKey: "7942e72a93d27c86ee00caec504989f7") //native app key
@@ -26,43 +21,23 @@ struct ScrapApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            if !network.connected {
-                //자료 저장인지 확인하기....
-                //ViewController에서 자료 저장인지 알아와야됨... 넘길 수 있는지 확인하기
-                if userIdx == 0 { //auto login X -> Login View
-                    LoginView()
-                        .onAppear(perform: UIApplication.shared.addTargetGestureRecognizer)
-                        .environmentObject(scrapVM)
-                        .environmentObject(userVM)
-                        .onOpenURL{ url in
-                            if (AuthApi.isKakaoTalkLoginUrl(url)) {
-                                  _ = AuthController.handleOpenUrl(url: url)
-                            }
+            if userIdx == 0 { //auto login X -> Login View
+                LoginView()
+                    .onAppear(perform: UIApplication.shared.addTargetGestureRecognizer)
+                    .environmentObject(scrapVM)
+                    .environmentObject(userVM)
+                    .onOpenURL{ url in
+                        if (AuthApi.isKakaoTalkLoginUrl(url)) {
+                              _ = AuthController.handleOpenUrl(url: url)
                         }
-                } else { //auto login o -> Main Home View
-//                    if webUrl != "" {
-//                        Text("")
-//                            .fullScreenCover(isPresented: $isWebUrl) {
-//                                SaveDataView()
-//                            }
-//                            .navigationBarBackButtonHidden(true)
-//                            .navigationBarHidden(true)
-//                            .environmentObject(scrapVM)
-//                            .environmentObject(userVM)
-//                    }else {
-//                    if scrapVM.isLoading {
-//                        ProgressView()
-//                    }else {
-                        MainHomeView()
-                            .navigationBarBackButtonHidden(true)
-                            .navigationBarHidden(true)
-                            .environmentObject(scrapVM)
-                            .environmentObject(userVM)
-//                    }
-                }
-//            } else {
-//                OfflineView()
-//            }
+                    }
+            } else { //auto login o -> Main Home View
+                MainHomeView()
+                    .navigationBarBackButtonHidden(true)
+                    .navigationBarHidden(true)
+                    .environmentObject(scrapVM)
+                    .environmentObject(userVM)
+            }
         }
     }
 }
