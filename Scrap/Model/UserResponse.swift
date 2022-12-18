@@ -27,3 +27,67 @@ struct UserResponse: Codable {
         self.result = result
     }
 }
+
+// ------------------------------------------------------
+// MARK: User Data Model (API)
+struct LoginModel: Codable {
+    struct Result: Codable {
+        var id: Int
+        
+        init(id: Int){
+            self.id = id
+        }
+    }
+    let code: Int
+    let message: String
+    var result: Result
+    
+    init(code: Int, message: String, result: Result){
+        self.code = code
+        self.message = message
+        self.result = result
+    }
+}
+
+struct CheckDuplication: Codable {
+    struct Result: Codable {
+        var isDuplicate: Bool
+        
+        init(isDuplicate: Bool){
+            self.isDuplicate = isDuplicate
+        }
+    }
+    let code: Int
+    let message: String
+    var result: Result
+    
+    init(code: Int, message: String, result: Result){
+        self.code = code
+        self.message = message
+        self.result = result
+    }
+}
+
+struct SignUpModel: Codable {
+    var code: Int
+    var message: String
+    
+    init(code: Int, message: String){
+        self.code = code
+        self.message = message
+    }
+}
+
+struct LogOutModel: Codable {
+    let code: Int
+    let message: String
+    init(code: Int, message: String){
+        self.code = code
+        self.message = message
+    }
+}
+
+struct FailModel: Codable {
+    let code: Int
+    let message: String
+}

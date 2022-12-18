@@ -41,3 +41,61 @@ struct DataResponse: Codable {
         self.result = result
     }
 }
+
+// ------------------------------------------------------
+// MARK: Data Model (API)
+
+struct MoveDataModel: Codable {
+    struct Result: Codable {
+        var linkId: Int
+        var categoryId: Int
+        var url: String
+        var title: String
+        var imgUrl: String
+        var domain: String
+        
+        init(linkId: Int, categoryId: Int, url: String, title: String, imgUrl: String, domain: String){
+            self.linkId = linkId
+            self.categoryId = categoryId
+            self.url = url
+            self.title = title
+            self.imgUrl = imgUrl
+            self.domain = domain
+        }
+    }
+    var code: Int
+    var message: String
+    var result: Result?
+    init(code: Int, message: String, result: Result){
+        self.code = code
+        self.message = message
+        self.result = result
+    }
+}
+
+struct NewDataModel: Codable { //자료 저장 -> response 데이터로 받을 link id
+    struct Result: Codable {
+        var linkId: Int
+        
+        init(linkId: Int){
+            self.linkId = linkId
+        }
+    }
+    var code: Int
+    var message: String
+    var result: Result
+    init(code: Int, message: String, result: Result){
+        self.code = code
+        self.message = message
+        self.result = result
+    }
+}
+
+struct NoResultModel: Codable {
+    var code: Int
+    var message: String
+    init(code: Int, message: String){
+        self.code = code
+        self.message = message
+    }
+}

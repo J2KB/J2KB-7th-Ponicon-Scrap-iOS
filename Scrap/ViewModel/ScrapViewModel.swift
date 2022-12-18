@@ -7,91 +7,13 @@
 
 import Foundation
 
-struct CategoryModel: Codable { //카테고리 추가 -> response 데이터로 받을 user id
-    struct Result: Codable {
-        var categoryId: Int
-        
-        init(categoryId: Int){
-            self.categoryId = categoryId
-        }
-    }
-    var code: Int
-    var message: String
-    var result: Result?
-    init(code: Int, message: String, result: Result){
-        self.code = code
-        self.message = message
-        self.result = result
-    }
-}
-
-struct MoveDataModel: Codable {
-    struct Result: Codable {
-        var linkId: Int
-        var categoryId: Int
-        var url: String
-        var title: String
-        var imgUrl: String
-        var domain: String
-        
-        init(linkId: Int, categoryId: Int, url: String, title: String, imgUrl: String, domain: String){
-            self.linkId = linkId
-            self.categoryId = categoryId
-            self.url = url
-            self.title = title
-            self.imgUrl = imgUrl
-            self.domain = domain
-        }
-    }
-    var code: Int
-    var message: String
-    var result: Result?
-    init(code: Int, message: String, result: Result){
-        self.code = code
-        self.message = message
-        self.result = result
-    }
-}
-
-struct NewDataModel: Codable { //자료 저장 -> response 데이터로 받을 link id
-    struct Result: Codable {
-        var linkId: Int
-        
-        init(linkId: Int){
-            self.linkId = linkId
-        }
-    }
-    var code: Int
-    var message: String
-    var result: Result
-    init(code: Int, message: String, result: Result){
-        self.code = code
-        self.message = message
-        self.result = result
-    }
-}
-
-struct NoResultModel: Codable {
-    var code: Int
-    var message: String
-    init(code: Int, message: String){
-        self.code = code
-        self.message = message
-    }
-}
-
 class ScrapViewModel: ObservableObject{
-    //api 서버 통신을 통해 받아온 데이터를 아래의 객체에 담는다. Published 객체이므로 이 객체 데이터의 변동사항을 다른 view에서 동기적으로 업데이트한다.
-    //카테고리 정보를 담은 categoryList 객체
-    //카테고리에 따른 자료 정보를 담은 dataList 객체
-    //사용자 정보를 담는 user 객체 -> 마이페이지에서 사용할 것
     @Published var dataList = DataResponse.Result(links: [])
     @Published var user = UserResponse.Result(name: "", username: "")
     @Published var categoryList = CategoryResponse(code: 0, message: "", result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)]))
     @Published var isLoading = false //서버 통신 상태 변수
     let service = APIService()
     var categoryID = 0
-    
     
     // MARK: initial fetch data
     init(){
