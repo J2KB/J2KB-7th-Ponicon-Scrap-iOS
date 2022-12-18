@@ -47,7 +47,6 @@ struct CategoryRow: View {
                     withAnimation(.spring()){
                         isShowingCateogry = false
                     }
-//                    vm.isLoading = .loading
                     self.selected = category.categoryId
                     self.selectedOrder = category.order
                     self.isChangeRow = true

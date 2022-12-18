@@ -98,7 +98,6 @@ struct SideMenuView: View {
                                     }
                                     Button(action: {
                                         if !isAddingCategory {
-//                                            vm.isLoading = .loading
                                             self.selected = category.categoryId
                                             self.selectedOrder = category.order
                                             withAnimation(.spring()){
@@ -145,7 +144,7 @@ struct SideMenuView: View {
 //                    }
                 }//CategoryList VStack
                 .refreshable {
-//                    await vm.inquiryCategoryData(userID: userVM.userIdx)
+                    vm.getDataByCategory(userID: userVM.userIdx, categoryID: selected)
                 }
                 .listStyle(PlainListStyle())
             }//VStack
@@ -168,6 +167,5 @@ struct SideMenuView_Previews: PreviewProvider {
         SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 0),
            CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2), CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCateogry: .constant(true), selected: .constant(0), selectedOrder: .constant(0))
             .environmentObject(ScrapViewModel())
-//            .preferredColorScheme(.dark)
     }
 }

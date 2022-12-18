@@ -249,17 +249,20 @@ class ScrapViewModel: ObservableObject{
     // ↓ local operation function
     // -------------------------------------------------------------------------------
 
-    // MARK: 카테고리 추가 기능: categoryList 맨 뒤에 newCategory를 추가
+    // MARK: 새 카테고리 추가
+    // - categoryList 맨 뒤에 newCategory를 추가
     func appendNewCategoryToCategoryList(new newCategory: CategoryResponse.Category){
         categoryList.result.categories.append(newCategory)
     }
     
-    // MARK: 카테고리 삭제 기능: categoryId를 통해 categoryList의 category 삭제 함수
+    // MARK: 카테고리 삭제
+    // - categoryId를 통해 categoryList의 category 삭제 함수
     func removeCategoryFromCategoryList(categoryID id: Int) {
         categoryList.result.categories = categoryList.result.categories.filter{ $0.categoryId != id }
     }
     
-    // MARK: 자료 삭제 기능: 삭제할 자료id를 받아서 dataList의 data 삭제 함수
+    // MARK: 자료 삭제
+    // - 삭제할 자료id를 받아서 dataList의 data 삭제 함수
     func removeDataFromDataList(dataID dataId: Int, categoryID categoryId: Int) {
         dataList.links = dataList.links.filter { $0.linkId != dataId }
         //해당 카테고리의 numOfLink -= 1
@@ -271,8 +274,9 @@ class ScrapViewModel: ObservableObject{
         }
     }
     
-    // MARK: data의 카테고리 이동 함수
-    func moveDataToOtherCategory(_ data: DataResponse.Datas, from fromCategoryID: Int, to toCategoryID: Int) { //이동할 자료id, 선택한 카테고리id, 이동될 카테고리id
+    // MARK: 자료의 카테고리 이동
+    // - data의 카테고리 이동 함수
+    func moveDataToOtherCategory(_ data: DataResponse.Datas, from fromCategoryID: Int, to toCategoryID: Int) {
         //해당 자료를 to 카테고리에 넣기 -> 해당 카테고리를 클릭하면 어차피 데이터 통신이 진행되므로 할 필요 x, 해당 카테고리의 numOfLink += 1 -> 이것만 진행
         for i in 0..<categoryList.result.categories.count {
             if categoryList.result.categories[i].categoryId == toCategoryID {
@@ -283,10 +287,11 @@ class ScrapViewModel: ObservableObject{
         removeDataFromDataList(dataID: data.linkId!, categoryID: fromCategoryID) //from 카테고리에서 해당 자료 제거
     }
     
-    // MARK: categoryList의 category 위치 이동
+    // MARK: 카테고리 위치 이동
+    // - categoryList의 category 위치 이동
     func moveCategoryRowInList(from oldIndex: Int, to newIndex: Int) {
-        guard oldIndex != newIndex else { return }             //제자리 -> return
-        guard abs(newIndex - oldIndex) != 1 else { return categoryList.result.categories.swapAt(oldIndex, newIndex) } //바로 아래, 위면 swap
+        guard oldIndex != newIndex else { return }             //제자리 -> 연산 X, return
+        guard abs(newIndex - oldIndex) != 1 else { return categoryList.result.categories.swapAt(oldIndex, newIndex) }
         if newIndex >= categoryList.result.categories.count { //맨 마지막으로 이동
             categoryList.result.categories.append(categoryList.result.categories.remove(at: oldIndex)) //맨 뒤에 추가
             return
@@ -294,8 +299,9 @@ class ScrapViewModel: ObservableObject{
         categoryList.result.categories.insert(categoryList.result.categories.remove(at: oldIndex), at: oldIndex > newIndex ? newIndex : newIndex - 1)
     }
     
-    // MARK: categoryList의 category 이름 수정
-    func renameCategory(id categoryID: Int, renamed rname: String){
+    // MARK: 카테고리 이름 수정
+    //- categoryList의 category 이름 수정
+    func renameCategory(categoryID: Int, renamed rname: String){
         for i in 0..<categoryList.result.categories.count {
             if categoryList.result.categories[i].categoryId == categoryID {
                 categoryList.result.categories[i].name = rname

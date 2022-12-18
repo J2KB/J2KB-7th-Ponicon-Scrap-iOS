@@ -32,7 +32,7 @@ struct CategorySheetView: View {
                             .foregroundColor(Color("basic_text"))
                         Button(action: {
                             //modify category name in local category list
-                            vm.renameCategory(id: category.categoryId, renamed: categoryName)
+                            vm.renameCategory(categoryID: category.categoryId, renamed: categoryName)
                             //📡 카테고리 이름 수정 서버 통신
                             vm.modifyCategoryName(categoryID: category.categoryId, categoryName: categoryName)
                             self.isEditingName.toggle()
