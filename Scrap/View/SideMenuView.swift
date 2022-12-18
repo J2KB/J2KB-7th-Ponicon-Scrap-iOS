@@ -104,8 +104,12 @@ struct SideMenuView: View {
                                             withAnimation(.spring()){
                                                 isShowingCateogry = false
                                             }
-                                            if selectedOrder == 0 { vm.inquiryAllData(userID: userVM.userIdx) } //📡 카테고리에 해당하는 자료 가져오는 통신
-                                            else { vm.inquiryData(userID: userVM.userIdx, catID: selected) } //📡 카테고리에 해당하는 자료 가져오는 통신
+                                            if selectedOrder == 0 {
+                                                vm.getAllData(userID: userVM.userIdx)
+                                            } //📡 카테고리에 해당하는 자료 가져오는 통신
+                                            else {
+                                                vm.getDataByCategory(userID: userVM.userIdx, categoryID: selected)
+                                            } //📡 카테고리에 해당하는 자료 가져오는 통신
                                         }
                                     }) {
                                         Rectangle()
@@ -136,12 +140,12 @@ struct SideMenuView: View {
                             }
                         })
                     }//List
-                    .task {
-                        await vm.inquiryCategoryData(userID: userVM.userIdx)
-                    }
+//                    .task {
+//                        await vm.inquiryCategoryData(userID: userVM.userIdx)
+//                    }
                 }//CategoryList VStack
                 .refreshable {
-                    await vm.inquiryCategoryData(userID: userVM.userIdx)
+//                    await vm.inquiryCategoryData(userID: userVM.userIdx)
                 }
                 .listStyle(PlainListStyle())
             }//VStack

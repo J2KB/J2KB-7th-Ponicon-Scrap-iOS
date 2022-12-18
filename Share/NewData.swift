@@ -9,12 +9,14 @@ import Foundation
 
 struct NewData: Codable, Equatable {
     let title: String
-    let imgUrl: String
+    let imageUrl: String
     let url: String
+    let categoryID: Int
     
-    init(title: String, imgUrl: String, url: String) {
+    init(title: String, imageUrl: String, url: String, categoryID: Int) {
         self.title = title
-        self.imgUrl = imgUrl
+        self.imageUrl = imageUrl
         self.url = url
+        self.categoryID = categoryID
     }
 }

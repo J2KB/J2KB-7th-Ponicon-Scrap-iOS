@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct UserResponse: Decodable{
-    struct Result: Decodable {
+struct UserResponse: Codable {
+    struct Result: Codable {
         var name: String
         var username: String
         

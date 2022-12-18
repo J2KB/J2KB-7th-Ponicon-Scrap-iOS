@@ -47,11 +47,11 @@ struct CategoryRow: View {
                     withAnimation(.spring()){
                         isShowingCateogry = false
                     }
-                    vm.isLoading = .loading
+//                    vm.isLoading = .loading
                     self.selected = category.categoryId
                     self.selectedOrder = category.order
                     self.isChangeRow = true
-                    vm.inquiryData(userID: userVM.userIdx, catID: selected)
+                    vm.getDataByCategory(userID: userVM.userIdx, categoryID: selected)
                 }
             }
             //modal shet 등장

@@ -60,7 +60,7 @@ struct MoveCategoryView: View {
             ToolbarItem(placement: .navigationBarTrailing){
                 Button(action: {
                     vm.moveDataToOtherCategory(data, from: currentCategory, to: selection)
-                    vm.modifyDatasCategory(userID: userVM.userIdx, linkID: data.linkId!, categoryId: selection) //📡 자료의 카테고리 이동 서버 통신
+                    vm.modifyCategoryOfData(userID: userVM.userIdx, linkID: data.linkId!, categoryId: selection) //📡 자료의 카테고리 이동 서버 통신
                     isShowMovingCategory.toggle()
                 }) {
                     Text("저장")

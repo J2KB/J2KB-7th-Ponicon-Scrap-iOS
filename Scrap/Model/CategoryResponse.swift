@@ -9,15 +9,15 @@ import Foundation
 
 //CategoryData
 
-struct CategoryResponse: Decodable{
-    struct Result: Decodable {
+struct CategoryResponse: Codable {
+    struct Result: Codable {
         var categories: [Category]
         
         init(categories: [Category]){
             self.categories = categories
         }
     }
-    struct Category: Decodable, Identifiable, Equatable {
+    struct Category: Codable, Identifiable, Equatable {
         let id = UUID()
         var categoryId: Int
         var name: String

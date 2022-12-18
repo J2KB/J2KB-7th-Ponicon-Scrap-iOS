@@ -109,12 +109,16 @@ class ShareViewController: UIViewController{
                           let hostname = results["currentUrl"] as? String,
                           let image = results["images"] as? String else { return }
                     print(results)
+                    let newData = NewData(title: title, imageUrl: image, url: hostname, categoryID: self.catID)
+                    print(newData)
+                    UserDefaults(suiteName: "group.com.thk.Scrap")?.setValue(try? PropertyListEncoder().encode(newData) , forKey: "NewData")
+                    if let data = UserDefaults(suiteName: "group.com.thk.Scrap")?.value(forKey: "NewData") as? Data {
+                        let newDataArray = try? PropertyListDecoder().decode(NewData.self,from: data)
+                        print(newDataArray ?? "nothing...")
+                    }
                     self.webpageTitle = title
                     self.webpageUrl = hostname
                     self.webpageImageUrl = image
-                    print(self.webpageTitle)
-                    print(self.webpageUrl)
-                    print(self.webpageImageUrl)
                     self.addNewData(catID: self.catID, userIdx: self.userIdx!)
                 }
             )}
@@ -161,6 +165,7 @@ class ShareViewController: UIViewController{
                     print("post saving data: SUCCESS")
                     print(result)
                     print(catID)
+                    UserDefaults(suiteName: "group.com.thk.Scrap")?.removeObject(forKey: "NewData")
                 }else {
                     print("no data")
                 }

@@ -34,7 +34,7 @@ struct CategorySheetView: View {
                             //modify category name in local category list
                             vm.renameCategory(id: category.categoryId, renamed: categoryName)
                             //📡 카테고리 이름 수정 서버 통신
-                            vm.modifyCategory(categoryID: category.categoryId, categoryName: categoryName)
+                            vm.modifyCategoryName(categoryID: category.categoryId, categoryName: categoryName)
                             self.isEditingName.toggle()
                         }) {
                             Image(systemName: "checkmark")

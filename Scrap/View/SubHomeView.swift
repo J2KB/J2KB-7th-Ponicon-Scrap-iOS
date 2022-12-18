@@ -46,7 +46,7 @@ struct SubHomeView: View {
     var newDataArray = [NewData]()
 
     var body: some View {
-        if vm.isLoading == .loading { //서버통신(로딩)중이면 progress view 등장(loading indicator)
+        if vm.isLoading { //서버통신(로딩)중이면 progress view 등장(loading indicator)
             ProgressView()
                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                 .progressViewStyle(CircularProgressViewStyle(tint: Color.gray))
@@ -103,14 +103,14 @@ struct SubHomeView: View {
                     let newDataArray = try? PropertyListDecoder().decode(NewData.self,from: data)
                     if newDataArray != nil { //안에 값이 있다면
                         print(newDataArray!)
-                        vm.addNewData(baseurl: newDataArray?.url ?? "", title: newDataArray?.title ?? "", imgUrl: newDataArray?.imageUrl ?? "", catID: newDataArray?.categoryID ?? 0, userIdx: userVM.userIdx)
+//                        vm.addNewData(baseurl: newDataArray?.url ?? "", title: newDataArray?.title ?? "", imgUrl: newDataArray?.imageUrl ?? "", catID: newDataArray?.categoryID ?? 0, userIdx: userVM.userIdx)
                         UserDefaults(suiteName: "group.com.thk.Scrap")?.removeObject(forKey: "NewData")
                     }
                 }
                 if currentCategoryOrder == 0 {
-                    vm.inquiryAllData(userID: userVM.userIdx)
+                    vm.getAllData(userID: userVM.userIdx)
                 }else {
-                    vm.inquiryData(userID: userVM.userIdx, catID: currentCategory)
+                    vm.getDataByCategory(userID: userVM.userIdx, categoryID: currentCategory)
                 }
             }//Refreshable
             .sheet(isPresented: $isPresentHalfModal){ //isPresentHalfModal == true일때 sheet 열림

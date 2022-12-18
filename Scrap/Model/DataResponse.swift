@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct DataResponse: Decodable{
-    struct Result: Decodable{
+struct DataResponse: Codable {
+    struct Result: Codable {
         var links: [Datas]
         
         init(links: [Datas]){
             self.links = links
         }
     }
-    struct Datas: Decodable, Identifiable{
+    struct Datas: Codable, Identifiable{
         let id = UUID()
         var linkId : Int?
         var link: String?             //링크
