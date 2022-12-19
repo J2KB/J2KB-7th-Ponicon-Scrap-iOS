@@ -13,15 +13,16 @@ import KakaoSDKCommon
 struct ScrapApp: App {
     @StateObject var scrapVM = ScrapViewModel()
     @StateObject var userVM = UserViewModel()
-    var userIdx : Int { return UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0 }
+    var userIndex : Int { return UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0 }
     
     init(){
-        KakaoSDK.initSDK(appKey: "7942e72a93d27c86ee00caec504989f7") //native app key
+        KakaoSDK.initSDK(appKey: "7942e72a93d27c86ee00caec504989f7") //native iOS app key
     }
     
     var body: some Scene {
         WindowGroup {
-            if userIdx == 0 { //auto login X -> Login View
+            // MARK: - AutoLogin X
+            if userIndex == 0 { //auto login X -> Login View
                 LoginView()
                     .onAppear(perform: UIApplication.shared.addTargetGestureRecognizer)
                     .environmentObject(scrapVM)
@@ -31,7 +32,9 @@ struct ScrapApp: App {
                               _ = AuthController.handleOpenUrl(url: url)
                         }
                     }
-            } else { //auto login o -> Main Home View
+            }
+            // MARK: - AutoLogin O
+            else {
                 MainHomeView()
                     .navigationBarBackButtonHidden(true)
                     .navigationBarHidden(true)

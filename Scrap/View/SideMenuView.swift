@@ -30,17 +30,19 @@ struct Item: Identifiable, Equatable{ //category item
 }
 
 struct SideMenuView: View {
-    @Environment(\.colorScheme) var scheme //Light/Dark mode
+    @Environment(\.colorScheme) var scheme
+    @EnvironmentObject var scrapVM : ScrapViewModel
+    @EnvironmentObject var userVM : UserViewModel
+    
     @State private var dragging: CategoryResponse.Category?
-    @Binding var categoryList : CategoryResponse.Result
-    @State private var newCat = ""
+    @State private var newCategoryName = ""
     @State private var isAddingCategory = false
-    @Binding var isShowingCateogry : Bool
-    @State private var maxCatName = 20
-    @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
-    @EnvironmentObject var userVM : UserViewModel //ScrapApp에서 연결받은 EnvironmentObject
-    @Binding var selected : Int
-    @Binding var selectedOrder : Int
+    @State private var maxCategoryName = 20
+    
+    @Binding var categoryList : CategoryResponse.Result
+    @Binding var isShowingCategoryView : Bool
+    @Binding var selectedCategoryId : Int
+    @Binding var selectedCategoryOrder : Int
     
     var body: some View {
         ZStack{
@@ -51,7 +53,7 @@ struct SideMenuView: View {
                         Button(action: {
                             if !isAddingCategory {
                                 withAnimation(.spring()){
-                                    isShowingCateogry = false
+                                    isShowingCategoryView = false
                                 }
                             }
                         }){
@@ -66,8 +68,8 @@ struct SideMenuView: View {
                             .foregroundColor(Color("basic_text"))
                     }
                     Spacer()
-                    Button(action: {
-                        self.isAddingCategory = true //카테고리 추가 -> 추가 버튼 누름
+                    Button(action: { //새로운 카테고리 추가 버튼
+                        self.isAddingCategory = true
                     }){
                         Image(systemName: "plus")
                             .resizable()
@@ -98,17 +100,17 @@ struct SideMenuView: View {
                                     }
                                     Button(action: {
                                         if !isAddingCategory {
-                                            self.selected = category.categoryId
-                                            self.selectedOrder = category.order
+                                            self.selectedCategoryId = category.categoryId
+                                            self.selectedCategoryOrder = category.order
                                             withAnimation(.spring()){
-                                                isShowingCateogry = false
+                                                isShowingCategoryView = false
                                             }
-                                            if selectedOrder == 0 {
-                                                vm.getAllData(userID: userVM.userIdx)
-                                            } //📡 카테고리에 해당하는 자료 가져오는 통신
+                                            if selectedCategoryOrder == 0 {
+                                                scrapVM.getAllData(userID: userVM.userIndex) //📡 카테고리에 해당하는 자료 가져오는 통신
+                                            }
                                             else {
-                                                vm.getDataByCategory(userID: userVM.userIdx, categoryID: selected)
-                                            } //📡 카테고리에 해당하는 자료 가져오는 통신
+                                                scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: selectedCategoryId) //📡 카테고리에 해당하는 자료 가져오는 통신
+                                            }
                                         }
                                     }) {
                                         Rectangle()
@@ -116,12 +118,12 @@ struct SideMenuView: View {
                                             .opacity(0)
                                     }
                                 }
-                                .listRowBackground(self.selected == category.categoryId ? Color("selected_color") : .none)
+                                .listRowBackground(self.selectedCategoryId == category.categoryId ? Color("selected_color") : .none)
                             }
                         }
                         ForEach($categoryList.categories) { $category in
                             if category.order != 0 && category.order != 1 {
-                                CategoryRow(category: $category, isShowingCateogry: $isShowingCateogry, selected: $selected, isAddingCategory: $isAddingCategory, selectedOrder: $selectedOrder)
+                                CategoryRow(category: $category, isShowingCategorySideMenuView: $isShowingCategoryView, selectedCategoryId: $selectedCategoryId, isAddingNewCategory: $isAddingCategory, selectedCategoryOrder: $selectedCategoryOrder)
                                     .id(category.id)
                                 .onDrag {
                                     self.dragging = category
@@ -132,10 +134,8 @@ struct SideMenuView: View {
                         }
                         .onMove(perform: {source, destination in //from source: IndexSet, to destination: Int
                             source.forEach {
-                                print($0)
-                                print(destination)
-                                vm.moveCategoryRowInList(from: $0, to: destination)
-                                vm.movingCategory(userID: userVM.userIdx, startIdx: $0, endIdx: destination) //📡 카테고리 이동 통신
+                                scrapVM.moveCategoryRowInList(from: $0, to: destination)
+                                scrapVM.movingCategory(userID: userVM.userIndex, startIdx: $0, endIdx: destination) //📡 카테고리 이동 통신
                             }
                         })
                     }//List
@@ -144,7 +144,7 @@ struct SideMenuView: View {
 //                    }
                 }//CategoryList VStack
                 .refreshable {
-                    vm.getDataByCategory(userID: userVM.userIdx, categoryID: selected)
+                    scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: selectedCategoryId)
                 }
                 .listStyle(PlainListStyle())
             }//VStack
@@ -153,11 +153,11 @@ struct SideMenuView: View {
             }
         }//ZStack
         .background(scheme == .light ? .white : .black)
-        .addCategoryAlert(isPresented: $isAddingCategory, newCategoryTitle: $newCat, placeholder: "새로운 카테고리 이름을 입력해주세요", title: "카테고리 추가하기", action: { _ in
-            vm.addNewCategory(newCat: newCat, userID: userVM.userIdx) //📡 카테고리 추가 통신
-            let newCategory = CategoryResponse.Category(categoryId: vm.categoryID, name: newCat, numOfLink: 0, order: categoryList.categories.count)
-            vm.appendNewCategoryToCategoryList(new: newCategory) //post로 추가된 카테고리 이름 서버에 전송
-            newCat = ""
+        .addCategoryAlert(isPresented: $isAddingCategory, newCategoryTitle: $newCategoryName, placeholder: "새로운 카테고리 이름을 입력해주세요", title: "카테고리 추가하기", action: { _ in
+            scrapVM.addNewCategory(newCat: newCategoryName, userID: userVM.userIndex) //📡 카테고리 추가 통신
+            let category = CategoryResponse.Category(categoryId: scrapVM.categoryID, name: newCategoryName, numOfLink: 0, order: categoryList.categories.count)
+            scrapVM.appendNewCategoryToCategoryList(new: category) //post로 추가된 카테고리 이름 서버에 전송
+            newCategoryName = ""
         })
     }//body
 }
@@ -165,7 +165,7 @@ struct SideMenuView: View {
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
         SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 0),
-           CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2), CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCateogry: .constant(true), selected: .constant(0), selectedOrder: .constant(0))
+           CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2), CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCategoryView: .constant(true), selectedCategoryId: .constant(0), selectedCategoryOrder: .constant(0))
             .environmentObject(ScrapViewModel())
     }
 }

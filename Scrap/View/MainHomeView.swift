@@ -11,32 +11,30 @@
 import SwiftUI
 
 struct MainHomeView: View {
-    @EnvironmentObject var scrapVM : ScrapViewModel //ScrapApp에서 연결받은 EnvironmentObject
-    @EnvironmentObject var userVM : UserViewModel //ScrapApp에서 연결받은 EnvironmentObject
-    @State private var isShowingCategory = false
-    @State private var isShowingMyPage = false
-    @State private var isPresentHalfModal = false //sheet가 열려있는지 체크하기 위한 변수
-    @Environment(\.colorScheme) var scheme //Light/Dark mode
-    @State private var selected = 0
-    @State private var selectedOrder = 0
+    @EnvironmentObject var scrapVM : ScrapViewModel
+    @EnvironmentObject var userVM : UserViewModel
+    @State private var isShowingCategorySideMenuView = false
+    @State private var isShowingMyPageView = false
+    @State private var isPresentDataModalSheet = false
+    @State private var selectedCategoryID = 0
+    @State private var selectedCategoryOrder = 0
     var newDataArray = [NewData]()
-//    var newDataArray = UserDefaults(suiteName: "group.com.thk.Scrap")?.array(forKey: "NewData") //저장된 데이터
     
-    var categoryTitle : String { return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selected}) ?? 0].name)"}
+    var categoryTitle : String { return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selectedCategoryID}) ?? 0].name)"}
     
     var body: some View {
         ZStack{
             //Main Home
             NavigationView{
-                SubHomeView(datas: $scrapVM.dataList, isPresentHalfModal: $isPresentHalfModal, currentCategory: $selected, currentCategoryOrder: $selectedOrder)
+                SubHomeView(datas: $scrapVM.dataList, isPresentDataModalSheet: $isPresentDataModalSheet, currentCategoryId: $selectedCategoryID, currentCategoryOrder: $selectedCategoryOrder)
                     .navigationBarTitle("", displayMode: .inline)
                     .toolbar{
                         ToolbarItem(placement: .navigationBarLeading){
                             HStack(spacing: 2){
                                 Button(action: {
-                                    if !isPresentHalfModal {                        //modal sheet가 열려있으면 카테고리뷰를 열 수 없다
+                                    if !isPresentDataModalSheet { // -> modal sheet가 열려있으면 카테고리뷰를 열 수 없다
                                         withAnimation(.spring()){
-                                            self.isShowingCategory = true
+                                            self.isShowingCategorySideMenuView = true
                                         }
                                     }
                                 }) {
@@ -54,10 +52,10 @@ struct MainHomeView: View {
                     .toolbar{
                         ToolbarItem(placement: .navigationBarTrailing){
                             VStack{
-                                NavigationLink(destination: MyPageView(userData: $scrapVM.user, isShowingMyPage: $isShowingMyPage).navigationBarHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowingMyPage) {
-                                    Button(action: {                                //modal sheet가 열려있으면 마이페이지뷰를 열 수 없다
-                                        if !isPresentHalfModal {
-                                            self.isShowingMyPage.toggle()
+                                NavigationLink(destination: MyPageView(userData: $scrapVM.user, isShowingMyPage: $isShowingMyPageView).navigationBarHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowingMyPageView) {
+                                    Button(action: {
+                                        if !isPresentDataModalSheet { //modal sheet가 열려있으면 마이페이지뷰를 열 수 없다
+                                            self.isShowingMyPageView.toggle()
                                         }
                                     }) {
                                         Image(systemName: "person.circle")
@@ -69,12 +67,16 @@ struct MainHomeView: View {
                     }
             }
             //Drawer
-            SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCateogry: $isShowingCategory, selected: $selected, selectedOrder: $selectedOrder)
-                .offset(x: isShowingCategory ? 0 : -UIScreen.main.bounds.width)
+            SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCategoryView: $isShowingCategorySideMenuView, selectedCategoryId: $selectedCategoryID, selectedCategoryOrder: $selectedCategoryOrder)
+                .offset(x: isShowingCategorySideMenuView ? 0 : -UIScreen.main.bounds.width)
         }
-        .onAppear{ //MainHomeView 등장하면 api 통신
-            userVM.userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ? userVM.userIdx : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
-//            scrapVM.getCategoryListData()
+        .onAppear{
+            userVM.userIndex = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ?
+                                userVM.userIndex : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
+            scrapVM.getCategoryListData(userID: userVM.userIndex) //카테고리 조회 통신 📡
+            scrapVM.getAllData(userID: userVM.userIndex) //자료 조회 통신 📡 case01
+            scrapVM.getMyPageData(userID: userVM.userIndex) //마이페이지 데이터 조회 통신 📡
+            
 //            if let data = UserDefaults(suiteName: "group.com.thk.Scrap")?.value(forKey: "NewData") as? Data {
 //                let newDataArray = try? PropertyListDecoder().decode(NewData.self,from: data)
 //                if newDataArray != nil { //안에 값이 있다면
@@ -83,22 +85,17 @@ struct MainHomeView: View {
 //                    UserDefaults(suiteName: "group.com.thk.Scrap")?.removeObject(forKey: "NewData")
 //                }
 //            }
-//            Task {
-//                await scrapVM.inquiryCategoryData(userID: userVM.userIdx) //카테고리 조회 통신 📡
-//            }
-//            scrapVM.inquiryUserData(userID: userVM.userIdx) //마이페이지 데이터 조회 통신 📡
-//            scrapVM.inquiryAllData(userID: userVM.userIdx) } //자료 조회 통신 📡 case01
         }
         .gesture(DragGesture().onEnded({
-            if !isShowingMyPage, !isPresentHalfModal {
+            if !isShowingMyPageView, !isPresentDataModalSheet {
                 if $0.translation.width < -100 {
                     withAnimation(.easeInOut) {
-                        self.isShowingCategory = false
+                        self.isShowingCategorySideMenuView = false
                     }
                 }
                else if $0.translation.width > 100 {
                     withAnimation(.easeInOut) {
-                        self.isShowingCategory = true
+                        self.isShowingCategorySideMenuView = true
                     }
                 }
             }
@@ -109,7 +106,6 @@ struct MainHomeView: View {
 struct MainHomeView_Previews: PreviewProvider { 
     static var previews: some View {
         MainHomeView()
-            .previewDevice(PreviewDevice(rawValue: "iPhone 8"))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
 //            .preferredColorScheme(.dark)

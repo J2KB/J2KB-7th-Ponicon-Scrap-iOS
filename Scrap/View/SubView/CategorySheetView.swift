@@ -8,18 +8,20 @@
 import SwiftUI
 
 struct CategorySheetView: View {
-    @Environment(\.colorScheme) var scheme //Light/Dark mode
-    @Binding var category : CategoryResponse.Category
+    @Environment(\.colorScheme) var scheme
     @EnvironmentObject var userVM : UserViewModel
-    @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
-    @State private var isEditingName = false
-    @Binding var isPresentHalfModal : Bool
-    @State private var isDelete = false
+    @EnvironmentObject var scrapVM : ScrapViewModel
+    
+    @State private var isEditingCategoryName = false
+    @State private var isDeleteCategory = false
     @State private var categoryName = ""
+    
+    @Binding var category : CategoryResponse.Category
+    @Binding var isPresentCategoryModalSheet : Bool
     
     var body: some View {
         VStack(spacing: 20){
-            if isEditingName { //이름 수정시, textfield로 변경
+            if isEditingCategoryName { //이름 수정시, textfield로 변경
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color("textfield_color"))
@@ -32,10 +34,10 @@ struct CategorySheetView: View {
                             .foregroundColor(Color("basic_text"))
                         Button(action: {
                             //modify category name in local category list
-                            vm.renameCategory(categoryID: category.categoryId, renamed: categoryName)
+                            scrapVM.renameCategory(categoryID: category.categoryId, renamed: categoryName)
                             //📡 카테고리 이름 수정 서버 통신
-                            vm.modifyCategoryName(categoryID: category.categoryId, categoryName: categoryName)
-                            self.isEditingName.toggle()
+                            scrapVM.modifyCategoryName(categoryID: category.categoryId, categoryName: categoryName)
+                            self.isEditingCategoryName.toggle()
                         }) {
                             Image(systemName: "checkmark")
                                 .resizable()
@@ -53,7 +55,7 @@ struct CategorySheetView: View {
                     .padding(.bottom, 10)
             }
             Button(action: {
-                self.isEditingName.toggle()
+                self.isEditingCategoryName.toggle()
             }) {
                 ZStack{
                     RoundedRectangle(cornerRadius: 10)
@@ -66,8 +68,8 @@ struct CategorySheetView: View {
                 }
             }
             Button(action: {
-                if !isEditingName { //이름 수정하지 않을 때만 활성화
-                    self.isDelete = true
+                if !isEditingCategoryName { //이름 수정하지 않을 때만 활성화
+                    self.isDeleteCategory = true
                 }
             }) {
                 ZStack{
@@ -87,14 +89,13 @@ struct CategorySheetView: View {
         .onAppear {
             self.categoryName = category.name
         }
-        .alert("정말 삭제하시겠습니까?", isPresented: $isDelete, actions: {
+        .alert("정말 삭제하시겠습니까?", isPresented: $isDeleteCategory, actions: {
             Button("취소", role: .cancel) {}
             Button("삭제", role: .destructive) {
-                //📡 카테고리 삭제 서버 통신
-                vm.deleteCategory(categoryID: category.categoryId) //📡 카테고리 삭제 통신
-                vm.removeCategoryFromCategoryList(categoryID: category.categoryId) //선택한 카테고리의 인덱스
-                self.isPresentHalfModal = false
-                self.isDelete = false
+                scrapVM.deleteCategory(categoryID: category.categoryId) //📡 카테고리 삭제 통신
+                scrapVM.removeCategoryFromCategoryList(categoryID: category.categoryId) //선택한 카테고리의 인덱스
+                self.isPresentCategoryModalSheet = false
+                self.isDeleteCategory = false
             }
         })
     }
@@ -102,9 +103,8 @@ struct CategorySheetView: View {
 
 struct CategorySheetView_Previews: PreviewProvider {
     static var previews: some View {
-        CategorySheetView(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), isPresentHalfModal: .constant(false))
+        CategorySheetView(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), isPresentCategoryModalSheet: .constant(false))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
-            .preferredColorScheme(.dark)
     }
 }

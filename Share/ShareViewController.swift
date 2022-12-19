@@ -33,7 +33,7 @@ struct NewDataModel: Decodable{ //자료 저장 -> response 데이터로 받을 
 class ShareViewController: UIViewController{
     private var cancellable: AnyCancellable!
     private var catID = 0
-    private var userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID")
+    private var userIndex = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID")
     private var appURLString = "ScrapShareExtension://"
     private var webpageTitle : String = ""
     private var webpageUrl : String = ""
@@ -42,7 +42,7 @@ class ShareViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard userIdx != 0 else {
+        guard userIndex != 0 else {
             self.openMainApp()
             self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
             return
@@ -119,7 +119,7 @@ class ShareViewController: UIViewController{
                     self.webpageTitle = title
                     self.webpageUrl = hostname
                     self.webpageImageUrl = image
-                    self.addNewData(catID: self.catID, userIdx: self.userIdx!)
+                    self.addNewData(catID: self.catID, userIndex: self.userIndex!)
                 }
             )}
         }
@@ -141,8 +141,8 @@ class ShareViewController: UIViewController{
         }.resume()
     }
     
-    func addNewData(catID: Int, userIdx: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=\(userIdx)&category=\(catID)") else {
+    func addNewData(catID: Int, userIndex: Int){
+        guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=\(userIndex)&category=\(catID)") else {
             print("invalid url")
             return
         }

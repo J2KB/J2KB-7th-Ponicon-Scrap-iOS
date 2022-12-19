@@ -9,14 +9,15 @@ import SwiftUI
 import KakaoSDKUser
 
 struct MyPageView: View {
-    @Binding var userData : UserResponse.Result
+    @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var userVM : UserViewModel
+
     @State private var isEditingUserName = false
-    @State private var username = ""
-    @State private var iconArr = ["camping", "circus", "classical", "compass", "palette", "rocket", "ufo"]
+    @State private var userName = ""
+    @State private var iconList = ["camping", "circus", "classical", "compass", "palette", "rocket", "ufo"]
+
+    @Binding var userData : UserResponse.Result
     @Binding var isShowingMyPage : Bool
-    @EnvironmentObject var vm : UserViewModel //여기서 로그아웃
-    @Environment(\.presentationMode) var presentationMode //pop sheet
-    @Environment(\.colorScheme) var scheme //Light/Dark mode
     
     var isKakaoLogin : Bool {
         return !userData.username.contains(where: {$0.isLetter})
@@ -27,7 +28,7 @@ struct MyPageView: View {
             VStack(spacing: 40){
                 VStack{
                     HStack(spacing: 10){
-                        Image("\(iconArr[vm.iconIdx])") //랜덤 출력 <- 에러
+                        Image("\(iconList[userVM.iconIdx])") //랜덤 출력 <- 에러
                             .resizable()
                             .frame(width: 70, height: 70)
                         VStack(spacing: 8){
@@ -52,21 +53,17 @@ struct MyPageView: View {
                     Button(action:{
                         if isKakaoLogin {
                             UserApi.shared.logout {(error) in
-                                if let error = error {
-                                    print(error)
-                                }
-                                else {
-                                    print("logout() success.")
-                                }
+                                if let error = error { print(error) }
+                                else { print("logout() success.") }
                             }
                         }
                         print("log out")
-                        vm.logOut() //📡 LogOut API
-                        vm.loginState = false //NavigationLink로 LoginView로 이동
-                        print(vm.loginState)
-                        vm.userIdx = 0
+                        userVM.logOut() //📡 LogOut API
+                        userVM.loginState = false
+                        print(userVM.loginState)
+                        userVM.userIndex = 0
                         UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "ID")
-                        print(vm.userIdx)
+                        print(userVM.userIndex)
                         isShowingMyPage = true
                         print(isShowingMyPage)
                         //데이터 지우기 -> user id 데이터 지우기
@@ -100,7 +97,6 @@ struct MyPageView: View {
                     }
                 }
             }
-//            .background(Color("background"))
         }
         .gesture(DragGesture().onEnded({
             if $0.translation.width > 100 {
@@ -116,6 +112,5 @@ struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
         MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")), isShowingMyPage: .constant(true))
             .environmentObject(ScrapViewModel())
-            .preferredColorScheme(.dark)
     }
 }

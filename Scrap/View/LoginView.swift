@@ -9,19 +9,16 @@ import SwiftUI
 import KakaoSDKUser
 
 struct LoginView: View {
-    @Environment(\.colorScheme) var scheme //Light/Dark mode
     @EnvironmentObject var userVM : UserViewModel
     @EnvironmentObject var scrapVM : ScrapViewModel
     @State private var email: String = ""
-    @State private var pw: String = ""
-    @State private var showPW = false //비밀번호 visible, invisible
+    @State private var password: String = ""
+    @State private var showPassword = false //비밀번호 visible, invisible
     @State private var keepLogin = false
-    @State private var popRootView = false //LoginView -> MainHome -> MyPage - logout - LoginView
-    @State private var movingToSignUp = false
-    @State private var autoLogin = false
+    @State private var goToSignUpView = false
     
     var body: some View {
-        NavigationView{
+        NavigationStack{
             VStack(spacing: 12){
                 VStack(spacing: 16){
                     VStack(spacing: 80){
@@ -41,14 +38,14 @@ struct LoginView: View {
                                         .frame(width: UIScreen.main.bounds.width / 1.5, height: 40, alignment: .center)
                                 )
                             HStack{ //password textfield
-                                if showPW {
+                                if showPassword {
                                     HStack(spacing: -1){
-                                        TextField("비밀번호", text: $pw)
+                                        TextField("비밀번호", text: $password)
                                             .textInputAutocapitalization(.never) //자동 대문자 비활성화
                                             .disableAutocorrection(true) //자동 수정 비활성화
                                             .frame(width: UIScreen.main.bounds.width / 1.5 - 60, height: 38)
                                         Button(action: {
-                                            self.showPW.toggle()
+                                            self.showPassword.toggle()
                                         }) {
                                             Image(systemName: "eye")
                                                 .resizable()
@@ -65,12 +62,12 @@ struct LoginView: View {
                                 }
                                 else {
                                     HStack(spacing: -1){
-                                        SecureField("비밀번호", text: $pw)
+                                        SecureField("비밀번호", text: $password)
                                             .textInputAutocapitalization(.never) //자동 대문자 비활성화
                                             .disableAutocorrection(true) //자동 수정 비활성화
                                             .frame(width: UIScreen.main.bounds.width / 1.5 - 60, height: 38)
                                         Button(action: {
-                                            self.showPW.toggle()
+                                            self.showPassword.toggle()
                                         }) {
                                             Image(systemName: "eye.slash")
                                                 .resizable()
@@ -127,9 +124,9 @@ struct LoginView: View {
                 }
                 VStack(spacing: 10){ //Buttons
                     Button(action:{
-                        userVM.postLogin(email: email, password: pw, autoLogin: keepLogin) //📡 LogIn API
+                        userVM.postLogin(email: email, password: password, autoLogin: keepLogin) //📡 LogIn API
                         email = ""
-                        pw = ""
+                        password = ""
                     }){
                         Text("로그인")
                             .frame(width: UIScreen.main.bounds.width / 1.5, height: 40, alignment: .center)
@@ -138,7 +135,6 @@ struct LoginView: View {
                             .background(Color("main_accent"))
                             .cornerRadius(12)
                     }
-                    NavigationLink("", destination: MainHomeView().navigationBarBackButtonHidden(true).navigationBarHidden(true), isActive: $userVM.loginState)
                     HStack{
                         Rectangle()
                             .frame(width: UIScreen.main.bounds.width/3.5, height: 1)
@@ -178,16 +174,23 @@ struct LoginView: View {
                             .frame(width: UIScreen.main.bounds.width / 1.8, height: 52, alignment: .center)
                     }
                 }
-                NavigationLink(destination: SignUpView(movingToSignUp: $movingToSignUp), isActive: $movingToSignUp){
+                Button(action: {
+                    self.goToSignUpView = true
+                }, label: {
                     Text("회원가입")
                         .font(.system(size: 14, weight: .medium))
                         .foregroundColor(.gray_bold)
                         .underline()
-                }
+                })
                 .padding(.top, 20)
             }
+            .navigationDestination(isPresented: $userVM.loginState) {
+                MainHomeView().navigationBarBackButtonHidden(true).navigationBarHidden(true)
+            }
+            .navigationDestination(isPresented: $goToSignUpView) {
+                SignUpView(goToSignUpView: $goToSignUpView)
+            }
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-//            .background(Color("background"))
             .ignoresSafeArea()
         }
     }
@@ -195,8 +198,7 @@ struct LoginView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView(/*autoLogin: .constant(true)*/)
-            .previewDevice(PreviewDevice(rawValue: "iPhone 14"))
+        LoginView()
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
     }

@@ -15,15 +15,16 @@ class ScrapViewModel: ObservableObject{
     let service = APIService()
     var categoryID = 0
     
-    // MARK: initial fetch data
-    init(){
-        let userID = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0
-        getCategoryListData(userID: userID)
-        getAllData(userID: userID)
-        getMyPageData(userID: userID)
-    }
+    // MARK: - initial fetch data
     
-    // MARK: 카테고리 리스트 조회
+//    init(){
+//        let userID = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0
+//        getCategoryListData(userID: userID)
+//        getAllData(userID: userID)
+//        getMyPageData(userID: userID)
+//    }
+    
+    // MARK: - 카테고리 리스트 조회
     func getCategoryListData(userID: Int){
         let url = URL(string: "https://scrap.hana-umc.shop/category/all?id=\(userID)")
         service.fetchData(CategoryResponse.self, baseUrl: url) { [unowned self] result in
@@ -39,7 +40,7 @@ class ScrapViewModel: ObservableObject{
         }
     }
     
-    // MARK: 전체 자료 조회
+    // MARK: - 전체 자료 조회
     func getAllData(userID: Int){
         isLoading = true
         let url = URL(string: "https://scrap.hana-umc.shop/auth/data/all?id=\(userID)")
@@ -249,19 +250,19 @@ class ScrapViewModel: ObservableObject{
     // ↓ local operation function
     // -------------------------------------------------------------------------------
 
-    // MARK: 새 카테고리 추가
+    // MARK: - 새 카테고리 추가
     // - categoryList 맨 뒤에 newCategory를 추가
     func appendNewCategoryToCategoryList(new newCategory: CategoryResponse.Category){
         categoryList.result.categories.append(newCategory)
     }
     
-    // MARK: 카테고리 삭제
+    // MARK: - 카테고리 삭제
     // - categoryId를 통해 categoryList의 category 삭제 함수
     func removeCategoryFromCategoryList(categoryID id: Int) {
         categoryList.result.categories = categoryList.result.categories.filter{ $0.categoryId != id }
     }
     
-    // MARK: 자료 삭제
+    // MARK: - 자료 삭제
     // - 삭제할 자료id를 받아서 dataList의 data 삭제 함수
     func removeDataFromDataList(dataID dataId: Int, categoryID categoryId: Int) {
         dataList.links = dataList.links.filter { $0.linkId != dataId }
@@ -274,7 +275,7 @@ class ScrapViewModel: ObservableObject{
         }
     }
     
-    // MARK: 자료의 카테고리 이동
+    // MARK: - 자료의 카테고리 이동
     // - data의 카테고리 이동 함수
     func moveDataToOtherCategory(_ data: DataResponse.Datas, from fromCategoryID: Int, to toCategoryID: Int) {
         //해당 자료를 to 카테고리에 넣기 -> 해당 카테고리를 클릭하면 어차피 데이터 통신이 진행되므로 할 필요 x, 해당 카테고리의 numOfLink += 1 -> 이것만 진행
@@ -287,7 +288,7 @@ class ScrapViewModel: ObservableObject{
         removeDataFromDataList(dataID: data.linkId!, categoryID: fromCategoryID) //from 카테고리에서 해당 자료 제거
     }
     
-    // MARK: 카테고리 위치 이동
+    // MARK: - 카테고리 위치 이동
     // - categoryList의 category 위치 이동
     func moveCategoryRowInList(from oldIndex: Int, to newIndex: Int) {
         guard oldIndex != newIndex else { return }             //제자리 -> 연산 X, return
@@ -299,7 +300,7 @@ class ScrapViewModel: ObservableObject{
         categoryList.result.categories.insert(categoryList.result.categories.remove(at: oldIndex), at: oldIndex > newIndex ? newIndex : newIndex - 1)
     }
     
-    // MARK: 카테고리 이름 수정
+    // MARK: - 카테고리 이름 수정
     //- categoryList의 category 이름 수정
     func renameCategory(categoryID: Int, renamed rname: String){
         for i in 0..<categoryList.result.categories.count {

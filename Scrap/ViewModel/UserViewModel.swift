@@ -10,9 +10,9 @@ import Foundation
 class UserViewModel: ObservableObject{
     @Published var loginState = false               //로그인 상태 변수
     @Published var loginToastMessage = ""
-    @Published var userIdx = 0 //initial value      //사용자 idx
+    @Published var userIndex = 0 //initial value    //사용자 idx
     @Published var iconIdx = 0 //initial value      //사용자 아이콘 idx
-    @Published var duplicateMessage = 9            //이메일 중복 상태 변수
+    @Published var duplicateMessage = 9             //이메일 중복 상태 변수
     private let service = APIService()
     private let baseUrl = "https://scrap.hana-umc.shop/user"
     private let decoder = JSONDecoder()
@@ -43,6 +43,7 @@ class UserViewModel: ObservableObject{
                         do{
                             let failMessage = try self.decoder.decode(FailModel.self, from: data)
                             print(failMessage)
+                            self.loginState = false
                             if failMessage.code == 2001 {
                                 self.loginToastMessage = "이메일/비밀번호는 필수값입니다"
                             } else if failMessage.code == 3003 {
@@ -56,7 +57,8 @@ class UserViewModel: ObservableObject{
                         do {
                             let result = try self.decoder.decode(LoginModel.self, from: data)
                             print(result)
-                            self.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
+                            self.loginState = true
+                            self.userIndex = result.result.id //이번 런칭에서 사용할 idx data (일회용)
                             self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
                             if autoLogin { //autoLogin일 때만 저장
                                 UserDefaults(suiteName: "group.com.thk.Scrap")?.set(result.result.id, forKey: "ID")
@@ -95,11 +97,13 @@ class UserViewModel: ObservableObject{
                 switch result {
                 case .failure(let error):
                     print(error)
+                    self.loginState = false
                 case .success(let result):
-                    self.userIdx = result.result.id //이번 런칭에서 사용할 idx data (일회용)
+                    self.userIndex = result.result.id //이번 런칭에서 사용할 idx data (일회용)
                     self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
+                    self.loginState = true
                     if autoLogin { //autoLogin일 때만 저장
-                        UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.userIdx, forKey: "ID")
+                        UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.userIndex, forKey: "ID")
                         UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx")
                     }
                     print(result)
@@ -150,7 +154,7 @@ class UserViewModel: ObservableObject{
                     print(error)
                 case .success(let result):
                     UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "ID")
-                    self.userIdx = 0
+                    self.userIndex = 0
                     UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "iconIdx")
                     self.iconIdx = 0
                     UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "lastCategory")

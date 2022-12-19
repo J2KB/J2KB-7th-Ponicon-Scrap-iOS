@@ -9,16 +9,16 @@ import SwiftUI
 
 struct CategoryRow: View {
     @Environment(\.colorScheme) var scheme //Light/Dark mode
-    @EnvironmentObject var vm : ScrapViewModel //여기서 카테고리 추가 post api 보내야되니까 필요
+    @EnvironmentObject var scrapVM : ScrapViewModel
     @EnvironmentObject var userVM : UserViewModel
-    @Binding var category : CategoryResponse.Category
     @State private var categoryName = "category"
-    @Binding var isShowingCateogry : Bool
-    @Binding var selected : Int
-    @State private var isChangeRow = true
-    @State private var isPresentHalfModal = false
-    @Binding var isAddingCategory : Bool
-    @Binding var selectedOrder : Int
+    @State private var isPresentCategoryModalSheet = false
+    
+    @Binding var category : CategoryResponse.Category
+    @Binding var isShowingCategorySideMenuView : Bool
+    @Binding var selectedCategoryId : Int
+    @Binding var isAddingNewCategory : Bool
+    @Binding var selectedCategoryOrder : Int
     
     var title: String {
         var cnt = 0
@@ -43,21 +43,20 @@ struct CategoryRow: View {
                     .frame(width: 30, alignment: .trailing)
             }
             .onTapGesture {
-                if !isAddingCategory {
+                if !isAddingNewCategory {
                     withAnimation(.spring()){
-                        isShowingCateogry = false
+                        isShowingCategorySideMenuView = false
                     }
-                    self.selected = category.categoryId
-                    self.selectedOrder = category.order
-                    self.isChangeRow = true
-                    vm.getDataByCategory(userID: userVM.userIdx, categoryID: selected)
+                    self.selectedCategoryId = category.categoryId
+                    self.selectedCategoryOrder = category.order
+                    scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: selectedCategoryId)
                 }
             }
             //modal shet 등장
             Button(action:{
-                if !isAddingCategory && !isPresentHalfModal {
-                    self.isPresentHalfModal = true //half-modal view 등장
-                    self.selected = category.categoryId
+                if !isAddingNewCategory && !isPresentCategoryModalSheet {
+                    self.isPresentCategoryModalSheet = true //half-modal view 등장
+                    self.selectedCategoryId = category.categoryId
                 }
             }){
                 Image(systemName: "ellipsis")
@@ -66,10 +65,10 @@ struct CategoryRow: View {
             .frame(width: 24, height: 32)
         }
         .padding(.leading, 10)
-        .listRowBackground(self.selected == category.categoryId ? Color("selected_color"): .none)
-        .sheet(isPresented: $isPresentHalfModal){
+        .listRowBackground(self.selectedCategoryId == category.categoryId ? Color("selected_color"): .none)
+        .sheet(isPresented: $isPresentCategoryModalSheet){
             HalfSheet {
-                CategorySheetView(category: $category, isPresentHalfModal: $isPresentHalfModal)
+                CategorySheetView(category: $category, isPresentCategoryModalSheet: $isPresentCategoryModalSheet)
             }
             .ignoresSafeArea()
         }
@@ -81,9 +80,8 @@ struct CategoryRow: View {
 
 struct CategoryRow_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryRow(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), isShowingCateogry: .constant(true), selected: .constant(0), isAddingCategory: .constant(true), selectedOrder: .constant(0))
+        CategoryRow(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), isShowingCategorySideMenuView: .constant(true), selectedCategoryId: .constant(0), isAddingNewCategory: .constant(true), selectedCategoryOrder: .constant(0))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
-//            .preferredColorScheme(.dark)
     }
 }

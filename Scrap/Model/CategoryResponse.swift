@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - CategoryList Data Model
+
 struct CategoryResponse: Codable {
     struct Result: Codable {
         var categories: [Category]
@@ -41,7 +43,7 @@ struct CategoryResponse: Codable {
 }
 
 // ------------------------------------------------------
-// MARK: Category Data Model (API)
+// MARK: - Category Data Model (API)
 
 struct CategoryModel: Codable { //카테고리 추가 -> response 데이터로 받을 user id
     struct Result: Codable {

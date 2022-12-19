@@ -45,9 +45,9 @@ struct CategoryResponseInShare: Decodable{
 class CategoryViewModel: ObservableObject{ //감시할 data model
     @Published var categoryList = CategoryResponseInShare(code: 0, message: "",result: CategoryResponseInShare.Result(categories: [CategoryResponseInShare.CategoryInShare(categoryId: 0, name: "", numOfLink: 0, order: 0)]))
     
-    func getCategoryDataInShare(userIdx: Int){
-        print("user index : \(userIdx)")
-        guard let url = URL(string: "https://scrap.hana-umc.shop/category/all?id=\(userIdx)") else {
+    func getCategoryDataInShare(userIndex: Int){
+        print("user index : \(userIndex)")
+        guard let url = URL(string: "https://scrap.hana-umc.shop/category/all?id=\(userIndex)") else {
             print("invalid url")
             return
         }
@@ -86,7 +86,7 @@ struct ShareUIView: View {
     let selectedColor_light = Color(red: 217/255, green: 217/255, blue: 217/255)
 
     @State private var selected : Int = 0 //이 값을 ShareViewController로 넘겨줘야 한다.
-    private let userIdx = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") //user id 가져오기
+    private let userIndex = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") //user id 가져오기
 
     var body: some View {
         List{
@@ -111,8 +111,8 @@ struct ShareUIView: View {
         }
         .listStyle(InsetListStyle())
         .onAppear{
-            print("user idx: \(self.userIdx!)")
-            vm.getCategoryDataInShare(userIdx: self.userIdx!)
+            print("user idx: \(self.userIndex!)")
+            vm.getCategoryDataInShare(userIndex: self.userIndex!)
         }
     }
 }

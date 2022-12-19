@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - Data List
 struct DataResponse: Codable {
     struct Result: Codable {
         var links: [Datas]
@@ -34,7 +35,6 @@ struct DataResponse: Codable {
     let code: Int
     let message: String
     var result: Result
-    
     init(code: Int, message: String, result: Result){
         self.code = code
         self.message = message
