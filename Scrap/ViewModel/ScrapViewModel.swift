@@ -246,6 +246,40 @@ class ScrapViewModel: ObservableObject{
         }
     }
     
+    //자료 저장
+    func addNewData(baseurl: String, title: String, imgUrl: String, catID: Int, userIdx: Int){
+        print("⭐️⭐️⭐️⭐️⭐️⭐️자료 저장!!!!!⭐️⭐️⭐️⭐️⭐️⭐️")
+        print(userIdx)
+        print(catID)
+        guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=\(userIdx)&category=\(catID)") else { //auth 추가해도 될 듯
+            print("invalid url")
+            return
+        }
+
+        let link = baseurl
+        let title = title
+        let imgUrl = imgUrl
+        let body: [String: Any] = ["link" : link, "title" : title, "imgUrl" : imgUrl]
+        let finalData = try! JSONSerialization.data(withJSONObject: body)
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = finalData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        service.requestTask(NewDataModel.self, withRequest: request) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let result):
+                    print(result)
+                    print("post saving data : SUCCESS")
+                    break
+                }
+            }
+        }
+    }
+    
     // -------------------------------------------------------------------------------
     // ↓ local operation function
     // -------------------------------------------------------------------------------
@@ -310,44 +344,4 @@ class ScrapViewModel: ObservableObject{
             }
         }
     }
-    
-    
-    //자료 저장
-    //query: category id, user id
-    //body: url
-//    func addNewData(baseurl: String, title: String, imgUrl: String, catID: Int, userIdx: Int){
-//        print("⭐️⭐️⭐️⭐️⭐️⭐️자료 저장!!!!!⭐️⭐️⭐️⭐️⭐️⭐️")
-//        print(userIdx)
-//        print(catID)
-//        guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=\(userIdx)&category=\(catID)") else { //auth 추가해도 될 듯
-//            print("invalid url")
-//            return
-//        }
-//
-//        let link = baseurl
-//        let title = title
-//        let imgUrl = imgUrl
-//        let body: [String: Any] = ["link" : link, "title" : title, "imgUrl" : imgUrl]
-//        let finalData = try! JSONSerialization.data(withJSONObject: body)
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        request.httpBody = finalData
-//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//
-//        networkingServerCompletionHandler(withRequest: request) { data, error in
-//            do{
-//                if let data = data {
-//                    let decoder = JSONDecoder()
-//                    let result = try decoder.decode(NewDataModel.self, from: data)
-//                    print(result)
-//                    print("post saving data : SUCCESS")
-//                    print(catID)
-//                } else {
-//                    print("no data")
-//                }
-//            }catch (let error){
-//                print(String(describing: error))
-//            }
-//        }
-//    }
 }

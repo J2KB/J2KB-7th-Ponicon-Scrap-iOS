@@ -27,6 +27,8 @@
 		F88E7E3628C5CDDC00C3CCA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F88E7E3528C5CDDC00C3CCA8 /* Assets.xcassets */; };
 		F88E7E3928C5CDDC00C3CCA8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F88E7E3828C5CDDC00C3CCA8 /* Preview Assets.xcassets */; };
 		F88F6D4B292B0E8700F34D59 /* CategorySheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88F6D4A292B0E8700F34D59 /* CategorySheetView.swift */; };
+		F892D2B52951E54200298683 /* APIErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F892D2B42951E54200298683 /* APIErrors.swift */; };
+		F892D2B72951E79800298683 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F892D2B62951E79800298683 /* APIService.swift */; };
 		F89494B128DAF9D10087304B /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F89494B028DAF9D10087304B /* ShareViewController.swift */; };
 		F89494B828DAF9D10087304B /* Share.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F89494AE28DAF9D10087304B /* Share.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F89BED8828C5F1EE0053D406 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F89BED8728C5F1EE0053D406 /* SignUpView.swift */; };
@@ -87,6 +89,8 @@
 		F88E7E3528C5CDDC00C3CCA8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F88E7E3828C5CDDC00C3CCA8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F88F6D4A292B0E8700F34D59 /* CategorySheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySheetView.swift; sourceTree = "<group>"; };
+		F892D2B42951E54200298683 /* APIErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIErrors.swift; sourceTree = "<group>"; };
+		F892D2B62951E79800298683 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		F89494AE28DAF9D10087304B /* Share.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Share.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F89494B028DAF9D10087304B /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		F89494B528DAF9D10087304B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -228,6 +232,8 @@
 				F89494B528DAF9D10087304B /* Info.plist */,
 				F802200E28F2C3F40032DAD0 /* ShareUIView.swift */,
 				F88CEFC2292C9D5800EF0EE0 /* ExtensionClass.js */,
+				F892D2B42951E54200298683 /* APIErrors.swift */,
+				F892D2B62951E79800298683 /* APIService.swift */,
 			);
 			path = Share;
 			sourceTree = "<group>";
@@ -390,6 +396,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8A276192945AC5F00E5209F /* NewData.swift in Sources */,
+				F892D2B72951E79800298683 /* APIService.swift in Sources */,
+				F892D2B52951E54200298683 /* APIErrors.swift in Sources */,
 				F802200F28F2C3F40032DAD0 /* ShareUIView.swift in Sources */,
 				F89494B128DAF9D10087304B /* ShareViewController.swift in Sources */,
 			);

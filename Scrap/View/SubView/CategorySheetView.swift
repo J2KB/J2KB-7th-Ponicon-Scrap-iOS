@@ -14,7 +14,7 @@ struct CategorySheetView: View {
     
     @State private var isEditingCategoryName = false
     @State private var isDeleteCategory = false
-    @State private var categoryName = ""
+    @State private var renamedCategoryName = ""
     
     @Binding var category : CategoryResponse.Category
     @Binding var isPresentCategoryModalSheet : Bool
@@ -28,15 +28,15 @@ struct CategorySheetView: View {
                         .opacity(0.4)
                         .frame(width: UIScreen.main.bounds.width - 40, height: 44, alignment: .leading)
                     HStack {
-                        TextField("카테고리 이름", text: $categoryName)
+                        TextField("카테고리 이름", text: $renamedCategoryName)
                             .font(.system(size: 22, weight: .regular))
                             .frame(width: UIScreen.main.bounds.width - 100, alignment: .leading)
                             .foregroundColor(Color("basic_text"))
                         Button(action: {
                             //modify category name in local category list
-                            scrapVM.renameCategory(categoryID: category.categoryId, renamed: categoryName)
+                            scrapVM.renameCategory(categoryID: category.categoryId, renamed: renamedCategoryName)
                             //📡 카테고리 이름 수정 서버 통신
-                            scrapVM.modifyCategoryName(categoryID: category.categoryId, categoryName: categoryName)
+                            scrapVM.modifyCategoryName(categoryID: category.categoryId, categoryName: renamedCategoryName)
                             self.isEditingCategoryName.toggle()
                         }) {
                             Image(systemName: "checkmark")
@@ -48,7 +48,7 @@ struct CategorySheetView: View {
                 }
                 .padding(.bottom, 10)
             } else { //아니면 그냥 text로 나타냄
-                Text(categoryName)
+                Text(renamedCategoryName)
                     .font(.system(size: 22, weight: .regular))
                     .frame(width: UIScreen.main.bounds.width - 60, height: 40, alignment: .leading)
                     .foregroundColor(Color("basic_text"))
@@ -87,7 +87,7 @@ struct CategorySheetView: View {
         .padding(.top, 48)
         .background(Color("sheet_background"))
         .onAppear {
-            self.categoryName = category.name
+            self.renamedCategoryName = category.name
         }
         .alert("정말 삭제하시겠습니까?", isPresented: $isDeleteCategory, actions: {
             Button("취소", role: .cancel) {}

@@ -11,9 +11,6 @@ import KakaoSDKUser
 struct MyPageView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var userVM : UserViewModel
-
-    @State private var isEditingUserName = false
-    @State private var userName = ""
     @State private var iconList = ["camping", "circus", "classical", "compass", "palette", "rocket", "ufo"]
 
     @Binding var userData : UserResponse.Result

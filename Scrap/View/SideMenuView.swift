@@ -37,7 +37,6 @@ struct SideMenuView: View {
     @State private var dragging: CategoryResponse.Category?
     @State private var newCategoryName = ""
     @State private var isAddingCategory = false
-    @State private var maxCategoryName = 20
     
     @Binding var categoryList : CategoryResponse.Result
     @Binding var isShowingCategoryView : Bool
