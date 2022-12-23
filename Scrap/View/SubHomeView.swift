@@ -1,5 +1,5 @@
 //
-//  MainHomeView.swift
+//  SubHomeView.swift
 //  Scrap
 //
 //  Created by 김영선 on 2022/09/08.
@@ -83,19 +83,20 @@ struct SubHomeView: View {
                             }
                         }
                         .frame(width: UIScreen.main.bounds.width - 32, height: 40, alignment: .trailing)
-                        LazyVGrid(columns: isOneColumnData ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: UIScreen.main.bounds.width / 2.8 ))], spacing: 10){
+                        LazyVGrid(columns: isOneColumnData ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: UIScreen.main.bounds.width / 2.2))], spacing: 20){
                             if isDataRecentOrder { //최신순
                                 ForEach($datas.links.reversed()) { info in
                                     PageView(isPresentDataModalSheet: $isPresentDataModalSheet, data: info, detailData: $detailData, isOneColumnData: $isOneColumnData, currentCategoryId: $currentCategoryId, currentCategoryOrder: $currentCategoryOrder)
-                                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+//                                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                                 }
                             } else { //오래된순
                                 ForEach($datas.links) { info in
                                     PageView(isPresentDataModalSheet: $isPresentDataModalSheet, data: info, detailData: $detailData, isOneColumnData: $isOneColumnData, currentCategoryId: $currentCategoryId, currentCategoryOrder: $currentCategoryOrder)
-                                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+//                                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                                 }
                             }
                         } //LAZYGRID
+                        .padding(.horizontal, 12)
                     }//ScrollView
                     NavigationLink(destination: MoveCategoryView(isShowMovingCategoryView: $isShowMovingCategory, categoryList: $scrapVM.categoryList.result, data: $detailData, currentCategoryId: $currentCategoryId).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory) { EmptyView() }
                         .opacity(0)

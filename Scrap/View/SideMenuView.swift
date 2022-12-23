@@ -139,7 +139,6 @@ struct SideMenuView: View {
 //                    }
                 }//CategoryList VStack
                 .refreshable {
-//                    scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: selectedCategoryId)
                     scrapVM.getCategoryListData(userID: userVM.userIndex)
                 }
                 .listStyle(PlainListStyle())

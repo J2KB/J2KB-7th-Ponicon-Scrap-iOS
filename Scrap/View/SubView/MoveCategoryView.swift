@@ -1,5 +1,5 @@
 //
-//  SaveDataView.swift
+//  MoveCategoryView.swift
 //  Scrap
 //
 //  Created by 김영선 on 2022/09/15.

@@ -59,10 +59,12 @@ struct CategoryRow: View {
                     self.selectedCategoryId = category.categoryId
                 }
             }){
-                Image(systemName: "ellipsis")
-                    .foregroundColor(Color("option_button"))
+                ZStack{
+                    Image(systemName: "ellipsis")
+                        .foregroundColor(Color("option_button"))
+                }
+                .frame(width: 30, height: 24)
             }
-            .frame(width: 24, height: 32)
         }
         .padding(.leading, 10)
         .listRowBackground(self.selectedCategoryId == category.categoryId ? Color("selected_color"): .none)

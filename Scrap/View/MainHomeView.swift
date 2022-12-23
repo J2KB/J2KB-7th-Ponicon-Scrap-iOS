@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  MainHomeView.swift
 //  Scrap
 //
 //  Created by 김영선 on 2022/09/05.
@@ -99,6 +99,5 @@ struct MainHomeView_Previews: PreviewProvider {
         MainHomeView()
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
-//            .preferredColorScheme(.dark)
     }
 }
