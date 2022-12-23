@@ -87,12 +87,10 @@ struct SubHomeView: View {
                             if isDataRecentOrder { //최신순
                                 ForEach($datas.links.reversed()) { info in
                                     PageView(isPresentDataModalSheet: $isPresentDataModalSheet, data: info, detailData: $detailData, isOneColumnData: $isOneColumnData, currentCategoryId: $currentCategoryId, currentCategoryOrder: $currentCategoryOrder)
-//                                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                                 }
                             } else { //오래된순
                                 ForEach($datas.links) { info in
                                     PageView(isPresentDataModalSheet: $isPresentDataModalSheet, data: info, detailData: $detailData, isOneColumnData: $isOneColumnData, currentCategoryId: $currentCategoryId, currentCategoryOrder: $currentCategoryOrder)
-//                                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                                 }
                             }
                         } //LAZYGRID

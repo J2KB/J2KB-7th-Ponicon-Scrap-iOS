@@ -18,7 +18,6 @@ struct MainHomeView: View {
     @State private var isPresentDataModalSheet = false
     @State private var selectedCategoryID = 0
     @State private var selectedCategoryOrder = 0
-    var newDataArray = [NewData]()
     
     var categoryTitle : String { return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selectedCategoryID}) ?? 0].name)"}
     
