@@ -99,16 +99,12 @@ struct SideMenuView: View {
                                     }
                                     Button(action: {
                                         if !isAddingCategory {
-                                            self.selectedCategoryId = category.categoryId
-                                            self.selectedCategoryOrder = category.order
                                             withAnimation(.spring()){
                                                 isShowingCategoryView = false
                                             }
-                                            if selectedCategoryOrder == 0 {
-                                                scrapVM.getAllData(userID: userVM.userIndex) //📡 카테고리에 해당하는 자료 가져오는 통신
-                                            }
-                                            else {
-                                                scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: selectedCategoryId) //📡 카테고리에 해당하는 자료 가져오는 통신
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { //0.5초 뒤에 자료 조회 -> SideMenuView 사라진 뒤 진행하도록
+                                                self.selectedCategoryId = category.categoryId
+                                                self.selectedCategoryOrder = category.order
                                             }
                                         }
                                     }) {
@@ -143,7 +139,8 @@ struct SideMenuView: View {
 //                    }
                 }//CategoryList VStack
                 .refreshable {
-                    scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: selectedCategoryId)
+//                    scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: selectedCategoryId)
+                    scrapVM.getCategoryListData(userID: userVM.userIndex)
                 }
                 .listStyle(PlainListStyle())
             }//VStack

@@ -101,17 +101,13 @@ struct SubHomeView: View {
                         .opacity(0)
                 }//VStack
             } refreshable: {
-//                if let data = UserDefaults(suiteName: "group.com.thk.Scrap")?.value(forKey: "NewData") as? Data {
-//                    let newDataArray = try? PropertyListDecoder().decode(NewData.self,from: data)
-//                    if newDataArray != nil { //안에 값이 있다면
-//                        print(newDataArray!)
-////                        vm.addNewData(baseurl: newDataArray?.url ?? "", title: newDataArray?.title ?? "", imgUrl: newDataArray?.imageUrl ?? "", catID: newDataArray?.categoryID ?? 0, userIdx: userVM.userIdx)
-//                        UserDefaults(suiteName: "group.com.thk.Scrap")?.removeObject(forKey: "NewData")
-//                    }
-//                }
                 if currentCategoryOrder == 0 { scrapVM.getAllData(userID: userVM.userIndex) }
                 else { scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: currentCategoryId) }
-            }//Refreshable
+            }
+            .onChange(of: currentCategoryId, perform: { newValue in
+                if currentCategoryOrder == 0 { scrapVM.getAllData(userID: userVM.userIndex) }
+                else { scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: newValue) }
+            })
             .sheet(isPresented: $isPresentDataModalSheet){
                 HalfSheet {
                     DataSheetView(isShowMovingCategoryView: $isShowMovingCategory, data: $detailData, isPresentDataModalSheet: $isPresentDataModalSheet, currentCategoryOrder: $currentCategoryOrder, currentCategoryId: $currentCategoryId)

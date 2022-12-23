@@ -15,15 +15,6 @@ class ScrapViewModel: ObservableObject{
     let service = APIService()
     var categoryID = 0
     
-    // MARK: - initial fetch data
-    
-//    init(){
-//        let userID = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0
-//        getCategoryListData(userID: userID)
-//        getAllData(userID: userID)
-//        getMyPageData(userID: userID)
-//    }
-    
     // MARK: - 카테고리 리스트 조회
     func getCategoryListData(userID: Int){
         let url = URL(string: "https://scrap.hana-umc.shop/category/all?id=\(userID)")
