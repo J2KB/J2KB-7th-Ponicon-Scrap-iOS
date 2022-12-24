@@ -11,6 +11,7 @@ import KakaoSDKCommon
 
 @main
 struct ScrapApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var scrapVM = ScrapViewModel()
     @StateObject var userVM = UserViewModel()
     var userIndex : Int { return UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") ?? 0 }
