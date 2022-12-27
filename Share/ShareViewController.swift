@@ -38,11 +38,10 @@ class ShareViewController: UIViewController{
     private var appURLString = "ScrapShareExtension://"
     private var webpageTitle : String = ""
     private var webpageUrl : String = ""
-    private var webpageImageUrl : String = "https://miro.medium.com/max/371/1*i6ZmTpc6iiQyWACDpn6UIw.png"
+    private var webpageImageUrl : String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         guard userIndex != 0 else {
             self.openMainApp()
             self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
@@ -79,7 +78,7 @@ class ShareViewController: UIViewController{
         })
     }
     
-    //2: set the title and the navigation items
+    //set the title and the navigation items
     private func configureNavBar(){
         self.navigationItem.title = "자료 저장"
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelAction))
@@ -90,35 +89,46 @@ class ShareViewController: UIViewController{
         self.navigationItem.rightBarButtonItem?.tintColor = .systemBlue
     }
     
-    //3. define the actions for the navigation items - cancel
+    //define the actions for the navigation items - cancel
     @objc private func cancelAction(){
         let error = NSError(domain: "some.bundle.identifier", code: 0, userInfo: [NSLocalizedDescriptionKey: "An error description"])
         extensionContext?.cancelRequest(withError: error)
     }
-
-    //4. define the actions for the navigation items - done/post
+    
+    //url, imageUrl, title 모두 javascript 파일에서 따올 수 있음
     @objc private func postAction(){
         print("post")
         //URL, Title, ImageURL 가져오기
-        if let extensionItem = extensionContext?.inputItems.first as? NSExtensionItem {
-            let propertyList = UTType.propertyList.identifier
-            print(propertyList)
-            for attachment in extensionItem.attachments! where attachment.hasItemConformingToTypeIdentifier(propertyList) {
-                attachment.loadItem(forTypeIdentifier: propertyList, options: nil, completionHandler: { (item, error) -> Void in
-                    guard let dictionary = item as? NSDictionary,
-                          let results = dictionary[NSExtensionJavaScriptPreprocessingResultsKey] as? NSDictionary,
-                          let title = results["currentTitle"] as? String,
-                          let hostname = results["currentUrl"] as? String,
-                          let image = results["images"] as? String else { return }
-                    self.webpageTitle = title
-                    self.webpageUrl = hostname
-                    self.webpageImageUrl = image
-                    self.addNewData(catID: self.catID, userIndex: self.userIndex!)
+        let extensionItems = extensionContext?.inputItems as! [NSExtensionItem]
+        for extensionItem in extensionItems {
+            if let itemProviders = extensionItem.attachments {
+                for itemProvider in itemProviders {
+                    let propertyList = UTType.propertyList.identifier
+                    if itemProvider.hasItemConformingToTypeIdentifier(propertyList) {
+                        itemProvider.loadItem(forTypeIdentifier: propertyList, completionHandler: { (result, error) in
+                            guard let dictionary = result as? NSDictionary,
+                                  let results = dictionary[NSExtensionJavaScriptPreprocessingResultsKey] as? NSDictionary,
+                                  let title = results["currentTitle"] as? String,
+                                  let hostname = results["currentUrl"] as? String,
+                                  let imageURL = results["images"] as? String else {
+                                return
+                            }
+                            print(title)
+                            print(hostname)
+                            print(imageURL)
+                            self.webpageTitle = title
+                            self.webpageUrl = hostname
+                            self.webpageImageUrl = imageURL
+                            self.addNewData(catID: self.catID, userIndex: self.userIndex!)
+                        })
+                    }else {
+                        print("💥💥💥hasItemConformingToTypeIdentifier(propertyList) 없음...")
+                    }
                 }
-            )}
+            }else {
+                print("💥💥💥itemProviders = extensionItem.attachments 부분 문제")
+            }
         }
-        //default stubbed out code which can pass data back to the host app.
-//        extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
     }
     
     func displayUIAlertController(title: String, message: String) {
@@ -130,13 +140,16 @@ class ShareViewController: UIViewController{
     }
     
     func addNewData(catID: Int, userIndex: Int){
+        print("categoryID: \(catID), userIndex: \(userIndex)")
         guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=\(userIndex)&category=\(catID)") else {
             print("invalid url")
             return
         }
+        
         let link = self.webpageUrl
         let title = self.webpageTitle
         let imageUrl = self.webpageImageUrl
+        
         let body: [String: Any] = ["link" : link, "title" : title, "imgUrl" : imageUrl]
         let finalData = try! JSONSerialization.data(withJSONObject: body)
         
@@ -144,12 +157,13 @@ class ShareViewController: UIViewController{
         request.httpMethod = "POST"
         request.httpBody = finalData
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
+        
         service.addDataToScrapCompletionHandler(withRequest: request) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .failure(let error):
                     print(error)
+                    self.displayUIAlertController(title: "자료 저장 실패", message: "네트워크 오류")
                 case .success(let result):
                     print(result)
                     self.displayUIAlertController(title: "자료 저장", message: "자료가 성공적으로 저장되었습니다.")
@@ -164,7 +178,6 @@ class ShareViewController: UIViewController{
 class ShareNavigationController: UINavigationController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        //1: set the viewcontrollers
         self.setViewControllers([ShareViewController()], animated: false)
     }
     @available(*, unavailable)

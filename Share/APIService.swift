@@ -17,7 +17,7 @@ class APIService {
 //    convenience init(){
 //        self.init(configuration: .background(withIdentifier: "com.thk.Scrap")) //background networking
 //    }
-    
+
     func addDataToScrapCompletionHandler(withRequest request: URLRequest, completionHandler completion: @escaping (Result<NewDataModel, APIErrors>) -> ()) {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error as? URLError {

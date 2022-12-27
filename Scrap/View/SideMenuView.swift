@@ -134,9 +134,6 @@ struct SideMenuView: View {
                             }
                         })
                     }//List
-//                    .task {
-//                        await vm.inquiryCategoryData(userID: userVM.userIdx)
-//                    }
                 }//CategoryList VStack
                 .refreshable {
                     scrapVM.getCategoryListData(userID: userVM.userIndex)

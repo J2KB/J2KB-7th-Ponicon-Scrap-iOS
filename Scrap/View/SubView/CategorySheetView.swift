@@ -26,10 +26,10 @@ struct CategorySheetView: View {
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color("textfield_color"))
                         .opacity(0.4)
-                        .frame(width: UIScreen.main.bounds.width - 40, height: 44, alignment: .leading)
+                        .frame(width: UIScreen.main.bounds.width - 40, height: 40, alignment: .leading)
                     HStack {
                         TextField("카테고리 이름", text: $renamedCategoryName)
-                            .font(.system(size: 22, weight: .regular))
+                            .font(.system(size: 18, weight: .regular))
                             .frame(width: UIScreen.main.bounds.width - 100, alignment: .leading)
                             .foregroundColor(Color("basic_text"))
                         Button(action: {
@@ -37,7 +37,7 @@ struct CategorySheetView: View {
                             scrapVM.renameCategory(categoryID: category.categoryId, renamed: renamedCategoryName)
                             //📡 카테고리 이름 수정 서버 통신
                             scrapVM.modifyCategoryName(categoryID: category.categoryId, categoryName: renamedCategoryName)
-                            self.isEditingCategoryName.toggle()
+                            self.isEditingCategoryName = false
                         }) {
                             Image(systemName: "checkmark")
                                 .resizable()
@@ -49,13 +49,13 @@ struct CategorySheetView: View {
                 .padding(.bottom, 10)
             } else { //아니면 그냥 text로 나타냄
                 Text(renamedCategoryName)
-                    .font(.system(size: 22, weight: .regular))
+                    .font(.system(size: 18, weight: .regular))
                     .frame(width: UIScreen.main.bounds.width - 60, height: 40, alignment: .leading)
                     .foregroundColor(Color("basic_text"))
                     .padding(.bottom, 10)
             }
             Button(action: {
-                self.isEditingCategoryName.toggle()
+                self.isEditingCategoryName = true
             }) {
                 ZStack{
                     RoundedRectangle(cornerRadius: 10)

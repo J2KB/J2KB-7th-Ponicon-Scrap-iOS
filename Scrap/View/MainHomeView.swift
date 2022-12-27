@@ -70,7 +70,6 @@ struct MainHomeView: View {
                 .offset(x: isShowingCategorySideMenuView ? 0 : -UIScreen.main.bounds.width)
         }
         .onAppear{
-            print("🚨🚨🚨🚨iOS16 미만🚨🚨🚨🚨")
             userVM.userIndex = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ?
                                 userVM.userIndex : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
             scrapVM.getCategoryListData(userID: userVM.userIndex) //카테고리 조회 통신 📡
