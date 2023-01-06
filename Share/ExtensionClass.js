@@ -20,3 +20,4 @@ ExtensionClass.prototype = {
 };
 
 var ExtensionPreprocessingJS = new ExtensionClass;
+

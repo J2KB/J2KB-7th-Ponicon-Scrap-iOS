@@ -19,13 +19,13 @@ struct MyPageView: View {
     var isKakaoLogin : Bool {
         return !userData.username.contains(where: {$0.isLetter})
     }
-    
+    /*userVM.iconIdx*/
     var body: some View {
         NavigationView {
             VStack(spacing: 40){
                 VStack{
                     HStack(spacing: 10){
-                        Image("\(iconList[userVM.iconIdx])") //랜덤 출력 <- 에러
+                        Image("\(iconList[0])")
                             .resizable()
                             .frame(width: 70, height: 70)
                         VStack(spacing: 8){
@@ -47,28 +47,37 @@ struct MyPageView: View {
                         .frame(width: UIScreen.main.bounds.width - 40, alignment: .center)
                         .padding(.top, 20)
                     Spacer()
-                    Button(action:{
-                        if isKakaoLogin {
-                            UserApi.shared.logout {(error) in
-                                if let error = error { print(error) }
-                                else { print("logout() success.") }
+                    HStack(spacing: 10) {
+                        Button(action:{
+                            if isKakaoLogin {
+                                UserApi.shared.logout {(error) in
+                                    if let error = error { print(error) }
+                                    else { print("logout() success.") }
+                                }
                             }
+                            userVM.logOut() //📡 LogOut API
+                            userVM.loginState = false
+                            userVM.userIndex = 0
+                            UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "ID")
+                            isShowingMyPage = true
+                        }){
+                            Text("로그아웃")
+                                .underline()
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.gray_bold)
                         }
-                        print("log out")
-                        userVM.logOut() //📡 LogOut API
-                        userVM.loginState = false
-                        print(userVM.loginState)
-                        userVM.userIndex = 0
-                        UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "ID")
-                        print(userVM.userIndex)
-                        isShowingMyPage = true
-                        print(isShowingMyPage)
-                        //데이터 지우기 -> user id 데이터 지우기
-                    }){
-                        Text("로그아웃")
-                            .underline()
-                            .font(.system(size: 17, weight: .semibold))
-                            .foregroundColor(.gray_bold)
+                        Divider()
+                            .overlay(.black)
+                            .frame(height: 16)
+                        Button(action:{
+                            userVM.acccountWithdrawal() //📡 WithDrawal API
+                            isShowingMyPage = true
+                        }){
+                            Text("회원탈퇴")
+                                .underline()
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.gray_bold)
+                        }
                     }
                     .padding(.bottom, 20)
                 }//VStack2

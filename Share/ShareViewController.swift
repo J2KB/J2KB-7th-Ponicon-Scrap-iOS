@@ -113,9 +113,6 @@ class ShareViewController: UIViewController{
                                   let imageURL = results["images"] as? String else {
                                 return
                             }
-                            print(title)
-                            print(hostname)
-                            print(imageURL)
                             self.webpageTitle = title
                             self.webpageUrl = hostname
                             self.webpageImageUrl = imageURL
@@ -140,7 +137,6 @@ class ShareViewController: UIViewController{
     }
     
     func addNewData(catID: Int, userIndex: Int){
-        print("categoryID: \(catID), userIndex: \(userIndex)")
         guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=\(userIndex)&category=\(catID)") else {
             print("invalid url")
             return
@@ -163,7 +159,7 @@ class ShareViewController: UIViewController{
                 switch result {
                 case .failure(let error):
                     print(error)
-                    self.displayUIAlertController(title: "자료 저장 실패", message: "네트워크 오류")
+                    self.displayUIAlertController(title: "자료 저장 실패", message: "오류")
                 case .success(let result):
                     print(result)
                     self.displayUIAlertController(title: "자료 저장", message: "자료가 성공적으로 저장되었습니다.")

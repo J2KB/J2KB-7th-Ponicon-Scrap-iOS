@@ -33,9 +33,7 @@ struct CategorySheetView: View {
                             .frame(width: UIScreen.main.bounds.width - 100, alignment: .leading)
                             .foregroundColor(Color("basic_text"))
                         Button(action: {
-                            //modify category name in local category list
                             scrapVM.renameCategory(categoryID: category.categoryId, renamed: renamedCategoryName)
-                            //📡 카테고리 이름 수정 서버 통신
                             scrapVM.modifyCategoryName(categoryID: category.categoryId, categoryName: renamedCategoryName)
                             self.isEditingCategoryName = false
                         }) {

@@ -6,12 +6,14 @@
 //
 
 import Foundation
+import AuthenticationServices
 
 class UserViewModel: ObservableObject{
+    @Published var appleSignInDelegate: SignInWithAppleDelegate! = nil
     @Published var loginState = false               //로그인 상태 변수
     @Published var loginToastMessage = ""
-    @Published var userIndex = 0 //initial value    //사용자 idx
-    @Published var iconIdx = 0 //initial value      //사용자 아이콘 idx
+    @Published var userIndex = 0                    //initial value    //사용자 idx
+    @Published var iconIdx = 0                      //initial value    //사용자 아이콘 idx
     @Published var duplicateMessage = 9             //이메일 중복 상태 변수
     private let service = APIService()
     private let baseUrl = "https://scrap.hana-umc.shop/user"
@@ -76,7 +78,7 @@ class UserViewModel: ObservableObject{
     
     
     // MARK: 카카오 로그인
-    func postKaKaoLogin(accessToken: String, refreshToken: String, autoLogin: Bool){
+    func postKaKaoLogin(accessToken: String, refreshToken: String){
         print("kakao login")
         guard let url = URL(string: "\(baseUrl)/login/kakao/v2") else {
             print("invalid url")
@@ -102,14 +104,38 @@ class UserViewModel: ObservableObject{
                     self.userIndex = result.result.id //이번 런칭에서 사용할 idx data (일회용)
                     self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
                     self.loginState = true
-                    if autoLogin { //autoLogin일 때만 저장
-                        UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.userIndex, forKey: "ID")
-                        UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx")
-                    }
+                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.userIndex, forKey: "ID")
+                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx")
                     print(result)
                 }
             }
         }
+    }
+    
+    // MARK: - 애플 로그인
+    func appleLogin(){
+        appleSignInDelegate = SignInWithAppleDelegate { (success, result) in
+            print("로그인 성공? : \(success)")
+            guard result != nil else {
+                print("no result in applesignindelegate")
+                return
+            } //result == nil이면 끗
+            if success { //update UI --> MainHomeView로 화면 전환!
+                self.userIndex = result!.result.id //이번 런칭에서 사용할 idx data (일회용)
+                self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
+                self.loginState = true
+                UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.userIndex, forKey: "ID")
+                UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx")
+            } else {
+                self.loginState = false
+            }
+        }
+        let request = ASAuthorizationAppleIDProvider().createRequest()
+        request.requestedScopes = [.fullName, .email] //필요한 사용자 데이터
+        let controller = ASAuthorizationController(authorizationRequests: [request]) //sign in dialog에 표시할 controller
+        controller.delegate = appleSignInDelegate
+        controller.presentationContextProvider = appleSignInDelegate
+        controller.performRequests()
     }
     
     // MARK: 회원가입
@@ -152,13 +178,32 @@ class UserViewModel: ObservableObject{
                 switch result {
                 case .failure(let error):
                     print(error)
-                case .success(let result):
+                case .success(_):
                     UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "ID")
                     self.userIndex = 0
                     UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "iconIdx")
                     self.iconIdx = 0
-                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "lastCategory")
-                    print(result)
+                }
+            }
+        })
+    }
+    
+    // MARK: 회원탈퇴
+    func acccountWithdrawal(){
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/\(userIndex)") else {
+            print("invalid url")
+            return
+        }
+        service.fetchData(NoResultModel.self, baseUrl: url, completionHandler: { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(_):
+                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "ID")
+                    self.userIndex = 0
+                    UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "iconIdx")
+                    self.iconIdx = 0
                 }
             }
         })

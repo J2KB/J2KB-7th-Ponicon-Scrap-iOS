@@ -17,6 +17,7 @@
 		F8740C2428C99954009D6F8C /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2328C99954009D6F8C /* SideMenuView.swift */; };
 		F8740C2828C99EB0009D6F8C /* SubHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2728C99EB0009D6F8C /* SubHomeView.swift */; };
 		F8740C2A28C9BD63009D6F8C /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2928C9BD63009D6F8C /* MyPageView.swift */; };
+		F87B1DC72963EB92000B2331 /* SignInWithApple.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87B1DC62963EB92000B2331 /* SignInWithApple.swift */; };
 		F88A67BF28E95BB6003BD8A6 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88A67BE28E95BB6003BD8A6 /* UserViewModel.swift */; };
 		F88CEFC3292C9D5800EF0EE0 /* ExtensionClass.js in Resources */ = {isa = PBXBuildFile; fileRef = F88CEFC2292C9D5800EF0EE0 /* ExtensionClass.js */; };
 		F88E3FEC28EEB4FD002A6385 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F88E3FEB28EEB4FD002A6385 /* KakaoSDKAuth */; };
@@ -36,6 +37,8 @@
 		F8A276192945AC5F00E5209F /* NewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A276172945A9FC00E5209F /* NewData.swift */; };
 		F8A2761B2945B57900E5209F /* NewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A2761A2945B57900E5209F /* NewData.swift */; };
 		F8A8972728D2F531006CEC60 /* MoveCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A8972628D2F531006CEC60 /* MoveCategoryView.swift */; };
+		F8ADA2DB29668B95001FC2C8 /* SignInWithAppleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8ADA2DA29668B95001FC2C8 /* SignInWithAppleDelegate.swift */; };
+		F8ADA2DD2966923D001FC2C8 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8ADA2DC2966923D001FC2C8 /* Keychain.swift */; };
 		F8B46C83294EF7EC003CB359 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B46C82294EF7EC003CB359 /* APIService.swift */; };
 		F8CFE8FB28FD508C005DB6F5 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */; };
 		F8CFE8FE28FD8D9F005DB6F5 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */; };
@@ -82,6 +85,7 @@
 		F8740C2328C99954009D6F8C /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
 		F8740C2728C99EB0009D6F8C /* SubHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubHomeView.swift; sourceTree = "<group>"; };
 		F8740C2928C9BD63009D6F8C /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
+		F87B1DC62963EB92000B2331 /* SignInWithApple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithApple.swift; sourceTree = "<group>"; };
 		F88A67BE28E95BB6003BD8A6 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		F88CEFC2292C9D5800EF0EE0 /* ExtensionClass.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ExtensionClass.js; sourceTree = "<group>"; };
 		F88E3FF128EEB538002A6385 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -103,6 +107,8 @@
 		F8A798B9290A612100FDD29D /* Scrap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Scrap.entitlements; sourceTree = "<group>"; };
 		F8A798BA290A61BD00FDD29D /* Share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Share.entitlements; sourceTree = "<group>"; };
 		F8A8972628D2F531006CEC60 /* MoveCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveCategoryView.swift; sourceTree = "<group>"; };
+		F8ADA2DA29668B95001FC2C8 /* SignInWithAppleDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleDelegate.swift; sourceTree = "<group>"; };
+		F8ADA2DC2966923D001FC2C8 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		F8B46C82294EF7EC003CB359 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
@@ -181,6 +187,8 @@
 				F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */,
 				F88E7E3728C5CDDC00C3CCA8 /* Preview Content */,
 				F8FC83B02956FAD500453EDD /* Launch Screen.storyboard */,
+				F8ADA2DA29668B95001FC2C8 /* SignInWithAppleDelegate.swift */,
+				F8ADA2DC2966923D001FC2C8 /* Keychain.swift */,
 			);
 			path = Scrap;
 			sourceTree = "<group>";
@@ -203,6 +211,7 @@
 				F8740C2328C99954009D6F8C /* SideMenuView.swift */,
 				F8740C2728C99EB0009D6F8C /* SubHomeView.swift */,
 				F8740C2928C9BD63009D6F8C /* MyPageView.swift */,
+				F87B1DC62963EB92000B2331 /* SignInWithApple.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -379,14 +388,17 @@
 				F88F6D4B292B0E8700F34D59 /* CategorySheetView.swift in Sources */,
 				F84C51CC28E58D0A00E5DECD /* ScrapViewModel.swift in Sources */,
 				F8740C2228C988E1009D6F8C /* PageView.swift in Sources */,
+				F8ADA2DB29668B95001FC2C8 /* SignInWithAppleDelegate.swift in Sources */,
 				F84C51CA28E5619300E5DECD /* UserResponse.swift in Sources */,
 				F8A8972728D2F531006CEC60 /* MoveCategoryView.swift in Sources */,
 				F88E7E3428C5CDDB00C3CCA8 /* LoginView.swift in Sources */,
 				F89BED8D28C5FC680053D406 /* MainHomeView.swift in Sources */,
 				F8740C2A28C9BD63009D6F8C /* MyPageView.swift in Sources */,
 				F89BED8828C5F1EE0053D406 /* SignUpView.swift in Sources */,
+				F8ADA2DD2966923D001FC2C8 /* Keychain.swift in Sources */,
 				F8D4A2072939F45000BAE93D /* APIErrors.swift in Sources */,
 				F8740C2828C99EB0009D6F8C /* SubHomeView.swift in Sources */,
+				F87B1DC72963EB92000B2331 /* SignInWithApple.swift in Sources */,
 				F88A67BF28E95BB6003BD8A6 /* UserViewModel.swift in Sources */,
 				F87109F628E3327F009AFA8F /* DataResponse.swift in Sources */,
 				F8F8F950292E06140058FA75 /* DataSheetView.swift in Sources */,

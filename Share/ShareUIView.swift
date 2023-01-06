@@ -43,34 +43,26 @@ struct CategoryResponseInShare: Decodable{
 
 //카테고리 조회하기 -> userdefaults에 저장된 idx로 조회해야됨
 class CategoryViewModel: ObservableObject{ //감시할 data model
+    private var service = APIService()
     @Published var categoryList = CategoryResponseInShare(code: 0, message: "",result: CategoryResponseInShare.Result(categories: [CategoryResponseInShare.CategoryInShare(categoryId: 0, name: "", numOfLink: 0, order: 0)]))
     
     func getCategoryDataInShare(userIndex: Int){
-        print("user index : \(userIndex)")
         guard let url = URL(string: "https://scrap.hana-umc.shop/category/all?id=\(userIndex)") else {
             print("invalid url")
             return
         }
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            do{
-                if let response = response as? HTTPURLResponse {
-                    print(response.statusCode)
-                }
-                if let data = data {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(CategoryResponseInShare.self, from: data)
-                    DispatchQueue.main.async {
-                        self.categoryList = result
-                    }
+        service.getCategoryListCompletionHandler(baseUrl: url) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let result):
                     print(result)
-                } else {
-                    print("no data")
+                    self.categoryList = result
+                    break
                 }
-            }catch (let error){
-                print("error")
-                print(String(describing: error))
             }
-        }.resume()
+        }
     }
 }
 
@@ -80,7 +72,7 @@ class CategoryIDDelegate: ObservableObject {
 
 struct ShareUIView: View {
     @Environment(\.colorScheme) var scheme //Light/Dark mode
-    @ObservedObject var delegate : CategoryIDDelegate
+    @StateObject var delegate : CategoryIDDelegate
     @StateObject var vm = CategoryViewModel()
     let selectedColor_dark = Color(red: 32/255, green: 32/255, blue: 32/255)
     let selectedColor_light = Color(red: 217/255, green: 217/255, blue: 217/255)

@@ -151,28 +151,45 @@ struct LoginView: View {
                     }
                     .frame(width: UIScreen.main.bounds.width / 1.5)
                     .padding(.bottom, 10)
-                    Button(action: { //kakao login button
-                        if (UserApi.isKakaoTalkLoginAvailable()) {
-                            UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
-                                if let oauthToken = oauthToken {
-                                    userVM.postKaKaoLogin(accessToken: oauthToken.accessToken, refreshToken: oauthToken.refreshToken, autoLogin: keepLogin)
-                                } else {
-                                    print(String(describing: error))
+                    VStack{
+                        Button(action: { //kakao login button
+                            if (UserApi.isKakaoTalkLoginAvailable()) {
+                                UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+                                    if let oauthToken = oauthToken {
+                                        userVM.postKaKaoLogin(accessToken: oauthToken.accessToken, refreshToken: oauthToken.refreshToken)
+                                    } else {
+                                        print(String(describing: error))
+                                    }
+                                }
+                            } else {
+                                UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
+                                    if let oauthToken = oauthToken {
+                                        userVM.postKaKaoLogin(accessToken: oauthToken.accessToken, refreshToken: oauthToken.refreshToken)
+                                    } else {
+                                        print(String(describing: error))
+                                    }
                                 }
                             }
-                        } else {
-                            UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
-                                if let oauthToken = oauthToken {
-                                    userVM.postKaKaoLogin(accessToken: oauthToken.accessToken, refreshToken: oauthToken.refreshToken, autoLogin: keepLogin)
-                                } else {
-                                    print(String(describing: error))
+                        }) {
+                            ZStack{
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color(red: 254/255, green: 229/255, blue: 0/255))
+                                    .frame(width: UIScreen.main.bounds.width / 1.5, height: 40, alignment: .center)
+                                HStack(spacing: 2){
+                                    Image("kakao_icon")
+                                        .resizable()
+                                        .frame(width: 20, height: 18)
+                                    Text("카카오 로그인")
+                                        .font(.system(size: 14, weight: .regular))
+                                        .foregroundColor(.black)
+                                        .background(Color(red: 254/255, green: 229/255, blue: 0/255))
+                                    
                                 }
                             }
                         }
-                    }) {
-                        Image("kakao_login_large_narrow")
-                            .resizable()
-                            .frame(width: UIScreen.main.bounds.width / 1.8, height: 52, alignment: .center)
+                        SignInWithApple()
+                            .frame(width: UIScreen.main.bounds.width / 1.5, height: 40, alignment: .center)
+                            .onTapGesture(perform: userVM.appleLogin)
                     }
                 }
                 NavigationLink(destination: SignUpView(goToSignUpView: $goToSignUpView), isActive: $goToSignUpView){
