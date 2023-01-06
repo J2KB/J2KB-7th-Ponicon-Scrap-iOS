@@ -12,13 +12,18 @@ struct MyPageView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var userVM : UserViewModel
     @State private var iconList = ["camping", "circus", "classical", "compass", "palette", "rocket", "ufo"]
-
+    @State private var reallyWithDrawal = false
     @Binding var userData : UserResponse.Result
     @Binding var isShowingMyPage : Bool
     
     var isKakaoLogin : Bool {
         return !userData.username.contains(where: {$0.isLetter})
     }
+    
+    var isAppleLogin: Bool {
+        return userData.username.contains(where: {$0 == "."})
+    }
+    
     /*userVM.iconIdx*/
     var body: some View {
         NavigationView {
@@ -34,7 +39,7 @@ struct MyPageView: View {
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(Color("basic_text"))
                                 .frame(width: UIScreen.main.bounds.width / 1.5, height: 30, alignment: .leading)
-                            Text(isKakaoLogin ? "" : "\(userData.username)")
+                            Text(isKakaoLogin || isAppleLogin ? "" : "\(userData.username)")
                                 .font(.system(size: 12, weight: .regular))
                                 .foregroundColor(.gray_bold)
                                 .frame(width: UIScreen.main.bounds.width / 1.5, alignment: .leading)
@@ -70,8 +75,7 @@ struct MyPageView: View {
                             .overlay(.black)
                             .frame(height: 16)
                         Button(action:{
-                            userVM.acccountWithdrawal() //📡 WithDrawal API
-                            isShowingMyPage = true
+                            self.reallyWithDrawal = true
                         }){
                             Text("회원탈퇴")
                                 .underline()
@@ -104,6 +108,13 @@ struct MyPageView: View {
                 }
             }
         }
+        .alert("회원 탈퇴하시겠습니까?", isPresented: $reallyWithDrawal, actions: {
+            Button("취소", role: .cancel) {}
+            Button("탈퇴", role: .destructive) {
+                userVM.acccountWithdrawal() //📡 WithDrawal API
+                isShowingMyPage = true
+            }
+        })
         .gesture(DragGesture().onEnded({
             if $0.translation.width > 100 {
                 withAnimation(.easeInOut) {
