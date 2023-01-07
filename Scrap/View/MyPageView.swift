@@ -24,13 +24,12 @@ struct MyPageView: View {
         return userData.username.contains(where: {$0 == "."})
     }
     
-    /*userVM.iconIdx*/
     var body: some View {
         NavigationView {
             VStack(spacing: 40){
                 VStack{
                     HStack(spacing: 10){
-                        Image("\(iconList[0])")
+                        Image("\(iconList[userVM.iconIdx])")
                             .resizable()
                             .frame(width: 70, height: 70)
                         VStack(spacing: 8){

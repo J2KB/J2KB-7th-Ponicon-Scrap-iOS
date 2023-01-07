@@ -48,7 +48,7 @@ struct SideMenuView: View {
             VStack(spacing: -2){
                 //HEADER
                 HStack{
-                    HStack(spacing: 16){
+                    HStack(spacing: 4){
                         Button(action: {
                             if !isAddingCategory {
                                 withAnimation(.spring()){
@@ -56,10 +56,13 @@ struct SideMenuView: View {
                                 }
                             }
                         }){
-                            Image(systemName: "chevron.backward")
-                                .resizable()
-                                .frame(width: 10, height: 16)
-                                .foregroundColor(Color("basic_text"))
+                            ZStack {
+                                Image(systemName: "chevron.backward")
+                                    .resizable()
+                                    .frame(width: 12, height: 18)
+                                    .foregroundColor(Color("basic_text"))
+                            }
+                            .frame(width: 28, height: 28)
                         }
                         Text("카테고리")
                             .font(.system(size: 18, weight: .semibold))
@@ -70,10 +73,13 @@ struct SideMenuView: View {
                     Button(action: { //새로운 카테고리 추가 버튼
                         self.isAddingCategory = true
                     }){
-                        Image(systemName: "plus")
-                            .resizable()
-                            .frame(width: 16, height: 16)
-                            .foregroundColor(Color("basic_text"))
+                        ZStack {
+                            Image(systemName: "plus")
+                                .resizable()
+                                .frame(width: 18, height: 18)
+                                .foregroundColor(Color("basic_text"))
+                        }
+                        .frame(width: 28, height: 28)
                     }
                     .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 2))
                 }//Header HStack
@@ -89,11 +95,11 @@ struct SideMenuView: View {
                                 ZStack {
                                     HStack{ //모든 자료, 분류되지 않은 자료
                                         Text(category.name)
-                                            .font(.system(size: 16))
+                                            .font(.system(size: 18))
                                             .foregroundColor(Color("basic_text"))
                                             .frame(width: UIScreen.main.bounds.width - 120, alignment: .leading)
                                         Text("\(category.numOfLink)")
-                                            .font(.system(size: 16))
+                                            .font(.system(size: 18))
                                             .foregroundColor(Color("basic_text"))
                                             .frame(width: 30, alignment: .trailing)
                                     }
@@ -109,7 +115,7 @@ struct SideMenuView: View {
                                         }
                                     }) {
                                         Rectangle()
-                                            .frame(width: UIScreen.main.bounds.width - 60)
+                                            .frame(width: UIScreen.main.bounds.width - 70)
                                             .opacity(0)
                                     }
                                 }

@@ -34,11 +34,11 @@ struct CategoryRow: View {
         HStack{
             HStack{
                 Text(title)
-                    .font(.system(size: 16))
+                    .font(.system(size: 18))
                     .foregroundColor(Color("basic_text"))
                     .frame(width: UIScreen.main.bounds.width - 120, alignment: .leading)
                 Text("\(category.numOfLink)")
-                    .font(.system(size: 16))
+                    .font(.system(size: 18))
                     .foregroundColor(Color("basic_text"))
                     .frame(width: 30, alignment: .trailing)
             }

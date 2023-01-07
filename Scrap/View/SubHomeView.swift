@@ -57,29 +57,35 @@ struct SubHomeView: View {
             RefreshableScrollView {
                 VStack{
                     ScrollView(.vertical, showsIndicators: false){
-                        HStack{
+                        HStack(spacing: 2){
                             Button(action: {
                                 if !isPresentDataModalSheet { //카테고리 더보기 sheet가 열려있으면 배경 버튼 비활성화
                                     self.isOneColumnData.toggle()
                                 }
                             }){
-                                Image(systemName: isOneColumnData ? "square.grid.2x2.fill" : "line.3.horizontal")
-                                    .resizable()
-                                    .frame(width: 16, height: isOneColumnData ? 16 : 12)
-                                    .foregroundColor(.gray)
+                                ZStack {
+                                    Image(systemName: isOneColumnData ? "square.grid.2x2.fill" : "line.3.horizontal")
+                                        .resizable()
+                                        .frame(width: 16, height: isOneColumnData ? 16 : 12)
+                                        .foregroundColor(.gray)
+                                }
+                                .frame(width: 24, height: 24)
                             }
                             Text(isDataRecentOrder ? "최신순" : "오래된 순") //정렬 순서에 따라 달라짐 (최신순/오래된순)
-                                .font(.system(size: 14))
+                                .font(.system(size: 16))
                                 .foregroundColor(.gray)
                             Button(action: {
                                 if !isPresentDataModalSheet { //카테고리더보기sheet가 열려있으면 배경 버튼 비활성화
                                     self.isDataRecentOrder.toggle()
                                 }
                             }){
-                                Image(systemName: "arrow.up.arrow.down")
-                                    .resizable()
-                                    .frame(width: 16, height: 16)
-                                    .foregroundColor(.gray)
+                                ZStack {
+                                    Image(systemName: "arrow.up.arrow.down")
+                                        .resizable()
+                                        .frame(width: 16, height: 16)
+                                        .foregroundColor(.gray)
+                                }
+                                .frame(width: 24, height: 24)
                             }
                         }
                         .frame(width: UIScreen.main.bounds.width - 32, height: 40, alignment: .trailing)

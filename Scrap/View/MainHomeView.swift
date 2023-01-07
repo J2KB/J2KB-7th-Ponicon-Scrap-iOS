@@ -5,9 +5,6 @@
 //  Created by 김영선 on 2022/09/05.
 //
 
-//로그인이 된 상태라면, 앱의 처음 시작은 HomeView
-//사용자가 저장한 자료를 보거나 수정, 삭제할 수 있는 공간
-
 import SwiftUI
 
 struct MainHomeView: View {
@@ -37,10 +34,13 @@ struct MainHomeView: View {
                                         }
                                     }
                                 }) {
-                                    Image(systemName: "line.3.horizontal")
-                                        .resizable()
-                                        .frame(width: 20, height: 14)
-                                        .foregroundColor(Color("basic_text"))
+                                    ZStack {
+                                        Image(systemName: "line.3.horizontal")
+                                            .resizable()
+                                            .frame(width: 22, height: 16)
+                                            .foregroundColor(Color("basic_text"))
+                                    }
+                                    .frame(width: 36, height: 30)
                                 }
                                 Text(categoryTitle)
                                     .fontWeight(.bold)
@@ -57,8 +57,13 @@ struct MainHomeView: View {
                                             self.isShowingMyPageView.toggle()
                                         }
                                     }) {
-                                        Image(systemName: "person.circle")
-                                            .foregroundColor(Color("basic_text"))
+                                        ZStack {
+                                            Image(systemName: "person.circle")
+                                                .resizable()
+                                                .frame(width: 22, height: 22)
+                                                .foregroundColor(Color("basic_text"))
+                                        }
+                                        .frame(width: 36, height: 30)
                                     }
                                 }
                             }

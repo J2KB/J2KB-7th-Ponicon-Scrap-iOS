@@ -150,7 +150,7 @@ struct LoginView: View {
                             .foregroundColor(.gray_sub)
                     }
                     .frame(width: UIScreen.main.bounds.width / 1.5)
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 20)
                     VStack{
                         Button(action: { //kakao login button
                             if (UserApi.isKakaoTalkLoginAvailable()) {
@@ -180,7 +180,7 @@ struct LoginView: View {
                                         .resizable()
                                         .frame(width: 20, height: 18)
                                     Text("카카오 로그인")
-                                        .font(.system(size: 14, weight: .regular))
+                                        .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(.black)
                                         .background(Color(red: 254/255, green: 229/255, blue: 0/255))
                                     
