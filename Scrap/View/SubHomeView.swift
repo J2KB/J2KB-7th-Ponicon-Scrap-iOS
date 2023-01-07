@@ -101,6 +101,7 @@ struct SubHomeView: View {
                             }
                         } //LAZYGRID
                         .padding(.horizontal, 12)
+                        .padding(.vertical, 10)
                     }//ScrollView
                     NavigationLink(destination: MoveCategoryView(isShowMovingCategoryView: $isShowMovingCategory, categoryList: $scrapVM.categoryList.result, data: $detailData, currentCategoryId: $currentCategoryId).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory) { EmptyView() }
                         .opacity(0)
