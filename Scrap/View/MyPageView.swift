@@ -11,18 +11,10 @@ import KakaoSDKUser
 struct MyPageView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var userVM : UserViewModel
-    @State private var iconList = ["camping", "circus", "classical", "compass", "palette", "rocket", "ufo"]
+    @State private var iconList = ["tiger", "dog", "cat", "fox", "mouse", "rabbit", "bear"]
     @State private var reallyWithDrawal = false
     @Binding var userData : UserResponse.Result
     @Binding var isShowingMyPage : Bool
-    
-    var isKakaoLogin : Bool {
-        return !userData.username.contains(where: {$0.isLetter})
-    }
-    
-    var isAppleLogin: Bool {
-        return userData.username.contains(where: {$0 == "."})
-    }
     
     var body: some View {
         NavigationView {
@@ -38,7 +30,7 @@ struct MyPageView: View {
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(Color("basic_text"))
                                 .frame(width: UIScreen.main.bounds.width / 1.5, height: 30, alignment: .leading)
-                            Text(isKakaoLogin || isAppleLogin ? "" : "\(userData.username)")
+                            Text(userVM.loginType != .email ? "" : "\(userData.username)")
                                 .font(.system(size: 12, weight: .regular))
                                 .foregroundColor(.gray_bold)
                                 .frame(width: UIScreen.main.bounds.width / 1.5, alignment: .leading)
@@ -53,7 +45,7 @@ struct MyPageView: View {
                     Spacer()
                     HStack(spacing: 10) {
                         Button(action:{
-                            if isKakaoLogin {
+                            if userVM.loginType == .kakao {
                                 UserApi.shared.logout {(error) in
                                     if let error = error { print(error) }
                                     else { print("logout() success.") }
@@ -111,6 +103,8 @@ struct MyPageView: View {
             Button("취소", role: .cancel) {}
             Button("탈퇴", role: .destructive) {
                 userVM.acccountWithdrawal() //📡 WithDrawal API
+                userVM.loginState = false
+                userVM.userIndex = 0
                 isShowingMyPage = true
             }
         })

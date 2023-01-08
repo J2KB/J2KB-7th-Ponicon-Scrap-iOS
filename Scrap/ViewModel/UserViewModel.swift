@@ -8,6 +8,10 @@
 import Foundation
 import AuthenticationServices
 
+enum LoginType {
+    case email, kakao, apple, none
+}
+
 class UserViewModel: ObservableObject{
     @Published var appleSignInDelegate: SignInWithAppleDelegate! = nil
     @Published var loginState = false               //로그인 상태 변수
@@ -15,6 +19,7 @@ class UserViewModel: ObservableObject{
     @Published var userIndex = 0                    //initial value    //사용자 idx
     @Published var iconIdx = 0                      //initial value    //사용자 아이콘 idx
     @Published var duplicateMessage = 9             //이메일 중복 상태 변수
+    @Published var loginType = LoginType.none
     private let service = APIService()
     private let baseUrl = "https://scrap.hana-umc.shop/user"
     private let decoder = JSONDecoder()
@@ -62,6 +67,7 @@ class UserViewModel: ObservableObject{
                             self.loginState = true
                             self.userIndex = result.result.id //이번 런칭에서 사용할 idx data (일회용)
                             self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
+                            self.loginType = .email
                             if autoLogin { //autoLogin일 때만 저장
                                 UserDefaults(suiteName: "group.com.thk.Scrap")?.set(result.result.id, forKey: "ID")
                                 UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx")
@@ -104,6 +110,7 @@ class UserViewModel: ObservableObject{
                     self.userIndex = result.result.id //이번 런칭에서 사용할 idx data (일회용)
                     self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
                     self.loginState = true
+                    self.loginType = .kakao
                     UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.userIndex, forKey: "ID")
                     UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx")
                     print(result)
@@ -124,6 +131,7 @@ class UserViewModel: ObservableObject{
                 self.userIndex = result!.result.id //이번 런칭에서 사용할 idx data (일회용)
                 self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
                 self.loginState = true
+                self.loginType = .apple
                 UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.userIndex, forKey: "ID")
                 UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx")
             } else {
@@ -194,19 +202,24 @@ class UserViewModel: ObservableObject{
             print("invalid url")
             return
         }
-        service.fetchData(NoResultModel.self, baseUrl: url, completionHandler: { result in
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        
+        service.requestTask(NoResultModel.self, withRequest: request) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .failure(let error):
                     print(error)
-                case .success(_):
+                case .success(let result):
                     UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "ID")
                     self.userIndex = 0
                     UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "iconIdx")
                     self.iconIdx = 0
+                    print(result)
                 }
             }
-        })
+        }
     }
     
     // MARK: 이메일 중복 확인

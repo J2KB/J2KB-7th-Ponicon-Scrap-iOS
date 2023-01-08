@@ -8,6 +8,8 @@
 import SwiftUI
 import KakaoSDKUser
 
+
+
 struct LoginView: View {
     @EnvironmentObject var userVM : UserViewModel
     @EnvironmentObject var scrapVM : ScrapViewModel

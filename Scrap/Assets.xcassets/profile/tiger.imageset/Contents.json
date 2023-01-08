@@ -1,15 +1,17 @@
 {
   "images" : [
     {
+      "filename" : "호랑이.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "호랑이-2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "profile=Artist palette.png",
+      "filename" : "호랑이-3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

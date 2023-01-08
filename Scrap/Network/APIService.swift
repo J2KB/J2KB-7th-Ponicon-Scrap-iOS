@@ -17,6 +17,7 @@ class APIService {
         
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error as? URLError {
+                print(error)
                 completion(Result.failure(APIErrors.url(error)))
             }else if let httpResponse = response as? HTTPURLResponse,
                      !(200..<300).contains(httpResponse.statusCode) {
@@ -26,6 +27,7 @@ class APIService {
                     let result = try JSONDecoder().decode(type, from: data)
                     completion(Result.success(result))
                 }catch let error {
+                    print(error)
                     completion(Result.failure(APIErrors.parsingError(error as? DecodingError)))
                 }
             }

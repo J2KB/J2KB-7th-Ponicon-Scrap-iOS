@@ -1,15 +1,17 @@
 {
   "images" : [
     {
+      "filename" : "쥐.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "쥐-2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Camping.png",
+      "filename" : "쥐-3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

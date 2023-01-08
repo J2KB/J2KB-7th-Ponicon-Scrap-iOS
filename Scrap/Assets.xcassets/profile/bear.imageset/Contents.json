@@ -1,15 +1,17 @@
 {
   "images" : [
     {
+      "filename" : "곰.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "곰-3.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "ClassicalBuilding.png",
+      "filename" : "곰-2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
