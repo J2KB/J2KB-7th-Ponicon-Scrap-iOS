@@ -13,6 +13,8 @@ import KakaoSDKUser
 struct LoginView: View {
     @EnvironmentObject var userVM : UserViewModel
     @EnvironmentObject var scrapVM : ScrapViewModel
+    @FocusState private var isFocused: Bool
+    
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showPassword = false //비밀번호 visible, invisible
@@ -29,22 +31,24 @@ struct LoginView: View {
                             .foregroundColor(Color("basic_text"))
                             .multilineTextAlignment(.center)
                             .padding(.top, UIScreen.main.bounds.height / 40)
-                        VStack(spacing: 16){ // id/pw textfield
+                        VStack(spacing: 16){
                             TextField("이메일", text: $email)
-                                .textInputAutocapitalization(.never)                //자동 대문자 비활성화
-                                .disableAutocorrection(true)                        //자동 수정 비활성화
+                                .focused($isFocused)
+                                .textInputAutocapitalization(.never)
+                                .disableAutocorrection(true)
                                 .frame(width: UIScreen.main.bounds.width / 1.5 - 24, height: 38)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 8)
                                         .stroke(Color("gray_sub"))
                                         .frame(width: UIScreen.main.bounds.width / 1.5, height: 40, alignment: .center)
                                 )
-                            HStack{ //password textfield
+                            HStack{
                                 if showPassword {
                                     HStack(spacing: -1){
                                         TextField("비밀번호", text: $password)
-                                            .textInputAutocapitalization(.never) //자동 대문자 비활성화
-                                            .disableAutocorrection(true) //자동 수정 비활성화
+                                            .focused($isFocused)
+                                            .textInputAutocapitalization(.never)
+                                            .disableAutocorrection(true)
                                             .frame(width: UIScreen.main.bounds.width / 1.5 - 60, height: 38)
                                         Button(action: {
                                             self.showPassword.toggle()
@@ -65,8 +69,9 @@ struct LoginView: View {
                                 else {
                                     HStack(spacing: -1){
                                         SecureField("비밀번호", text: $password)
-                                            .textInputAutocapitalization(.never) //자동 대문자 비활성화
-                                            .disableAutocorrection(true) //자동 수정 비활성화
+                                            .focused($isFocused)
+                                            .textInputAutocapitalization(.never)
+                                            .disableAutocorrection(true)
                                             .frame(width: UIScreen.main.bounds.width / 1.5 - 60, height: 38)
                                         Button(action: {
                                             self.showPassword.toggle()
@@ -126,6 +131,7 @@ struct LoginView: View {
                 }
                 VStack(spacing: 10){ //Buttons
                     Button(action:{
+                        isFocused = false
                         userVM.postLogin(email: email, password: password, autoLogin: keepLogin) //📡 LogIn API
                         email = ""
                         password = ""
