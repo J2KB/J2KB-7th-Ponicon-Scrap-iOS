@@ -25,7 +25,7 @@ class UserViewModel: ObservableObject{
     private let decoder = JSONDecoder()
     
     // MARK: 로그인
-    func postLogin(email: String, password: String, autoLogin: Bool){
+    func postLogin(email: String, password: String){
         guard let url = URL(string: "\(baseUrl)/login") else {
             print("invalid url")
             return
@@ -33,8 +33,7 @@ class UserViewModel: ObservableObject{
         
         let email = email
         let pw = password
-        let autoLogin = autoLogin
-        let body: [String: Any] = ["email": email, "password": pw, "autoLogin": autoLogin]
+        let body: [String: Any] = ["email": email, "password": pw, "autoLogin": true]
         let finalData = try! JSONSerialization.data(withJSONObject: body)
 
         var request = URLRequest(url: url)
@@ -68,10 +67,8 @@ class UserViewModel: ObservableObject{
                             self.userIndex = result.result.id //이번 런칭에서 사용할 idx data (일회용)
                             self.iconIdx = Int.random(in: 0...6) //random으로 icon idx 생성하기
                             self.loginType = .email
-                            if autoLogin { //autoLogin일 때만 저장
-                                UserDefaults(suiteName: "group.com.thk.Scrap")?.set(result.result.id, forKey: "ID")
-                                UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx")
-                            }
+                            UserDefaults(suiteName: "group.com.thk.Scrap")?.set(result.result.id, forKey: "ID")
+                            UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx")
                         } catch let error {
                             print("error")
                             print(String(describing: error))

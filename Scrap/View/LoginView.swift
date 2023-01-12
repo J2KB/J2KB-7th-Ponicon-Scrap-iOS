@@ -8,8 +8,6 @@
 import SwiftUI
 import KakaoSDKUser
 
-
-
 struct LoginView: View {
     @EnvironmentObject var userVM : UserViewModel
     @EnvironmentObject var scrapVM : ScrapViewModel
@@ -18,7 +16,6 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showPassword = false //비밀번호 visible, invisible
-    @State private var keepLogin = false
     @State private var goToSignUpView = false
     
     var body: some View {
@@ -92,47 +89,20 @@ struct LoginView: View {
                             }
                         }
                     }
-                    VStack(spacing: 4){ //로그인 유지 체크 박스
-                        if !userVM.loginState { //로그인 실패 -> 에러 메세지
+                    if !userVM.loginState { //로그인 실패 -> 에러 메세지
                             Text(userVM.loginToastMessage) //관련 에러 메세지 출력되도록
-                                .font(.caption)
-                                .foregroundColor(.red_error)
-                                .lineLimit(1)
-                                .padding(.leading, 4)
-                                .frame(width: UIScreen.main.bounds.width / 1.5, height: 10, alignment: .leading)
-                        }
-                        Button(action: { //자동 로그인 체크박스 버튼
-                            self.keepLogin.toggle()
-                        }) {
-                            if keepLogin {
-                                HStack(spacing: 5){
-                                    Image(systemName: "checkmark.square.fill")
-                                        .resizable()
-                                        .frame(width: 12, height: 12)
-                                        .foregroundColor(Color("basic_text"))
-                                    Text("자동 로그인")
-                                        .font(.system(size: 12, weight: .regular))
-                                        .foregroundColor(Color("basic_text"))
-                                }
-                            }else{
-                                HStack(spacing: 5){
-                                    Image(systemName: "square")
-                                        .resizable()
-                                        .frame(width: 12, height: 12)
-                                        .foregroundColor(Color("basic_text"))
-                                    Text("자동 로그인")
-                                        .font(.system(size: 12, weight: .regular))
-                                        .foregroundColor(Color("basic_text"))
-                                }
-                            }
-                        }
-                        .frame(width: UIScreen.main.bounds.width / 1.5, height: 12, alignment: .trailing)
+                            .font(.caption)
+                            .foregroundColor(.red_error)
+                            .lineLimit(1)
+                            .padding(.leading, 4)
+                            .padding(.bottom, 8)
+                            .frame(width: UIScreen.main.bounds.width / 1.5, height: 4, alignment: .leading)
                     }
                 }
                 VStack(spacing: 10){ //Buttons
                     Button(action:{
                         isFocused = false
-                        userVM.postLogin(email: email, password: password, autoLogin: keepLogin) //📡 LogIn API
+                        userVM.postLogin(email: email, password: password) //📡 LogIn API
                         email = ""
                         password = ""
                     }){

@@ -42,12 +42,12 @@ class ShareViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard userIndex != 0 else {
-            self.openMainApp()
-            self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
-            return
+        if userIndex != 0 {
+            configureNavigationBar()
+        }else {
+            configureNavigationBarForLogin()
         }
-        configureNavBar()
+        
         let delegate = CategoryIDDelegate()
         let childView = UIHostingController(rootView: ShareUIView(delegate: delegate))
         self.addChild(childView)
@@ -60,26 +60,14 @@ class ShareViewController: UIViewController{
         }
     }
     
-    @objc func openURL(_ url: URL) -> Bool { //create custom OpenURL
-        var responder : UIResponder? = self
-        while responder != nil {
-            if let application = responder as? UIApplication {
-                return application.perform(#selector(openURL(_:)), with: url) != nil
-            }
-            responder = responder?.next
-        }
-        return false
-    }
-
-    private func openMainApp() { //open the containing app
-        self.extensionContext?.completeRequest(returningItems: nil, completionHandler: { _ in
-            guard let url = URL(string: self.appURLString) else { return }
-            _ = self.openURL(url)
-        })
+    private func configureNavigationBarForLogin() {
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(cancelAction))
+        self.navigationItem.setRightBarButton(doneButton, animated: false)
+        self.navigationItem.rightBarButtonItem?.tintColor = .systemBlue
     }
     
     //set the title and the navigation items
-    private func configureNavBar(){
+    private func configureNavigationBar(){
         self.navigationItem.title = "자료 저장"
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelAction))
         self.navigationItem.setLeftBarButton(cancelButton, animated: false)

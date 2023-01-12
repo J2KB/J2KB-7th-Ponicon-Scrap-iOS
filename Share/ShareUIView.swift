@@ -81,30 +81,45 @@ struct ShareUIView: View {
     private let userIndex = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") //user id 가져오기
 
     var body: some View {
-        List{
-            ForEach($vm.categoryList.result.categories){ $category in
-                if category.order != 0 { //모든 자료는 제외
-                    ZStack{
-                        Text(category.name)
-                            .foregroundColor(scheme == .light ? .black : .white)
-                            .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
-                        Button(action: {
-                            self.selected = category.categoryId
-                            self.delegate.categoryID = category.categoryId
-                        }) {
-                            Rectangle()
-                                .frame(width: UIScreen.main.bounds.width - 20)
-                                .opacity(0)
+        if userIndex == 0 { //로그인 안되어있으면
+            VStack{
+                Image("scrap")
+                    .cornerRadius(14)
+                    .padding(12)
+                Text("Scrap 에 로그인 해주세요!")
+                Divider()
+                    .frame(width: UIScreen.main.bounds.width / 2)
+                    .padding(.bottom, 10)
+                Text("로그인 후 링크를 저장하실 수 있습니다.")
+                    .font(.caption)
+            }
+            .padding(.bottom, 60)
+        } else {
+            List{
+                ForEach($vm.categoryList.result.categories){ $category in
+                    if category.order != 0 { //모든 자료는 제외
+                        ZStack{
+                            Text(category.name)
+                                .foregroundColor(scheme == .light ? .black : .white)
+                                .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
+                            Button(action: {
+                                self.selected = category.categoryId
+                                self.delegate.categoryID = category.categoryId
+                            }) {
+                                Rectangle()
+                                    .frame(width: UIScreen.main.bounds.width - 20)
+                                    .opacity(0)
+                            }
                         }
+                        .listRowBackground(self.selected == category.categoryId ? scheme == .light ? selectedColor_light : selectedColor_dark : .none)
                     }
-                    .listRowBackground(self.selected == category.categoryId ? scheme == .light ? selectedColor_light : selectedColor_dark : .none)
                 }
             }
-        }
-        .listStyle(InsetListStyle())
-        .onAppear{
-            print("user idx: \(self.userIndex!)")
-            vm.getCategoryDataInShare(userIndex: self.userIndex!)
+            .listStyle(InsetListStyle())
+            .onAppear{
+                print("user idx: \(self.userIndex!)")
+                vm.getCategoryDataInShare(userIndex: self.userIndex!)
+            }
         }
     }
 }

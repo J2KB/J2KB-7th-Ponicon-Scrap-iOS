@@ -14,10 +14,11 @@ enum Field {
 }
 
 struct SignUpView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode> //MARK: - pop to Login View
+    //MARK: - pop to Login View
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var userVM : UserViewModel
     
-    @State private var checkSignUpInfomation = [9,9,9,9]
+    @State private var checkSignUpInfomation = [1,3,5,8]
     @State private var username = ""
     @State private var email = ""
     @State private var password = ""
@@ -39,7 +40,7 @@ struct SignUpView: View {
                                           5: "비밀번호를 입력하세요",
                                           6: "5~16자의 영문/숫자를 포함해야 합니다",
                                           7: "비밀번호와 일치하지 않습니다",
-                                          8: "비밀번호 확인을 입력하세요",
+                                          8: "비밀번호를 확인해주세요",
                                           9: "",
                                           10: "사용 가능한 이메일입니다",
                                           11: "비밀번호가 일치합니다",
@@ -93,7 +94,7 @@ struct SignUpView: View {
                             Text(toastMessages[checkSignUpInfomation[0]]!) //관련 에러 메세지 따로 출력되도록
                                 .font(.caption)
                                 .foregroundColor(.red_error)
-                                .frame(width: UIScreen.main.bounds.width / 1.2, alignment: .leading)
+                                .frame(width: UIScreen.main.bounds.width / 1.23, alignment: .leading)
                         }
                     }
                     VStack{ //이메일 입력창
@@ -115,7 +116,7 @@ struct SignUpView: View {
                                         isValidEmail(email: email)
                                         isEmailDuplicationChecking = false
                                     }
-                                    .frame(width: UIScreen.main.bounds.width / 1.55, height: 28, alignment: .leading)
+                                    .frame(width: UIScreen.main.bounds.width / 1.54, height: 28, alignment: .leading)
                                 //MARK: - 이메일 중복 확인 버튼
                                 Button(action: {
                                     userVM.checkDuplication(email: email) //📡 이메일 중복 확인 api 통신
@@ -137,7 +138,7 @@ struct SignUpView: View {
                         Text(isEmailDuplicationChecking ? toastMessages[checkDuplicatedEmail]! : toastMessages[checkSignUpInfomation[1]]!) //관련 에러 메세지 따로 출력되도록
                             .font(.caption)
                             .foregroundColor(isEmailDuplicationChecking && checkDuplicatedEmail == 10 ? .main_accent : .red_error)
-                            .frame(width: UIScreen.main.bounds.width / 1.2, alignment: .leading)
+                            .frame(width: UIScreen.main.bounds.width / 1.23, alignment: .leading)
                     }
                     VStack{ //비밀번호 입력창
                         HStack{
@@ -167,7 +168,7 @@ struct SignUpView: View {
                         Text(toastMessages[checkSignUpInfomation[2]]!) //관련 에러 메세지 따로 출력되도록
                             .font(.caption)
                             .foregroundColor(.red_error)
-                            .frame(width: UIScreen.main.bounds.width - (UIScreen.main.bounds.width / 8) * 1.5, alignment: .leading)
+                            .frame(width: UIScreen.main.bounds.width / 1.23, alignment: .leading)
                     }
                     VStack{ //비밀번호 확인 입력창
                         HStack{
@@ -182,7 +183,7 @@ struct SignUpView: View {
                         TextField("비밀번호 확인을 입력하세요", text: $checkPassword)
                             .focused($focusField, equals: .checkPassword)
                             .keyboardType(.asciiCapable)
-                            .frame(width: UIScreen.main.bounds.width / 1.2, height: 28, alignment: .leading)
+                            .frame(width: UIScreen.main.bounds.width / 1.21, height: 28, alignment: .leading)
                             .onSubmit {
                                 isEqualWithPassword(password: password, checkPassword: checkPassword)
                             }
@@ -191,7 +192,7 @@ struct SignUpView: View {
                         Text(toastMessages[checkSignUpInfomation[3]]!) //관련 에러 메세지 따로 출력되도록
                             .font(.caption)
                             .foregroundColor(checkSignUpInfomation[3] == 11 ? .main_accent : .red_error)
-                            .frame(width: UIScreen.main.bounds.width / 1.2, alignment: .leading)
+                            .frame(width: UIScreen.main.bounds.width / 1.23, alignment: .leading)
                     }
                     Spacer()
                 }
