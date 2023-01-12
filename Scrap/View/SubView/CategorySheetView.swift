@@ -36,6 +36,9 @@ struct CategorySheetView: View {
                             scrapVM.renameCategory(categoryID: category.categoryId, renamed: renamedCategoryName)
                             scrapVM.modifyCategoryName(categoryID: category.categoryId, categoryName: renamedCategoryName)
                             self.isEditingCategoryName = false
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                scrapVM.getCategoryListData(userID: userVM.userIndex)
+                            }
                         }) {
                             Image(systemName: "checkmark")
                                 .resizable()
@@ -91,7 +94,9 @@ struct CategorySheetView: View {
             Button("취소", role: .cancel) {}
             Button("삭제", role: .destructive) {
                 scrapVM.deleteCategory(categoryID: category.categoryId) //📡 카테고리 삭제 통신
-                scrapVM.removeCategoryFromCategoryList(categoryID: category.categoryId) //선택한 카테고리의 인덱스
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    scrapVM.getCategoryListData(userID: userVM.userIndex)
+                }
                 self.isPresentCategoryModalSheet = false
                 self.isDeleteCategory = false
             }

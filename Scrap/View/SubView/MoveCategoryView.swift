@@ -19,8 +19,8 @@ struct MoveCategoryView: View {
     @Binding var currentCategoryId : Int //현재 카테고리id
     
     var body: some View {
-        ZStack{
-            List{
+        ZStack {
+            List {
                 ForEach($categoryList.categories) { $category in
                     if category.order != 0 {
                         ZStack{
@@ -60,6 +60,10 @@ struct MoveCategoryView: View {
                 Button(action: {
                     scrapVM.moveDataToOtherCategory(data, from: currentCategoryId, to: wantedToMoveCategoryId)
                     scrapVM.modifyCategoryOfData(userID: userVM.userIndex, linkID: data.linkId!, categoryId: wantedToMoveCategoryId) //📡 자료의 카테고리 이동 서버 통신
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        scrapVM.getCategoryListData(userID: userVM.userIndex)
+                        scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: currentCategoryId)
+                    }
                     isShowMovingCategoryView.toggle()
                 }) {
                     Text("저장")

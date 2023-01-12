@@ -59,13 +59,13 @@ struct SideMenuView: View {
                             ZStack {
                                 Image(systemName: "chevron.backward")
                                     .resizable()
-                                    .frame(width: 12, height: 18)
+                                    .frame(width: 10, height: 16)
                                     .foregroundColor(Color("basic_text"))
                             }
                             .frame(width: 28, height: 28)
                         }
                         Text("카테고리")
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.system(size: 16, weight: .semibold))
                             .frame(width: 70, height: 20, alignment: .leading)
                             .foregroundColor(Color("basic_text"))
                     }
@@ -84,8 +84,7 @@ struct SideMenuView: View {
                     .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 2))
                 }//Header HStack
                 .frame(height: 40)
-                .padding(.horizontal, 16)
-                .padding(.bottom, 10)
+                .padding(EdgeInsets(top: 0, leading: 6, bottom: 10, trailing: 10))
                 .background(scheme == .light ? .white : .black)
                 //Category LIST
                 VStack{
@@ -93,16 +92,17 @@ struct SideMenuView: View {
                         ForEach($categoryList.categories) { $category in
                             if category.order == 0 || category.order == 1 {
                                 ZStack {
-                                    HStack{ //모든 자료, 분류되지 않은 자료
+                                    HStack(spacing: 20){ //모든 자료, 분류되지 않은 자료
                                         Text(category.name)
-                                            .font(.system(size: 18))
+                                            .font(.system(size: 16))
                                             .foregroundColor(Color("basic_text"))
-                                            .frame(width: UIScreen.main.bounds.width - 120, alignment: .leading)
+                                            .frame(width: UIScreen.main.bounds.width / 1.39, alignment: .leading)
                                         Text("\(category.numOfLink)")
-                                            .font(.system(size: 18))
+                                            .font(.system(size: 16))
                                             .foregroundColor(Color("basic_text"))
-                                            .frame(width: 30, alignment: .trailing)
+                                            .frame(width: UIScreen.main.bounds.width / 14, alignment: .trailing)
                                     }
+                                    
                                     Button(action: {
                                         if !isAddingCategory {
                                             withAnimation(.spring()){
@@ -137,6 +137,9 @@ struct SideMenuView: View {
                             source.forEach {
                                 scrapVM.moveCategoryRowInList(from: $0, to: destination)
                                 scrapVM.movingCategory(userID: userVM.userIndex, startIdx: $0, endIdx: destination) //📡 카테고리 이동 통신
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    scrapVM.getCategoryListData(userID: userVM.userIndex)
+                                }
                             }
                         })
                     }//List
@@ -153,16 +156,17 @@ struct SideMenuView: View {
         .background(scheme == .light ? .white : .black)
         .addCategoryAlert(isPresented: $isAddingCategory, newCategoryTitle: $newCategoryName, placeholder: "새로운 카테고리 이름을 입력해주세요", title: "카테고리 추가하기", action: { _ in
             scrapVM.addNewCategory(newCat: newCategoryName, userID: userVM.userIndex) //📡 카테고리 추가 통신
-            let category = CategoryResponse.Category(categoryId: scrapVM.categoryID, name: newCategoryName, numOfLink: 0, order: categoryList.categories.count)
-            scrapVM.appendNewCategoryToCategoryList(new: category) //post로 추가된 카테고리 이름 서버에 전송
             newCategoryName = ""
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                scrapVM.getCategoryListData(userID: userVM.userIndex)
+            }
         })
     }//body
 }
 
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 0),
+        SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "분류되지 않은 자료", numOfLink: 1, order: 0),
            CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2), CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCategoryView: .constant(true), selectedCategoryId: .constant(0), selectedCategoryOrder: .constant(0))
             .environmentObject(ScrapViewModel())
     }
