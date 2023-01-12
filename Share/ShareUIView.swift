@@ -68,6 +68,7 @@ class CategoryViewModel: ObservableObject{ //감시할 data model
 
 class CategoryIDDelegate: ObservableObject {
     @Published var categoryID: Int = 0
+    @Published var isChangedId: Bool = false
 }
 
 struct ShareUIView: View {
@@ -105,6 +106,7 @@ struct ShareUIView: View {
                             Button(action: {
                                 self.selected = category.categoryId
                                 self.delegate.categoryID = category.categoryId
+                                self.delegate.isChangedId = true
                             }) {
                                 Rectangle()
                                     .frame(width: UIScreen.main.bounds.width - 20)

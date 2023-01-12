@@ -33,6 +33,7 @@ struct NewDataModel: Decodable{ //자료 저장 -> response 데이터로 받을 
 class ShareViewController: UIViewController{
     private var service = APIService()
     private var cancellable: AnyCancellable!
+    
     private var catID = 0
     private var userIndex = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID")
     private var appURLString = "ScrapShareExtension://"
@@ -55,8 +56,12 @@ class ShareViewController: UIViewController{
         self.view.addSubview(childView.view)
         childView.didMove(toParent: self)
         self.cancellable = delegate.$categoryID.sink { catID in
-            print(catID)
             self.catID = catID
+        }
+        self.cancellable = delegate.$isChangedId.sink { isChanged in
+            if isChanged == true {
+                self.navigationItem.rightBarButtonItem?.isEnabled = true
+            }
         }
     }
     
@@ -75,6 +80,7 @@ class ShareViewController: UIViewController{
         let postButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(postAction))
         self.navigationItem.setRightBarButton(postButton, animated: false)
         self.navigationItem.rightBarButtonItem?.tintColor = .systemBlue
+        self.navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
     //define the actions for the navigation items - cancel
