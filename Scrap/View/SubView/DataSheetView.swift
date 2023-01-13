@@ -75,9 +75,9 @@ struct DataSheetView: View {
             Button("취소", role: .cancel) {}
             Button("삭제", role: .destructive) {
                 scrapVM.deleteData(userID: userVM.userIndex, linkID: data.linkId!) //📡 자료 삭제 서버 통신
+                scrapVM.removeDataFromDataList(dataID: data.linkId!, categoryID: currentCategoryId)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     scrapVM.getCategoryListData(userID: userVM.userIndex)
-                    scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: currentCategoryId)
                 }
                 isPresentDataModalSheet = false
                 self.isDeleteData = false

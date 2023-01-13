@@ -26,7 +26,7 @@ struct MainHomeView: View {
                     .navigationBarTitle("", displayMode: .inline)
                     .toolbar{
                         ToolbarItem(placement: .navigationBarLeading){
-                            HStack(spacing: 0){
+                            HStack(spacing: -4){
                                 Button(action: {
                                     if !isPresentDataModalSheet { // -> modal sheet가 열려있으면 카테고리뷰를 열 수 없다
                                         withAnimation(.spring()){
@@ -46,7 +46,7 @@ struct MainHomeView: View {
                                 Text(categoryTitle)
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(Color("basic_text"))
-                                    .frame(width: UIScreen.main.bounds.width - 110, alignment: .leading)
+                                    .frame(width: UIScreen.main.bounds.width / 1.3, alignment: .leading)
                             }
                         }
                     }
@@ -65,7 +65,7 @@ struct MainHomeView: View {
                                                 .frame(width: 22, height: 22)
                                                 .foregroundColor(Color("basic_text"))
                                         }
-                                        .frame(width: 36, height: 30)
+                                        .frame(width: 24, height: 30)
                                     }
                                 }
                             }

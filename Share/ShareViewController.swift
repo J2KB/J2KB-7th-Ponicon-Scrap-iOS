@@ -58,11 +58,6 @@ class ShareViewController: UIViewController{
         self.cancellable = delegate.$categoryID.sink { catID in
             self.catID = catID
         }
-        self.cancellable = delegate.$isChangedId.sink { isChanged in
-            if isChanged == true {
-                self.navigationItem.rightBarButtonItem?.isEnabled = true
-            }
-        }
     }
     
     private func configureNavigationBarForLogin() {
@@ -80,7 +75,6 @@ class ShareViewController: UIViewController{
         let postButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(postAction))
         self.navigationItem.setRightBarButton(postButton, animated: false)
         self.navigationItem.rightBarButtonItem?.tintColor = .systemBlue
-        self.navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
     //define the actions for the navigation items - cancel

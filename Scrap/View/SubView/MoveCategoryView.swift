@@ -60,9 +60,9 @@ struct MoveCategoryView: View {
                 Button(action: {
                     scrapVM.moveDataToOtherCategory(data, from: currentCategoryId, to: wantedToMoveCategoryId)
                     scrapVM.modifyCategoryOfData(userID: userVM.userIndex, linkID: data.linkId!, categoryId: wantedToMoveCategoryId) //📡 자료의 카테고리 이동 서버 통신
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         scrapVM.getCategoryListData(userID: userVM.userIndex)
-                        scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: currentCategoryId)
+//                        scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: currentCategoryId)
                     }
                     isShowMovingCategoryView.toggle()
                 }) {
