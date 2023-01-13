@@ -81,6 +81,7 @@ struct SignUpView: View {
                                 .focused($focusField, equals: .name)
                                 .onSubmit {
                                     isValidName(name: username)
+                                    self.changeFocusField()
                                 }
                                 .frame(width: UIScreen.main.bounds.width / 1.21, height: 28, alignment: .leading)
                                 .onReceive(Just(username), perform: { _ in  //최대 30글자(이상은 입력안되도록)
@@ -115,6 +116,7 @@ struct SignUpView: View {
                                     .onSubmit {
                                         isValidEmail(email: email)
                                         isEmailDuplicationChecking = false
+                                        self.changeFocusField()
                                     }
                                     .frame(width: UIScreen.main.bounds.width / 1.54, height: 28, alignment: .leading)
                                 //MARK: - 이메일 중복 확인 버튼
@@ -156,6 +158,7 @@ struct SignUpView: View {
                             .frame(width: UIScreen.main.bounds.width / 1.21, height: 28, alignment: .leading)
                             .onSubmit {
                                 isValidPassword(password: password)
+                                self.changeFocusField()
                             }
                             .onReceive(Just(password), perform: { _ in  //최대 15글자
                                 if maxPassword < password.count {
@@ -186,6 +189,7 @@ struct SignUpView: View {
                             .frame(width: UIScreen.main.bounds.width / 1.21, height: 28, alignment: .leading)
                             .onSubmit {
                                 isEqualWithPassword(password: password, checkPassword: checkPassword)
+                                self.changeFocusField()
                             }
                         Divider()
                             .frame(width: UIScreen.main.bounds.width / 1.2, alignment: .leading)
@@ -223,6 +227,9 @@ struct SignUpView: View {
         .onTapGesture {
             self.hideKeyboard()
             appearMessageEachTextFieldWhenTappedScreen()
+        }
+        .onAppear {
+            focusField = .name
         }
         .frame(width: UIScreen.main.bounds.width, alignment: .center)
         .navigationBarTitle("",displayMode: .inline)
@@ -279,7 +286,8 @@ struct SignUpView: View {
         return !username.isEmpty && !email.isEmpty && !password.isEmpty && !checkPassword.isEmpty && checkSignUpInfomation[0] == 9 && checkSignUpInfomation[1] == 9 && checkSignUpInfomation[2] == 9 && checkSignUpInfomation[3] == 11 && isEmailDuplicationChecking
     }
     
-    func appearMessageEachTextFieldWhenTappedScreen() {
+    //MARK: - 화면 터치 시 validity 확인 후 그에 맞는 message 출력
+    private func appearMessageEachTextFieldWhenTappedScreen() {
         switch focusField {
         case .name:
             //입력에 맞는 메세지 출력해야됨
@@ -296,7 +304,8 @@ struct SignUpView: View {
         }
     }
     
-    func appearMessageTotal(name: String, email: String, password: String, checkPassword: String) {
+    //MARK: - 전체 validity 확인 후 message 출력
+    private func appearMessageTotal(name: String, email: String, password: String, checkPassword: String) {
         //입력을 안한 상태(isEmpty) -> 입력하라고 값 넣기
         if name.isEmpty { checkSignUpInfomation[0] = 1 }
         if email.isEmpty { checkSignUpInfomation[1] = 3 }
@@ -304,6 +313,22 @@ struct SignUpView: View {
         if checkPassword.isEmpty { checkSignUpInfomation[3] = 8 }
         //중복확인 안한 상태(checkEmailDuplication=false) -> 중복 확인하라고 하기 12번
         if !isEmailDuplicationChecking { checkSignUpInfomation[1] = 12 }
+    }
+    
+    //MARK: - FocusField 변경
+    private func changeFocusField() {
+        switch focusField {
+        case .name:
+            focusField = .email
+        case .email:
+            focusField = .password
+        case .password:
+            focusField = .checkPassword
+        case .checkPassword:
+            focusField = Field.none
+        default:
+            break
+        }
     }
 }
 
