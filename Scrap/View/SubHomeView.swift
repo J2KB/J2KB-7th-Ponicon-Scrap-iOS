@@ -88,7 +88,7 @@ struct SubHomeView: View {
                                 .frame(width: 24, height: 24)
                             }
                         }
-                        .frame(width: UIScreen.main.bounds.width / 1.08, height: 30, alignment: .trailing)
+                        .frame(width: UIScreen.main.bounds.width / 1.105, height: 30, alignment: .trailing)
                         LazyVGrid(columns: isOneColumnData ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: UIScreen.main.bounds.width / 2.2))], spacing: 20){
                             if isDataRecentOrder { //최신순
                                 ForEach($datas.links.reversed()) { info in

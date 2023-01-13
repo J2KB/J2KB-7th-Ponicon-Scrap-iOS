@@ -7,10 +7,15 @@
 
 import SwiftUI
 
+enum nameField {
+    case rename
+}
+
 struct CategorySheetView: View {
     @Environment(\.colorScheme) var scheme
     @EnvironmentObject var userVM : UserViewModel
     @EnvironmentObject var scrapVM : ScrapViewModel
+    @FocusState var focusState : nameField?
     
     @State private var isEditingCategoryName = false
     @State private var isDeleteCategory = false
@@ -21,29 +26,53 @@ struct CategorySheetView: View {
     
     var body: some View {
         VStack(spacing: 20){
-            if isEditingCategoryName { //이름 수정시, textfield로 변경
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color("textfield_color"))
-                        .opacity(0.4)
-                        .frame(width: UIScreen.main.bounds.width - 40, height: 40, alignment: .leading)
-                    HStack {
-                        TextField("카테고리 이름", text: $renamedCategoryName)
-                            .font(.system(size: 18, weight: .regular))
-                            .frame(width: UIScreen.main.bounds.width - 100, alignment: .leading)
-                            .foregroundColor(Color("basic_text"))
-                        Button(action: {
+            if isEditingCategoryName {
+                HStack{
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color("textfield_color"))
+                            .opacity(0.4)
+                            .frame(width: UIScreen.main.bounds.width / 1.25, height: 36, alignment: .leading)
+                        HStack(spacing: 13){
+                            TextField("카테고리 이름", text: $renamedCategoryName)
+                                .focused($focusState, equals: .rename)
+                                .font(.system(size: 18, weight: .regular))
+                                .frame(width: UIScreen.main.bounds.width / 1.5, alignment: .leading)
+                                .foregroundColor(Color("basic_text"))
+                            Button(action: {
+                                renamedCategoryName = "" //clear category name
+                            }) {
+                                ZStack{
+                                    Image(systemName: "xmark.circle")
+                                        .resizable()
+                                        .foregroundColor(.gray)
+                                        .frame(width: 14, height: 14)
+                                }
+                                .frame(width: 24, height: 36)
+                            }
+                        }
+                    }
+                    Button(action: {
+                        if !renamedCategoryName.isEmpty {
                             scrapVM.renameCategory(categoryID: category.categoryId, renamed: renamedCategoryName)
                             scrapVM.modifyCategoryName(categoryID: category.categoryId, categoryName: renamedCategoryName)
                             self.isEditingCategoryName = false
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                 scrapVM.getCategoryListData(userID: userVM.userIndex)
                             }
-                        }) {
+                        } else {
+                            renamedCategoryName = category.name //원래 카테고리 이름으로
+                            self.isEditingCategoryName = false
+                        }
+                    }) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color("list_color"))
+                                .frame(width: 36, height: 36, alignment: .leading)
                             Image(systemName: "checkmark")
                                 .resizable()
-                                .frame(width: 18, height: 18)
-                                .foregroundColor(scheme == .light ? .black : .white)
+                                .frame(width: 12, height: 12)
+                                .foregroundColor(Color("blue_bold"))
                         }
                     }
                 }
@@ -57,6 +86,7 @@ struct CategorySheetView: View {
             }
             Button(action: {
                 self.isEditingCategoryName = true
+                focusState = .rename
             }) {
                 ZStack{
                     RoundedRectangle(cornerRadius: 10)
@@ -109,5 +139,6 @@ struct CategorySheetView_Previews: PreviewProvider {
         CategorySheetView(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), isPresentCategoryModalSheet: .constant(false))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
+            .preferredColorScheme(.dark)
     }
 }
