@@ -7,23 +7,26 @@
 
 import SwiftUI
 
+
 struct CategoryRow: View {
     @Environment(\.colorScheme) var scheme //Light/Dark mode
     @EnvironmentObject var scrapVM : ScrapViewModel
     @EnvironmentObject var userVM : UserViewModel
-    @State private var categoryName = "category"
-    @State private var isPresentCategoryModalSheet = false
     
+    @State private var categoryName = "category"
+    
+    @Binding var isPresentCategoryModalSheet : Bool
     @Binding var category : CategoryResponse.Category
     @Binding var isShowingCategorySideMenuView : Bool
     @Binding var selectedCategoryId : Int
     @Binding var isAddingNewCategory : Bool
     @Binding var selectedCategoryOrder : Int
-    
+    @Binding var detailCategory : CategoryResponse.Category
+
     var title: String {
         var cnt = 0
         var tmp = category.name
-        while cnt <= Int(UIScreen.main.bounds.width / 1.25) {
+        while cnt <= Int(UIScreen.main.bounds.width / 1.35) {
             tmp += " "
             cnt += 1
         }
@@ -43,34 +46,34 @@ struct CategoryRow: View {
                     .frame(width: UIScreen.main.bounds.width / 14, alignment: .trailing)
             }
             .onTapGesture {
-                if !isAddingNewCategory {
-                    withAnimation(.spring()){
+                withAnimation(.spring()){
+                    if !isPresentCategoryModalSheet {
                         isShowingCategorySideMenuView = false
                     }
-                    self.selectedCategoryId = category.categoryId
-                    self.selectedCategoryOrder = category.order
-                    scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: selectedCategoryId)
                 }
+                selectedCategoryId = category.categoryId
+                selectedCategoryOrder = category.order
+                scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: selectedCategoryId)
             }
             //modal shet 등장
             Button(action:{
-                if !isAddingNewCategory && !isPresentCategoryModalSheet {
-                    self.isPresentCategoryModalSheet = true //half-modal view 등장
-                    self.selectedCategoryId = category.categoryId
-                }
+                selectedCategoryId = category.categoryId
+                detailCategory = category
+                isPresentCategoryModalSheet = true //half-modal view 등장
             }){
                 ZStack{
                     Image(systemName: "ellipsis")
                         .foregroundColor(Color("option_button"))
                 }
-                .frame(width: 36, height: 26)
+                .frame(width: 36, height: 36)
             }
+            .padding(.leading, 10)
         }
-        .padding(.leading, 8)
-        .listRowBackground(self.selectedCategoryId == category.categoryId ? Color("selected_color"): .none)
+        .padding(.leading, 16)
+        .listRowBackground(selectedCategoryId == category.categoryId ? Color("selected_color"): .none)
         .sheet(isPresented: $isPresentCategoryModalSheet){
             HalfSheet {
-                CategorySheetView(category: $category, isPresentCategoryModalSheet: $isPresentCategoryModalSheet)
+                CategorySheetView(category: $detailCategory, isPresentCategoryModalSheet: $isPresentCategoryModalSheet)
             }
             .ignoresSafeArea()
         }
@@ -82,9 +85,6 @@ struct CategoryRow: View {
 
 struct CategoryRow_Previews: PreviewProvider {
     static var previews: some View {
-        //        CategoryRow(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), isShowingCategorySideMenuView: .constant(true), selectedCategoryId: .constant(0), isAddingNewCategory: .constant(true), selectedCategoryOrder: .constant(0))
-        //            .environmentObject(ScrapViewModel())
-        //            .environmentObject(UserViewModel())
         SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "전체 자료", numOfLink: 1, order: 0),
            CategoryResponse.Category(categoryId: 1, name: "1st category", numOfLink: 10, order: 2), CategoryResponse.Category(categoryId: 2, name: "2nd category", numOfLink: 201, order: 3)])), isShowingCategoryView: .constant(true), selectedCategoryId: .constant(0), selectedCategoryOrder: .constant(0))
             .environmentObject(ScrapViewModel())

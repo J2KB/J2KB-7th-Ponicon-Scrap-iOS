@@ -106,7 +106,7 @@ struct SubHomeView: View {
                     NavigationLink(destination: MoveCategoryView(isShowMovingCategoryView: $isShowMovingCategory, categoryList: $scrapVM.categoryList.result, data: $detailData, currentCategoryId: $currentCategoryId).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory) { EmptyView() }
                         .opacity(0)
                 }//VStack
-            } refreshable: {    
+            } refreshable: {
                 if currentCategoryOrder == 0 { scrapVM.getAllData(userID: userVM.userIndex) }
                 else { scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: currentCategoryId) }
             }

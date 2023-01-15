@@ -28,11 +28,9 @@ struct MainHomeView: View {
                         ToolbarItem(placement: .navigationBarLeading){
                             HStack(spacing: -4){
                                 Button(action: {
-                                    if !isPresentDataModalSheet { // -> modal sheet가 열려있으면 카테고리뷰를 열 수 없다
-                                        withAnimation(.spring()){
-                                            self.isShowingCategorySideMenuView = true
-                                            scrapVM.getCategoryListData(userID: userVM.userIndex)
-                                        }
+                                    withAnimation(.spring()){
+                                        self.isShowingCategorySideMenuView = true
+                                        scrapVM.getCategoryListData(userID: userVM.userIndex)
                                     }
                                 }) {
                                     ZStack {
@@ -55,9 +53,7 @@ struct MainHomeView: View {
                             VStack{
                                 NavigationLink(destination: MyPageView(userData: $scrapVM.user, isShowingMyPage: $isShowingMyPageView).navigationBarHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowingMyPageView) {
                                     Button(action: {
-                                        if !isPresentDataModalSheet { //modal sheet가 열려있으면 마이페이지뷰를 열 수 없다
-                                            self.isShowingMyPageView.toggle()
-                                        }
+                                        self.isShowingMyPageView.toggle()
                                     }) {
                                         ZStack {
                                             Image(systemName: "person.circle")
@@ -75,6 +71,14 @@ struct MainHomeView: View {
             //Drawer
             SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCategoryView: $isShowingCategorySideMenuView, selectedCategoryId: $selectedCategoryID, selectedCategoryOrder: $selectedCategoryOrder)
                 .offset(x: isShowingCategorySideMenuView ? 0 : -UIScreen.main.bounds.width)
+            if isPresentDataModalSheet {
+                Color(.black)
+                    .opacity(0.2)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isPresentDataModalSheet = false
+                    }
+            }
         }
         .onAppear{
             userVM.userIndex = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ?

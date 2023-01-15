@@ -33,11 +33,13 @@ struct SideMenuView: View {
     @Environment(\.colorScheme) var scheme
     @EnvironmentObject var scrapVM : ScrapViewModel
     @EnvironmentObject var userVM : UserViewModel
-    
+        
     @State private var dragging: CategoryResponse.Category?
     @State private var newCategoryName = ""
     @State private var isAddingCategory = false
-    
+    @State private var isPresentCategoryModalSheet = false
+    @State private var detailCategory = CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)
+
     @Binding var categoryList : CategoryResponse.Result
     @Binding var isShowingCategoryView : Bool
     @Binding var selectedCategoryId : Int
@@ -50,10 +52,8 @@ struct SideMenuView: View {
                 HStack{
                     HStack(spacing: 4){
                         Button(action: {
-                            if !isAddingCategory {
-                                withAnimation(.spring()){
-                                    isShowingCategoryView = false
-                                }
+                            withAnimation(.spring()){
+                                isShowingCategoryView = false //main home view로 돌아가기
                             }
                         }){
                             ZStack {
@@ -104,14 +104,12 @@ struct SideMenuView: View {
                                     }
                                     
                                     Button(action: {
-                                        if !isAddingCategory {
-                                            withAnimation(.spring()){
-                                                isShowingCategoryView = false
-                                            }
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { //0.5초 뒤에 자료 조회 -> SideMenuView 사라진 뒤 진행하도록
-                                                self.selectedCategoryId = category.categoryId
-                                                self.selectedCategoryOrder = category.order
-                                            }
+                                        withAnimation(.spring()){
+                                            isShowingCategoryView = false
+                                        }
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                            selectedCategoryId = category.categoryId
+                                            selectedCategoryOrder = category.order
                                         }
                                     }) {
                                         Rectangle()
@@ -119,12 +117,12 @@ struct SideMenuView: View {
                                             .opacity(0)
                                     }
                                 }
-                                .listRowBackground(self.selectedCategoryId == category.categoryId ? Color("selected_color") : .none)
+                                .listRowBackground(selectedCategoryId == category.categoryId ? Color("selected_color") : .none)
                             }
                         }
                         ForEach($categoryList.categories) { $category in
                             if category.order != 0 && category.order != 1 {
-                                CategoryRow(category: $category, isShowingCategorySideMenuView: $isShowingCategoryView, selectedCategoryId: $selectedCategoryId, isAddingNewCategory: $isAddingCategory, selectedCategoryOrder: $selectedCategoryOrder)
+                                CategoryRow(isPresentCategoryModalSheet: $isPresentCategoryModalSheet, category: $category, isShowingCategorySideMenuView: $isShowingCategoryView, selectedCategoryId: $selectedCategoryId, isAddingNewCategory: $isAddingCategory, selectedCategoryOrder: $selectedCategoryOrder, detailCategory: $detailCategory)
                                     .id(category.id)
                                 .onDrag {
                                     self.dragging = category
@@ -149,8 +147,15 @@ struct SideMenuView: View {
                 }
                 .listStyle(PlainListStyle())
             }//VStack
-            if isAddingCategory { //카테고리 추가 alert창 켜지면 뒷 배경 블러 처리
+            if self.isAddingCategory { //카테고리 추가 alert창 켜지면 뒷 배경 블러 처리
                 Color("blur_background").ignoresSafeArea()
+            }
+            if self.isPresentCategoryModalSheet {
+                Color("blur_background")
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        self.isPresentCategoryModalSheet = false
+                    }
             }
         }//ZStack
         .background(scheme == .light ? .white : .black)

@@ -127,7 +127,7 @@ struct CategorySheetView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     scrapVM.getCategoryListData(userID: userVM.userIndex)
                 }
-                self.isPresentCategoryModalSheet = false
+                isPresentCategoryModalSheet = false
                 self.isDeleteCategory = false
             }
         })
