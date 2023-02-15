@@ -8,11 +8,18 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+enum DataNameField {
+    case rename
+}
+
 struct DataSheetView: View {
     @EnvironmentObject var scrapVM : ScrapViewModel
     @EnvironmentObject var userVM : UserViewModel
-    
+    @FocusState var focusState : DataNameField?
+
     @State private var isDeleteData = false
+    @State private var isEditingDataName = false
+    @State private var renamedDataName = ""
     
     @Binding var isShowMovingCategoryView : Bool
     @Binding var data : DataResponse.Datas
@@ -22,9 +29,62 @@ struct DataSheetView: View {
 
     var body: some View {
         VStack(spacing: 24){
-            Text(data.title ?? "")
-                .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
-                .foregroundColor(Color("basic_text"))
+            if isEditingDataName {
+                HStack{
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color("textfield_color"))
+                            .opacity(0.4)
+                            .frame(width: UIScreen.main.bounds.width / 1.25, height: 36, alignment: .leading)
+                        HStack(spacing: 13){
+                            TextField("자료 이름", text: $renamedDataName)
+                                .focused($focusState, equals: .rename)
+                                .font(.system(size: 18, weight: .regular))
+                                .frame(width: UIScreen.main.bounds.width / 1.5, alignment: .leading)
+                                .foregroundColor(Color("basic_text"))
+                            Button(action: {
+                                renamedDataName = "" //clear category name
+                            }) {
+                                ZStack{
+                                    Image(systemName: "xmark.circle")
+                                        .resizable()
+                                        .foregroundColor(.gray)
+                                        .frame(width: 14, height: 14)
+                                }
+                                .frame(width: 24, height: 36)
+                            }
+                        }
+                    }
+                    Button(action: {
+                        if !renamedDataName.isEmpty {
+//                            scrapVM.renameCategory(categoryID: category.categoryId, renamed: renamedCategoryName)
+//                            scrapVM.modifyCategoryName(categoryID: category.categoryId, categoryName: renamedCategoryName)
+                            self.isEditingDataName = false
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                scrapVM.getCategoryListData(userID: userVM.userIndex)
+                            }
+                        } else {
+                            renamedDataName = data.title ?? "" //원래 카테고리 이름으로
+                            self.isEditingDataName = false
+                        }
+                    }) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color("list_color"))
+                                .frame(width: 36, height: 36, alignment: .leading)
+                            Image(systemName: "checkmark")
+                                .resizable()
+                                .frame(width: 12, height: 12)
+                                .foregroundColor(Color("blue_bold"))
+                        }
+                    }
+                }
+                .padding(.bottom, 10)
+            }else {
+                Text(data.title ?? "")
+                    .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
+                    .foregroundColor(Color("basic_text"))
+            }
             Button(action: {
                 UIPasteboard.general.setValue(data.link ?? "", forPasteboardType: UTType.plainText.identifier)
                 isPresentDataModalSheet.toggle()
@@ -42,8 +102,18 @@ struct DataSheetView: View {
             ZStack{
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color("list_color"))
-                    .frame(width: UIScreen.main.bounds.width - 40, height: currentCategoryOrder == 0 ? 46 : 100, alignment: .leading)
+                    .frame(width: UIScreen.main.bounds.width - 40, height: currentCategoryOrder == 0 ? 46 : 140, alignment: .leading)
                 VStack(spacing: 4){
+                    Button(action: {
+                        self.isEditingDataName = true
+                    }) {
+                        Label("이름 수정", systemImage: "pencil")
+                            .foregroundColor(Color("basic_text"))
+                            .frame(width: UIScreen.main.bounds.width - 40, height: 40, alignment: .leading)
+                            .padding(.leading, 40)
+                    }
+                    Divider()
+                        .frame(width: UIScreen.main.bounds.width - 40)
                     if currentCategoryOrder != 0 {
                         Button(action: {
                             isShowMovingCategoryView = true
@@ -95,8 +165,8 @@ struct DataSheetView_Previews: PreviewProvider {
             currentCategoryOrder: .constant(1),
             currentCategoryId: .constant(1)
         )
-            .environmentObject(ScrapViewModel())
-            .environmentObject(UserViewModel())
-            .preferredColorScheme(.dark)
+        .environmentObject(ScrapViewModel())
+        .environmentObject(UserViewModel())
+        .preferredColorScheme(.dark)
     }
 }
