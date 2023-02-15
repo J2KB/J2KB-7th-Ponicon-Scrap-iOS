@@ -91,12 +91,16 @@ struct PageView: View {
                             let url = URL(string: urlString)
                             if let Url = url {
                                 Link(destination: Url, label: {
-                                    AsyncImage(url: URL(string: data.imgUrl!)!) { image in
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                    } placeholder: {
-                                        ProgressView()
+                                    AsyncImage(url: URL(string: data.imgUrl!)!) { phase in
+                                        if let image = phase.image {
+                                                image // Displays the loaded image.
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fill)
+                                            } else if phase.error != nil {
+                                                Color("image") // Indicates an error.
+                                            } else {
+                                                ProgressView() // Acts as a placeholder.
+                                            }
                                     }
                                     .frame(width: isOneColumnData ? UIScreen.main.bounds.width - 30 : UIScreen.main.bounds.width / 2.4, height: isOneColumnData ? ((UIScreen.main.bounds.width - 40) / 2) / 1.4 : (UIScreen.main.bounds.width / 2.4) / 2)
                                     .cornerRadius(10, corners: .topLeft)
