@@ -40,6 +40,9 @@
 		F8A8972728D2F531006CEC60 /* MoveCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A8972628D2F531006CEC60 /* MoveCategoryView.swift */; };
 		F8ADA2DB29668B95001FC2C8 /* SignInWithAppleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8ADA2DA29668B95001FC2C8 /* SignInWithAppleDelegate.swift */; };
 		F8ADA2DD2966923D001FC2C8 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8ADA2DC2966923D001FC2C8 /* Keychain.swift */; };
+		F8AF178129A5096100CAE295 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F841A326296FE0FF007B1840 /* Media.xcassets */; };
+		F8AF178229A509C100CAE295 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F88E7E3528C5CDDC00C3CCA8 /* Assets.xcassets */; };
+		F8AF178329A509C600CAE295 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */; };
 		F8B46C83294EF7EC003CB359 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B46C82294EF7EC003CB359 /* APIService.swift */; };
 		F8CFE8FB28FD508C005DB6F5 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */; };
 		F8CFE8FE28FD8D9F005DB6F5 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8CFE8FD28FD8D9F005DB6F5 /* ColorExtension.swift */; };
@@ -362,6 +365,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8AF178129A5096100CAE295 /* Media.xcassets in Resources */,
 				F8CFE8FB28FD508C005DB6F5 /* Colors.xcassets in Resources */,
 				F88E7E3928C5CDDC00C3CCA8 /* Preview Assets.xcassets in Resources */,
 				F8FC83B12956FAD500453EDD /* Launch Screen.storyboard in Resources */,
@@ -374,6 +378,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F841A327296FE0FF007B1840 /* Media.xcassets in Resources */,
+				F8AF178329A509C600CAE295 /* Colors.xcassets in Resources */,
+				F8AF178229A509C100CAE295 /* Assets.xcassets in Resources */,
 				F88CEFC3292C9D5800EF0EE0 /* ExtensionClass.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

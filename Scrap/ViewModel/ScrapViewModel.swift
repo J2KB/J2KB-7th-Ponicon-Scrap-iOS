@@ -335,4 +335,17 @@ class ScrapViewModel: ObservableObject{
             }
         }
     }
+    
+    // MARK: - 자료 이름 수정
+    //- dataList의 data 이름 수정
+    //- 전체 자료의 data 이름이랑 현재 보이고 있는 카테고리의 data 이름을 변경해야 하는데,
+    //어차피 지금 보이는 건,
+    func renameData(dataID dataId: Int, renamed rname: String){
+        for i in 0..<dataList.links.count {
+            if dataList.links[i].linkId == dataId {
+                dataList.links[i].title = rname
+                return
+            }
+        }
+    }
 }

@@ -57,8 +57,7 @@ struct DataSheetView: View {
                     }
                     Button(action: {
                         if !renamedDataName.isEmpty {
-//                            scrapVM.renameCategory(categoryID: category.categoryId, renamed: renamedCategoryName)
-//                            scrapVM.modifyCategoryName(categoryID: category.categoryId, categoryName: renamedCategoryName)
+                            scrapVM.renameData(dataID: data.linkId ?? 0, renamed: renamedDataName) //local method
                             self.isEditingDataName = false
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                 scrapVM.getCategoryListData(userID: userVM.userIndex)
