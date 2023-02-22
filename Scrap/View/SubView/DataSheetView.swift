@@ -59,9 +59,9 @@ struct DataSheetView: View {
                         if !renamedDataName.isEmpty {
                             scrapVM.renameData(dataID: data.linkId ?? 0, renamed: renamedDataName) //local method
                             self.isEditingDataName = false
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                scrapVM.getCategoryListData(userID: userVM.userIndex)
-                            }
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//                                scrapVM.getCategoryListData(userID: userVM.userIndex)
+//                            }
                         } else {
                             renamedDataName = data.title ?? "" //원래 카테고리 이름으로
                             self.isEditingDataName = false
@@ -101,18 +101,19 @@ struct DataSheetView: View {
             ZStack{
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color("list_color"))
-                    .frame(width: UIScreen.main.bounds.width - 40, height: currentCategoryOrder == 0 ? 46 : 140, alignment: .leading)
-                VStack(spacing: 4){
+                    .frame(width: UIScreen.main.bounds.width - 40, height: currentCategoryOrder == 0 ? 92 : 140, alignment: .leading)
+                VStack(spacing: 2){
                     Button(action: {
                         self.isEditingDataName = true
                     }) {
                         Label("이름 수정", systemImage: "pencil")
                             .foregroundColor(Color("basic_text"))
-                            .frame(width: UIScreen.main.bounds.width - 40, height: 40, alignment: .leading)
+                            .frame(width: UIScreen.main.bounds.width - 40, height: 42, alignment: .leading)
                             .padding(.leading, 40)
                     }
                     Divider()
                         .frame(width: UIScreen.main.bounds.width - 40)
+                        .padding(.vertical, currentCategoryOrder != 0 ? 0 : -2)
                     if currentCategoryOrder != 0 {
                         Button(action: {
                             isShowMovingCategoryView = true
@@ -137,6 +138,9 @@ struct DataSheetView: View {
                 }
             }
             Spacer()
+        }
+        .onAppear {
+            self.renamedDataName = data.title ?? ""
         }
         .padding(.top, 48)
         .background(Color("sheet_background"))
