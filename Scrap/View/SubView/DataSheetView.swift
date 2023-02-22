@@ -56,13 +56,15 @@ struct DataSheetView: View {
                         }
                     }
                     Button(action: {
-                        if !renamedDataName.isEmpty {
+                        if !renamedDataName.isEmpty { //새로 쓴 이름이 비어있지 않을 경우 -> 이름 수정 저장
                             scrapVM.renameData(dataID: data.linkId ?? 0, renamed: renamedDataName) //local method
+                            scrapVM.modifyDataName(dataID: data.linkId ?? 0, dataName: renamedDataName, userIdx: userVM.userIndex) //server
                             self.isEditingDataName = false
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-//                                scrapVM.getCategoryListData(userID: userVM.userIndex)
-//                            }
-                        } else {
+                            data.title = renamedDataName
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                scrapVM.getCategoryListData(userID: userVM.userIndex)
+                            }
+                        } else { //새로 쓴 이름이 비어있을 경우
                             renamedDataName = data.title ?? "" //원래 카테고리 이름으로
                             self.isEditingDataName = false
                         }

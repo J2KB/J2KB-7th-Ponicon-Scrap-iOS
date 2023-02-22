@@ -237,6 +237,34 @@ class ScrapViewModel: ObservableObject{
         }
     }
     
+    //auth/data/{user_id}?link_id=
+    //자료 이름 수정
+    func modifyDataName(dataID: Int, dataName: String, userIdx: Int){
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data/\(userIdx)?link_id=\(dataID)") else {
+            print("invalid url")
+            return
+        }
+        let title = dataName
+        let body: [String: Any] = ["title": title]
+        let finalData = try! JSONSerialization.data(withJSONObject: body)
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.httpBody = finalData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        service.requestTask(NewDataModel.self, withRequest: request) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let result):
+                    print(result)
+                    break
+                }
+            }
+        }
+    }
+    
     //자료 저장
     func addNewData(baseurl: String, title: String, imgUrl: String, catID: Int, userIdx: Int){
         print("⭐️⭐️⭐️⭐️⭐️⭐️자료 저장!!!!!⭐️⭐️⭐️⭐️⭐️⭐️")
