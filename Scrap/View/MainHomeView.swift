@@ -11,7 +11,6 @@ struct MainHomeView: View {
     @EnvironmentObject var scrapVM : ScrapViewModel
     @EnvironmentObject var userVM : UserViewModel
     @State private var isShowingCategorySideMenuView = false
-    @State private var isShowingMyPageView = false
     @State private var isPresentDataModalSheet = false
     @State private var selectedCategoryID = 0
     @State private var selectedCategoryOrder = 0
@@ -48,25 +47,6 @@ struct MainHomeView: View {
                             }
                         }
                     }
-                    .toolbar{
-                        ToolbarItem(placement: .navigationBarTrailing){
-                            VStack{
-                                NavigationLink(destination: MyPageView(userData: $scrapVM.user, isShowingMyPage: $isShowingMyPageView).navigationBarHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowingMyPageView) {
-                                    Button(action: {
-                                        self.isShowingMyPageView.toggle()
-                                    }) {
-                                        ZStack {
-                                            Image(systemName: "person.circle")
-                                                .resizable()
-                                                .frame(width: 22, height: 22)
-                                                .foregroundColor(Color("basic_text"))
-                                        }
-                                        .frame(width: 24, height: 30)
-                                    }
-                                }
-                            }
-                        }
-                    }
             }
             //Drawer
             SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCategoryView: $isShowingCategorySideMenuView, selectedCategoryId: $selectedCategoryID, selectedCategoryOrder: $selectedCategoryOrder)
@@ -80,15 +60,8 @@ struct MainHomeView: View {
                     }
             }
         }
-        .onAppear{
-            userVM.userIndex = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ?
-                                userVM.userIndex : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int
-            scrapVM.getCategoryListData(userID: userVM.userIndex) //카테고리 조회 통신 📡
-            scrapVM.getAllData(userID: userVM.userIndex) //자료 조회 통신 📡 case01
-            scrapVM.getMyPageData(userID: userVM.userIndex) //마이페이지 데이터 조회 통신 📡
-        }
         .gesture(DragGesture().onEnded({
-            if !isShowingMyPageView, !isPresentDataModalSheet {
+            if !isPresentDataModalSheet {
                 if $0.translation.width < -100 {
                     withAnimation(.easeInOut) {
                         self.isShowingCategorySideMenuView = false

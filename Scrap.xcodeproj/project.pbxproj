@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		F802200F28F2C3F40032DAD0 /* ShareUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F802200E28F2C3F40032DAD0 /* ShareUIView.swift */; };
+		F81BAF5B29A74D0600E8761D /* TabControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81BAF5A29A74D0600E8761D /* TabControlView.swift */; };
+		F81BAF5D29A755CF00E8761D /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81BAF5C29A755CF00E8761D /* FavoritesView.swift */; };
 		F82C610128FFF716000C2C92 /* HalfSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82C610028FFF716000C2C92 /* HalfSheetController.swift */; };
 		F841A327296FE0FF007B1840 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F841A326296FE0FF007B1840 /* Media.xcassets */; };
 		F84C51CA28E5619300E5DECD /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84C51C928E5619300E5DECD /* UserResponse.swift */; };
@@ -80,6 +82,8 @@
 
 /* Begin PBXFileReference section */
 		F802200E28F2C3F40032DAD0 /* ShareUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareUIView.swift; sourceTree = "<group>"; };
+		F81BAF5A29A74D0600E8761D /* TabControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabControlView.swift; sourceTree = "<group>"; };
+		F81BAF5C29A755CF00E8761D /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
 		F82C610028FFF716000C2C92 /* HalfSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfSheetController.swift; sourceTree = "<group>"; };
 		F841A326296FE0FF007B1840 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		F84C51C928E5619300E5DECD /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
@@ -217,6 +221,8 @@
 				F8740C2728C99EB0009D6F8C /* SubHomeView.swift */,
 				F8740C2928C9BD63009D6F8C /* MyPageView.swift */,
 				F87B1DC62963EB92000B2331 /* SignInWithApple.swift */,
+				F81BAF5A29A74D0600E8761D /* TabControlView.swift */,
+				F81BAF5C29A755CF00E8761D /* FavoritesView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -406,9 +412,11 @@
 				F8740C2A28C9BD63009D6F8C /* MyPageView.swift in Sources */,
 				F89BED8828C5F1EE0053D406 /* SignUpView.swift in Sources */,
 				F8ADA2DD2966923D001FC2C8 /* Keychain.swift in Sources */,
+				F81BAF5D29A755CF00E8761D /* FavoritesView.swift in Sources */,
 				F8D4A2072939F45000BAE93D /* APIErrors.swift in Sources */,
 				F8740C2828C99EB0009D6F8C /* SubHomeView.swift in Sources */,
 				F87B1DC72963EB92000B2331 /* SignInWithApple.swift in Sources */,
+				F81BAF5B29A74D0600E8761D /* TabControlView.swift in Sources */,
 				F88A67BF28E95BB6003BD8A6 /* UserViewModel.swift in Sources */,
 				F87109F628E3327F009AFA8F /* DataResponse.swift in Sources */,
 				F8F8F950292E06140058FA75 /* DataSheetView.swift in Sources */,

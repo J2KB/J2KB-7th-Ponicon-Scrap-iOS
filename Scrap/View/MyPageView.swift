@@ -9,12 +9,11 @@ import SwiftUI
 import KakaoSDKUser
 
 struct MyPageView: View {
-    @Environment(\.presentationMode) var presentationMode
+//    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var userVM : UserViewModel
     @State private var iconList = ["tiger", "dog", "cat", "fox", "mouse", "rabbit", "bear"]
     @State private var reallyWithDrawal = false
     @Binding var userData : UserResponse.Result
-    @Binding var isShowingMyPage : Bool
     
     var body: some View {
         NavigationView {
@@ -55,7 +54,7 @@ struct MyPageView: View {
                             userVM.loginState = false
                             userVM.userIndex = 0
                             UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "ID")
-                            isShowingMyPage = true
+//                            isShowingMyPage = true
                         }){
                             Text("로그아웃")
                                 .underline()
@@ -80,22 +79,10 @@ struct MyPageView: View {
             .padding(.top, 24)
             .toolbar{
                 ToolbarItem(placement: .navigationBarLeading){
-                    HStack(spacing: 8){
-                        Button(action: {
-                            withAnimation(.easeInOut.delay(0.3)){
-                                self.presentationMode.wrappedValue.dismiss()
-                            }
-                        }) {
-                            Image(systemName: "chevron.backward")
-                                .resizable()
-                                .frame(width: 10, height: 16)
-                                .foregroundColor(Color("basic_text"))
-                        }
-                        Text("마이페이지")
-                            .font(.system(size: 18, weight: .bold))
-                            .frame(width: 100, height: 20, alignment: .leading)
-                            .foregroundColor(Color("basic_text"))
-                    }
+                    Text("마이페이지")
+                        .font(.system(size: 18, weight: .bold))
+                        .frame(width: 100, height: 20, alignment: .leading)
+                        .foregroundColor(Color("basic_text"))
                 }
             }
         }
@@ -105,22 +92,15 @@ struct MyPageView: View {
                 userVM.acccountWithdrawal() //📡 WithDrawal API
                 userVM.loginState = false
                 userVM.userIndex = 0
-                isShowingMyPage = true
+//                isShowingMyPage = true
             }
         })
-        .gesture(DragGesture().onEnded({
-            if $0.translation.width > 100 {
-                withAnimation(.easeInOut) {
-                    self.presentationMode.wrappedValue.dismiss()
-                }
-            }
-        }))
     }
 }
 
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
-        MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")), isShowingMyPage: .constant(true))
+        MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")))
             .environmentObject(ScrapViewModel())
     }
 }

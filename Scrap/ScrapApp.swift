@@ -35,7 +35,9 @@ struct ScrapApp: App {
             }
             // MARK: - AutoLogin O
             else {
-                MainHomeView()
+                //TabView()로 변경
+//                MainHomeView()
+                TabControlView()
                     .navigationBarBackButtonHidden(true)
                     .navigationBarHidden(true)
                     .environmentObject(scrapVM)
