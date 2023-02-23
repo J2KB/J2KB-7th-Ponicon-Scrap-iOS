@@ -10,6 +10,7 @@
 		F802200F28F2C3F40032DAD0 /* ShareUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F802200E28F2C3F40032DAD0 /* ShareUIView.swift */; };
 		F81BAF5B29A74D0600E8761D /* TabControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81BAF5A29A74D0600E8761D /* TabControlView.swift */; };
 		F81BAF5D29A755CF00E8761D /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81BAF5C29A755CF00E8761D /* FavoritesView.swift */; };
+		F81BAF5F29A7627100E8761D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81BAF5E29A7627100E8761D /* HomeView.swift */; };
 		F82C610128FFF716000C2C92 /* HalfSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82C610028FFF716000C2C92 /* HalfSheetController.swift */; };
 		F841A327296FE0FF007B1840 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F841A326296FE0FF007B1840 /* Media.xcassets */; };
 		F84C51CA28E5619300E5DECD /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84C51C928E5619300E5DECD /* UserResponse.swift */; };
@@ -17,7 +18,7 @@
 		F87109F428E33275009AFA8F /* CategoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87109F328E33275009AFA8F /* CategoryResponse.swift */; };
 		F87109F628E3327F009AFA8F /* DataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87109F528E3327F009AFA8F /* DataResponse.swift */; };
 		F8740C2228C988E1009D6F8C /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2128C988E1009D6F8C /* PageView.swift */; };
-		F8740C2428C99954009D6F8C /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2328C99954009D6F8C /* SideMenuView.swift */; };
+		F8740C2428C99954009D6F8C /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2328C99954009D6F8C /* CategoryView.swift */; };
 		F8740C2828C99EB0009D6F8C /* SubHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2728C99EB0009D6F8C /* SubHomeView.swift */; };
 		F8740C2A28C9BD63009D6F8C /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8740C2928C9BD63009D6F8C /* MyPageView.swift */; };
 		F87B1DC72963EB92000B2331 /* SignInWithApple.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87B1DC62963EB92000B2331 /* SignInWithApple.swift */; };
@@ -84,6 +85,7 @@
 		F802200E28F2C3F40032DAD0 /* ShareUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareUIView.swift; sourceTree = "<group>"; };
 		F81BAF5A29A74D0600E8761D /* TabControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabControlView.swift; sourceTree = "<group>"; };
 		F81BAF5C29A755CF00E8761D /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
+		F81BAF5E29A7627100E8761D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		F82C610028FFF716000C2C92 /* HalfSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfSheetController.swift; sourceTree = "<group>"; };
 		F841A326296FE0FF007B1840 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		F84C51C928E5619300E5DECD /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
@@ -91,7 +93,7 @@
 		F87109F328E33275009AFA8F /* CategoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryResponse.swift; sourceTree = "<group>"; };
 		F87109F528E3327F009AFA8F /* DataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataResponse.swift; sourceTree = "<group>"; };
 		F8740C2128C988E1009D6F8C /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
-		F8740C2328C99954009D6F8C /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
+		F8740C2328C99954009D6F8C /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		F8740C2728C99EB0009D6F8C /* SubHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubHomeView.swift; sourceTree = "<group>"; };
 		F8740C2928C9BD63009D6F8C /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		F87B1DC62963EB92000B2331 /* SignInWithApple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithApple.swift; sourceTree = "<group>"; };
@@ -217,12 +219,13 @@
 				F88E7E3328C5CDDB00C3CCA8 /* LoginView.swift */,
 				F89BED8728C5F1EE0053D406 /* SignUpView.swift */,
 				F89BED8C28C5FC680053D406 /* MainHomeView.swift */,
-				F8740C2328C99954009D6F8C /* SideMenuView.swift */,
+				F8740C2328C99954009D6F8C /* CategoryView.swift */,
 				F8740C2728C99EB0009D6F8C /* SubHomeView.swift */,
 				F8740C2928C9BD63009D6F8C /* MyPageView.swift */,
 				F87B1DC62963EB92000B2331 /* SignInWithApple.swift */,
 				F81BAF5A29A74D0600E8761D /* TabControlView.swift */,
 				F81BAF5C29A755CF00E8761D /* FavoritesView.swift */,
+				F81BAF5E29A7627100E8761D /* HomeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -398,8 +401,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8FC83B32956FB7300453EDD /* AppDelegate.swift in Sources */,
-				F8740C2428C99954009D6F8C /* SideMenuView.swift in Sources */,
+				F8740C2428C99954009D6F8C /* CategoryView.swift in Sources */,
 				F87109F428E33275009AFA8F /* CategoryResponse.swift in Sources */,
+				F81BAF5F29A7627100E8761D /* HomeView.swift in Sources */,
 				F8CFE8FE28FD8D9F005DB6F5 /* ColorExtension.swift in Sources */,
 				F88F6D4B292B0E8700F34D59 /* CategorySheetView.swift in Sources */,
 				F84C51CC28E58D0A00E5DECD /* ScrapViewModel.swift in Sources */,

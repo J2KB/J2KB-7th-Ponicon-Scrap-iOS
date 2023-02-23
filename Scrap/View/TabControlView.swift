@@ -13,13 +13,13 @@ struct TabControlView: View {
 
     var body: some View {
         TabView {
-            Text("Favorites")
-                .tabItem {
-                    Image(systemName: "star")
-                }
             MainHomeView()
                 .tabItem {
                     Image(systemName: "house")
+                }
+            Text("Favorites")
+                .tabItem {
+                    Image(systemName: "heart")
                 }
             MyPageView(userData: $scrapVM.user)
                 .tabItem {

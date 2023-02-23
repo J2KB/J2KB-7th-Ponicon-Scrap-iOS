@@ -85,7 +85,7 @@ struct CategoryRow: View {
 
 struct CategoryRow_Previews: PreviewProvider {
     static var previews: some View {
-        SideMenuView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "전체 자료", numOfLink: 1, order: 0),
+        CategoryView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "전체 자료", numOfLink: 1, order: 0),
            CategoryResponse.Category(categoryId: 1, name: "1st category", numOfLink: 10, order: 2), CategoryResponse.Category(categoryId: 2, name: "2nd category", numOfLink: 201, order: 3)])), isShowingCategoryView: .constant(true), selectedCategoryId: .constant(0), selectedCategoryOrder: .constant(0))
             .environmentObject(ScrapViewModel())
     }

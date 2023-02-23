@@ -14,67 +14,85 @@ struct MainHomeView: View {
     @State private var isPresentDataModalSheet = false
     @State private var selectedCategoryID = 0
     @State private var selectedCategoryOrder = 0
-    
-    var categoryTitle : String { return "\(scrapVM.categoryList.result.categories[scrapVM.categoryList.result.categories.firstIndex(where: {$0.categoryId == selectedCategoryID}) ?? 0].name)"}
-    
+
     var body: some View {
-        ZStack{
-            //Main Home
-            NavigationView{
-                SubHomeView(datas: $scrapVM.dataList, isPresentDataModalSheet: $isPresentDataModalSheet, currentCategoryId: $selectedCategoryID, currentCategoryOrder: $selectedCategoryOrder)
-                    .navigationBarTitle("", displayMode: .inline)
-                    .toolbar{
-                        ToolbarItem(placement: .navigationBarLeading){
-                            HStack(spacing: -4){
-                                Button(action: {
-                                    withAnimation(.spring()){
-                                        self.isShowingCategorySideMenuView = true
-                                        scrapVM.getCategoryListData(userID: userVM.userIndex)
-                                    }
-                                }) {
-                                    ZStack {
-                                        Image(systemName: "line.3.horizontal")
-                                            .resizable()
-                                            .frame(width: 22, height: 16)
-                                            .foregroundColor(Color("basic_text"))
-                                    }
-                                    .frame(width: 36, height: 30)
-                                }
-                                Text(categoryTitle)
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(Color("basic_text"))
-                                    .frame(width: UIScreen.main.bounds.width / 1.3, alignment: .leading)
-                            }
-                        }
-                    }
-            }
-            //Drawer
-            SideMenuView(categoryList: $scrapVM.categoryList.result, isShowingCategoryView: $isShowingCategorySideMenuView, selectedCategoryId: $selectedCategoryID, selectedCategoryOrder: $selectedCategoryOrder)
-                .offset(x: isShowingCategorySideMenuView ? 0 : -UIScreen.main.bounds.width)
-            if isPresentDataModalSheet {
-                Color(.black)
-                    .opacity(0.2)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        isPresentDataModalSheet = false
-                    }
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                HomeView(selectedCategoryID: $selectedCategoryID, selectedCategoryOrder: $selectedCategoryOrder, isShowingCategorySideMenuView: $isShowingCategorySideMenuView)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                CategoryView(categoryList: $scrapVM.categoryList.result, isShowingCategoryView: $isShowingCategorySideMenuView, selectedCategoryId: $selectedCategoryID, selectedCategoryOrder: $selectedCategoryOrder)
+                    .frame(width: geometry.size.width)
+//                        .transition(.move(edge: .leading))
+                    .offset(x: isShowingCategorySideMenuView ? 0 : -geometry.size.width)
             }
         }
-        .gesture(DragGesture().onEnded({
-            if !isPresentDataModalSheet {
-                if $0.translation.width < -100 {
-                    withAnimation(.easeInOut) {
-                        self.isShowingCategorySideMenuView = false
-                    }
-                }
-               else if $0.translation.width > 100 {
-                    withAnimation(.easeInOut) {
-                        self.isShowingCategorySideMenuView = true
-                        scrapVM.getCategoryListData(userID: userVM.userIndex)
-                    }
-                }
-            }
-         }))
+//        ZStack{
+            //Main Home
+//            HomeView()
+//            NavigationView{
+//                SubHomeView(datas: $scrapVM.dataList, isPresentDataModalSheet: $isPresentDataModalSheet, currentCategoryId: $selectedCategoryID, currentCategoryOrder: $selectedCategoryOrder)
+//                    .navigationBarTitle("", displayMode: .inline)
+//                    .toolbar{
+//                        ToolbarItem(placement: .navigationBarLeading){
+//                            HStack{
+//                                Button(action: {
+//                                    withAnimation(.spring()){
+//                                        self.isShowingCategorySideMenuView = true
+//                                        scrapVM.getCategoryListData(userID: userVM.userIndex)
+//                                    }
+//                                }) {
+//                                    ZStack {
+//                                        Image(systemName: "line.3.horizontal")
+//                                            .resizable()
+//                                            .frame(width: 22, height: 16)
+//                                            .foregroundColor(Color("basic_text"))
+//                                    }
+//                                    .frame(width: 42, height: 40)
+////                                    .background(.blue)
+//                                }
+//                                .padding(.trailing, -16)
+////                                Text(categoryTitle)
+//                                Text("카테고리 이름 입니다! 크기 18도 괜찮군요")
+//                                    .font(.system(size: 18, weight: .semibold))
+//                                    .foregroundColor(Color("basic_text"))
+//                                    .frame(width: screenWidth / 1.27, alignment: .leading)
+////                                    .background(.red)
+//                                    .padding(.trailing)
+//                                Spacer()
+//                                    .frame(width: 10)
+//                            }
+//                            .frame(width: screenWidth)
+//                            .background(.yellow)
+//                        }
+//                    }
+//            }
+            //Drawer
+//            CategoryView(categoryList: $scrapVM.categoryList.result, isShowingCategoryView: $isShowingCategorySideMenuView, selectedCategoryId: $selectedCategoryID, selectedCategoryOrder: $selectedCategoryOrder)
+//                .offset(x: isShowingCategorySideMenuView ? 0 : -UIScreen.main.bounds.width)
+//            if isPresentDataModalSheet {
+//                Color(.black)
+//                    .opacity(0.2)
+//                    .ignoresSafeArea()
+//                    .onTapGesture {
+//                        isPresentDataModalSheet = false
+//                    }
+//            }
+//        }
+//        .gesture(DragGesture().onEnded({
+//            if !isPresentDataModalSheet {
+//                if $0.translation.width < -100 {
+//                    withAnimation(.easeInOut) {
+//                        self.isShowingCategorySideMenuView = false
+//                    }
+//                }
+//               else if $0.translation.width > 100 {
+//                    withAnimation(.easeInOut) {
+//                        self.isShowingCategorySideMenuView = true
+//                        scrapVM.getCategoryListData(userID: userVM.userIndex)
+//                    }
+//                }
+//            }
+//         }))
     }
 }
 
