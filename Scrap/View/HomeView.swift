@@ -40,8 +40,8 @@ struct HomeView: View {
 //                    .background(.blue)
                     .padding(.trailing, -10)
                 }
-//                    Text(categoryTitle)
-                Text("카테고리 이름 입니다! 크기 18도 괜찮군요")
+                Text(categoryTitle)
+//                Text("카테고리 이름 입니다! 크기 18도 괜찮군요")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(Color("basic_text"))
                     .frame(width: screenWidth / 1.22, alignment: .leading)
