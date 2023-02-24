@@ -36,22 +36,18 @@ struct HomeView: View {
                             .frame(width: 22, height: 16)
                             .foregroundColor(Color("basic_text"))
                     }
-                    .frame(width: 45, height: 40)
-//                    .background(.blue)
+                    .frame(width: 55, height: 40)
                     .padding(.trailing, -10)
                 }
                 Text(categoryTitle)
-//                Text("카테고리 이름 입니다! 크기 18도 괜찮군요")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(Color("basic_text"))
                     .frame(width: screenWidth / 1.22, alignment: .leading)
-//                    .background(.red)
                     .padding(.trailing)
                 Spacer()
-                    .frame(width: 12)
+                    .frame(width: 5)
             }
             .frame(width: screenWidth, height: 40)
-//            .background(.yellow)
             SubHomeView(datas: $scrapVM.dataList, isPresentDataModalSheet: $isPresentDataModalSheet, currentCategoryId: $selectedCategoryID, currentCategoryOrder: $selectedCategoryOrder)
                 .navigationBarTitle("", displayMode: .inline)
         }
