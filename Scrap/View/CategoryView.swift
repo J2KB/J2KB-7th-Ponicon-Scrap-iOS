@@ -45,9 +45,12 @@ struct CategoryView: View {
     @Binding var selectedCategoryId : Int
     @Binding var selectedCategoryOrder : Int
     
+    private let screenWidth = UIScreen.main.bounds.width
+    private let screenHeight = UIScreen.main.bounds.height
+    
     var body: some View {
         ZStack{
-            VStack(spacing: -2){
+            VStack(spacing: 0){
                 //HEADER
                 HStack{
                     HStack(spacing: 4){
@@ -64,10 +67,12 @@ struct CategoryView: View {
                             }
                             .frame(width: 28, height: 28)
                         }
+//                        .background(.blue)
                         Text("카테고리")
                             .font(.system(size: 16, weight: .semibold))
-                            .frame(width: 70, height: 20, alignment: .leading)
+                            .frame(width: 70, height: 28, alignment: .leading)
                             .foregroundColor(Color("basic_text"))
+//                            .background(.red)
                     }
                     Spacer()
                     Button(action: { //새로운 카테고리 추가 버튼
@@ -76,33 +81,37 @@ struct CategoryView: View {
                         ZStack {
                             Image(systemName: "plus")
                                 .resizable()
-                                .frame(width: 18, height: 18)
+                                .frame(width: 16, height: 16)
                                 .foregroundColor(Color("basic_text"))
                         }
-                        .frame(width: 28, height: 28)
+                        .frame(width: 24, height: 20)
                     }
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 2))
+                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+//                    .background(.yellow)
                 }//Header HStack
-                .frame(height: 40)
-                .padding(EdgeInsets(top: 0, leading: 6, bottom: 10, trailing: 10))
                 .background(scheme == .light ? .white : .black)
+                
                 //Category LIST
                 VStack{
                     List{
+                        //모든 자료, 분류되지 않은 자료
                         ForEach($categoryList.categories) { $category in
                             if category.order == 0 || category.order == 1 {
                                 ZStack {
-                                    HStack(spacing: 20){ //모든 자료, 분류되지 않은 자료
+                                    HStack(spacing: 0){
+                                        Spacer()
+                                            .frame(width: screenWidth / 24)
                                         Text(category.name)
                                             .font(.system(size: 16))
                                             .foregroundColor(Color("basic_text"))
-                                            .frame(width: UIScreen.main.bounds.width / 1.39, alignment: .leading)
+                                            .frame(width: screenWidth / 1.35, alignment: .leading)
                                         Text("\(category.numOfLink)")
                                             .font(.system(size: 16))
                                             .foregroundColor(Color("basic_text"))
-                                            .frame(width: UIScreen.main.bounds.width / 14, alignment: .trailing)
+                                            .frame(width: screenWidth / 11, alignment: .trailing)
+                                        Spacer()
+                                            .frame(width: screenWidth / 10)
                                     }
-                                    
                                     Button(action: {
                                         withAnimation(.spring()){
                                             isShowingCategoryView = false
@@ -113,13 +122,16 @@ struct CategoryView: View {
                                         }
                                     }) {
                                         Rectangle()
-                                            .frame(width: UIScreen.main.bounds.width - 70)
+                                            .frame(width: screenWidth / 1.1)
                                             .opacity(0)
                                     }
                                 }
                                 .listRowBackground(selectedCategoryId == category.categoryId ? Color("selected_color") : .none)
+                                .frame(width: screenWidth)
                             }
                         }
+                        
+                        //나머지 카테고리
                         ForEach($categoryList.categories) { $category in
                             if category.order != 0 && category.order != 1 {
                                 CategoryRow(isPresentCategoryModalSheet: $isPresentCategoryModalSheet, category: $category, isShowingCategorySideMenuView: $isShowingCategoryView, selectedCategoryId: $selectedCategoryId, isAddingNewCategory: $isAddingCategory, selectedCategoryOrder: $selectedCategoryOrder, detailCategory: $detailCategory)
@@ -140,7 +152,6 @@ struct CategoryView: View {
                                 }
                             }
                         })
-                        Spacer()
                     }//List
                 }//CategoryList VStack
                 .refreshable {
@@ -172,8 +183,31 @@ struct CategoryView: View {
 
 struct CategoryView_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryView(categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "분류되지 않은 자료", numOfLink: 1, order: 0),
-           CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2), CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])), isShowingCategoryView: .constant(true), selectedCategoryId: .constant(0), selectedCategoryOrder: .constant(0))
+        CategoryView(categoryList: .constant(CategoryResponse.Result(categories: [
+            CategoryResponse.Category(categoryId: 0, name: "전체 자료", numOfLink: 500, order: 0),
+            CategoryResponse.Category(categoryId: 1, name: "분류되지 않은 자료", numOfLink: 42, order: 1),
+            CategoryResponse.Category(categoryId: 2, name: "채용 공고 모음", numOfLink: 6, order: 2),
+            CategoryResponse.Category(categoryId: 3, name: "iOS 자료", numOfLink: 30, order: 3),
+            CategoryResponse.Category(categoryId: 4, name: "컴퓨터 사이언스 자료", numOfLink: 140, order: 4),
+            CategoryResponse.Category(categoryId: 5, name: "취준 팁 모음", numOfLink: 60, order: 5),
+            CategoryResponse.Category(categoryId: 6, name: "개발자 정보!", numOfLink: 20, order: 6),
+            CategoryResponse.Category(categoryId: 7, name: "iOS 자료", numOfLink: 60, order: 7),
+            CategoryResponse.Category(categoryId: 8, name: "iOS 자료", numOfLink: 60, order: 8),
+            CategoryResponse.Category(categoryId: 9, name: "iOS 자료", numOfLink: 60, order: 9),
+            CategoryResponse.Category(categoryId: 10, name: "iOS 자료", numOfLink: 60, order: 10),
+            CategoryResponse.Category(categoryId: 11, name: "iOS 자료", numOfLink: 60, order: 11),
+            CategoryResponse.Category(categoryId: 12, name: "iOS 자료", numOfLink: 60, order: 12),
+            CategoryResponse.Category(categoryId: 13, name: "iOS 자료", numOfLink: 60, order: 13),
+            CategoryResponse.Category(categoryId: 14, name: "iOS 자료", numOfLink: 60, order: 14),
+            CategoryResponse.Category(categoryId: 15, name: "iOS 자료", numOfLink: 60, order: 15),
+            CategoryResponse.Category(categoryId: 16, name: "iOS 자료", numOfLink: 60, order: 16),
+            CategoryResponse.Category(categoryId: 17, name: "iOS 자료", numOfLink: 60, order: 17),
+            CategoryResponse.Category(categoryId: 18, name: "iOS 자료", numOfLink: 60, order: 18),
+            CategoryResponse.Category(categoryId: 19, name: "iOS 자료", numOfLink: 60, order: 19),
+            CategoryResponse.Category(categoryId: 20, name: "iOS 자료", numOfLink: 60, order: 20),
+            CategoryResponse.Category(categoryId: 21, name: "iOS 자료", numOfLink: 60, order: 21),
+            CategoryResponse.Category(categoryId: 22, name: "iOS 자료", numOfLink: 60, order: 22)
+        ])), isShowingCategoryView: .constant(true), selectedCategoryId: .constant(0), selectedCategoryOrder: .constant(0))
             .environmentObject(ScrapViewModel())
     }
 }

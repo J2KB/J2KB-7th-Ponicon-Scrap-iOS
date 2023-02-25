@@ -72,7 +72,6 @@ struct MyPageView: View {
 //                            isShowingMyPage = true
                 }){
                     Text("로그아웃")
-                        .underline()
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(.gray_bold)
                         .frame(width: screenWidth, height: 32, alignment: .leading)
@@ -87,7 +86,6 @@ struct MyPageView: View {
                     self.reallyWithDrawal = true
                 }){
                     Text("회원탈퇴")
-                        .underline()
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(.gray_bold)
                         .frame(width: screenWidth, height: 32, alignment: .leading)
