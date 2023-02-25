@@ -26,6 +26,9 @@ struct DataSheetView: View {
     @Binding var isPresentDataModalSheet : Bool
     @Binding var currentCategoryOrder : Int
     @Binding var currentCategoryId : Int
+    
+    private let screenWidth = UIScreen.main.bounds.width
+    private let screenHeight = UIScreen.main.bounds.height
 
     var body: some View {
         VStack(spacing: 24){
@@ -35,12 +38,12 @@ struct DataSheetView: View {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(Color("textfield_color"))
                             .opacity(0.4)
-                            .frame(width: UIScreen.main.bounds.width / 1.25, height: 36, alignment: .leading)
+                            .frame(width: screenWidth / 1.25, height: 36, alignment: .leading)
                         HStack(spacing: 13){
                             TextField("자료 이름", text: $renamedDataName)
                                 .focused($focusState, equals: .rename)
                                 .font(.system(size: 18, weight: .regular))
-                                .frame(width: UIScreen.main.bounds.width / 1.5, alignment: .leading)
+                                .frame(width: screenWidth / 1.5, alignment: .leading)
                                 .foregroundColor(Color("basic_text"))
                             Button(action: {
                                 renamedDataName = "" //clear category name
@@ -83,7 +86,7 @@ struct DataSheetView: View {
                 .padding(.bottom, 10)
             }else {
                 Text(data.title ?? "")
-                    .frame(width: UIScreen.main.bounds.width - 40, alignment: .leading)
+                    .frame(width: screenWidth - 40, alignment: .leading)
                     .foregroundColor(Color("basic_text"))
             }
             Button(action: {
@@ -93,29 +96,41 @@ struct DataSheetView: View {
                 ZStack{
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color("list_color"))
-                        .frame(width: UIScreen.main.bounds.width - 40, height: 46, alignment: .leading)
+                        .frame(width: screenWidth - 40, height: 46, alignment: .leading)
                     Label("링크 복사", systemImage: "doc.on.doc")
                         .foregroundColor(Color("basic_text"))
-                        .frame(width: UIScreen.main.bounds.width - 40, height: 46, alignment: .leading)
+                        .frame(width: screenWidth - 40, height: 46, alignment: .leading)
                         .padding(.leading, 40)
                 }
             }
             ZStack{
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color("list_color"))
-                    .frame(width: UIScreen.main.bounds.width - 40, height: currentCategoryOrder == 0 ? 92 : 140, alignment: .leading)
+                    .frame(width: screenWidth - 40, height: currentCategoryOrder != 0 ? screenHeight / 4.7 : screenHeight / 6, alignment: .leading)
                 VStack(spacing: 2){
                     Button(action: {
                         self.isEditingDataName = true
                     }) {
-                        Label("이름 수정", systemImage: "pencil")
+                        //즐겨찾기에 추가 되어/안되어 있으면, 해제 / 추가
+                        Label("즐겨찾기 추가", systemImage: "heart")
                             .foregroundColor(Color("basic_text"))
-                            .frame(width: UIScreen.main.bounds.width - 40, height: 42, alignment: .leading)
+                            .frame(width: screenWidth - 40, height: 42, alignment: .leading)
                             .padding(.leading, 40)
                     }
                     Divider()
-                        .frame(width: UIScreen.main.bounds.width - 40)
+                        .frame(width: screenWidth - 40)
                         .padding(.vertical, currentCategoryOrder != 0 ? 0 : -2)
+                    Button(action: {
+                        isShowMovingCategoryView = true
+                        isPresentDataModalSheet.toggle()
+                    }) {
+                        Label("이름 수정", systemImage: "pencil")
+                            .foregroundColor(Color("basic_text"))
+                            .frame(width: screenWidth - 40, height: 40, alignment: .leading)
+                            .padding(.leading, 40)
+                    }
+                    Divider()
+                        .frame(width: screenWidth - 40)
                     if currentCategoryOrder != 0 {
                         Button(action: {
                             isShowMovingCategoryView = true
@@ -123,18 +138,18 @@ struct DataSheetView: View {
                         }) {
                             Label("카테고리 이동", systemImage: "arrow.turn.down.right")
                                 .foregroundColor(Color("basic_text"))
-                                .frame(width: UIScreen.main.bounds.width - 40, height: 40, alignment: .leading)
+                                .frame(width: screenWidth - 40, height: 40, alignment: .leading)
                                 .padding(.leading, 40)
                         }
                         Divider()
-                            .frame(width: UIScreen.main.bounds.width - 40)
+                            .frame(width: screenWidth - 40)
                     }
                     Button(action:{
                         self.isDeleteData = true
                     }){
                         Label("삭제", systemImage: "trash")
                             .foregroundColor(.red)
-                            .frame(width: UIScreen.main.bounds.width - 40, height: 40, alignment: .leading)
+                            .frame(width: screenWidth - 40, height: 40, alignment: .leading)
                             .padding(.leading, 40)
                     }
                 }

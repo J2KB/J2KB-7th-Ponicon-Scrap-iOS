@@ -22,23 +22,19 @@ struct CategoryRow: View {
     @Binding var isAddingNewCategory : Bool
     @Binding var selectedCategoryOrder : Int
     @Binding var detailCategory : CategoryResponse.Category
-
+    
+    private let screenWidth = UIScreen.main.bounds.width
+    private let screenHeight = UIScreen.main.bounds.height
+    
     var title: String {
         var cnt = 0
         var tmp = category.name
-        while cnt <= Int(UIScreen.main.bounds.width / 1.35) {
+        while cnt <= Int(screenWidth / 1.35) {
             tmp += " "
             cnt += 1
         }
         return tmp
     }
-    
-    private let screenWidth = UIScreen.main.bounds.width
-    private let screenHeight = UIScreen.main.bounds.height
-    
-    //1.35, 11.0
-    //0.0135, 0.11
-    //
     
     var body: some View {
         HStack(spacing: 0){

@@ -67,12 +67,11 @@ struct CategoryView: View {
                             }
                             .frame(width: 28, height: 28)
                         }
-//                        .background(.blue)
+                        .padding(.leading, 6)
                         Text("카테고리")
                             .font(.system(size: 16, weight: .semibold))
                             .frame(width: 70, height: 28, alignment: .leading)
                             .foregroundColor(Color("basic_text"))
-//                            .background(.red)
                     }
                     Spacer()
                     Button(action: { //새로운 카테고리 추가 버튼
@@ -86,11 +85,9 @@ struct CategoryView: View {
                         }
                         .frame(width: 24, height: 20)
                     }
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
-//                    .background(.yellow)
+                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 12))
                 }//Header HStack
                 .background(scheme == .light ? .white : .black)
-                
                 //Category LIST
                 VStack{
                     List{
