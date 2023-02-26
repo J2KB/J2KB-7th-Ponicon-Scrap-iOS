@@ -53,6 +53,7 @@
 		F8D4A2072939F45000BAE93D /* APIErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D4A2062939F45000BAE93D /* APIErrors.swift */; };
 		F8F8F94E292DDC420058FA75 /* AddCategoryAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F8F94D292DDC420058FA75 /* AddCategoryAlert.swift */; };
 		F8F8F950292E06140058FA75 /* DataSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F8F94F292E06140058FA75 /* DataSheetView.swift */; };
+		F8FC547729ABB0C6001D6FB4 /* LocalNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC547529ABAAE3001D6FB4 /* LocalNotificationManager.swift */; };
 		F8FC83B12956FAD500453EDD /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8FC83B02956FAD500453EDD /* Launch Screen.storyboard */; };
 		F8FC83B32956FB7300453EDD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC83B22956FB7300453EDD /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
@@ -127,6 +128,7 @@
 		F8D4A2062939F45000BAE93D /* APIErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIErrors.swift; sourceTree = "<group>"; };
 		F8F8F94D292DDC420058FA75 /* AddCategoryAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryAlert.swift; sourceTree = "<group>"; };
 		F8F8F94F292E06140058FA75 /* DataSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSheetView.swift; sourceTree = "<group>"; };
+		F8FC547529ABAAE3001D6FB4 /* LocalNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationManager.swift; sourceTree = "<group>"; };
 		F8FC83B02956FAD500453EDD /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		F8FC83B22956FB7300453EDD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -255,6 +257,7 @@
 		F89494AF28DAF9D10087304B /* Share */ = {
 			isa = PBXGroup;
 			children = (
+				F8FC547529ABAAE3001D6FB4 /* LocalNotificationManager.swift */,
 				F8A276172945A9FC00E5209F /* NewData.swift */,
 				F8A798BA290A61BD00FDD29D /* Share.entitlements */,
 				F89494B028DAF9D10087304B /* ShareViewController.swift */,
@@ -437,6 +440,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8FC547729ABB0C6001D6FB4 /* LocalNotificationManager.swift in Sources */,
 				F8A276192945AC5F00E5209F /* NewData.swift in Sources */,
 				F892D2B72951E79800298683 /* APIService.swift in Sources */,
 				F892D2B52951E54200298683 /* APIErrors.swift in Sources */,

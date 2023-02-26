@@ -11,6 +11,7 @@ import SwiftUI
 import Combine
 import MobileCoreServices
 import UniformTypeIdentifiers
+import UserNotifications
 
 struct NewDataModel: Decodable{ //자료 저장 -> response 데이터로 받을 link id
     struct Result: Decodable {
@@ -124,6 +125,13 @@ class ShareViewController: UIViewController{
         self.present(alert, animated: true, completion: nil)
     }
     
+    func setNotification() -> Void {
+        let manager = LocalNotificationManager()
+        manager.requestPermission() //알림 권한 요청
+        manager.addNotification(title: "Scrap") //notification 추가
+        manager.schedule()
+    }
+    
     func addNewData(catID: Int, userIndex: Int){
         guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=\(userIndex)&category=\(catID)") else {
             print("invalid url")
@@ -150,7 +158,8 @@ class ShareViewController: UIViewController{
                     self.displayUIAlertController(title: "자료 저장 실패", message: "오류")
                 case .success(let result):
                     print(result)
-                    self.displayUIAlertController(title: "자료 저장", message: "자료가 성공적으로 저장되었습니다.")
+//                    self.displayUIAlertController(title: "자료 저장", message: "자료가 성공적으로 저장되었습니다.")
+                    self.setNotification() //자료 저장이 되면, 푸시 알람 뜨도록 notification 세팅
                     break
                 }
             }

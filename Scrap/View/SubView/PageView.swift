@@ -33,11 +33,9 @@ struct PageView: View {
             InformationView
         }
     }
-    //body
     
     var LinkImageView: some View {
         VStack{
-            //Link Image Part
             if let urlString = data.link {          //자료 링크 -> 옵셔널 바인딩
                 let url = URL(string: urlString)    //URL값으로 변경
                 if let Url = url {                  //URL값이 nil이 아니면
