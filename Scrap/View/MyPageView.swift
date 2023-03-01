@@ -24,7 +24,7 @@ struct MyPageView: View {
                 .font(.system(size: 18, weight: .bold))
                 .frame(width: screenWidth, height: 40, alignment: .leading)
                 .foregroundColor(Color("basic_text"))
-                .padding(EdgeInsets(top: 0, leading: 40, bottom: 0, trailing: 0)) //superview
+                .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 0)) //superview
 //                    .background(.green)
             VStack{ //profile
                 HStack(spacing: 10){

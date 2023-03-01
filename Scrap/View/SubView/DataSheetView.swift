@@ -107,7 +107,7 @@ struct DataSheetView: View {
             ZStack{
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color("list_color"))
-                    .frame(width: screenWidth - 40, height: currentCategoryOrder != 0 ? screenHeight / 4.7 : screenHeight / 6, alignment: .leading)
+                    .frame(width: screenWidth - 40, height: currentCategoryOrder > 0 ? screenHeight / 4.7 : screenHeight / 6, alignment: .leading)
                 VStack(spacing: 2){
                     Button(action: {
                         self.isEditingDataName = true
@@ -120,7 +120,7 @@ struct DataSheetView: View {
                     }
                     Divider()
                         .frame(width: screenWidth - 40)
-                        .padding(.vertical, currentCategoryOrder != 0 ? 0 : -2)
+                        .padding(.vertical, currentCategoryOrder > 0 ? 0 : -2)
                     Button(action: {
                         isShowMovingCategoryView = true
                         isPresentDataModalSheet.toggle()
@@ -132,7 +132,7 @@ struct DataSheetView: View {
                     }
                     Divider()
                         .frame(width: screenWidth - 40)
-                    if currentCategoryOrder != 0 {
+                    if currentCategoryOrder > 0 {
                         Button(action: {
                             isShowMovingCategoryView = true
                             isPresentDataModalSheet.toggle()
@@ -181,7 +181,7 @@ struct DataSheetView_Previews: PreviewProvider {
     static var previews: some View {
         DataSheetView(
             isShowMovingCategoryView: .constant(true),
-            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도일! 이름도 참 잘지었어 유명한 이름도 진짜 독특하고 잘지은듯 유명한 탐정 유명한!ㅋㅋㅋㅋ", domain: "naver.com", imgUrl: "")),
+            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네유명한이름진짜독특하고 잘지은듯.. 유명한탐정유명한ㅋㅋㅋㅋ", domain: "naver.com", imgUrl: "")),
             isPresentDataModalSheet: .constant(true),
             currentCategoryOrder: .constant(1),
             currentCategoryId: .constant(1)

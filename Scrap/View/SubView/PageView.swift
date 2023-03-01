@@ -13,8 +13,6 @@ struct PageView: View {
     @Binding var data : DataResponse.Datas              //해당 자료 데이터
     @Binding var detailData : DataResponse.Datas
     @Binding var isOneColumnData : Bool                 //1열인가?
-    @Binding var currentCategoryId : Int                //현재 카테고리 id
-    @Binding var currentCategoryOrder : Int             //현재 카테고리 order
     
     private let screenHeight = UIScreen.main.bounds.height
     private let screenWidth = UIScreen.main.bounds.width
@@ -143,34 +141,26 @@ struct PageView_Previews: PreviewProvider {
         PageView(
             isPresentDataModalSheet: .constant(false),
             data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도일~ 보고싶다!히히", domain: "naver.com", imgUrl:"")),
-            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneColumnData: .constant(false),
-            currentCategoryId: .constant(0),
-            currentCategoryOrder: .constant(1)
+            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneColumnData: .constant(false)
         )
         .environmentObject(ScrapViewModel())
         .environmentObject(UserViewModel())
         PageView(
             isPresentDataModalSheet: .constant(false),
             data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도일~", domain: "naver.com", imgUrl: "http://static1.squarespace.com/static/5e9672644b617e2a1765d11c/t/5eddc91b1cb53938998c7a67/1591593250119/Codable+Crash+Data+Missing.png?format=1500w")),
-            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneColumnData: .constant(false),
-            currentCategoryId: .constant(0),
-            currentCategoryOrder: .constant(1)
+            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneColumnData: .constant(false)
         )
         PageView(
             isPresentDataModalSheet: .constant(false),
             data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허 남도일~ 보고싶다!히히 코난은 정뫌 재미 있어, 극장판 볼거 짱많은데 할게 너무 많네...ㅋ 밥먹으면서 봐야겠다 흑흑 어쩌면 좋아", domain: "naver.com", imgUrl:"")),
-            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneColumnData: .constant(true),
-            currentCategoryId: .constant(0),
-            currentCategoryOrder: .constant(1)
+            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneColumnData: .constant(true)
         )
         .environmentObject(ScrapViewModel())
         .environmentObject(UserViewModel())
         PageView(
             isPresentDataModalSheet: .constant(false),
             data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허 남도일~ 보고싶다!히히 코난은 정뫌 재미 있어, 극장판 볼거 짱많은데 할게 너무 많네...ㅋ 밥먹으면서 봐야겠다 흑흑 어쩌면 좋아", domain: "naver.com", imgUrl: "http://static1.squarespace.com/static/5e9672644b617e2a1765d11c/t/5eddc91b1cb53938998c7a67/1591593250119/Codable+Crash+Data+Missing.png?format=1500w")),
-            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneColumnData: .constant(true),
-            currentCategoryId: .constant(0),
-            currentCategoryOrder: .constant(1)
+            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneColumnData: .constant(true)
         )
         .environmentObject(ScrapViewModel())
         .environmentObject(UserViewModel())

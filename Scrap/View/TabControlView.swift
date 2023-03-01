@@ -17,7 +17,7 @@ struct TabControlView: View {
                 .tabItem {
                     Image(systemName: "house")
                 }
-            Text("Favorites")
+            FavoritesView()
                 .tabItem {
                     Image(systemName: "heart")
                 }

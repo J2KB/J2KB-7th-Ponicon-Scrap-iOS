@@ -9,6 +9,7 @@ import Foundation
 
 class ScrapViewModel: ObservableObject{
     @Published var dataList = DataResponse.Result(links: [])
+    @Published var favoriteList = DataResponse.Result(links: [])
     @Published var user = UserResponse.Result(name: "", username: "")
     @Published var categoryList = CategoryResponse(code: 0, message: "", result: CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)]))
     @Published var isLoading = false //서버 통신 상태 변수
@@ -29,6 +30,10 @@ class ScrapViewModel: ObservableObject{
                 }
             }
         }
+    }
+    
+    private func getFavorites() {
+//        favoriteList = dataList.links.filter{ $0.favorites == true } //즐겨찾기인애들만 가져오기
     }
     
     // MARK: - 전체 자료 조회

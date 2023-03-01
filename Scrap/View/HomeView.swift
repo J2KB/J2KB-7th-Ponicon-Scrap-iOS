@@ -23,6 +23,7 @@ struct HomeView: View {
     
     var body: some View {
         VStack {
+            //Header
             HStack {
                 Button(action: {
                     withAnimation(.easeInOut) {

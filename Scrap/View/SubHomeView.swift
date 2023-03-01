@@ -89,19 +89,21 @@ struct SubHomeView: View {
                             }
                         }
                         .frame(width: UIScreen.main.bounds.width / 1.105, height: 30, alignment: .trailing)
+                        
                         LazyVGrid(columns: isOneColumnData ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: UIScreen.main.bounds.width / 2.2))], spacing: 20){
                             if isDataRecentOrder { //최신순
                                 ForEach($datas.links.reversed()) { info in
-                                    PageView(isPresentDataModalSheet: $isPresentDataModalSheet, data: info, detailData: $detailData, isOneColumnData: $isOneColumnData, currentCategoryId: $currentCategoryId, currentCategoryOrder: $currentCategoryOrder)
+                                    PageView(isPresentDataModalSheet: $isPresentDataModalSheet, data: info, detailData: $detailData, isOneColumnData: $isOneColumnData)
                                 }
                             } else { //오래된순
                                 ForEach($datas.links) { info in
-                                    PageView(isPresentDataModalSheet: $isPresentDataModalSheet, data: info, detailData: $detailData, isOneColumnData: $isOneColumnData, currentCategoryId: $currentCategoryId, currentCategoryOrder: $currentCategoryOrder)
+                                    PageView(isPresentDataModalSheet: $isPresentDataModalSheet, data: info, detailData: $detailData, isOneColumnData: $isOneColumnData)
                                 }
                             }
                         } //LAZYGRID
                         .padding(.horizontal, 12)
                         .padding(.vertical, 10)
+                        
                     }//ScrollView
                     NavigationLink(destination: MoveCategoryView(isShowMovingCategoryView: $isShowMovingCategory, categoryList: $scrapVM.categoryList.result, data: $detailData, currentCategoryId: $currentCategoryId).navigationBarBackButtonHidden(true).navigationBarBackButtonHidden(true), isActive: $isShowMovingCategory) { EmptyView() }
                         .opacity(0)
