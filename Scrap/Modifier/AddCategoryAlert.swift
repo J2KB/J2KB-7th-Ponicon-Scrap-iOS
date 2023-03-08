@@ -15,6 +15,7 @@ struct AddCategoryAlert: ViewModifier {
     let placeholder : String = "카테고리를 입력해주세요"
     let title : String = "새로운 카테고리"
     let action: (String) -> Void
+    private let screenWidth = UIScreen.main.bounds.width
     
     func body(content: Content) -> some View {
         ZStack(alignment: .center) {
@@ -25,36 +26,36 @@ struct AddCategoryAlert: ViewModifier {
                     ZStack{
                         //Text, TextField
                         Rectangle()
-                            .fill(scheme == .light ? Color(.systemGray6) : .black_bold)
-                            .frame(width: UIScreen.main.bounds.width / 1.4, height: UIScreen.main.bounds.height / 7.5, alignment: .center)
+                            .fill(scheme == .light ? Color(.systemGray6) :.black_bold)
+                            .frame(width: screenWidth / 1.4, height: screenWidth / 3.6, alignment: .center)
                             .cornerRadius(14, corners: .topLeft)
                             .cornerRadius(14, corners: .topRight)
                         VStack(spacing: 12){
-                            Text(title)
+                            Text(/*title*/"New Category")
                                 .font(.system(size: 16, weight: .semibold))
                                 .padding(.top, 6)
                             ZStack {
                                 RoundedRectangle(cornerRadius: 4)
-                                    .fill(scheme == .light ? .white : .black_accent)
+                                    .fill(scheme == .light ? Color(.systemGray6) :.black_bold)
                                     .shadow(radius: 1)
-                                    .frame(width: UIScreen.main.bounds.width / 1.7, height: UIScreen.main.bounds.height / 26, alignment: .center)
+                                    .frame(width: screenWidth / 1.7, height: screenWidth / 13, alignment: .center)
                                 TextField("새로운 카테고리 이름", text: $newCategoryTitle)
                                     .font(.system(size: 13))
                                     .disableAutocorrection(true) //자동 수정 비활성화
                                     .padding(.horizontal)
-                                    .frame(width: UIScreen.main.bounds.width / 1.62, height: UIScreen.main.bounds.height / 30, alignment: .leading)
+                                    .frame(width: screenWidth / 1.62, height: screenWidth / 10, alignment: .leading)
                                     .padding(.leading, -10)
                             }
                         }
                     }
                     Divider()
                         .overlay(scheme == .light ? Color(.systemGray5) : Color(.systemGray))
-                        .frame(width: UIScreen.main.bounds.width / 1.4)
+                        .frame(width: screenWidth / 1.4)
                     ZStack{
                         //Buttons
                         Rectangle()
-                            .fill(scheme == .light ? Color(.systemGray6) : .black_bold)
-                            .frame(width: UIScreen.main.bounds.width / 1.4, height: UIScreen.main.bounds.height / 17, alignment: .center)
+                            .fill(scheme == .light ? Color(.systemGray6) :.black_bold)
+                            .frame(width: screenWidth / 1.4, height: screenWidth / 8, alignment: .center)
                             .cornerRadius(14, corners: .bottomLeft)
                             .cornerRadius(14, corners: .bottomRight)
                         HStack(spacing: 0){
@@ -67,10 +68,10 @@ struct AddCategoryAlert: ViewModifier {
                                     .font(.system(size: 15, weight: .semibold))
                                     .foregroundColor(.blue)
                             }
-                            .frame(width: UIScreen.main.bounds.width / 2.8, height: UIScreen.main.bounds.height / 17)
+                            .frame(width: screenWidth / 2.8, height: screenWidth / 8)
                             Divider()
                                 .overlay(scheme == .light ? Color(.systemGray5) : Color(.systemGray))
-                                .frame(height: UIScreen.main.bounds.height / 17)
+                                .frame(height: screenWidth / 8)
                             Button() {
                                 action(newCategoryTitle)
                                 withAnimation {
@@ -81,7 +82,7 @@ struct AddCategoryAlert: ViewModifier {
                                     .font(.system(size: 15, weight: .semibold))
                                     .foregroundColor(.blue)
                             }
-                            .frame(width: UIScreen.main.bounds.width / 2.8, height: UIScreen.main.bounds.height / 17)
+                            .frame(width: screenWidth / 2.8, height: screenWidth / 8)
                         }
                     }
                 }
