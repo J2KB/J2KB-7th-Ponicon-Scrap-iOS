@@ -41,6 +41,7 @@ class ShareViewController: UIViewController{
     private var webpageTitle : String = ""
     private var webpageUrl : String = ""
     private var webpageImageUrl : String = ""
+    private var flag = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +59,41 @@ class ShareViewController: UIViewController{
         childView.didMove(toParent: self)
         self.cancellable = delegate.$categoryID.sink { catID in
             self.catID = catID
+        }
+    }
+    
+    private func test(){
+        let extensionItems = extensionContext?.inputItems as! [NSExtensionItem]
+//        let title = item.attributedContentText?.string ?? "no contentText"
+        for extensionItem in extensionItems {
+            if let itemProviders = extensionItem.attachments {
+                for itemProvider in itemProviders {
+                    if itemProvider.hasItemConformingToTypeIdentifier("public.url") {
+                        itemProvider.loadItem(forTypeIdentifier: "public.url", options: nil) { (url, error) in
+                            let baseURL = url as! NSURL
+                            print("url⭐️⭐️⭐️⭐️⭐️⭐️⭐️")
+                            print(baseURL)
+                            self.webpageTitle = ""
+                            self.webpageUrl = baseURL.absoluteString ?? ""
+                            self.webpageImageUrl = ""
+                            self.addNewData(catID: self.catID, userIndex: self.userIndex!)
+                        }
+                    }
+                    if itemProvider.hasItemConformingToTypeIdentifier("public.plain-text") {
+                        itemProvider.loadItem(forTypeIdentifier: "public.plain-text", options: nil) { (result, error) in
+                            let text = result as! String
+                            print("plain_text⭐️⭐️⭐️⭐️⭐️⭐️⭐️")
+                            print(text)
+                            if text.hasPrefix("https") || text.hasPrefix("http") {
+                                self.webpageTitle = ""
+                                self.webpageUrl = text
+                                self.webpageImageUrl = ""
+                                self.addNewData(catID: self.catID, userIndex: self.userIndex!)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -106,6 +142,7 @@ class ShareViewController: UIViewController{
                             self.webpageUrl = hostname
                             self.webpageImageUrl = imageURL
                             self.addNewData(catID: self.catID, userIndex: self.userIndex!)
+                            self.flag = true
                         })
                     }else {
                         print("💥💥💥hasItemConformingToTypeIdentifier(propertyList) 없음...")
@@ -115,14 +152,9 @@ class ShareViewController: UIViewController{
                 print("💥💥💥itemProviders = extensionItem.attachments 부분 문제")
             }
         }
-    }
-    
-    func displayUIAlertController(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction!) -> () in
-            self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
-        }))
-        self.present(alert, animated: true, completion: nil)
+        if !flag {
+            test()
+        }
     }
     
     func setNotification() -> Void {
@@ -130,6 +162,7 @@ class ShareViewController: UIViewController{
         manager.requestPermission() //알림 권한 요청
         manager.addNotification(title: "Scrap") //notification 추가
         manager.schedule()
+        self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
     
     func addNewData(catID: Int, userIndex: Int){
@@ -155,10 +188,8 @@ class ShareViewController: UIViewController{
                 switch result {
                 case .failure(let error):
                     print(error)
-                    self.displayUIAlertController(title: "자료 저장 실패", message: "오류")
                 case .success(let result):
                     print(result)
-//                    self.displayUIAlertController(title: "자료 저장", message: "자료가 성공적으로 저장되었습니다.")
                     self.setNotification() //자료 저장이 되면, 푸시 알람 뜨도록 notification 세팅
                     break
                 }
