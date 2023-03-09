@@ -23,13 +23,15 @@ struct DataResponse: Codable {
         var title: String?            //자료 제목
         var domain: String?
         var imgUrl: String?           //자료 이미지
+        var bookmark: Bool
         
-        init(linkId: Int, link: String, title: String, domain: String, imgUrl: String){
+        init(linkId: Int, link: String, title: String, domain: String, imgUrl: String, bookmark: Bool){
             self.linkId = linkId
             self.link = link
             self.title = title
             self.domain = domain
             self.imgUrl = imgUrl
+            self.bookmark = bookmark
         }
     }
     let code: Int
@@ -85,6 +87,26 @@ struct NewDataModel: Codable { //자료 저장 -> response 데이터로 받을 l
     var message: String
     var result: Result
     init(code: Int, message: String, result: Result){
+        self.code = code
+        self.message = message
+        self.result = result
+    }
+}
+
+struct FavoriteDataModel: Codable {
+    struct Result: Codable {
+        var bookmark: Bool
+        
+        init(bookmark: Bool) {
+            self.bookmark = bookmark
+        }
+    }
+    
+    var code: Int
+    var message: String
+    var result: Result
+    
+    init(code: Int, message: String, result: Result) {
         self.code = code
         self.message = message
         self.result = result

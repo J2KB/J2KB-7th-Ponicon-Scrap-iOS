@@ -80,7 +80,7 @@ struct MoveCategoryView_Previews: PreviewProvider {
         MoveCategoryView(
             isShowMovingCategoryView: .constant(true),
             categoryList: .constant(CategoryResponse.Result(categories: [CategoryResponse.Category(categoryId: 0, name: "1", numOfLink: 1, order: 0), CategoryResponse.Category(categoryId: 1, name: "2", numOfLink: 1, order: 2), CategoryResponse.Category(categoryId: 2, name: "3", numOfLink: 1, order: 3)])),
-            data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "")),
+            data: .constant(DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "", bookmark: false)),
             currentCategoryId: .constant(0)
         )
     }

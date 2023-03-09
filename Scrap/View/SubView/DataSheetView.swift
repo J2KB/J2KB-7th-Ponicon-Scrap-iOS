@@ -21,6 +21,7 @@ struct DataSheetView: View {
     @State private var isDeleteData = false
     @State private var isEditingDataName = false
     @State private var renamedDataName = ""
+    @State private var isBookmarked = false
     
     @Binding var isShowMovingCategoryView : Bool
     @Binding var data : DataResponse.Datas
@@ -110,10 +111,13 @@ struct DataSheetView: View {
                     .frame(width: screenWidth - 40, height: currentCategoryOrder > 0 ? screenHeight / 4.7 : screenHeight / 6, alignment: .leading)
                 VStack(spacing: 2){
                     Button(action: {
-                        self.isEditingDataName = true
+                        //즐겨찾기 기능
+                        self.isBookmarked = !isBookmarked
+                        scrapVM.modifyFavoritesData(userID: userVM.userIndex, linkID: data.linkId!) //서버통신
+                        scrapVM.bookmark(dataID: data.linkId!, isBookmark: isBookmarked)
                     }) {
                         //즐겨찾기에 추가 되어/안되어 있으면, 해제 / 추가
-                        Label("즐겨찾기 추가", systemImage: "heart")
+                        Label(isBookmarked ? "즐겨찾기 해제" : "즐겨찾기 추가", systemImage: "heart")
                             .foregroundColor(Color("basic_text"))
                             .frame(width: screenWidth - 40, height: 42, alignment: .leading)
                             .padding(.leading, 40)
@@ -122,8 +126,7 @@ struct DataSheetView: View {
                         .frame(width: screenWidth - 40)
                         .padding(.vertical, currentCategoryOrder > 0 ? 0 : -2)
                     Button(action: {
-                        isShowMovingCategoryView = true
-                        isPresentDataModalSheet.toggle()
+                        self.isEditingDataName = true
                     }) {
                         Label("이름 수정", systemImage: "pencil")
                             .foregroundColor(Color("basic_text"))
@@ -159,6 +162,7 @@ struct DataSheetView: View {
         }
         .onAppear {
             self.renamedDataName = data.title ?? ""
+            self.isBookmarked = data.bookmark
         }
         .padding(.top, 48)
         .background(Color("sheet_background"))
@@ -181,7 +185,7 @@ struct DataSheetView_Previews: PreviewProvider {
     static var previews: some View {
         DataSheetView(
             isShowMovingCategoryView: .constant(true),
-            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네유명한이름진짜독특하고 잘지은듯.. 유명한탐정유명한ㅋㅋㅋㅋ", domain: "naver.com", imgUrl: "")),
+            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네유명한이름진짜독특하고 잘지은듯.. 유명한탐정유명한ㅋㅋㅋㅋ", domain: "naver.com", imgUrl: "", bookmark: false)),
             isPresentDataModalSheet: .constant(true),
             currentCategoryOrder: .constant(1),
             currentCategoryId: .constant(1)

@@ -16,16 +16,20 @@ struct TabControlView: View {
             MainHomeView()
                 .tabItem {
                     Image(systemName: "house")
+                    Text("홈")
                 }
             FavoritesView()
                 .tabItem {
                     Image(systemName: "heart")
+                    Text("즐겨찾기")
                 }
             MyPageView(userData: $scrapVM.user)
                 .tabItem {
                     Image(systemName: "person.circle")
+                    Text("마이페이지")
                 }
         }
+        .accentColor(Color("main_accent"))
         .onAppear{
             userVM.userIndex = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ?
                                 userVM.userIndex : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int

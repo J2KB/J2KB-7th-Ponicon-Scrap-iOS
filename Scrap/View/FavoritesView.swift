@@ -21,7 +21,7 @@ struct FavoritesView: View {
                 .foregroundColor(Color("basic_text"))
                 .frame(width: screenWidth, height: 40, alignment: .leading)
                 .padding(.leading, 24)
-            SubHomeView(datas: $scrapVM.dataList, isPresentDataModalSheet: $isPresentFavDataModalSheet, currentCategoryId: .constant(-1), currentCategoryOrder: .constant(-1))
+            SubHomeView(datas: $scrapVM.favoriteList, isPresentDataModalSheet: $isPresentFavDataModalSheet, currentCategoryId: .constant(-1), currentCategoryOrder: .constant(-1))
                 .navigationBarTitle("", displayMode: .inline)
         }
     }

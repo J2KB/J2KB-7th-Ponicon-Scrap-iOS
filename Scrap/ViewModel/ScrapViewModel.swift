@@ -32,8 +32,11 @@ class ScrapViewModel: ObservableObject{
         }
     }
     
+    // MARK: - 즐겨찾기 자료 리스트 추출
     private func getFavorites() {
-//        favoriteList = dataList.links.filter{ $0.favorites == true } //즐겨찾기인애들만 가져오기
+        favoriteList.links = dataList.links.filter{ $0.bookmark == true } //즐겨찾기인애들만 가져오기
+        print("즐겨찾기 리스트🥕🥕🥕🥕🥕🥕🥕🥕🥕")
+        print(favoriteList.links)
     }
     
     // MARK: - 전체 자료 조회
@@ -49,6 +52,7 @@ class ScrapViewModel: ObservableObject{
                 case .success(let result):
                     self.dataList = result.result
                     print(self.dataList)
+                    self.getFavorites()
                 }
             }
         }
@@ -242,8 +246,7 @@ class ScrapViewModel: ObservableObject{
         }
     }
     
-    //auth/data/{user_id}?link_id=
-    //자료 이름 수정
+    // MARK: - 자료 이름 수정
     func modifyDataName(dataID: Int, dataName: String, userIdx: Int){
         guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data/\(userIdx)?link_id=\(dataID)") else {
             print("invalid url")
@@ -270,7 +273,30 @@ class ScrapViewModel: ObservableObject{
         }
     }
     
-    //자료 저장
+    // MARK: 즐겨찾기 추가 & 삭제
+    func modifyFavoritesData(userID: Int, linkID: Int) {
+        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/data/bookmark/\(userID)?link_id=\(linkID)") else {
+            print("invalid url")
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        service.requestTask(FavoriteDataModel.self, withRequest: request) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let result):
+                    print(result)
+                    break
+                }
+            }
+        }
+    }
+    
+    // MARK: - 자료 저장
     func addNewData(baseurl: String, title: String, imgUrl: String, catID: Int, userIdx: Int){
         print("⭐️⭐️⭐️⭐️⭐️⭐️자료 저장!!!!!⭐️⭐️⭐️⭐️⭐️⭐️")
         print(userIdx)
@@ -378,6 +404,34 @@ class ScrapViewModel: ObservableObject{
             if dataList.links[i].linkId == dataId {
                 dataList.links[i].title = rname
                 return
+            }
+        }
+    }
+    
+    // MARK: - 즐겨찾기 추가 / 해제
+    func bookmark(dataID: Int, isBookmark: Bool) {
+        //favoriteList에 추가 / 해제
+        if isBookmark {
+            for i in 0..<dataList.links.count {
+                if dataList.links[i].linkId == dataID {
+                    dataList.links[i].bookmark = true
+                    favoriteList.links.append(dataList.links[i])
+                    break
+                }
+            }
+        }
+        else { // 즐겨찾기 해제
+            for i in 0..<dataList.links.count {
+                if dataList.links[i].linkId == dataID {
+                    dataList.links[i].bookmark = false
+                    break
+                }
+            }
+            for i in 0..<favoriteList.links.count {
+                if favoriteList.links[i].linkId == dataID {
+                    favoriteList.links.remove(at: i)
+                    return
+                }
             }
         }
     }

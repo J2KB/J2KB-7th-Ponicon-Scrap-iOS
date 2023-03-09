@@ -9,6 +9,11 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct PageView: View {
+    @EnvironmentObject var scrapVM : ScrapViewModel
+    @EnvironmentObject var userVM : UserViewModel
+    
+    @State private var isBookmarked = false
+    
     @Binding var isPresentDataModalSheet : Bool         //카테고리 더보기 sheet가 열려있는지에 대한 상태 변수
     @Binding var data : DataResponse.Datas              //해당 자료 데이터
     @Binding var detailData : DataResponse.Datas
@@ -29,6 +34,9 @@ struct PageView: View {
         VStack(spacing: -2) {
             LinkImageView
             InformationView
+        }
+        .onAppear {
+            self.isBookmarked = data.bookmark
         }
     }
     
@@ -72,9 +80,12 @@ struct PageView: View {
                         VStack{
                             Button(action: {
                                 //즐겨찾기 기능
+                                self.isBookmarked = !isBookmarked
+                                scrapVM.modifyFavoritesData(userID: userVM.userIndex, linkID: data.linkId!) //서버통신
+                                scrapVM.bookmark(dataID: data.linkId!, isBookmark: isBookmarked)
                             }){
                                 ZStack{
-                                    Image(systemName: "heart.fill") //즐겨찾기포함이라면 "heart.fill"
+                                    Image(systemName: isBookmarked ? "heart.fill" : "heart") //즐겨찾기포함이라면 "heart.fill"
                                         .foregroundColor(Color("heart"))
                                 }
                                 .frame(width: 30, height: 30)
@@ -140,27 +151,27 @@ struct PageView_Previews: PreviewProvider {
     static var previews: some View {
         PageView(
             isPresentDataModalSheet: .constant(false),
-            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도일~ 보고싶다!히히", domain: "naver.com", imgUrl:"")),
-            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneColumnData: .constant(false)
+            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도일~ 보고싶다!히히", domain: "naver.com", imgUrl:"", bookmark: false)),
+            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "", bookmark: false)), isOneColumnData: .constant(false)
         )
         .environmentObject(ScrapViewModel())
         .environmentObject(UserViewModel())
         PageView(
             isPresentDataModalSheet: .constant(false),
-            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도일~", domain: "naver.com", imgUrl: "http://static1.squarespace.com/static/5e9672644b617e2a1765d11c/t/5eddc91b1cb53938998c7a67/1591593250119/Codable+Crash+Data+Missing.png?format=1500w")),
-            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneColumnData: .constant(false)
+            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도일~", domain: "naver.com", imgUrl: "http://static1.squarespace.com/static/5e9672644b617e2a1765d11c/t/5eddc91b1cb53938998c7a67/1591593250119/Codable+Crash+Data+Missing.png?format=1500w", bookmark: false)),
+            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "", bookmark: false)), isOneColumnData: .constant(false)
         )
         PageView(
             isPresentDataModalSheet: .constant(false),
-            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허 남도일~ 보고싶다!히히 코난은 정뫌 재미 있어, 극장판 볼거 짱많은데 할게 너무 많네...ㅋ 밥먹으면서 봐야겠다 흑흑 어쩌면 좋아", domain: "naver.com", imgUrl:"")),
-            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneColumnData: .constant(true)
+            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허 남도일~ 보고싶다!히히 코난은 정뫌 재미 있어, 극장판 볼거 짱많은데 할게 너무 많네...ㅋ 밥먹으면서 봐야겠다 흑흑 어쩌면 좋아", domain: "naver.com", imgUrl:"", bookmark: false)),
+            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "", bookmark: false)), isOneColumnData: .constant(true)
         )
         .environmentObject(ScrapViewModel())
         .environmentObject(UserViewModel())
         PageView(
             isPresentDataModalSheet: .constant(false),
-            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허 남도일~ 보고싶다!히히 코난은 정뫌 재미 있어, 극장판 볼거 짱많은데 할게 너무 많네...ㅋ 밥먹으면서 봐야겠다 흑흑 어쩌면 좋아", domain: "naver.com", imgUrl: "http://static1.squarespace.com/static/5e9672644b617e2a1765d11c/t/5eddc91b1cb53938998c7a67/1591593250119/Codable+Crash+Data+Missing.png?format=1500w")),
-            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "")), isOneColumnData: .constant(true)
+            data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허 남도일~ 보고싶다!히히 코난은 정뫌 재미 있어, 극장판 볼거 짱많은데 할게 너무 많네...ㅋ 밥먹으면서 봐야겠다 흑흑 어쩌면 좋아", domain: "naver.com", imgUrl: "http://static1.squarespace.com/static/5e9672644b617e2a1765d11c/t/5eddc91b1cb53938998c7a67/1591593250119/Codable+Crash+Data+Missing.png?format=1500w", bookmark: false)),
+            detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "", bookmark: false)), isOneColumnData: .constant(true)
         )
         .environmentObject(ScrapViewModel())
         .environmentObject(UserViewModel())
