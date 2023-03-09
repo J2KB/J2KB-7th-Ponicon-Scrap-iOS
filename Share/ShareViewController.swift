@@ -62,9 +62,9 @@ class ShareViewController: UIViewController{
         }
     }
     
-    private func test(){
+    private func extractURL(){
         let extensionItems = extensionContext?.inputItems as! [NSExtensionItem]
-//        let title = item.attributedContentText?.string ?? "no contentText"
+        let title = extensionItems[0].attributedContentText?.string ?? ""
         for extensionItem in extensionItems {
             if let itemProviders = extensionItem.attachments {
                 for itemProvider in itemProviders {
@@ -73,7 +73,7 @@ class ShareViewController: UIViewController{
                             let baseURL = url as! NSURL
                             print("url⭐️⭐️⭐️⭐️⭐️⭐️⭐️")
                             print(baseURL)
-                            self.webpageTitle = ""
+                            self.webpageTitle = title
                             self.webpageUrl = baseURL.absoluteString ?? ""
                             self.webpageImageUrl = ""
                             self.addNewData(catID: self.catID, userIndex: self.userIndex!)
@@ -84,8 +84,8 @@ class ShareViewController: UIViewController{
                             let text = result as! String
                             print("plain_text⭐️⭐️⭐️⭐️⭐️⭐️⭐️")
                             print(text)
-                            if text.hasPrefix("https") || text.hasPrefix("http") {
-                                self.webpageTitle = ""
+                            if text.hasPrefix("https") || text.hasPrefix("http") { //youtube
+                                self.webpageTitle = title
                                 self.webpageUrl = text
                                 self.webpageImageUrl = ""
                                 self.addNewData(catID: self.catID, userIndex: self.userIndex!)
@@ -153,7 +153,7 @@ class ShareViewController: UIViewController{
             }
         }
         if !flag {
-            test()
+            extractURL()
         }
     }
     
@@ -161,7 +161,7 @@ class ShareViewController: UIViewController{
         let manager = LocalNotificationManager()
         manager.requestPermission() //알림 권한 요청
         manager.addNotification(title: "Scrap") //notification 추가
-        manager.schedule()
+        manager.schedule(title: webpageTitle)
         self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
     
