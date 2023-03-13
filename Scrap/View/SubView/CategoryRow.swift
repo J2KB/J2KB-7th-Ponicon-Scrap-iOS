@@ -117,10 +117,9 @@ struct CategoryRow_Previews: PreviewProvider {
                 CategoryResponse.Category(categoryId: 21, name: "iOS 자료", numOfLink: 60, order: 21),
                 CategoryResponse.Category(categoryId: 22, name: "iOS 자료", numOfLink: 60, order: 22)
             ])), isShowingCategoryView: .constant(true), selectedCategoryId: .constant(0), selectedCategoryOrder: .constant(0))
-                .environmentObject(ScrapViewModel())                        .previewDevice(PreviewDevice(rawValue: $0))
-                        .previewDisplayName($0) //각 프리뷰 컨테이너 이름지정
-                }
-        
-        
+            .environmentObject(ScrapViewModel())
+            .previewDevice(PreviewDevice(rawValue: $0))
+            .previewDisplayName($0) //각 프리뷰 컨테이너 이름지정
+        }
     }
 }

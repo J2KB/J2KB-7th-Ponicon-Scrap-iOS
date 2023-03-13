@@ -29,7 +29,6 @@ struct TabControlView: View {
                     Text("마이페이지")
                 }
         }
-        .accentColor(.gray)
         .onAppear{
             userVM.userIndex = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ?
                                 userVM.userIndex : UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") as! Int

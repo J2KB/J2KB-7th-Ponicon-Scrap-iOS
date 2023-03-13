@@ -28,11 +28,13 @@ struct SignUpView: View {
     @FocusState private var focusField: Field?
     @Binding var goToSignUpView : Bool
 
-    let maxUserName = 30
-    let maxPassword = 16
-    var checkDuplicatedEmail : Int { return userVM.duplicateMessage }
+    private let screenWidth = UIScreen.main.bounds.width
+    private let screenHeight = UIScreen.main.bounds.height
+    private let maxUserName = 30
+    private let maxPassword = 16
+    private var checkDuplicatedEmail : Int { return userVM.duplicateMessage }
     
-    let toastMessages : [Int : String] = [0: "한글 또는 영어로만 이뤄질 수 있습니다",
+    private let toastMessages : [Int : String] = [0: "한글 또는 영어로만 이뤄질 수 있습니다",
                                           1: "이름을 입력하세요",
                                           2: "이메일 형식으로 입력해주세요",
                                           3: "이메일을 입력하세요",
@@ -64,140 +66,12 @@ struct SignUpView: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false){
             ZStack{
-                VStack(spacing: 48){
+                VStack(spacing: 40){
                     Spacer()
-                    VStack(spacing: 20){
-                        HStack{
-                            Text("이름")
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(Color("basic_text"))
-                            Text("*")
-                                .foregroundColor(.blue_bold)
-                                .padding(.leading, -2)
-                        }
-                        .frame(width: UIScreen.main.bounds.width / 1.2, alignment: .leading)
-                        VStack{
-                            TextField("이름을 입력하세요", text: $username)
-                                .focused($focusField, equals: .name)
-                                .onSubmit {
-                                    isValidName(name: username)
-                                    self.changeFocusField()
-                                }
-                                .frame(width: UIScreen.main.bounds.width / 1.21, height: 28, alignment: .leading)
-                                .onReceive(Just(username), perform: { _ in  //최대 30글자(이상은 입력안되도록)
-                                    if maxUserName < username.count {
-                                        username = String(username.prefix(maxUserName))
-                                    }
-                                })
-                            Divider()
-                                .foregroundColor(.gray_bold)
-                                .frame(width: UIScreen.main.bounds.width / 1.2)
-                            Text(toastMessages[checkSignUpInfomation[0]]!) //관련 에러 메세지 따로 출력되도록
-                                .font(.caption)
-                                .foregroundColor(.red_error)
-                                .frame(width: UIScreen.main.bounds.width / 1.23, alignment: .leading)
-                        }
-                    }
-                    VStack{ //이메일 입력창
-                        HStack{
-                            Text("이메일")
-                                .foregroundColor(Color("basic_text"))
-                                .font(.system(size: 20, weight: .semibold))
-                            Text("*")
-                                .foregroundColor(.blue_bold)
-                                .padding(.leading, -2)
-                        }
-                        .frame(width: UIScreen.main.bounds.width / 1.2, alignment: .leading)
-                        VStack{
-                            HStack{
-                                TextField("이메일을 입력하세요", text: $email)
-                                    .focused($focusField, equals: .email)
-                                    .keyboardType(.asciiCapable)
-                                    .onSubmit {
-                                        isValidEmail(email: email)
-                                        isEmailDuplicationChecking = false
-                                        self.changeFocusField()
-                                    }
-                                    .frame(width: UIScreen.main.bounds.width / 1.54, height: 28, alignment: .leading)
-                                //MARK: - 이메일 중복 확인 버튼
-                                Button(action: {
-                                    userVM.checkDuplication(email: email) //📡 이메일 중복 확인 api 통신
-                                    isEmailDuplicationChecking = true
-                                }){
-                                    Text("중복 확인")
-                                        .padding(2)
-                                        .font(.system(size: 12, weight: .semibold))
-                                        .frame(width: 60, height: 32, alignment: .center)
-                                        .foregroundColor(Color.white)
-                                        .background(Color("main_accent"))
-                                        .cornerRadius(8)
-                                }
-                            }
-                            Divider()
-                                .foregroundColor(.gray_bold)
-                                .frame(width: UIScreen.main.bounds.width / 1.2, alignment: .leading)
-                        }
-                        Text(isEmailDuplicationChecking ? toastMessages[checkDuplicatedEmail]! : toastMessages[checkSignUpInfomation[1]]!) //관련 에러 메세지 따로 출력되도록
-                            .font(.caption)
-                            .foregroundColor(isEmailDuplicationChecking && checkDuplicatedEmail == 10 ? .main_accent : .red_error)
-                            .frame(width: UIScreen.main.bounds.width / 1.23, alignment: .leading)
-                    }
-                    VStack{ //비밀번호 입력창
-                        HStack{
-                            Text("비밀번호")
-                                .foregroundColor(Color("basic_text"))
-                                .font(.system(size: 20, weight: .semibold))
-                            Text("*")
-                                .foregroundColor(.blue_bold)
-                                .padding(.leading, -2)
-                        }
-                        .frame(width: UIScreen.main.bounds.width / 1.2, alignment: .leading)
-                        TextField("비밀번호를 입력하세요 (최소 5자)", text: $password)
-                            .focused($focusField, equals: .password)
-                            .keyboardType(.asciiCapable)
-                            .frame(width: UIScreen.main.bounds.width / 1.21, height: 28, alignment: .leading)
-                            .onSubmit {
-                                isValidPassword(password: password)
-                                self.changeFocusField()
-                            }
-                            .onReceive(Just(password), perform: { _ in  //최대 15글자
-                                if maxPassword < password.count {
-                                    password = String(password.prefix(maxPassword))
-                                }
-                            })
-                        Divider()
-                            .foregroundColor(.gray_bold)
-                            .frame(width: UIScreen.main.bounds.width / 1.2, alignment: .leading)
-                        Text(toastMessages[checkSignUpInfomation[2]]!) //관련 에러 메세지 따로 출력되도록
-                            .font(.caption)
-                            .foregroundColor(.red_error)
-                            .frame(width: UIScreen.main.bounds.width / 1.23, alignment: .leading)
-                    }
-                    VStack{ //비밀번호 확인 입력창
-                        HStack{
-                            Text("비밀번호 확인")
-                                .foregroundColor(Color("basic_text"))
-                                .font(.system(size: 20, weight: .semibold))
-                            Text("*")
-                                .foregroundColor(.blue_bold)
-                                .padding(.leading, -2)
-                        }
-                        .frame(width: UIScreen.main.bounds.width / 1.2, alignment: .leading)
-                        TextField("비밀번호 확인을 입력하세요", text: $checkPassword)
-                            .focused($focusField, equals: .checkPassword)
-                            .keyboardType(.asciiCapable)
-                            .frame(width: UIScreen.main.bounds.width / 1.21, height: 28, alignment: .leading)
-                            .onSubmit {
-                                isEqualWithPassword(password: password, checkPassword: checkPassword)
-                                self.changeFocusField()
-                            }
-                        Divider()
-                            .frame(width: UIScreen.main.bounds.width / 1.2, alignment: .leading)
-                        Text(toastMessages[checkSignUpInfomation[3]]!) //관련 에러 메세지 따로 출력되도록
-                            .font(.caption)
-                            .foregroundColor(checkSignUpInfomation[3] == 11 ? .main_accent : .red_error)
-                            .frame(width: UIScreen.main.bounds.width / 1.23, alignment: .leading)
-                    }
+                    NameView
+                    EmailView
+                    PasswordView
+                    PasswordCheckView
                     Spacer()
                 }
                 .ignoresSafeArea(.keyboard)
@@ -214,12 +88,12 @@ struct SignUpView: View {
                     }){
                         Text("회원가입")
                             .font(.system(size: 16, weight: .semibold))
-                            .frame(width: UIScreen.main.bounds.width / 2.2, height: 44, alignment: .center)
+                            .frame(width: UIScreen.main.bounds.width / 1.1, height: 50, alignment: .center)
                             .foregroundColor(.white)
                             .background(Color("main_accent"))
                             .cornerRadius(10)
                     }
-                    .padding(.bottom, -40)
+                    .padding(.bottom, -50)
                 }
                 .ignoresSafeArea(.keyboard)
             }
@@ -242,6 +116,153 @@ struct SignUpView: View {
                  }
              }
          }))
+    }
+    
+    var NameView: some View {
+        VStack(spacing: 10){
+            HStack{
+                Text("이름")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(Color("basic_text"))
+                Text("*")
+                    .foregroundColor(.blue_bold)
+                    .padding(.leading, -2)
+            }
+            .frame(width: screenWidth / 1.1, alignment: .leading)
+            VStack{
+                TextField("이름을 입력하세요", text: $username)
+                    .focused($focusField, equals: .name)
+                    .onSubmit {
+                        isValidName(name: username)
+                        self.changeFocusField()
+                    }
+                    .frame(width: screenWidth / 1.11, height: 20, alignment: .leading)
+                    .onReceive(Just(username), perform: { _ in  //최대 30글자(이상은 입력안되도록)
+                        if maxUserName < username.count {
+                            username = String(username.prefix(maxUserName))
+                        }
+                    })
+                Divider()
+                    .foregroundColor(.gray_bold)
+                    .frame(width: screenWidth / 1.1)
+                Text(toastMessages[checkSignUpInfomation[0]]!) //관련 에러 메세지 따로 출력되도록
+                    .font(.caption)
+                    .foregroundColor(.red_error)
+                    .frame(width: screenWidth / 1.125, alignment: .leading)
+            }
+        }
+    }
+    
+    var EmailView: some View {
+        VStack(spacing: 10){
+            HStack{
+                Text("이메일")
+                    .foregroundColor(Color("basic_text"))
+                    .font(.system(size: 18, weight: .semibold))
+                Text("*")
+                    .foregroundColor(.blue_bold)
+                    .padding(.leading, -2)
+            }
+            .frame(width: screenWidth / 1.1, alignment: .leading)
+            VStack{
+                HStack{
+                    VStack{
+                        TextField("이메일을 입력하세요", text: $email)
+                            .focused($focusField, equals: .email)
+                            .keyboardType(.asciiCapable)
+                            .onSubmit {
+                                isValidEmail(email: email)
+                                isEmailDuplicationChecking = false
+                                self.changeFocusField()
+                            }
+                            .frame(width: screenWidth / 1.37, height: 20, alignment: .leading)
+                        Divider()
+                            .foregroundColor(.gray_bold)
+                            .frame(width: screenWidth / 1.37, alignment: .leading)
+                    }
+                    //MARK: - 이메일 중복 확인 버튼
+                    Button(action: {
+                        userVM.checkDuplication(email: email) //📡 이메일 중복 확인 api 통신
+                        isEmailDuplicationChecking = true
+                    }){
+                        Text("중복 확인")
+                            .padding(2)
+                            .font(.system(size: 12, weight: .semibold))
+                            .frame(width: screenWidth / 6.7, height: 26, alignment: .center)
+                            .foregroundColor(Color.white)
+                            .background(Color("main_accent"))
+                            .cornerRadius(8)
+                    }
+                }
+                
+            }
+            Text(isEmailDuplicationChecking ? toastMessages[checkDuplicatedEmail]! : toastMessages[checkSignUpInfomation[1]]!) //관련 에러 메세지 따로 출력되도록
+                .font(.caption)
+                .foregroundColor(isEmailDuplicationChecking && checkDuplicatedEmail == 10 ? .main_accent : .red_error)
+                .frame(width: screenWidth / 1.12, alignment: .leading)
+        }
+    }
+    
+    var PasswordView: some View {
+        VStack(spacing: 10){
+            HStack{
+                Text("비밀번호")
+                    .foregroundColor(Color("basic_text"))
+                    .font(.system(size: 18, weight: .semibold))
+                Text("*")
+                    .foregroundColor(.blue_bold)
+                    .padding(.leading, -2)
+            }
+            .frame(width: screenWidth / 1.1, alignment: .leading)
+            TextField("비밀번호를 입력하세요 (최소 5자)", text: $password)
+                .focused($focusField, equals: .password)
+                .keyboardType(.asciiCapable)
+                .frame(width: UIScreen.main.bounds.width / 1.11, height: 20, alignment: .leading)
+                .onSubmit {
+                    isValidPassword(password: password)
+                    self.changeFocusField()
+                }
+                .onReceive(Just(password), perform: { _ in  //최대 15글자
+                    if maxPassword < password.count {
+                        password = String(password.prefix(maxPassword))
+                    }
+                })
+            Divider()
+                .foregroundColor(.gray_bold)
+                .frame(width: screenWidth / 1.1, alignment: .leading)
+            Text(toastMessages[checkSignUpInfomation[2]]!) //관련 에러 메세지 따로 출력되도록
+                .font(.caption)
+                .foregroundColor(.red_error)
+                .frame(width: screenWidth / 1.125, alignment: .leading)
+        }
+    }
+    
+    var PasswordCheckView: some View {
+        VStack(spacing: 10){
+            HStack{
+                Text("비밀번호 확인")
+                    .foregroundColor(Color("basic_text"))
+                    .font(.system(size: 18, weight: .semibold))
+                Text("*")
+                    .foregroundColor(.blue_bold)
+                    .padding(.leading, -2)
+            }
+            .frame(width: screenWidth / 1.1, alignment: .leading)
+            TextField("비밀번호 확인을 입력하세요", text: $checkPassword)
+                .focused($focusField, equals: .checkPassword)
+                .keyboardType(.asciiCapable)
+                .frame(width: screenWidth / 1.11, height: 20, alignment: .leading)
+                .onSubmit {
+                    isEqualWithPassword(password: password, checkPassword: checkPassword)
+                    self.changeFocusField()
+                }
+            Divider()
+                .frame(width: screenWidth / 1.1, alignment: .leading)
+            Text(toastMessages[checkSignUpInfomation[3]]!) //관련 에러 메세지 따로 출력되도록
+                .font(.caption)
+                .foregroundColor(checkSignUpInfomation[3] == 11 ? .main_accent : .red_error)
+                .frame(width: screenWidth / 1.125, alignment: .leading)
+        }
     }
     
     //MARK: - 이메일 입력 값 확인
@@ -334,8 +355,12 @@ struct SignUpView: View {
 
 struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
-        SignUpView(goToSignUpView: .constant(true))
-            .environmentObject(ScrapViewModel())
+        ForEach(["iPhone 14 Pro", "iPhone 8", "iPhone 13 mini"], id: \.self) {
+            SignUpView(goToSignUpView: .constant(true))
+                .environmentObject(ScrapViewModel())
+                .previewDevice(PreviewDevice(rawValue: $0))
+                .previewDisplayName($0) //각 프리뷰 컨테이너 이름지정
+        }
     }
 }
 
