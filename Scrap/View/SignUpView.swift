@@ -142,6 +142,14 @@ struct SignUpView: View {
                             username = String(username.prefix(maxUserName))
                         }
                     })
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            Button("Done") {
+                                hideKeyboard()
+                            }
+                        }
+                    }
                 Divider()
                     .foregroundColor(.gray_bold)
                     .frame(width: screenWidth / 1.1)
