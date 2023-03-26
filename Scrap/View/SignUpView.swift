@@ -78,10 +78,8 @@ struct SignUpView: View {
                 VStack{
                     Spacer()
                     Button(action:{
-                        print("회원가입?")
                         appearMessageTotal(name: username, email: email, password: password, checkPassword: checkPassword)
                         if isValidSignUp() { //가입 조건에 다 맞췄다면
-                            print("회원가입!!")
                             goToSignUpView = false //로그인 화면으로 돌아가기
                             userVM.postSignUp(email: email, password: password, name: username) //📡 SignUp API (모든 조건 통과)
                         }

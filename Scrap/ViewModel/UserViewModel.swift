@@ -21,7 +21,7 @@ class UserViewModel: ObservableObject{
     @Published var duplicateMessage = 9             //이메일 중복 상태 변수
     @Published var loginType = LoginType.none
     private let service = APIService()
-    private let baseUrl = "https://scrap.hana-umc.shop/user"
+    private let baseUrl = "https://scrap-j2kb.shop/user"
     private let decoder = JSONDecoder()
     
     // MARK: 로그인
@@ -195,7 +195,7 @@ class UserViewModel: ObservableObject{
     
     // MARK: 회원탈퇴
     func acccountWithdrawal(){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/auth/user/\(userIndex)") else {
+        guard let url = URL(string: "https://\(baseUrl)/auth/user/\(userIndex)") else {
             print("invalid url")
             return
         }

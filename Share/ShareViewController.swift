@@ -166,7 +166,7 @@ class ShareViewController: UIViewController{
     }
     
     func addNewData(catID: Int, userIndex: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/data?id=\(userIndex)&category=\(catID)") else {
+        guard let url = URL(string: "https://scrap-j2kb.shop/data?id=\(userIndex)&category=\(catID)") else {
             print("invalid url")
             return
         }

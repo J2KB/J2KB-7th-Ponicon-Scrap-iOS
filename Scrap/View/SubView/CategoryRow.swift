@@ -77,12 +77,6 @@ struct CategoryRow: View {
         }
         .frame(width: screenWidth)
         .listRowBackground(selectedCategoryId == category.categoryId ? Color("selected_color"): .none)
-        .sheet(isPresented: $isPresentCategoryModalSheet){
-            HalfSheet {
-                CategorySheetView(category: $detailCategory, isPresentCategoryModalSheet: $isPresentCategoryModalSheet)
-            }
-            .ignoresSafeArea()
-        }
         .onAppear{
             UITableView.appearance().backgroundColor = .clear
         }

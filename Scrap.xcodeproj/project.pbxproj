@@ -11,7 +11,7 @@
 		F81BAF5B29A74D0600E8761D /* TabControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81BAF5A29A74D0600E8761D /* TabControlView.swift */; };
 		F81BAF5D29A755CF00E8761D /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81BAF5C29A755CF00E8761D /* FavoritesView.swift */; };
 		F81BAF5F29A7627100E8761D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81BAF5E29A7627100E8761D /* HomeView.swift */; };
-		F82C610128FFF716000C2C92 /* HalfSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82C610028FFF716000C2C92 /* HalfSheetController.swift */; };
+		F82C610128FFF716000C2C92 /* BottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82C610028FFF716000C2C92 /* BottomSheetController.swift */; };
 		F841A327296FE0FF007B1840 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F841A326296FE0FF007B1840 /* Media.xcassets */; };
 		F84C51CA28E5619300E5DECD /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84C51C928E5619300E5DECD /* UserResponse.swift */; };
 		F84C51CC28E58D0A00E5DECD /* ScrapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84C51CB28E58D0A00E5DECD /* ScrapViewModel.swift */; };
@@ -87,7 +87,7 @@
 		F81BAF5A29A74D0600E8761D /* TabControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabControlView.swift; sourceTree = "<group>"; };
 		F81BAF5C29A755CF00E8761D /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
 		F81BAF5E29A7627100E8761D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		F82C610028FFF716000C2C92 /* HalfSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfSheetController.swift; sourceTree = "<group>"; };
+		F82C610028FFF716000C2C92 /* BottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetController.swift; sourceTree = "<group>"; };
 		F841A326296FE0FF007B1840 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		F84C51C928E5619300E5DECD /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
 		F84C51CB28E58D0A00E5DECD /* ScrapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapViewModel.swift; sourceTree = "<group>"; };
@@ -274,7 +274,7 @@
 		F89BED8928C5FB050053D406 /* Modifier */ = {
 			isa = PBXGroup;
 			children = (
-				F82C610028FFF716000C2C92 /* HalfSheetController.swift */,
+				F82C610028FFF716000C2C92 /* BottomSheetController.swift */,
 				F8F8F94D292DDC420058FA75 /* AddCategoryAlert.swift */,
 			);
 			path = Modifier;
@@ -428,7 +428,7 @@
 				F87109F628E3327F009AFA8F /* DataResponse.swift in Sources */,
 				F8F8F950292E06140058FA75 /* DataSheetView.swift in Sources */,
 				F8A2761B2945B57900E5209F /* NewData.swift in Sources */,
-				F82C610128FFF716000C2C92 /* HalfSheetController.swift in Sources */,
+				F82C610128FFF716000C2C92 /* BottomSheetController.swift in Sources */,
 				F8F8F94E292DDC420058FA75 /* AddCategoryAlert.swift in Sources */,
 				F8B46C83294EF7EC003CB359 /* APIService.swift in Sources */,
 				F88E7E3228C5CDDB00C3CCA8 /* ScrapApp.swift in Sources */,

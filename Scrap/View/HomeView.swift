@@ -12,6 +12,9 @@ struct HomeView: View {
     @EnvironmentObject var userVM : UserViewModel
     @State private var isPresentDataModalSheet = false
     
+    //bottom sheet test
+    @State private var isShowMovingCategory = false
+    @State private var detailData = DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "", bookmark: false)
     @Binding var selectedCategoryID: Int
     @Binding var selectedCategoryOrder: Int
     @Binding var isShowingCategorySideMenuView: Bool
@@ -49,8 +52,15 @@ struct HomeView: View {
                     .frame(width: 5)
             }
             .frame(width: screenWidth, height: 40)
-            SubHomeView(datas: $scrapVM.dataList, isPresentDataModalSheet: $isPresentDataModalSheet, currentCategoryId: $selectedCategoryID, currentCategoryOrder: $selectedCategoryOrder)
+            SubHomeView(detailData: $detailData, isShowMovingCategory: $isShowMovingCategory, datas: $scrapVM.dataList, isPresentDataModalSheet: $isPresentDataModalSheet, currentCategoryId: $selectedCategoryID, currentCategoryOrder: $selectedCategoryOrder)
                 .navigationBarTitle("", displayMode: .inline)
+        }
+        .bottomSheet(showSheet: $isPresentDataModalSheet) {
+            DataSheetView(isShowMovingCategoryView: $isShowMovingCategory, data: $detailData, isPresentDataModalSheet: $isPresentDataModalSheet, currentCategoryOrder: $selectedCategoryOrder, currentCategoryId: $selectedCategoryID)
+                .environmentObject(scrapVM)
+                .environmentObject(userVM)
+        } onEnd: {
+            print("dismissed")
         }
         if isPresentDataModalSheet {
             Color(.black)
@@ -60,6 +70,7 @@ struct HomeView: View {
                     isPresentDataModalSheet = false
                 }
         }
+        
     }
 }
 
@@ -70,3 +81,6 @@ struct HomeView_Previews: PreviewProvider {
             .environmentObject(UserViewModel())
     }
 }
+
+
+//bottomSheet -> detailData, isShowingMovingCategory, isPresentDataModelSheet, currentCategoryOrder, currentCategoryId

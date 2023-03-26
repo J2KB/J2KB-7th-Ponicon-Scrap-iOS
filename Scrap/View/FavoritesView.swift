@@ -9,9 +9,10 @@ import SwiftUI
 
 struct FavoritesView: View {
     @EnvironmentObject var scrapVM : ScrapViewModel //favorites Array 넘기기
-    @State private var isPresentFavDataModalSheet = false
     
-    private let screenHeight = UIScreen.main.bounds.height
+    @State private var isPresentFavoriteDataModalSheet = false
+    @State private var detailData = DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "", bookmark: false)
+
     private let screenWidth = UIScreen.main.bounds.width
     
     var body: some View {
@@ -21,8 +22,14 @@ struct FavoritesView: View {
                 .foregroundColor(Color("basic_text"))
                 .frame(width: screenWidth, height: 40, alignment: .leading)
                 .padding(.leading, 24)
-            SubHomeView(datas: $scrapVM.favoriteList, isPresentDataModalSheet: $isPresentFavDataModalSheet, currentCategoryId: .constant(-1), currentCategoryOrder: .constant(-1))
+            SubHomeView(detailData: $detailData, isShowMovingCategory: .constant(false), datas: $scrapVM.favoriteList, isPresentDataModalSheet: $isPresentFavoriteDataModalSheet, currentCategoryId: .constant(-1), currentCategoryOrder: .constant(-1))
                 .navigationBarTitle("", displayMode: .inline)
+        }
+        .bottomSheet(showSheet: $isPresentFavoriteDataModalSheet) {
+            DataSheetView(isShowMovingCategoryView: .constant(false), data: $detailData, isPresentDataModalSheet: $isPresentFavoriteDataModalSheet,  currentCategoryOrder: .constant(-1), currentCategoryId: .constant(-1))
+                .environmentObject(scrapVM)
+        } onEnd: {
+            print("dismissed")
         }
     }
 }
