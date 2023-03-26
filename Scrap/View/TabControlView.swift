@@ -10,6 +10,10 @@ import SwiftUI
 struct TabControlView: View {
     @EnvironmentObject var scrapVM : ScrapViewModel
     @EnvironmentObject var userVM : UserViewModel
+    
+    init() {
+        UITabBar.appearance().scrollEdgeAppearance = .init()
+    }
 
     var body: some View {
         TabView {
