@@ -69,6 +69,7 @@ struct DataSheetView: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                 scrapVM.getCategoryListData(userID: userVM.userIndex)
                             }
+                            isPresentDataModalSheet = false
                         } else { //새로 쓴 이름이 비어있을 경우
                             renamedDataName = data.title ?? "" //원래 카테고리 이름으로
                             self.isEditingDataName = false
@@ -93,7 +94,7 @@ struct DataSheetView: View {
             }
             Button(action: {
                 UIPasteboard.general.setValue(data.link ?? "", forPasteboardType: UTType.plainText.identifier)
-                isPresentDataModalSheet.toggle()
+                isPresentDataModalSheet = false
             }) {
                 ZStack{
                     RoundedRectangle(cornerRadius: 10)
@@ -108,13 +109,14 @@ struct DataSheetView: View {
             ZStack{
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color("list_color"))
-                    .frame(width: screenWidth - 40, height: currentCategoryOrder > 0 ? screenHeight / 4.7 : screenHeight / 6, alignment: .leading)
+                    .frame(width: screenWidth - 40, height: screenHeight / 4.7, alignment: .leading)
                 VStack(spacing: 2){
                     Button(action: {
                         //즐겨찾기 기능
                         self.isBookmarked = !isBookmarked
                         scrapVM.modifyFavoritesData(userID: userVM.userIndex, linkID: data.linkId!) //서버통신
                         scrapVM.bookmark(dataID: data.linkId!, isBookmark: isBookmarked)
+                        isPresentDataModalSheet = false
                     }) {
                         //즐겨찾기에 추가 되어/안되어 있으면, 해제 / 추가
                         Label(isBookmarked ? "즐겨찾기 해제" : "즐겨찾기 추가", systemImage: "heart")
@@ -124,7 +126,7 @@ struct DataSheetView: View {
                     }
                     Divider()
                         .frame(width: screenWidth - 40)
-                        .padding(.vertical, currentCategoryOrder > 0 ? 0 : -2)
+                        .padding(.vertical, 0)
                     Button(action: {
                         self.isEditingDataName = true
                     }) {
@@ -135,19 +137,17 @@ struct DataSheetView: View {
                     }
                     Divider()
                         .frame(width: screenWidth - 40)
-                    if currentCategoryOrder > 0 {
-                        Button(action: {
-                            isShowMovingCategoryView = true
-                            isPresentDataModalSheet.toggle()
-                        }) {
-                            Label("카테고리 이동", systemImage: "arrow.turn.down.right")
-                                .foregroundColor(Color("basic_text"))
-                                .frame(width: screenWidth - 40, height: 40, alignment: .leading)
-                                .padding(.leading, 40)
-                        }
-                        Divider()
-                            .frame(width: screenWidth - 40)
+                    Button(action: {
+                        isShowMovingCategoryView = true
+                        isPresentDataModalSheet = false
+                    }) {
+                        Label("카테고리 이동", systemImage: "arrow.turn.down.right")
+                            .foregroundColor(Color("basic_text"))
+                            .frame(width: screenWidth - 40, height: 40, alignment: .leading)
+                            .padding(.leading, 40)
                     }
+                    Divider()
+                        .frame(width: screenWidth - 40)
                     Button(action:{
                         self.isDeleteData = true
                     }){
@@ -192,6 +192,5 @@ struct DataSheetView_Previews: PreviewProvider {
         )
         .environmentObject(ScrapViewModel())
         .environmentObject(UserViewModel())
-        .preferredColorScheme(.dark)
     }
 }

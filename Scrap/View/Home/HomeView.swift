@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var scrapVM : ScrapViewModel
     @EnvironmentObject var userVM : UserViewModel
-    @State private var isPresentDataModalSheet = false
+    @State private var isPresentingDataBottomSheet = false
     
     //bottom sheet test
     @State private var isShowMovingCategory = false
@@ -52,25 +52,16 @@ struct HomeView: View {
                     .frame(width: 5)
             }
             .frame(width: screenWidth, height: 40)
-            SubHomeView(detailData: $detailData, isShowMovingCategory: $isShowMovingCategory, datas: $scrapVM.dataList, isPresentDataModalSheet: $isPresentDataModalSheet, currentCategoryId: $selectedCategoryID, currentCategoryOrder: $selectedCategoryOrder)
+            SubHomeView(detailData: $detailData, isShowMovingCategory: $isShowMovingCategory, datas: $scrapVM.dataList, isPresentDataBottomSheet: $isPresentingDataBottomSheet, currentCategoryId: $selectedCategoryID, currentCategoryOrder: $selectedCategoryOrder)
                 .navigationBarTitle("", displayMode: .inline)
         }
-        .bottomSheet(showSheet: $isPresentDataModalSheet) {
-            DataSheetView(isShowMovingCategoryView: $isShowMovingCategory, data: $detailData, isPresentDataModalSheet: $isPresentDataModalSheet, currentCategoryOrder: $selectedCategoryOrder, currentCategoryId: $selectedCategoryID)
+        .bottomSheet(showSheet: $isPresentingDataBottomSheet) {
+            DataSheetView(isShowMovingCategoryView: $isShowMovingCategory, data: $detailData, isPresentDataModalSheet: $isPresentingDataBottomSheet, currentCategoryOrder: $selectedCategoryOrder, currentCategoryId: $selectedCategoryID)
                 .environmentObject(scrapVM)
                 .environmentObject(userVM)
         } onEnd: {
-            print("dismissed")
+            isPresentingDataBottomSheet = false
         }
-        if isPresentDataModalSheet {
-            Color(.black)
-                .opacity(0.2)
-                .ignoresSafeArea()
-                .onTapGesture {
-                    isPresentDataModalSheet = false
-                }
-        }
-        
     }
 }
 
@@ -81,6 +72,3 @@ struct HomeView_Previews: PreviewProvider {
             .environmentObject(UserViewModel())
     }
 }
-
-
-//bottomSheet -> detailData, isShowingMovingCategory, isPresentDataModelSheet, currentCategoryOrder, currentCategoryId

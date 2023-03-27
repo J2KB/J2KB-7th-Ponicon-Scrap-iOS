@@ -5,13 +5,12 @@
 //  Created by 김영선 on 2022/10/19.
 //
 
-import Foundation
 import SwiftUI
+import UIKit
 
 class BottomSheetController<Content: View>: UIHostingController<Content> {
     override func viewDidLoad() {
-        view.backgroundColor = .clear
-        
+        view.backgroundColor = .blue
         if let presentationController = presentationController as? UISheetPresentationController {
             presentationController.detents = [.medium(), .large()]
             presentationController.prefersGrabberVisible = true
@@ -57,14 +56,13 @@ struct BottomSheet<SheetView: View>: UIViewControllerRepresentable {
         }
         
         func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-            parent.showSheet = false
             parent.onEnd()
         }
     }
 }
 
 extension View {
-    func bottomSheet<SheetView: View>(showSheet: Binding<Bool>, @ViewBuilder sheetView: @escaping() -> SheetView, onEnd: @escaping() -> ()) -> some View {
+    func bottomSheet<SheetView: View>(showSheet: Binding<Bool>, @ViewBuilder sheetView: @escaping () -> SheetView, onEnd: @escaping() -> ()) -> some View {
         return self
             .background(
                 BottomSheet(sheetView: sheetView(), showSheet: showSheet, onEnd: onEnd)

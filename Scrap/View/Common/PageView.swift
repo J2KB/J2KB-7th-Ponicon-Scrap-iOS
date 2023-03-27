@@ -14,7 +14,7 @@ struct PageView: View {
     
     @State private var isBookmarked = false
     
-    @Binding var isPresentDataModalSheet : Bool         //카테고리 더보기 sheet가 열려있는지에 대한 상태 변수
+    @Binding var isPresentingBottomSheet : Bool         //카테고리 더보기 sheet가 열려있는지에 대한 상태 변수
     @Binding var data : DataResponse.Datas              //해당 자료 데이터
     @Binding var detailData : DataResponse.Datas
     @Binding var isOneColumnData : Bool                 //1열인가?
@@ -132,7 +132,7 @@ struct PageView: View {
             .frame(width: isOneColumnData ? screenWidth / 1.085 : screenWidth / 2.4, height: isOneColumnData ? screenWidth / 5 : screenWidth / 5.52)
             
             Button(action: {                     //더보기 버튼 클릭하면 isPresentHalfModal = true, sheet 올라옴
-                isPresentDataModalSheet = true   //half-modal view 등장
+                isPresentingBottomSheet = true   //half-modal view 등장
                 detailData = data
             }, label: {
                 ZStack{
@@ -150,26 +150,26 @@ struct PageView: View {
 struct PageView_Previews: PreviewProvider {
     static var previews: some View {
         PageView(
-            isPresentDataModalSheet: .constant(false),
+            isPresentingBottomSheet: .constant(false),
             data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도일~ 보고싶다!히히", domain: "naver.com", imgUrl:"", bookmark: false)),
             detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "", bookmark: false)), isOneColumnData: .constant(false)
         )
         .environmentObject(ScrapViewModel())
         .environmentObject(UserViewModel())
         PageView(
-            isPresentDataModalSheet: .constant(false),
+            isPresentingBottomSheet: .constant(false),
             data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허남도일~", domain: "naver.com", imgUrl: "http://static1.squarespace.com/static/5e9672644b617e2a1765d11c/t/5eddc91b1cb53938998c7a67/1591593250119/Codable+Crash+Data+Missing.png?format=1500w", bookmark: false)),
             detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "", bookmark: false)), isOneColumnData: .constant(false)
         )
         PageView(
-            isPresentDataModalSheet: .constant(false),
+            isPresentingBottomSheet: .constant(false),
             data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허 남도일~ 보고싶다!히히 코난은 정뫌 재미 있어, 극장판 볼거 짱많은데 할게 너무 많네...ㅋ 밥먹으면서 봐야겠다 흑흑 어쩌면 좋아", domain: "naver.com", imgUrl:"", bookmark: false)),
             detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "", bookmark: false)), isOneColumnData: .constant(true)
         )
         .environmentObject(ScrapViewModel())
         .environmentObject(UserViewModel())
         PageView(
-            isPresentDataModalSheet: .constant(false),
+            isPresentingBottomSheet: .constant(false),
             data: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "명탐정코난재미있네허허 남도일~ 보고싶다!히히 코난은 정뫌 재미 있어, 극장판 볼거 짱많은데 할게 너무 많네...ㅋ 밥먹으면서 봐야겠다 흑흑 어쩌면 좋아", domain: "naver.com", imgUrl: "http://static1.squarespace.com/static/5e9672644b617e2a1765d11c/t/5eddc91b1cb53938998c7a67/1591593250119/Codable+Crash+Data+Missing.png?format=1500w", bookmark: false)),
             detailData: .constant(DataResponse.Datas(linkId: 0, link: "https://www.apple.com", title: "", domain: "naver.com", imgUrl: "", bookmark: false)), isOneColumnData: .constant(true)
         )

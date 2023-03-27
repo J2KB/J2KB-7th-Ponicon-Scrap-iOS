@@ -11,6 +11,8 @@ struct TabControlView: View {
     @EnvironmentObject var scrapVM : ScrapViewModel
     @EnvironmentObject var userVM : UserViewModel
     
+    @State private var selection = 0
+    
     init() {
         UITabBar.appearance().scrollEdgeAppearance = .init()
     }
@@ -21,17 +23,17 @@ struct TabControlView: View {
                 .tabItem {
                     Image(systemName: "house")
                     Text("홈")
-                }
+                }.tag(0)
             FavoritesView()
                 .tabItem {
                     Image(systemName: "heart")
                     Text("즐겨찾기")
-                }
+                }.tag(1)
             MyPageView(userData: $scrapVM.user)
                 .tabItem {
                     Image(systemName: "person.circle")
                     Text("마이페이지")
-                }
+                }.tag(2)
         }
         .onAppear{
             userVM.userIndex = UserDefaults(suiteName: "group.com.thk.Scrap")?.integer(forKey: "ID") == Optional(0) ?

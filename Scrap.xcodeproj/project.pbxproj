@@ -41,6 +41,9 @@
 		F8A276192945AC5F00E5209F /* NewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A276172945A9FC00E5209F /* NewData.swift */; };
 		F8A2761B2945B57900E5209F /* NewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A2761A2945B57900E5209F /* NewData.swift */; };
 		F8A8972728D2F531006CEC60 /* MoveCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A8972628D2F531006CEC60 /* MoveCategoryView.swift */; };
+		F8AC21A529D1C88D00449BBD /* SubFavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC21A429D1C88D00449BBD /* SubFavoriteView.swift */; };
+		F8AC21A829D1C8CD00449BBD /* RefreshableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC21A729D1C8CC00449BBD /* RefreshableScrollView.swift */; };
+		F8AC21AA29D1CB5600449BBD /* FavoriteSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC21A929D1CB5600449BBD /* FavoriteSheetView.swift */; };
 		F8ADA2DB29668B95001FC2C8 /* SignInWithAppleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8ADA2DA29668B95001FC2C8 /* SignInWithAppleDelegate.swift */; };
 		F8ADA2DD2966923D001FC2C8 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8ADA2DC2966923D001FC2C8 /* Keychain.swift */; };
 		F8AF178129A5096100CAE295 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F841A326296FE0FF007B1840 /* Media.xcassets */; };
@@ -119,6 +122,9 @@
 		F8A798B9290A612100FDD29D /* Scrap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Scrap.entitlements; sourceTree = "<group>"; };
 		F8A798BA290A61BD00FDD29D /* Share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Share.entitlements; sourceTree = "<group>"; };
 		F8A8972628D2F531006CEC60 /* MoveCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveCategoryView.swift; sourceTree = "<group>"; };
+		F8AC21A429D1C88D00449BBD /* SubFavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubFavoriteView.swift; sourceTree = "<group>"; };
+		F8AC21A729D1C8CC00449BBD /* RefreshableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshableScrollView.swift; sourceTree = "<group>"; };
+		F8AC21A929D1CB5600449BBD /* FavoriteSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSheetView.swift; sourceTree = "<group>"; };
 		F8ADA2DA29668B95001FC2C8 /* SignInWithAppleDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleDelegate.swift; sourceTree = "<group>"; };
 		F8ADA2DC2966923D001FC2C8 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		F8B46C82294EF7EC003CB359 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
@@ -154,18 +160,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F8740C2028C988D1009D6F8C /* SubView */ = {
-			isa = PBXGroup;
-			children = (
-				F8740C2128C988E1009D6F8C /* PageView.swift */,
-				F8D18E4729051B16008479BA /* CategoryRow.swift */,
-				F8A8972628D2F531006CEC60 /* MoveCategoryView.swift */,
-				F88F6D4A292B0E8700F34D59 /* CategorySheetView.swift */,
-				F8F8F94F292E06140058FA75 /* DataSheetView.swift */,
-			);
-			path = SubView;
-			sourceTree = "<group>";
-		};
 		F88E7E2528C5CDDB00C3CCA8 = {
 			isa = PBXGroup;
 			children = (
@@ -188,13 +182,14 @@
 		F88E7E3028C5CDDB00C3CCA8 /* Scrap */ = {
 			isa = PBXGroup;
 			children = (
+				F88E7E3F28C5CFD300C3CCA8 /* View */,
+				F88E7E4128C5CFDB00C3CCA8 /* ViewModel */,
+				F88E7E4028C5CFD700C3CCA8 /* Model */,
 				F8B46C81294EF7DC003CB359 /* Network */,
 				F8A798B9290A612100FDD29D /* Scrap.entitlements */,
 				F88E3FF128EEB538002A6385 /* Info.plist */,
 				F89BED8928C5FB050053D406 /* Modifier */,
-				F88E7E4128C5CFDB00C3CCA8 /* ViewModel */,
-				F88E7E4028C5CFD700C3CCA8 /* Model */,
-				F88E7E3F28C5CFD300C3CCA8 /* View */,
+				F81BAF5A29A74D0600E8761D /* TabControlView.swift */,
 				F88E7E3128C5CDDB00C3CCA8 /* ScrapApp.swift */,
 				F88E7E3528C5CDDC00C3CCA8 /* Assets.xcassets */,
 				F8CFE8FA28FD508C005DB6F5 /* Colors.xcassets */,
@@ -217,17 +212,12 @@
 		F88E7E3F28C5CFD300C3CCA8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F8740C2028C988D1009D6F8C /* SubView */,
-				F88E7E3328C5CDDB00C3CCA8 /* LoginView.swift */,
-				F89BED8728C5F1EE0053D406 /* SignUpView.swift */,
-				F89BED8C28C5FC680053D406 /* MainHomeView.swift */,
-				F8740C2328C99954009D6F8C /* CategoryView.swift */,
-				F8740C2728C99EB0009D6F8C /* SubHomeView.swift */,
-				F8740C2928C9BD63009D6F8C /* MyPageView.swift */,
-				F87B1DC62963EB92000B2331 /* SignInWithApple.swift */,
-				F81BAF5A29A74D0600E8761D /* TabControlView.swift */,
-				F81BAF5C29A755CF00E8761D /* FavoritesView.swift */,
-				F81BAF5E29A7627100E8761D /* HomeView.swift */,
+				F8AC21A629D1C89500449BBD /* Common */,
+				F8AC21A129D1C6D000449BBD /* Login */,
+				F8AC21A029D1C6BF00449BBD /* Mypage */,
+				F8AC219F29D1C6B300449BBD /* Favorite */,
+				F8AC219E29D1C6AE00449BBD /* Home */,
+				F8AC21A329D1C71C00449BBD /* Sheet */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -278,6 +268,73 @@
 				F8F8F94D292DDC420058FA75 /* AddCategoryAlert.swift */,
 			);
 			path = Modifier;
+			sourceTree = "<group>";
+		};
+		F8AC219E29D1C6AE00449BBD /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				F89BED8C28C5FC680053D406 /* MainHomeView.swift */,
+				F81BAF5E29A7627100E8761D /* HomeView.swift */,
+				F8740C2728C99EB0009D6F8C /* SubHomeView.swift */,
+				F8AC21A229D1C6FB00449BBD /* Category */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		F8AC219F29D1C6B300449BBD /* Favorite */ = {
+			isa = PBXGroup;
+			children = (
+				F81BAF5C29A755CF00E8761D /* FavoritesView.swift */,
+				F8AC21A429D1C88D00449BBD /* SubFavoriteView.swift */,
+			);
+			path = Favorite;
+			sourceTree = "<group>";
+		};
+		F8AC21A029D1C6BF00449BBD /* Mypage */ = {
+			isa = PBXGroup;
+			children = (
+				F8740C2928C9BD63009D6F8C /* MyPageView.swift */,
+			);
+			path = Mypage;
+			sourceTree = "<group>";
+		};
+		F8AC21A129D1C6D000449BBD /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				F87B1DC62963EB92000B2331 /* SignInWithApple.swift */,
+				F88E7E3328C5CDDB00C3CCA8 /* LoginView.swift */,
+				F89BED8728C5F1EE0053D406 /* SignUpView.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		F8AC21A229D1C6FB00449BBD /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				F8740C2328C99954009D6F8C /* CategoryView.swift */,
+				F8D18E4729051B16008479BA /* CategoryRow.swift */,
+				F8A8972628D2F531006CEC60 /* MoveCategoryView.swift */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		F8AC21A329D1C71C00449BBD /* Sheet */ = {
+			isa = PBXGroup;
+			children = (
+				F88F6D4A292B0E8700F34D59 /* CategorySheetView.swift */,
+				F8F8F94F292E06140058FA75 /* DataSheetView.swift */,
+				F8AC21A929D1CB5600449BBD /* FavoriteSheetView.swift */,
+			);
+			path = Sheet;
+			sourceTree = "<group>";
+		};
+		F8AC21A629D1C89500449BBD /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				F8740C2128C988E1009D6F8C /* PageView.swift */,
+				F8AC21A729D1C8CC00449BBD /* RefreshableScrollView.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		F8B46C81294EF7DC003CB359 /* Network */ = {
@@ -403,6 +460,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8AC21AA29D1CB5600449BBD /* FavoriteSheetView.swift in Sources */,
 				F8FC83B32956FB7300453EDD /* AppDelegate.swift in Sources */,
 				F8740C2428C99954009D6F8C /* CategoryView.swift in Sources */,
 				F87109F428E33275009AFA8F /* CategoryResponse.swift in Sources */,
@@ -417,6 +475,7 @@
 				F88E7E3428C5CDDB00C3CCA8 /* LoginView.swift in Sources */,
 				F89BED8D28C5FC680053D406 /* MainHomeView.swift in Sources */,
 				F8740C2A28C9BD63009D6F8C /* MyPageView.swift in Sources */,
+				F8AC21A829D1C8CD00449BBD /* RefreshableScrollView.swift in Sources */,
 				F89BED8828C5F1EE0053D406 /* SignUpView.swift in Sources */,
 				F8ADA2DD2966923D001FC2C8 /* Keychain.swift in Sources */,
 				F81BAF5D29A755CF00E8761D /* FavoritesView.swift in Sources */,
@@ -428,6 +487,7 @@
 				F87109F628E3327F009AFA8F /* DataResponse.swift in Sources */,
 				F8F8F950292E06140058FA75 /* DataSheetView.swift in Sources */,
 				F8A2761B2945B57900E5209F /* NewData.swift in Sources */,
+				F8AC21A529D1C88D00449BBD /* SubFavoriteView.swift in Sources */,
 				F82C610128FFF716000C2C92 /* BottomSheetController.swift in Sources */,
 				F8F8F94E292DDC420058FA75 /* AddCategoryAlert.swift in Sources */,
 				F8B46C83294EF7EC003CB359 /* APIService.swift in Sources */,
