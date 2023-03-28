@@ -78,5 +78,5 @@ struct SubFavoriteView: View {
                 scrapVM.getAllData(userID: userVM.userIndex)
             }
         }
-    }//body
+    }
 }

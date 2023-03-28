@@ -35,7 +35,7 @@ struct FavoriteSheetView: View {
                             .frame(width: screenWidth / 1.25, height: 36, alignment: .leading)
                         HStack(spacing: 13){
                             TextField("자료 이름", text: $renamedDataName)
-                                .font(.system(size: 18, weight: .regular))
+                                .font(.system(size: 14, weight: .regular))
                                 .frame(width: screenWidth / 1.5, alignment: .leading)
                                 .foregroundColor(Color("basic_text"))
                             Button(action: {
@@ -60,11 +60,11 @@ struct FavoriteSheetView: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                 scrapVM.getAllData(userID: userVM.userIndex)
                             }
-                            isPresentFavoriteBottomSheet = false
                         } else { //새로 쓴 이름이 비어있을 경우
                             renamedDataName = data.title ?? "" //원래 카테고리 이름으로
                             self.isEditingDataName = false
                         }
+                        isPresentFavoriteBottomSheet = false
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -108,6 +108,9 @@ struct FavoriteSheetView: View {
                         scrapVM.modifyFavoritesData(userID: userVM.userIndex, linkID: data.linkId!) //서버통신
                         scrapVM.bookmark(dataID: data.linkId!, isBookmark: isBookmarked)
                         isPresentFavoriteBottomSheet = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            scrapVM.getAllData(userID: userVM.userIndex)
+                        }
                     }) {
                         //즐겨찾기에 추가 되어/안되어 있으면, 해제 / 추가
                         Label(isBookmarked ? "즐겨찾기 해제" : "즐겨찾기 추가", systemImage: "heart")
@@ -152,7 +155,7 @@ struct FavoriteSheetView: View {
                 scrapVM.deleteData(userID: userVM.userIndex, linkID: data.linkId!) //📡 자료 삭제 서버 통신
                 scrapVM.removeDataFromDataList(dataID: data.linkId!, categoryID: currentCategoryId)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    scrapVM.getCategoryListData(userID: userVM.userIndex)
+                    scrapVM.getAllData(userID: userVM.userIndex)
                 }
                 isPresentFavoriteBottomSheet = false
                 self.isDeleteData = false

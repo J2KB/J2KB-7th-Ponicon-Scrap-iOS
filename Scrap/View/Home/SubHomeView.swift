@@ -90,7 +90,8 @@ struct SubHomeView: View {
             .onChange(of: currentCategoryId, perform: { newValue in
                 if currentCategoryOrder == 0 { scrapVM.getAllData(userID: userVM.userIndex) }
                 else { scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: newValue) }
-            }).sheet(isPresented: $isPresentDataBottomSheet){
+            })
+            .sheet(isPresented: $isPresentDataBottomSheet){
                 HalfSheet {
                     DataSheetView(isShowMovingCategoryView: $isShowMovingCategory, data: $detailData, isPresentDataModalSheet: $isPresentDataBottomSheet, currentCategoryOrder: $currentCategoryOrder, currentCategoryId: $currentCategoryId)
                 }

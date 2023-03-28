@@ -155,13 +155,11 @@ struct CategoryView: View {
                         })
                     }//List
                     //바텀시트 -> isPresentCategoryBottomSheet
-                    .bottomSheet(showSheet: $isPresentCategoryBottomSheet) {
-                        CategorySheetView(category: $detailCategory, isPresentCategoryBottomSheet: $isPresentCategoryBottomSheet)
-                            .environmentObject(scrapVM)
-                            .environmentObject(userVM)
-                    } onEnd: {
-                        print("✅ category bottom sheet dismissed")
-//                        self.isPresentCategoryBottomSheet = false //카테고리 바텀 시트 off
+                    .sheet(isPresented: $isPresentCategoryBottomSheet){
+                        HalfSheet {
+                            CategorySheetView(category: $detailCategory, isPresentCategoryBottomSheet: $isPresentCategoryBottomSheet)
+                        }
+                        .ignoresSafeArea()
                     }
                 }//CategoryList VStack
                 .refreshable {
@@ -172,13 +170,13 @@ struct CategoryView: View {
             if isAddingCategory { //카테고리 추가 alert창 켜지면 뒷 배경 블러 처리
                 Color("blur_background").ignoresSafeArea()
             }
-//            if self.isPresentCategoryModalSheet {
-//                Color("blur_background")
-//                    .ignoresSafeArea()
-//                    .onTapGesture {
-//                        self.isPresentCategoryModalSheet = false
-//                    }
-//            }
+            if self.isPresentCategoryBottomSheet {
+                Color("blur_background")
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        self.isPresentCategoryBottomSheet = false
+                    }
+            }
         }//ZStack
         .background(scheme == .light ? .white : .black)
         .addCategoryAlert(isPresented: $isAddingCategory, newCategoryTitle: $newCategoryName, placeholder: "새로운 카테고리 이름을 입력해주세요", title: "카테고리 추가하기", action: { _ in
@@ -191,22 +189,3 @@ struct CategoryView: View {
 
     }//body
 }
-
-//struct CategoryView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CategoryView(categoryList: .constant(CategoryResponse.Result(categories: [
-//            CategoryResponse.Category(categoryId: 0, name: "전체 자료", numOfLink: 500, order: 0),
-//            CategoryResponse.Category(categoryId: 1, name: "분류되지 않은 자료", numOfLink: 42, order: 1),
-//            CategoryResponse.Category(categoryId: 2, name: "채용 공고 모음", numOfLink: 6, order: 2),
-//            CategoryResponse.Category(categoryId: 3, name: "iOS 자료", numOfLink: 30, order: 3),
-//            CategoryResponse.Category(categoryId: 4, name: "컴퓨터 사이언스 자료", numOfLink: 140, order: 4),
-//            CategoryResponse.Category(categoryId: 5, name: "취준 팁 모음", numOfLink: 60, order: 5),
-//            CategoryResponse.Category(categoryId: 6, name: "개발자 정보!", numOfLink: 20, order: 6),
-//            CategoryResponse.Category(categoryId: 7, name: "iOS 자료", numOfLink: 60, order: 7),
-//            CategoryResponse.Category(categoryId: 8, name: "iOS 자료", numOfLink: 60, order: 8),
-//            CategoryResponse.Category(categoryId: 9, name: "iOS 자료", numOfLink: 60, order: 9),
-//            CategoryResponse.Category(categoryId: 10, name: "iOS 자료", numOfLink: 60, order: 10)
-//        ])), isShowingCategoryView: .constant(true), selectedCategoryId: .constant(0), detailCategory: <#Binding<CategoryResponse.Category>#>, selectedCategoryOrder: .constant(0))
-//            .environmentObject(ScrapViewModel())
-//    }
-//}

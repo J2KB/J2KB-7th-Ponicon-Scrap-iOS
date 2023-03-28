@@ -36,7 +36,7 @@ struct CategorySheetView: View {
                         HStack(spacing: 13){
                             TextField("카테고리 이름", text: $renamedCategoryName)
                                 .focused($focusState, equals: .rename)
-                                .font(.system(size: 18, weight: .regular))
+                                .font(.system(size: 14, weight: .regular))
                                 .frame(width: UIScreen.main.bounds.width / 1.5, alignment: .leading)
                                 .foregroundColor(Color("basic_text"))
                             Button(action: {
@@ -56,15 +56,14 @@ struct CategorySheetView: View {
                         if !renamedCategoryName.isEmpty {
                             scrapVM.renameCategory(categoryID: category.categoryId, renamed: renamedCategoryName)
                             scrapVM.modifyCategoryName(categoryID: category.categoryId, categoryName: renamedCategoryName)
-                            self.isEditingCategoryName = false
+                            isEditingCategoryName = false
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                 scrapVM.getCategoryListData(userID: userVM.userIndex)
                             }
                         } else {
                             renamedCategoryName = category.name //원래 카테고리 이름으로
-                            self.isEditingCategoryName = false
+                            isEditingCategoryName = false
                         }
-                        isPresentCategoryBottomSheet = false
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -86,7 +85,7 @@ struct CategorySheetView: View {
                     .padding(.bottom, 10)
             }
             Button(action: {
-                self.isEditingCategoryName = true
+                isEditingCategoryName = true
                 focusState = .rename
             }) {
                 ZStack{
@@ -101,7 +100,7 @@ struct CategorySheetView: View {
             }
             Button(action: {
                 if !isEditingCategoryName { //이름 수정하지 않을 때만 활성화
-                    self.isDeleteCategory = true
+                    isDeleteCategory = true
                 }
             }) {
                 ZStack{
@@ -119,7 +118,7 @@ struct CategorySheetView: View {
         .padding(.top, 48)
         .background(Color("sheet_background"))
         .onAppear {
-            self.renamedCategoryName = category.name
+            renamedCategoryName = category.name
         }
         .alert("정말 삭제하시겠습니까?", isPresented: $isDeleteCategory, actions: {
             Button("취소", role: .cancel) {}
@@ -129,7 +128,7 @@ struct CategorySheetView: View {
                     scrapVM.getCategoryListData(userID: userVM.userIndex)
                 }
                 isPresentCategoryBottomSheet = false
-                self.isDeleteCategory = false
+                isDeleteCategory = false
             }
         })
     }

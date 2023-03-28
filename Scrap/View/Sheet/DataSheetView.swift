@@ -40,14 +40,16 @@ struct DataSheetView: View {
             ZStack{
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color("list_color"))
-                    .frame(width: screenWidth - 40, height: screenHeight / 4.7, alignment: .leading)
+                    .frame(width: screenWidth - 40, height: currentCategoryOrder > 0 ? screenHeight / 4.7 : screenHeight / 6, alignment: .leading)
                 VStack(spacing: 2){
                     FavoriteButton
                     Divider().frame(width: screenWidth - 40).padding(.vertical, 0)
                     RenameButton
                     Divider().frame(width: screenWidth - 40)
-                    MoveCategoryButton
-                    Divider().frame(width: screenWidth - 40)
+                    if currentCategoryOrder > 0 {
+                        MoveCategoryButton
+                        Divider().frame(width: screenWidth - 40)
+                    }
                     DeleteButton
                 }
             }
@@ -161,6 +163,13 @@ struct DataSheetView: View {
             scrapVM.modifyFavoritesData(userID: userVM.userIndex, linkID: data.linkId!) //서버통신
             scrapVM.bookmark(dataID: data.linkId!, isBookmark: isBookmarked)
             isPresentDataModalSheet = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                if currentCategoryOrder == 0 {
+                    scrapVM.getAllData(userID: userVM.userIndex)
+                }else {
+                    scrapVM.getCategoryListData(userID: userVM.userIndex)
+                }
+            }
         }) {
             //즐겨찾기에 추가 되어/안되어 있으면, 해제 / 추가
             Label(isBookmarked ? "즐겨찾기 해제" : "즐겨찾기 추가", systemImage: "heart")
@@ -183,8 +192,8 @@ struct DataSheetView: View {
     
     var MoveCategoryButton: some View {
         Button(action: {
-            isShowMovingCategoryView = true
-            isPresentDataModalSheet = false
+            self.isShowMovingCategoryView = true
+            self.isPresentDataModalSheet = false
         }) {
             Label("카테고리 이동", systemImage: "arrow.turn.down.right")
                 .foregroundColor(Color("basic_text"))
