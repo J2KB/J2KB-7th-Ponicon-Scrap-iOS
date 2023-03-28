@@ -10,7 +10,6 @@ import UIKit
 
 class BottomSheetController<Content: View>: UIHostingController<Content> {
     override func viewDidLoad() {
-        view.backgroundColor = .blue
         if let presentationController = presentationController as? UISheetPresentationController {
             presentationController.detents = [.medium(), .large()]
             presentationController.prefersGrabberVisible = true
@@ -56,6 +55,7 @@ struct BottomSheet<SheetView: View>: UIViewControllerRepresentable {
         }
         
         func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+            parent.showSheet = false
             parent.onEnd()
         }
     }

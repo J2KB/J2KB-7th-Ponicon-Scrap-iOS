@@ -10,14 +10,15 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var scrapVM : ScrapViewModel
     @EnvironmentObject var userVM : UserViewModel
-    @State private var isPresentingDataBottomSheet = false
     
-    //bottom sheet test
-    @State private var isShowMovingCategory = false
+    @State private var isShowMovingCategory = false //자료의 카테고리 이동뷰 onoff
     @State private var detailData = DataResponse.Datas(linkId: 0, link: "", title: "", domain: "", imgUrl: "", bookmark: false)
+    
+    @Binding var isPresentingDataBottomSheet : Bool //데이터바텀시트 onoff
+    @Binding var isShowingCategorySideMenuView: Bool //카테고리 뷰 onoff 변수
+    
     @Binding var selectedCategoryID: Int
     @Binding var selectedCategoryOrder: Int
-    @Binding var isShowingCategorySideMenuView: Bool
 
     private let screenHeight = UIScreen.main.bounds.height
     private let screenWidth = UIScreen.main.bounds.width
@@ -30,8 +31,10 @@ struct HomeView: View {
             HStack {
                 Button(action: {
                     withAnimation(.easeInOut) {
-                        self.isShowingCategorySideMenuView = true
-                        scrapVM.getCategoryListData(userID: userVM.userIndex)
+                        if !isPresentingDataBottomSheet {
+                            isShowingCategorySideMenuView = true //카테고리뷰 on
+                            scrapVM.getCategoryListData(userID: userVM.userIndex)
+                        }
                     }
                 }) {
                     ZStack {
@@ -55,20 +58,27 @@ struct HomeView: View {
             SubHomeView(detailData: $detailData, isShowMovingCategory: $isShowMovingCategory, datas: $scrapVM.dataList, isPresentDataBottomSheet: $isPresentingDataBottomSheet, currentCategoryId: $selectedCategoryID, currentCategoryOrder: $selectedCategoryOrder)
                 .navigationBarTitle("", displayMode: .inline)
         }
-        .bottomSheet(showSheet: $isPresentingDataBottomSheet) {
-            DataSheetView(isShowMovingCategoryView: $isShowMovingCategory, data: $detailData, isPresentDataModalSheet: $isPresentingDataBottomSheet, currentCategoryOrder: $selectedCategoryOrder, currentCategoryId: $selectedCategoryID)
-                .environmentObject(scrapVM)
-                .environmentObject(userVM)
-        } onEnd: {
-            isPresentingDataBottomSheet = false
+        if isPresentingDataBottomSheet {
+            Color(.black)
+                .opacity(0.2)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    isPresentingDataBottomSheet = false
+                }
         }
-    }
-}
-
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView(selectedCategoryID: .constant(0), selectedCategoryOrder: .constant(0), isShowingCategorySideMenuView: .constant(false))
-            .environmentObject(ScrapViewModel())
-            .environmentObject(UserViewModel())
+//        .sheet(isPresented: $isPresentingDataBottomSheet){
+//             HalfSheet {
+//                 DataSheetView(isShowMovingCategoryView: $isShowMovingCategory, data: $detailData, isPresentDataModalSheet: $isPresentingDataBottomSheet, currentCategoryOrder: $selectedCategoryOrder, currentCategoryId: $selectedCategoryID)
+//             }
+//             .ignoresSafeArea()
+//         }
+//        .bottomSheet(showSheet: $isPresentingDataBottomSheet) { //데이터바텀시트 on -ing
+//            DataSheetView(isShowMovingCategoryView: $isShowMovingCategory, data: $detailData, isPresentDataModalSheet: $isPresentingDataBottomSheet, currentCategoryOrder: $selectedCategoryOrder, currentCategoryId: $selectedCategoryID)
+//                .environmentObject(scrapVM)
+//                .environmentObject(userVM)
+//        } onEnd: {
+//            print("✅ data bottom sheet dismissed")
+////            isPresentingDataBottomSheet = false //데이터바텀시트 off
+//        }
     }
 }

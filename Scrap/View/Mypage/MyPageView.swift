@@ -9,7 +9,6 @@ import SwiftUI
 import KakaoSDKUser
 
 struct MyPageView: View {
-//    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var userVM : UserViewModel
     @State private var iconList = ["tiger", "dog", "cat", "fox", "mouse", "rabbit", "bear"]
     @State private var reallyWithDrawal = false
@@ -21,43 +20,33 @@ struct MyPageView: View {
     var body: some View {
         VStack {
             Text("마이페이지") //title
-                .font(.system(size: 18, weight: .bold))
+                .font(.system(size: 20, weight: .bold))
                 .frame(width: screenWidth, height: 40, alignment: .leading)
                 .foregroundColor(Color("basic_text"))
                 .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 0)) //superview
-//                    .background(.green)
             VStack{ //profile
                 HStack(spacing: 10){
-//                        Image("\(iconList[userVM.iconIdx])")
-                    Image("\(iconList[5])")
+                        Image("\(iconList[userVM.iconIdx])")
                         .resizable()
                         .frame(width: 70, height: 70)
-//                            .background(.blue)
                         .padding(.leading, 16)
                     VStack(spacing: 4){
-//                            Text("\(userData.name) 님") //user data 가져오기
-                        Text("녕이 님")
+                        Text("\(userData.name) 님") //user data 가져오기
                             .lineLimit(2)
                             .font(.system(size: 16, weight: .bold))
                             .foregroundColor(Color("basic_text"))
                             .frame(width: screenWidth / 1.5, height: 40, alignment: .bottomLeading)
-//                                .background(.red)
-//                            Text(userVM.loginType != .email ? "" : "\(userData.username)")
-                        Text("nyeong1030@comcomcom")
+                        Text(userVM.loginType != .email ? "" : "\(userData.username)")
                             .font(.system(size: 12, weight: .regular))
                             .foregroundColor(.gray_bold)
                             .frame(width: screenWidth / 1.5, alignment: .leading)
-//                                .background(.yellow)
                     }
-//                        .background(.cyan)
                     Spacer()
                 }
-                .frame(width: screenWidth, height: screenHeight / 9)
-//                .background(.gray)
+                .frame(width: screenWidth / 1.13, height: screenHeight / 9)
                 Divider()
-                    .frame(height: 8)
-                    .frame(width: screenWidth, alignment: .center)
-                    .overlay(Color("gray_sub"))
+                    .frame(width: screenWidth / 1.13, alignment: .center)
+                    .overlay(Color("gray_bold"))
                 Button(action:{
                     if userVM.loginType == .kakao {
                         UserApi.shared.logout {(error) in
@@ -69,7 +58,6 @@ struct MyPageView: View {
                     userVM.loginState = false
                     userVM.userIndex = 0
                     UserDefaults(suiteName: "group.com.thk.Scrap")?.set(0, forKey: "ID")
-//                            isShowingMyPage = true
                 }){
                     Text("로그아웃")
                         .font(.system(size: 14, weight: .semibold))
@@ -105,15 +93,14 @@ struct MyPageView: View {
                 userVM.acccountWithdrawal() //📡 WithDrawal API
                 userVM.loginState = false
                 userVM.userIndex = 0
-//                isShowingMyPage = true
             }
         })
     }
 }
 
-struct MyPageView_Previews: PreviewProvider {
-    static var previews: some View {
-        MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")))
-            .environmentObject(UserViewModel())
-    }
-}
+//struct MyPageView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MyPageView(userData: .constant(UserResponse.Result(name: "", username: "")))
+//            .environmentObject(UserViewModel())
+//    }
+//}

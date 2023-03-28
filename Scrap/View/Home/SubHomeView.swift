@@ -16,9 +16,9 @@ struct SubHomeView: View {
     @State private var isDataRecentOrder = true         //최신순인가?
     
     @Binding var detailData: DataResponse.Datas
-    @Binding var isShowMovingCategory: Bool
+    @Binding var isShowMovingCategory: Bool             //자료의 카테고리 이동 onoff
     @Binding var datas : DataResponse.Result            //선택한 카테고리에 따른 자료 배열
-    @Binding var isPresentDataBottomSheet : Bool         //카테고리 더보기 sheet가 열려있는지에 대한 상태 변수
+    @Binding var isPresentDataBottomSheet : Bool        //데이터 바텀 시트 onoff
     @Binding var currentCategoryId : Int                //현재 카테고리 id
     @Binding var currentCategoryOrder : Int             //현재 카테고리 order
         
@@ -90,7 +90,12 @@ struct SubHomeView: View {
             .onChange(of: currentCategoryId, perform: { newValue in
                 if currentCategoryOrder == 0 { scrapVM.getAllData(userID: userVM.userIndex) }
                 else { scrapVM.getDataByCategory(userID: userVM.userIndex, categoryID: newValue) }
-            })
+            }).sheet(isPresented: $isPresentDataBottomSheet){
+                HalfSheet {
+                    DataSheetView(isShowMovingCategoryView: $isShowMovingCategory, data: $detailData, isPresentDataModalSheet: $isPresentDataBottomSheet, currentCategoryOrder: $currentCategoryOrder, currentCategoryId: $currentCategoryId)
+                }
+                .ignoresSafeArea()
+            }
         }
     }//body
 }

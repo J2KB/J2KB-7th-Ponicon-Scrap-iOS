@@ -37,11 +37,11 @@ struct CategoryView: View {
     @State private var dragging: CategoryResponse.Category?
     @State private var newCategoryName = ""
     @State private var isAddingCategory = false
-    @State private var isPresentCategoryModalSheet = false
+    @State private var isPresentCategoryBottomSheet = false //카테고리 바텀시트 onoff
     @State private var detailCategory = CategoryResponse.Category(categoryId: 0, name: "", numOfLink: 0, order: 0)
-
+    
     @Binding var categoryList : CategoryResponse.Result
-    @Binding var isShowingCategoryView : Bool
+    @Binding var isShowingCategorySideMenuView : Bool        //카테고리 뷰 onoff
     @Binding var selectedCategoryId : Int
     @Binding var selectedCategoryOrder : Int
     
@@ -56,7 +56,9 @@ struct CategoryView: View {
                     HStack(spacing: 4){
                         Button(action: {
                             withAnimation(.spring()){
-                                isShowingCategoryView = false //main home view로 돌아가기
+                                if !self.isPresentCategoryBottomSheet {
+                                    self.isShowingCategorySideMenuView = false //main home view로 돌아가기
+                                }
                             }
                         }){
                             ZStack {
@@ -75,7 +77,9 @@ struct CategoryView: View {
                     }
                     Spacer()
                     Button(action: { //새로운 카테고리 추가 버튼
-                        self.isAddingCategory = true
+                        if !self.isPresentCategoryBottomSheet {
+                            self.isAddingCategory = true
+                        }
                     }){
                         ZStack {
                             Image(systemName: "plus")
@@ -111,7 +115,7 @@ struct CategoryView: View {
                                     }
                                     Button(action: {
                                         withAnimation(.spring()){
-                                            isShowingCategoryView = false
+                                            self.isShowingCategorySideMenuView = false //카테고리뷰 off
                                         }
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                             selectedCategoryId = category.categoryId
@@ -131,7 +135,7 @@ struct CategoryView: View {
                         //나머지 카테고리
                         ForEach($categoryList.categories) { $category in
                             if category.order != 0 && category.order != 1 {
-                                CategoryRow(isPresentCategoryModalSheet: $isPresentCategoryModalSheet, category: $category, isShowingCategorySideMenuView: $isShowingCategoryView, selectedCategoryId: $selectedCategoryId, isAddingNewCategory: $isAddingCategory, selectedCategoryOrder: $selectedCategoryOrder, detailCategory: $detailCategory)
+                                CategoryRow(category: $category, detailCategory: $detailCategory, isPresentCategoryBottomSheet: $isPresentCategoryBottomSheet, isShowingCategorySideMenuView: $isShowingCategorySideMenuView,  selectedCategoryId: $selectedCategoryId, selectedCategoryOrder: $selectedCategoryOrder)
                                     .id(category.id)
                                 .onDrag {
                                     self.dragging = category
@@ -150,22 +154,31 @@ struct CategoryView: View {
                             }
                         })
                     }//List
+                    //바텀시트 -> isPresentCategoryBottomSheet
+                    .bottomSheet(showSheet: $isPresentCategoryBottomSheet) {
+                        CategorySheetView(category: $detailCategory, isPresentCategoryBottomSheet: $isPresentCategoryBottomSheet)
+                            .environmentObject(scrapVM)
+                            .environmentObject(userVM)
+                    } onEnd: {
+                        print("✅ category bottom sheet dismissed")
+//                        self.isPresentCategoryBottomSheet = false //카테고리 바텀 시트 off
+                    }
                 }//CategoryList VStack
                 .refreshable {
                     scrapVM.getCategoryListData(userID: userVM.userIndex)
                 }
                 .listStyle(PlainListStyle())
             }//VStack
-            if self.isAddingCategory { //카테고리 추가 alert창 켜지면 뒷 배경 블러 처리
+            if isAddingCategory { //카테고리 추가 alert창 켜지면 뒷 배경 블러 처리
                 Color("blur_background").ignoresSafeArea()
             }
-            if self.isPresentCategoryModalSheet {
-                Color("blur_background")
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        self.isPresentCategoryModalSheet = false
-                    }
-            }
+//            if self.isPresentCategoryModalSheet {
+//                Color("blur_background")
+//                    .ignoresSafeArea()
+//                    .onTapGesture {
+//                        self.isPresentCategoryModalSheet = false
+//                    }
+//            }
         }//ZStack
         .background(scheme == .light ? .white : .black)
         .addCategoryAlert(isPresented: $isAddingCategory, newCategoryTitle: $newCategoryName, placeholder: "새로운 카테고리 이름을 입력해주세요", title: "카테고리 추가하기", action: { _ in
@@ -175,36 +188,25 @@ struct CategoryView: View {
                 scrapVM.getCategoryListData(userID: userVM.userIndex)
             }
         })
+
     }//body
 }
 
-struct CategoryView_Previews: PreviewProvider {
-    static var previews: some View {
-        CategoryView(categoryList: .constant(CategoryResponse.Result(categories: [
-            CategoryResponse.Category(categoryId: 0, name: "전체 자료", numOfLink: 500, order: 0),
-            CategoryResponse.Category(categoryId: 1, name: "분류되지 않은 자료", numOfLink: 42, order: 1),
-            CategoryResponse.Category(categoryId: 2, name: "채용 공고 모음", numOfLink: 6, order: 2),
-            CategoryResponse.Category(categoryId: 3, name: "iOS 자료", numOfLink: 30, order: 3),
-            CategoryResponse.Category(categoryId: 4, name: "컴퓨터 사이언스 자료", numOfLink: 140, order: 4),
-            CategoryResponse.Category(categoryId: 5, name: "취준 팁 모음", numOfLink: 60, order: 5),
-            CategoryResponse.Category(categoryId: 6, name: "개발자 정보!", numOfLink: 20, order: 6),
-            CategoryResponse.Category(categoryId: 7, name: "iOS 자료", numOfLink: 60, order: 7),
-            CategoryResponse.Category(categoryId: 8, name: "iOS 자료", numOfLink: 60, order: 8),
-            CategoryResponse.Category(categoryId: 9, name: "iOS 자료", numOfLink: 60, order: 9),
-            CategoryResponse.Category(categoryId: 10, name: "iOS 자료", numOfLink: 60, order: 10),
-            CategoryResponse.Category(categoryId: 11, name: "iOS 자료", numOfLink: 60, order: 11),
-            CategoryResponse.Category(categoryId: 12, name: "iOS 자료", numOfLink: 60, order: 12),
-            CategoryResponse.Category(categoryId: 13, name: "iOS 자료", numOfLink: 60, order: 13),
-            CategoryResponse.Category(categoryId: 14, name: "iOS 자료", numOfLink: 60, order: 14),
-            CategoryResponse.Category(categoryId: 15, name: "iOS 자료", numOfLink: 60, order: 15),
-            CategoryResponse.Category(categoryId: 16, name: "iOS 자료", numOfLink: 60, order: 16),
-            CategoryResponse.Category(categoryId: 17, name: "iOS 자료", numOfLink: 60, order: 17),
-            CategoryResponse.Category(categoryId: 18, name: "iOS 자료", numOfLink: 60, order: 18),
-            CategoryResponse.Category(categoryId: 19, name: "iOS 자료", numOfLink: 60, order: 19),
-            CategoryResponse.Category(categoryId: 20, name: "iOS 자료", numOfLink: 60, order: 20),
-            CategoryResponse.Category(categoryId: 21, name: "iOS 자료", numOfLink: 60, order: 21),
-            CategoryResponse.Category(categoryId: 22, name: "iOS 자료", numOfLink: 60, order: 22)
-        ])), isShowingCategoryView: .constant(true), selectedCategoryId: .constant(0), selectedCategoryOrder: .constant(0))
-            .environmentObject(ScrapViewModel())
-    }
-}
+//struct CategoryView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CategoryView(categoryList: .constant(CategoryResponse.Result(categories: [
+//            CategoryResponse.Category(categoryId: 0, name: "전체 자료", numOfLink: 500, order: 0),
+//            CategoryResponse.Category(categoryId: 1, name: "분류되지 않은 자료", numOfLink: 42, order: 1),
+//            CategoryResponse.Category(categoryId: 2, name: "채용 공고 모음", numOfLink: 6, order: 2),
+//            CategoryResponse.Category(categoryId: 3, name: "iOS 자료", numOfLink: 30, order: 3),
+//            CategoryResponse.Category(categoryId: 4, name: "컴퓨터 사이언스 자료", numOfLink: 140, order: 4),
+//            CategoryResponse.Category(categoryId: 5, name: "취준 팁 모음", numOfLink: 60, order: 5),
+//            CategoryResponse.Category(categoryId: 6, name: "개발자 정보!", numOfLink: 20, order: 6),
+//            CategoryResponse.Category(categoryId: 7, name: "iOS 자료", numOfLink: 60, order: 7),
+//            CategoryResponse.Category(categoryId: 8, name: "iOS 자료", numOfLink: 60, order: 8),
+//            CategoryResponse.Category(categoryId: 9, name: "iOS 자료", numOfLink: 60, order: 9),
+//            CategoryResponse.Category(categoryId: 10, name: "iOS 자료", numOfLink: 60, order: 10)
+//        ])), isShowingCategoryView: .constant(true), selectedCategoryId: .constant(0), detailCategory: <#Binding<CategoryResponse.Category>#>, selectedCategoryOrder: .constant(0))
+//            .environmentObject(ScrapViewModel())
+//    }
+//}

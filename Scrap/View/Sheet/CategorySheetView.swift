@@ -22,7 +22,7 @@ struct CategorySheetView: View {
     @State private var renamedCategoryName = ""
     
     @Binding var category : CategoryResponse.Category
-    @Binding var isPresentCategoryModalSheet : Bool
+    @Binding var isPresentCategoryBottomSheet : Bool
     
     var body: some View {
         VStack(spacing: 20){
@@ -64,6 +64,7 @@ struct CategorySheetView: View {
                             renamedCategoryName = category.name //원래 카테고리 이름으로
                             self.isEditingCategoryName = false
                         }
+                        isPresentCategoryBottomSheet = false
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -127,7 +128,7 @@ struct CategorySheetView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     scrapVM.getCategoryListData(userID: userVM.userIndex)
                 }
-                isPresentCategoryModalSheet = false
+                isPresentCategoryBottomSheet = false
                 self.isDeleteCategory = false
             }
         })
@@ -136,7 +137,7 @@ struct CategorySheetView: View {
 
 struct CategorySheetView_Previews: PreviewProvider {
     static var previews: some View {
-        CategorySheetView(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), isPresentCategoryModalSheet: .constant(false))
+        CategorySheetView(category: .constant(CategoryResponse.Category(categoryId: 0, name: "name", numOfLink: 10, order: 1)), isPresentCategoryBottomSheet: .constant(false))
             .environmentObject(ScrapViewModel())
             .environmentObject(UserViewModel())
             .preferredColorScheme(.dark)
