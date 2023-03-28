@@ -85,13 +85,16 @@ struct PageView: View {
                                 scrapVM.bookmark(dataID: data.linkId!, isBookmark: isBookmarked)
                             }){
                                 ZStack{
-                                    Image(systemName: isBookmarked ? "heart.fill" : "heart") //즐겨찾기포함이라면 "heart.fill"
-                                        .foregroundColor(Color("heart"))
+                                    Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+                                        .resizable()
+                                        .frame(width: 20, height: 28)
+                                        .foregroundColor(Color("main_accent"))
+                                        
                                 }
                                 .frame(width: 30, height: 30)
                             }
                             .padding(.leading, isOneColumnData ? screenWidth / 1.22 : screenWidth / 3)
-                            .padding(.bottom, isOneColumnData ? screenWidth / 5 : screenWidth / 7.6)
+                            .padding(.bottom, isOneColumnData ? screenWidth / 4 : screenWidth / 6)
                         }
                         .frame(width: isOneColumnData ? screenWidth / 1.085 : screenWidth / 2.4, height: isOneColumnData ? screenWidth / 3.2 : screenWidth / 4.4)
                         .shadow(radius: 5)
