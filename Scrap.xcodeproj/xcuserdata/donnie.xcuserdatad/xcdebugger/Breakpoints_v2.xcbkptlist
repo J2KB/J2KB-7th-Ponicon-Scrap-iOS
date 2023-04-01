@@ -750,6 +750,38 @@
             endingLineNumber = "186"
             landmarkName = "addNewData(catID:userIndex:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "DA1FF39A-4C60-46A4-A5A3-7C887B8B7F4A - 10b4c468eafe5a52"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Share.ShareViewController.addNewData(catID: Swift.Int, userIndex: Swift.Int) -&gt; ()"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/Share/ShareViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "186"
+                  endingLineNumber = "186"
+                  offsetFromSymbolStart = "1975">
+               </Location>
+               <Location
+                  uuid = "DA1FF39A-4C60-46A4-A5A3-7C887B8B7F4A - 516b59e695ae8893"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Share.NewDataModel, Share.APIErrors&gt;) -&gt; () in Share.ShareViewController.addNewData(catID: Swift.Int, userIndex: Swift.Int) -&gt; ()"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/Share/ShareViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "187"
+                  endingLineNumber = "187"
+                  offsetFromSymbolStart = "238">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -768,7 +800,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "BB7EF940-6617-4044-8E30-67862EBDA968 - 8581137aaf67b866"
+                  uuid = "BB7EF940-6617-4044-8E30-67862EBDA968 - 8581137aaf67b8e2"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -778,12 +810,12 @@
                   urlString = "file:///Users/donnie/Scrap/Share/ShareViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "123"
-                  endingLineNumber = "123"
-                  offsetFromSymbolStart = "436">
+                  startingLineNumber = "127"
+                  endingLineNumber = "127"
+                  offsetFromSymbolStart = "380">
                </Location>
                <Location
-                  uuid = "BB7EF940-6617-4044-8E30-67862EBDA968 - 8581137aaf67b866"
+                  uuid = "BB7EF940-6617-4044-8E30-67862EBDA968 - 8581137aaf67b8e2"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -793,9 +825,9 @@
                   urlString = "file:///Users/donnie/Scrap/Share/ShareViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "123"
-                  endingLineNumber = "123"
-                  offsetFromSymbolStart = "528">
+                  startingLineNumber = "127"
+                  endingLineNumber = "127"
+                  offsetFromSymbolStart = "485">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -814,6 +846,38 @@
             endingLineNumber = "187"
             landmarkName = "addNewData(catID:userIndex:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "84C2ED38-4821-49E0-96D2-0238BB1681B2 - 516b59e695ae8893"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Share.NewDataModel, Share.APIErrors&gt;) -&gt; () in Share.ShareViewController.addNewData(catID: Swift.Int, userIndex: Swift.Int) -&gt; ()"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/Share/ShareViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "187"
+                  endingLineNumber = "187"
+                  offsetFromSymbolStart = "238">
+               </Location>
+               <Location
+                  uuid = "84C2ED38-4821-49E0-96D2-0238BB1681B2 - 22dafe8cb4ac20e2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;Share.NewDataModel, Share.APIErrors&gt;) -&gt; () in Share.ShareViewController.addNewData(catID: Swift.Int, userIndex: Swift.Int) -&gt; ()"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/Share/ShareViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "188"
+                  endingLineNumber = "188"
+                  offsetFromSymbolStart = "180">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -960,7 +1024,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "EE63FB8C-DF1B-4E5D-B7AB-ABAE9BB4182A - 8581137aaf67b866"
+                  uuid = "EE63FB8C-DF1B-4E5D-B7AB-ABAE9BB4182A - 8581137aaf67b8e2"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -970,12 +1034,12 @@
                   urlString = "file:///Users/donnie/Scrap/Share/ShareViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "123"
-                  endingLineNumber = "123"
-                  offsetFromSymbolStart = "436">
+                  startingLineNumber = "127"
+                  endingLineNumber = "127"
+                  offsetFromSymbolStart = "380">
                </Location>
                <Location
-                  uuid = "EE63FB8C-DF1B-4E5D-B7AB-ABAE9BB4182A - 8581137aaf67b866"
+                  uuid = "EE63FB8C-DF1B-4E5D-B7AB-ABAE9BB4182A - 8581137aaf67b8e2"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -985,9 +1049,9 @@
                   urlString = "file:///Users/donnie/Scrap/Share/ShareViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "123"
-                  endingLineNumber = "123"
-                  offsetFromSymbolStart = "528">
+                  startingLineNumber = "127"
+                  endingLineNumber = "127"
+                  offsetFromSymbolStart = "485">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -1248,7 +1312,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "36E7F865-95EF-4FEE-9059-85A92993CBA7 - 8581137aaf67b824"
+                  uuid = "36E7F865-95EF-4FEE-9059-85A92993CBA7 - 8581137aaf67b8a0"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -1258,12 +1322,12 @@
                   urlString = "file:///Users/donnie/Scrap/Share/ShareViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "125"
-                  endingLineNumber = "125"
-                  offsetFromSymbolStart = "816">
+                  startingLineNumber = "129"
+                  endingLineNumber = "129"
+                  offsetFromSymbolStart = "812">
                </Location>
                <Location
-                  uuid = "36E7F865-95EF-4FEE-9059-85A92993CBA7 - 8581137aaf67b824"
+                  uuid = "36E7F865-95EF-4FEE-9059-85A92993CBA7 - 8581137aaf67b8a0"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -1273,9 +1337,9 @@
                   urlString = "file:///Users/donnie/Scrap/Share/ShareViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "125"
-                  endingLineNumber = "125"
-                  offsetFromSymbolStart = "888">
+                  startingLineNumber = "129"
+                  endingLineNumber = "129"
+                  offsetFromSymbolStart = "873">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -1358,6 +1422,22 @@
             endingLineNumber = "195"
             landmarkName = "MoveCategoryButton"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "092B4AE2-F224-4D41-8D1F-321D603FB125"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Share/ShareUIView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
+            landmarkName = "CategoryViewModel"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

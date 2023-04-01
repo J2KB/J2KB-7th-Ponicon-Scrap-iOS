@@ -47,7 +47,7 @@ class CategoryViewModel: ObservableObject{ //감시할 data model
     @Published var categoryList = CategoryResponseInShare(code: 0, message: "",result: CategoryResponseInShare.Result(categories: [CategoryResponseInShare.CategoryInShare(categoryId: 0, name: "", numOfLink: 0, order: 0)]))
     
     func getCategoryDataInShare(userIndex: Int){
-        guard let url = URL(string: "https://scrap.hana-umc.shop/category/all?id=\(userIndex)") else {
+        guard let url = URL(string: "https://scrap-j2kb.shop/category/all?id=\(userIndex)") else {
             print("invalid url")
             return
         }
