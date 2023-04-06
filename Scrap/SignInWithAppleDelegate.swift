@@ -69,8 +69,8 @@ extension SignInWithAppleDelegate: ASAuthorizationControllerDelegate {
         
         do {
             _ = try postAppleLogin(email: userDataInKeyChain!.email,
-                                             name: userDataInKeyChain!.name,
-                                             userIdentifier: userDataInKeyChain!.identifier)//서버 통신
+                                   name: userDataInKeyChain!.name,
+                                   userIdentifier: userDataInKeyChain!.identifier)//서버 통신
             print("👾 start server networking")
         } catch {
             print("🚨 no server networking")
@@ -82,7 +82,7 @@ extension SignInWithAppleDelegate: ASAuthorizationControllerDelegate {
     func postAppleLogin(email: String, name: String, userIdentifier: String) throws -> Bool {
         print("💡 post apple login")
         
-        guard let url = URL(string: "https://scrap.hana-umc.shop/user/login/apple") else {
+        guard let url = URL(string: "https://scrap-j2kb.shop/user/login/apple") else {
             print("invalid url")
             return false
         }

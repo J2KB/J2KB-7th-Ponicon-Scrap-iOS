@@ -764,7 +764,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "186"
                   endingLineNumber = "186"
-                  offsetFromSymbolStart = "1975">
+                  offsetFromSymbolStart = "2308">
                </Location>
                <Location
                   uuid = "DA1FF39A-4C60-46A4-A5A3-7C887B8B7F4A - 516b59e695ae8893"
@@ -779,7 +779,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "187"
                   endingLineNumber = "187"
-                  offsetFromSymbolStart = "238">
+                  offsetFromSymbolStart = "284">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -812,7 +812,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "127"
                   endingLineNumber = "127"
-                  offsetFromSymbolStart = "380">
+                  offsetFromSymbolStart = "436">
                </Location>
                <Location
                   uuid = "BB7EF940-6617-4044-8E30-67862EBDA968 - 8581137aaf67b8e2"
@@ -827,7 +827,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "127"
                   endingLineNumber = "127"
-                  offsetFromSymbolStart = "485">
+                  offsetFromSymbolStart = "528">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -860,7 +860,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "187"
                   endingLineNumber = "187"
-                  offsetFromSymbolStart = "238">
+                  offsetFromSymbolStart = "284">
                </Location>
                <Location
                   uuid = "84C2ED38-4821-49E0-96D2-0238BB1681B2 - 22dafe8cb4ac20e2"
@@ -875,7 +875,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "188"
                   endingLineNumber = "188"
-                  offsetFromSymbolStart = "180">
+                  offsetFromSymbolStart = "252">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -1036,7 +1036,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "127"
                   endingLineNumber = "127"
-                  offsetFromSymbolStart = "380">
+                  offsetFromSymbolStart = "436">
                </Location>
                <Location
                   uuid = "EE63FB8C-DF1B-4E5D-B7AB-ABAE9BB4182A - 8581137aaf67b8e2"
@@ -1051,7 +1051,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "127"
                   endingLineNumber = "127"
-                  offsetFromSymbolStart = "485">
+                  offsetFromSymbolStart = "528">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -1178,8 +1178,8 @@
             filePath = "Scrap/ViewModel/UserViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "197"
-            endingLineNumber = "197"
+            startingLineNumber = "198"
+            endingLineNumber = "198"
             landmarkName = "acccountWithdrawal()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1324,7 +1324,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "129"
                   endingLineNumber = "129"
-                  offsetFromSymbolStart = "812">
+                  offsetFromSymbolStart = "816">
                </Location>
                <Location
                   uuid = "36E7F865-95EF-4FEE-9059-85A92993CBA7 - 8581137aaf67b8a0"
@@ -1339,7 +1339,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "129"
                   endingLineNumber = "129"
-                  offsetFromSymbolStart = "873">
+                  offsetFromSymbolStart = "888">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -1438,6 +1438,158 @@
             endingLineNumber = "47"
             landmarkName = "CategoryViewModel"
             landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "092B4AE2-F224-4D41-8D1F-321D603FB125 - d635b32da0cc5731"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "property wrapper backing initializer of Share.CategoryViewModel.categoryList : Share.CategoryResponseInShare"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/Share/ShareUIView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "72">
+               </Location>
+               <Location
+                  uuid = "092B4AE2-F224-4D41-8D1F-321D603FB125 - 9010a3e6d615f637"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Share.CategoryViewModel.categoryList.getter : Share.CategoryResponseInShare"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/Share/ShareUIView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "136">
+               </Location>
+               <Location
+                  uuid = "092B4AE2-F224-4D41-8D1F-321D603FB125 - 97691b40f32f8a2b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Share.CategoryViewModel.categoryList.setter : Share.CategoryResponseInShare"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/Share/ShareUIView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "204">
+               </Location>
+               <Location
+                  uuid = "092B4AE2-F224-4D41-8D1F-321D603FB125 - 993ca14ff2a17f38"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Share.CategoryViewModel.categoryList.modify : Share.CategoryResponseInShare"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/Share/ShareUIView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "092B4AE2-F224-4D41-8D1F-321D603FB125 - bbe0e5e25b60a1ea"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Share.CategoryViewModel.categoryList.modify : Share.CategoryResponseInShare with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/Share/ShareUIView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "092B4AE2-F224-4D41-8D1F-321D603FB125 - 3276d7067cef5b1c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Share.CategoryViewModel.$categoryList.getter : Combine.Published&lt;Share.CategoryResponseInShare&gt;.Publisher"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/Share/ShareUIView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "96">
+               </Location>
+               <Location
+                  uuid = "092B4AE2-F224-4D41-8D1F-321D603FB125 - 40c542716b685710"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Share.CategoryViewModel.$categoryList.setter : Combine.Published&lt;Share.CategoryResponseInShare&gt;.Publisher"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/Share/ShareUIView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "092B4AE2-F224-4D41-8D1F-321D603FB125 - 26bbf3ab72f449d9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Share.CategoryViewModel.$categoryList.modify : Combine.Published&lt;Share.CategoryResponseInShare&gt;.Publisher"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/%3Ccompiler-generated%3E"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "092B4AE2-F224-4D41-8D1F-321D603FB125 - 74a66df25f647596"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Share.CategoryViewModel.$categoryList.modify : Combine.Published&lt;Share.CategoryResponseInShare&gt;.Publisher with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/Share/ShareUIView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "24">
+               </Location>
+               <Location
+                  uuid = "092B4AE2-F224-4D41-8D1F-321D603FB125 - dbd158c9dd637133"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Share.CategoryViewModel.init() -&gt; Share.CategoryViewModel"
+                  moduleName = "Share"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/donnie/Scrap/Share/ShareUIView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "140">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

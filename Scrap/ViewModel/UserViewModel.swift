@@ -132,6 +132,7 @@ class UserViewModel: ObservableObject{
                 UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.userIndex, forKey: "ID")
                 UserDefaults(suiteName: "group.com.thk.Scrap")?.set(self.iconIdx, forKey: "iconIdx")
             } else {
+                print("fail to apple login")
                 self.loginState = false
             }
         }
